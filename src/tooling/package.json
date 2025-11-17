@@ -1,0 +1,40 @@
+{
+  "name": "@razorweave/tooling",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Linting, validation, and development tooling for Razorweave",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./linters/eslint-config": "./dist/linters/eslint-config.js",
+    "./linters/prettier-config": "./dist/linters/prettier-config.js",
+    "./linters/markdownlint-config": "./dist/linters/markdownlint-config.js",
+    "./hooks/git": "./dist/hooks/git/index.js",
+    "./hooks/claude": "./dist/hooks/claude/index.js"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "build:watch": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@razorweave/shared": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4",
+    "markdownlint-cli2": "^0.12.1",
+    "glob": "^10.3.10",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}
