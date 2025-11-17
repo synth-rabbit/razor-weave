@@ -5,98 +5,103 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 export async function setupHooks(): Promise<void> {
-  console.log('🔧 Setting up Razorweave development environment...\n');
+  try {
+    console.log('🔧 Setting up Razorweave development environment...\n');
 
-  // Find project root (3 levels up from this script: scripts -> tooling -> src -> root)
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-  const projectRoot = join(__dirname, '..', '..', '..');
+    // Find project root (3 levels up from this script: scripts -> tooling -> src -> root)
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const projectRoot = join(__dirname, '..', '..', '..');
 
-  // 1. Install husky
-  console.log('📦 Installing git hooks...');
+    // 1. Install husky
+    console.log('📦 Installing git hooks...');
 
-  if (!existsSync(join(projectRoot, '.husky'))) {
-    execSync('npx --prefix src/tooling husky install', { stdio: 'inherit', cwd: projectRoot });
-  }
+    if (!existsSync(join(projectRoot, '.husky'))) {
+      execSync('npx --prefix src/tooling husky install', { stdio: 'inherit', cwd: projectRoot });
+    }
 
-  // 2. Create git hook files
-  await createGitHook(projectRoot, 'post-checkout', `#!/bin/sh
+    // 2. Create git hook files
+    await createGitHook(projectRoot, 'post-checkout', `#!/bin/sh
 pnpm --filter @razorweave/tooling exec tsx hooks/git/post-checkout.ts
 `);
 
-  await createGitHook(projectRoot, 'pre-commit', `#!/bin/sh
+    await createGitHook(projectRoot, 'pre-commit', `#!/bin/sh
 pnpm --filter @razorweave/tooling exec tsx hooks/git/pre-commit.ts
 `);
 
-  await createGitHook(projectRoot, 'commit-msg', `#!/bin/sh
+    await createGitHook(projectRoot, 'commit-msg', `#!/bin/sh
 pnpm --filter @razorweave/tooling exec tsx hooks/git/commit-msg.ts "$1"
 `);
 
-  await createGitHook(projectRoot, 'post-commit', `#!/bin/sh
+    await createGitHook(projectRoot, 'post-commit', `#!/bin/sh
 pnpm --filter @razorweave/tooling exec tsx hooks/git/post-commit.ts
 `);
 
-  console.log('✅ Git hooks installed\n');
+    console.log('✅ Git hooks installed\n');
 
-  // 3. Create Claude hooks directory
-  console.log('📦 Installing Claude hooks...');
+    // 3. Create Claude hooks directory
+    console.log('📦 Installing Claude hooks...');
 
-  const claudeHooksDir = join(projectRoot, '.claude', 'hooks');
-  await mkdir(claudeHooksDir, { recursive: true });
+    const claudeHooksDir = join(projectRoot, '.claude', 'hooks');
+    await mkdir(claudeHooksDir, { recursive: true });
 
-  await createClaudeHook(claudeHooksDir, 'session_start.ts', `
+    await createClaudeHook(claudeHooksDir, 'session_start.ts', `
 import { sessionStart } from '@razorweave/tooling/hooks/claude'
 export default async function() { await sessionStart() }
 `);
 
-  await createClaudeHook(claudeHooksDir, 'before_tool_call.ts', `
+    await createClaudeHook(claudeHooksDir, 'before_tool_call.ts', `
 import { beforeToolCall } from '@razorweave/tooling/hooks/claude'
-export default async function(tool: string, args: any) {
+export default async function(tool: string, args: unknown) {
   return await beforeToolCall(tool, args)
 }
 `);
 
-  await createClaudeHook(claudeHooksDir, 'after_tool_call.ts', `
+    await createClaudeHook(claudeHooksDir, 'after_tool_call.ts', `
 import { afterToolCall } from '@razorweave/tooling/hooks/claude'
-export default async function(tool: string, args: any, result: any) {
+export default async function(tool: string, args: unknown, result: unknown) {
   return await afterToolCall(tool, args, result)
 }
 `);
 
-  await createClaudeHook(claudeHooksDir, 'user_prompt_submit.ts', `
+    await createClaudeHook(claudeHooksDir, 'user_prompt_submit.ts', `
 import { userPromptSubmit } from '@razorweave/tooling/hooks/claude'
 export default async function(prompt: string) {
   return await userPromptSubmit(prompt)
 }
 `);
 
-  console.log('✅ Claude hooks installed\n');
+    console.log('✅ Claude hooks installed\n');
 
-  // 4. Create root config files
-  console.log('📦 Creating configuration files...');
+    // 4. Create root config files
+    console.log('📦 Creating configuration files...');
 
-  await writeFile(
-    join(projectRoot, '.eslintrc.cjs'),
-    `module.exports = require('./src/tooling/dist/linters/eslint-config').eslintConfig;\n`
-  );
+    await writeFile(
+      join(projectRoot, '.eslintrc.cjs'),
+      `module.exports = require('@razorweave/tooling/linters/eslint-config').eslintConfig;\n`
+    );
 
-  await writeFile(
-    join(projectRoot, '.prettierrc.cjs'),
-    `module.exports = require('./src/tooling/dist/linters/prettier-config').prettierConfig;\n`
-  );
+    await writeFile(
+      join(projectRoot, '.prettierrc.cjs'),
+      `module.exports = require('@razorweave/tooling/linters/prettier-config').prettierConfig;\n`
+    );
 
-  const { markdownlintConfig } = await import('../linters/markdownlint-config.js');
-  await writeFile(
-    join(projectRoot, '.markdownlint.json'),
-    JSON.stringify(markdownlintConfig, null, 2)
-  );
+    const { markdownlintConfig } = await import('../linters/markdownlint-config.js');
+    await writeFile(
+      join(projectRoot, '.markdownlint.json'),
+      JSON.stringify(markdownlintConfig, null, 2)
+    );
 
-  console.log('✅ Configuration files created\n');
-  console.log('✨ Setup complete!\n');
-  console.log('Next steps:');
-  console.log('- Run `pnpm lint` to check code quality');
-  console.log('- Run `pnpm validate` to check documentation');
-  console.log('- Commit changes to test git hooks');
+    console.log('✅ Configuration files created\n');
+    console.log('✨ Setup complete!\n');
+    console.log('Next steps:');
+    console.log('- Run `pnpm lint` to check code quality');
+    console.log('- Run `pnpm validate` to check documentation');
+    console.log('- Commit changes to test git hooks');
+  } catch (error) {
+    console.error('❌ Setup failed:', error instanceof Error ? error.message : String(error));
+    throw error;
+  }
 }
 
 async function createGitHook(
