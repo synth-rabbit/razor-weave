@@ -28,4 +28,28 @@ describe('validateLinks', () => {
     // Will fail if anchor doesn't exist
     expect(errors[0]?.type).toBe('link');
   });
+
+  it('validates same-file anchor links', async () => {
+    const content = `# Test Document
+## My Section
+Some content here
+[Link to section](#my-section)`;
+    const errors = await validateLinks(
+      content,
+      '/Users/pandorz/Documents/razorweave/src/tooling/validators/test.md'
+    );
+    expect(errors).toHaveLength(0);
+  });
+
+  it('handles anchors with special characters', async () => {
+    const content = `# Test Document
+## User's Guide
+Some content here
+[Link to guide](#users-guide)`;
+    const errors = await validateLinks(
+      content,
+      '/Users/pandorz/Documents/razorweave/src/tooling/validators/test.md'
+    );
+    expect(errors).toHaveLength(0);
+  });
 });
