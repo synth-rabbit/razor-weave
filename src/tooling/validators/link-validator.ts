@@ -89,9 +89,10 @@ function generateSlug(heading: string): string {
   return heading
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special chars
-    .replace(/\s+/g, '-')      // Replace spaces with hyphens
-    .replace(/-+/g, '-');      // Collapse multiple hyphens
+    .replace(/[^\w\s-]/g, '')   // Remove special chars
+    .replace(/\s+/g, '-')        // Replace spaces with hyphens
+    .replace(/^-+|-+$/g, '')     // Trim leading/trailing hyphens
+    .replace(/-+/g, '-');        // Collapse multiple hyphens
 }
 
 /**
