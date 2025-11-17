@@ -4,7 +4,7 @@ export interface ValidationResult {
   error?: string;
   warning?: string;
   format?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ValidationError {
