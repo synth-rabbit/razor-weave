@@ -82,6 +82,64 @@ export function createTables(db: Database.Database): void {
     CREATE INDEX IF NOT EXISTS idx_artifact_path ON data_artifacts(artifact_path);
   `);
 
+  // Persona metadata and single-value dimensions
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS personas (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      type TEXT NOT NULL CHECK(type IN ('core', 'generated')),
+      archetype TEXT NOT NULL,
+      experience_level TEXT NOT NULL,
+      fiction_first_alignment TEXT NOT NULL,
+      narrative_mechanics_comfort TEXT NOT NULL,
+      gm_philosophy TEXT NOT NULL,
+      genre_flexibility TEXT NOT NULL,
+      primary_cognitive_style TEXT NOT NULL,
+      secondary_cognitive_style TEXT,
+      schema_version INTEGER DEFAULT 1,
+      generated_seed INTEGER,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      active BOOLEAN DEFAULT TRUE
+    );
+  `);
+
+  // Multi-value dimensions
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS persona_dimensions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      persona_id TEXT NOT NULL,
+      dimension_type TEXT NOT NULL CHECK(dimension_type IN (
+        'playstyle_modifiers',
+        'social_emotional_traits',
+        'system_exposures',
+        'life_contexts'
+      )),
+      value TEXT NOT NULL,
+      FOREIGN KEY (persona_id) REFERENCES personas(id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_persona_dimensions_persona_id
+      ON persona_dimensions(persona_id);
+    CREATE INDEX IF NOT EXISTS idx_persona_dimensions_type
+      ON persona_dimensions(dimension_type);
+  `);
+
+  // Generation statistics
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS persona_generation_stats (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      batch_id TEXT NOT NULL,
+      total_generated INTEGER NOT NULL,
+      valid_count INTEGER NOT NULL,
+      invalid_count INTEGER NOT NULL,
+      dimension_distribution TEXT,
+      generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_generation_stats_batch
+      ON persona_generation_stats(batch_id);
+  `);
+
   // Store schema version
   db.exec(`
     CREATE TABLE IF NOT EXISTS schema_info (
