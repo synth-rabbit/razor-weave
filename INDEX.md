@@ -4,9 +4,11 @@ Quick reference for navigating the Razorweave project.
 
 ## Getting Started
 
-- **For Humans**: Start with [README.md](README.md)
-- **For Agents**: Start with [AGENTS.md](AGENTS.md)
+- **New Developers**: Start with [Getting Started Guide](docs/GETTING_STARTED.md)
+- **For Humans**: Project overview in [README.md](README.md)
+- **For Agents**: Instructions in [AGENTS.md](AGENTS.md)
 - **Current Plan**: See [PLAN.md](PLAN.md)
+- **Project Structure**: See [Directory Structure](docs/plans/DIRECTORY_STRUCTURE.md)
 
 ## Project Documentation
 
@@ -16,11 +18,12 @@ Quick reference for navigating the Razorweave project.
 - [Agentic Processes](docs/agents/AGENTIC_PROCESSES.md) - Automated agent workflows
 
 ### Workflows
-- [Content Pipeline](docs/workflows/content_pipeline/) - Content creation process
-- [Review Pipeline](docs/workflows/review_pipeline/) - Review and analysis process
-- [Playtest Pipeline](docs/workflows/playtest_pipeline/) - Playtesting process
-- [PDF Pipeline](docs/workflows/pdf_pipeline/) - PDF generation and design
-- [Release Pipeline](docs/workflows/release_pipeline/) - Publication and release
+- [End-to-End Pipeline](docs/workflows/END_TO_END_PIPELINE.md) - Complete workflow
+- [Git Hooks Guide](docs/workflows/GIT_HOOKS.md) - Automated quality checks
+- [Project Database](docs/workflows/PROJECT_DATABASE.md) - Content history and state
+- Content Pipeline (planned)
+- Review Pipeline (planned)
+- Playtest Pipeline (planned)
 
 ### Style Guides
 - [Prose Style Guide](docs/style_guides/prose/) - Writing style guidelines
@@ -39,9 +42,10 @@ Quick reference for navigating the Razorweave project.
 - **Settings**: `books/settings/{slice}/{setting}/v1/`
   - Slices: cozy, fantasy, horror_mystery, modern, sci_fi
 
-### Rules
-- **Core Rules**: `rules/core/`
-- **Expanded Rules**: `rules/expanded/`
+### Rules (Planned)
+- **Core Rules**: `rules/core/` (not yet implemented)
+- **Expanded Rules**: `rules/expanded/` (not yet implemented)
+- **Current location**: Rules are in book manuscripts
 
 ### Data
 - **Personas**: `data/personas/`
@@ -51,16 +55,27 @@ Quick reference for navigating the Razorweave project.
 
 ## Source Code
 
-- **Agents**: `src/agents/`
-  - Content: `src/agents/content/`
-  - Review: `src/agents/review/`
-  - Playtest: `src/agents/playtest/`
-  - PDF: `src/agents/pdf/`
-  - Release: `src/agents/release/`
-
-- **Workflows**: `src/workflows/`
+**Implemented:**
+- **Tooling**: `src/tooling/`
+  - Database: `src/tooling/database/`
+  - Git Hooks: `src/tooling/hooks/git/`
+  - Claude Hooks: `src/tooling/hooks/claude/`
+  - Validators: `src/tooling/validators/`
+  - Linters: `src/tooling/linters/`
+- **Shared**: `src/shared/` - Shared utilities
 - **CLI Tools**: `src/cli/`
 - **Site Generator**: `src/site/`
+- **Workflows**: `src/workflows/`
+- **Tools**: `src/tools/`
+- **Maintenance**: `src/maintenance/`
+
+**Planned:**
+- **Agents**: `src/agents/`
+  - Content: `src/agents/content/` (planned)
+  - Review: `src/agents/review/` (planned)
+  - Playtest: `src/agents/playtest/` (planned)
+  - PDF: `src/agents/pdf/` (planned)
+  - Release: `src/agents/release/` (planned)
 
 ## Quick File Lookup
 
@@ -76,7 +91,30 @@ Quick reference for navigating the Razorweave project.
 - **Quality metrics**: `data/metrics/`
 
 ### Finding Documentation
+- **Getting started**: `docs/GETTING_STARTED.md`
 - **Agent instructions**: `docs/agents/`
 - **Project plans**: `docs/plans/`
 - **Style guides**: `docs/style_guides/`
 - **Workflow docs**: `docs/workflows/`
+- **Review reports**: `docs/reviews/`
+
+## Configuration
+
+### Git Hooks
+- **Location**: `.husky/`
+- **Hooks**: pre-commit, commit-msg, post-commit, post-checkout
+- **Documentation**: [Git Hooks Guide](docs/workflows/GIT_HOOKS.md)
+
+### Claude Code Hooks
+- **Location**: `.claude/hooks/`
+- **Hooks**: session_start, before_tool_call, after_tool_call, user_prompt_submit
+- **Documentation**: AGENTS.md, docs/workflows/CLAUDE_HOOKS.md (Phase 3)
+
+### Scripts
+- **Location**: `scripts/`
+- **Review scripts**: `scripts/review/`
+- **Database verification**: `scripts/verify-database.ts`
+
+### Database
+- **Location**: `src/tooling/data/project.db`
+- **Documentation**: [Project Database Guide](docs/workflows/PROJECT_DATABASE.md)

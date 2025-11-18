@@ -20,66 +20,67 @@ The complete workflow for creating, reviewing, editing, and releasing TTRPG book
 
 **Audience:** Everyone - this is the core workflow for the project
 
-### Git Hooks (Documentation Needed)
+### [Git Hooks](GIT_HOOKS.md)
 
 **Purpose:** Automated validation and enforcement on git operations
 
 **Hooks Implemented:**
-- `commit-msg` - Validates commit message format
-- `pre-commit` - Runs linters and validators before commit
-- `post-commit` - Records commits in database
-- `post-checkout` - Updates environment after branch switches
+- `pre-commit` - Linting, tests, validation, snapshots
+- `commit-msg` - Message format validation
+- `post-commit` - Database updates, PROMPT.md reset
+- `post-checkout` - PROMPT.md display
 
-**Current State:** Implemented but not documented
+**Documentation:** [GIT_HOOKS.md](GIT_HOOKS.md)
 
-**Suggested Documentation:** `GIT_HOOKS.md`
+**Quick Reference:** See [Git Commit Conventions](../style_guides/git/commit-conventions.md) for message format
 
-See [Git Commit Conventions](../style_guides/git/commit-conventions.md) for commit message format.
+**Audience:** All developers
 
-### Claude Code Hooks (Documentation Needed)
+### [Claude Code Hooks](CLAUDE_HOOKS.md)
 
 **Purpose:** Integration with Claude Code environment
 
 **Hooks Implemented:**
-- `session-start.ts` - Initialize session state
-- `after-tool-call.ts` - Capture file changes to database
-- `before-tool-call.ts` - Pre-operation validation
-- `user-prompt-submit.ts` - Process user prompts
+- `session_start` - Display project context
+- `before_tool_call` - Pre-execution validation
+- `after_tool_call` - Track changes and create snapshots
+- `user_prompt_submit` - Prompt enhancement (planned)
 
-**Current State:** Implemented but not documented
+**Documentation:** [CLAUDE_HOOKS.md](CLAUDE_HOOKS.md)
 
-**Suggested Documentation:** `CLAUDE_HOOKS.md`
+**Audience:** Claude Code users
 
-### Project Database (Documentation Needed)
+### [Project Database](PROJECT_DATABASE.md)
 
 **Purpose:** State persistence and content history tracking
 
 **Features:**
-- Session state persistence
 - Chapter version snapshots
-- Book version tracking
+- Project state tracking
 - Data artifact management
-- Content history and diffs
+- Git commit integration
+- Point-in-time recovery
 
-**Current State:** Implemented with excellent design doc
+**Documentation:** [PROJECT_DATABASE.md](PROJECT_DATABASE.md)
 
 **Design Document:** [Project Database Design](../plans/2025-11-18-project-database-design.md)
 
-**Suggested User Guide:** `PROJECT_DATABASE.md`
+**Audience:** All developers, content creators
 
-### Validation System (Documentation Needed)
+### [Validation System](VALIDATION.md)
 
 **Purpose:** Automated quality checks and standards enforcement
 
 **Validators:**
-- Link validation
-- Mechanics validation (dice notation, DC values)
-- Term extraction and consistency
-- Database integrity checks
+- TypeScript linting (ESLint)
+- Markdown linting (markdownlint)
+- Plan naming validation
+- Link validation (planned)
+- Mechanics validation (planned)
 
-**Current State:** Scripts exist but not documented
+**Documentation:** [VALIDATION.md](VALIDATION.md)
 
-**Suggested Documentation:** `VALIDATION.md`
+**Audience:** All developers
 
 ## Workflow Categories
 

@@ -38,7 +38,16 @@ Cross-referencing documents that tie related plans together:
 
 Proposed project structure and organization:
 
-- **[Directory Structure](DIRECTORY_STRUCTURE.md)** - Proposed directory organization
+- **[Directory Structure](DIRECTORY_STRUCTURE.md)** - Project directory organization (implemented with deviations)
+
+### Documentation Plans
+
+Documentation improvement and maintenance:
+
+- **[Documentation Improvements Index](documentation-improvements-index.md)** - Documentation overhaul plan
+- **[Documentation Improvements P1](documentation-improvements-P1.md)** - Phase 1: Developer onboarding
+- **[Documentation Improvements P2](documentation-improvements-P2.md)** - Phase 2: Structure updates
+- **[Documentation Improvements P3](documentation-improvements-P3.md)** - Phase 3: Tool documentation
 
 ## Documents by Category
 
@@ -60,7 +69,12 @@ Proposed project structure and organization:
 
 ### Project Organization
 
-- [Directory Structure](DIRECTORY_STRUCTURE.md) - File organization proposal
+- [Directory Structure](DIRECTORY_STRUCTURE.md) - File organization (implemented)
+
+### Documentation
+
+- [Documentation Improvements Index](documentation-improvements-index.md) - Documentation improvement plan
+- Documentation Improvements Phases (P1, P2, P3)
 
 ## Document Status
 
@@ -167,6 +181,15 @@ Complete database implementation:
 1. [Database Design](2025-11-18-project-database-design.md) - Architecture
 2. [Database Implementation](2025-11-18-project-database.md) - Details
 
+### Documentation Improvements Series
+
+Documentation overhaul in three phases:
+
+1. [Index](documentation-improvements-index.md) - Overview and goals
+2. [Phase 1](documentation-improvements-P1.md) - Developer onboarding
+3. [Phase 2](documentation-improvements-P2.md) - Structure updates
+4. [Phase 3](documentation-improvements-P3.md) - Tool documentation
+
 ## Implemented Features
 
 These plans have been implemented:
@@ -176,6 +199,9 @@ These plans have been implemented:
 - ✅ Claude Code hooks (session-start, after-tool-call, etc.)
 - ✅ Project database (schema, clients, integration)
 - ✅ Linting and code formatting
+- ✅ Documentation improvements Phase 1 (developer onboarding)
+- ✅ Documentation improvements Phase 2 (structure updates)
+- 🚧 Documentation improvements Phase 3 (tool documentation - in progress)
 - 🚧 Core rulebook consolidation (in progress)
 - 🚧 Persona system (design complete, implementation pending)
 
