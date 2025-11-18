@@ -122,16 +122,280 @@
       margin-bottom: 0.5rem;
       text-align: left;
     }
+    /* ===================================
+       RESPONSIVE LAYOUT - MOBILE FIRST
+       =================================== */
+
+    /* Base styles (Mobile < 640px) */
+    /* Mobile-first approach - base styles already optimized for mobile */
+
+    /* Mobile specific overrides */
     @media (max-width: 640px) {
+      /* Typography scaling for mobile */
+      body {
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+
+      h4 {
+        font-size: 1.05rem;
+      }
+
+      /* Compressed layout */
       main {
         padding: 1.5rem 1rem 3rem;
+        max-width: 100%;
       }
-      nav ul {
+
+      /* Compressed sticky header */
+      nav {
+        padding: 0.75rem 1rem;
+      }
+
+      nav .toc-root {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      nav .toc-root > li {
+        margin-right: 0;
+        width: 100%;
+      }
+
+      nav .toc-root > li > ul {
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-left: 0.5rem;
+      }
+
+      /* Touch-friendly link targets (minimum 44px) */
+      nav a {
+        display: inline-block;
+        min-height: 44px;
+        line-height: 44px;
+        padding: 0 0.5rem;
+      }
+
+      /* Vertical stacking */
+      header, section, article {
+        margin-bottom: 2rem;
+      }
+
+      /* Responsive tables - horizontal scroll */
+      table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.85rem;
+      }
+
+      /* Better spacing for blocks */
+      .example, .gm {
+        padding: 0.6rem 0.8rem;
+        margin: 0.75rem 0;
+        font-size: 0.9rem;
+      }
+
+      .sheet-block {
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
       }
     }
+
+    /* Tablet (640px - 1024px) */
+    @media (min-width: 640px) and (max-width: 1023px) {
+      /* Typography scaling for tablet */
+      body {
+        font-size: 17px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+      }
+
+      h4 {
+        font-size: 1.08rem;
+      }
+
+      /* Two-column optimized layout */
+      main {
+        max-width: 100%;
+        padding: 2rem 2rem 4rem;
+      }
+
+      /* Navigation - horizontal but wrapped */
+      nav {
+        padding: 0.9rem 2rem;
+      }
+
+      nav .toc-root {
+        font-size: 0.93rem;
+      }
+
+      /* Better horizontal space usage */
+      header, section, article {
+        margin-bottom: 2.5rem;
+      }
+
+      /* Tables - better spacing */
+      table {
+        font-size: 0.92rem;
+      }
+
+      th, td {
+        padding: 0.5rem 0.75rem;
+      }
+    }
+
+    /* Desktop (>= 1024px) */
+    @media (min-width: 1024px) {
+      /* Typography scaling for desktop */
+      body {
+        font-size: 18px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+      }
+
+      h4 {
+        font-size: 1.1rem;
+      }
+
+      /* Full horizontal layout with enhanced whitespace */
+      main {
+        max-width: 960px;
+        padding: 2.5rem 2rem 5rem;
+      }
+
+      /* Full navigation visibility */
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      nav .toc-root {
+        font-size: 0.95rem;
+      }
+
+      /* Enhanced hover states */
+      nav a:hover {
+        text-decoration: underline;
+        color: #003366;
+      }
+
+      a:hover {
+        color: #003366;
+      }
+
+      /* Enhanced spacing */
+      header, section, article {
+        margin-bottom: 3rem;
+      }
+
+      /* Better table presentation */
+      table {
+        font-size: 0.95rem;
+      }
+
+      th, td {
+        padding: 0.5rem 0.8rem;
+      }
+
+      /* Enhanced blocks with better whitespace */
+      .example, .gm {
+        padding: 0.875rem 1.25rem;
+        margin: 1.25rem 0;
+      }
+
+      .sheet-block {
+        padding: 1.25rem 1.5rem;
+        margin: 1.75rem 0;
+      }
+    }
+
+    /* Large Desktop (>= 1440px) - Extra breathing room */
+    @media (min-width: 1440px) {
+      main {
+        max-width: 1080px;
+        padding: 3rem 2.5rem 6rem;
+      }
+
+      h1 {
+        font-size: 2.75rem;
+      }
+
+      h2 {
+        font-size: 2.2rem;
+      }
+    }
+
+    /* Small Mobile (320px) - Extra compact */
+    @media (max-width: 320px) {
+      body {
+        font-size: 15px;
+      }
+
+      main {
+        padding: 1rem 0.75rem 2.5rem;
+      }
+
+      nav {
+        padding: 0.5rem 0.75rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      table {
+        font-size: 0.8rem;
+      }
+
+      th, td {
+        padding: 0.3rem 0.4rem;
+      }
+    }
+
+    /* Accessibility: Reduced motion preference */
     @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
       nav {
         transition: none;
       }
