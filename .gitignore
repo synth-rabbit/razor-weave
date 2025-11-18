@@ -24,6 +24,12 @@ Thumbs.db
 # Testing
 coverage/
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
 # Logs
 *.log
 npm-debug.log*
@@ -38,3 +44,8 @@ source/codex/
 
 # Git worktrees
 .worktrees/
+
+# Project database
+data/project.db
+data/project.db-shm
+data/project.db-wal

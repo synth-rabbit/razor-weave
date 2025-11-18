@@ -29,14 +29,16 @@
     "@razorweave/shared": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
+    "better-sqlite3": "^12.4.1",
     "eslint": "^8.56.0",
-    "prettier": "^3.2.4",
-    "markdownlint-cli2": "^0.12.1",
     "glob": "^10.3.10",
-    "zod": "^3.22.4",
-    "husky": "^8.0.3"
+    "husky": "^8.0.3",
+    "markdownlint-cli2": "^0.12.1",
+    "prettier": "^3.2.4",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.10.0",
     "typescript": "^5.3.3",
     "vitest": "^1.1.0"
