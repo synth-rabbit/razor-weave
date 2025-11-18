@@ -1,6 +1,14 @@
+/* eslint-disable no-console */
 import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-export async function runLinters(files?: string[]): Promise<void> {
+// Get the repository root (3 levels up from this file)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const repoRoot = resolve(__dirname, '../../..');
+
+export function runLinters(files?: string[]): void {
   console.log('🔍 Running linters...\n');
 
   const tsFiles = files?.filter(f => f.endsWith('.ts')) ?? [];
@@ -16,7 +24,8 @@ export async function runLinters(files?: string[]): Promise<void> {
       // Lint tooling files from within the tooling workspace
       if (toolingFiles.length > 0) {
         const relativeFiles = toolingFiles.map(f => f.replace('src/tooling/', ''));
-        execSync(`cd src/tooling && eslint ${relativeFiles.join(' ')}`, {
+        const toolingDir = resolve(repoRoot, 'src/tooling');
+        execSync(`cd "${toolingDir}" && eslint ${relativeFiles.join(' ')}`, {
           stdio: 'inherit',
           shell: '/bin/bash',
         });
@@ -26,6 +35,7 @@ export async function runLinters(files?: string[]): Promise<void> {
       if (otherFiles.length > 0 || (!files && otherFiles.length === 0 && toolingFiles.length === 0)) {
         execSync(`eslint ${!files || otherFiles.length === 0 ? 'src/**/*.ts' : otherFiles.join(' ')}`, {
           stdio: 'inherit',
+          cwd: repoRoot,
         });
       }
 
@@ -54,5 +64,5 @@ export async function runLinters(files?: string[]): Promise<void> {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runLinters().catch(console.error);
+  runLinters();
 }
