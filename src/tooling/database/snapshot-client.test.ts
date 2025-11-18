@@ -51,7 +51,7 @@ describe('SnapshotClient', () => {
   });
 
   it('should mark snapshots as committed', async () => {
-    const id = await db.snapshots.createChapterSnapshot(testChapterPath, 'claude');
+    await db.snapshots.createChapterSnapshot(testChapterPath, 'claude');
 
     db.snapshots.markAsCommitted('abc123');
 
