@@ -35,3 +35,6 @@ pnpm-debug.log*
 
 # Source files to ignore
 source/codex/
+
+# Git worktrees
+.worktrees/
