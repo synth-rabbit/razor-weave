@@ -1,0 +1,3263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Razorweave Core Rulebook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #ffffff;
+      color: #222222;
+      margin: 0;
+      padding: 0;/
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      line-height: 1.6;
+    }
+    header, section, article {
+      margin-bottom: 3rem;
+    }
+    h1, h2, h3, h4 {
+      font-family: "Georgia", "Times New Roman", serif;
+      line-height: 1.2;
+    }
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-top: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h3 {
+      font-size: 1.3rem;
+      margin-top: 1.75rem;
+    }
+    h4 {
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
+    }
+    nav {
+      background: #f5f5f5;
+      border-bottom: 1px solid #dddddd;
+      padding: 1rem 1.5rem;
+    }
+    nav .toc-root {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+    }
+    nav .toc-root > li {
+      margin-right: 1.5rem;
+    }
+    nav .toc-root > li > a {
+      font-weight: 600;
+    }
+    nav .toc-root > li > ul {
+      list-style: none;
+      margin: 0.4rem 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1rem;
+      font-weight: 400;
+    }
+    nav a {
+      color: #004b8d;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .example, .gm {
+      border-left: 4px solid #004b8d;
+      background: #f7fbff;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    .gm {
+      border-left-color: #8b3c00;
+      background: #fff8f2;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid #cccccc;
+      padding: 0.4rem 0.6rem;
+      text-align: left;
+    }
+    thead th {
+      background: #f0f0f0;
+    }
+    tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+    caption {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+    @media (max-width: 640px) {
+      main {
+        padding: 1.5rem 1rem 3rem;
+      }
+      nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul class="toc-root">
+      <li>
+        <a href="#part-i-foundations">Part I: Foundations</a>
+        <ul>
+          <li><a href="#ch-01-welcome-to-the-game">1. Welcome to the Game</a></li>
+          <li><a href="#ch-02-core-concepts">2. Core Concepts at a Glance</a></li>
+          <li><a href="#ch-03-how-to-use-this-rulebook">3. How to Use This Rulebook</a></li>
+          <li><a href="#ch-04-core-principles-of-play">4. Core Principles of Play</a></li>
+          <li><a href="#ch-05-ways-to-play">5. Ways to Play the Game</a></li>
+          <li><a href="#ch-06-character-creation">6. Character Creation</a></li>
+          <li><a href="#ch-07-characters-and-attributes">7. Characters and Attributes</a></li>
+          <li><a href="#ch-08-actions-checks-outcomes">8. Actions, Checks, and Outcomes</a></li>
+          <li><a href="#ch-09-tags-conditions-clocks">9. Tags, Conditions, and Clocks</a></li>
+          <li><a href="#ch-10-combat-basics">10. Combat Basics</a></li>
+          <li><a href="#ch-11-exploration-social-play">11. Exploration and Social Play</a></li>
+          <li><a href="#ch-12-downtime-recovery-advancement-overview">12. Downtime, Recovery, and Advancement Overview</a></li>
+          <li><a href="#ch-13-roleplaying-guidance-working-with-gm">13. Roleplaying Guidance and Working with the GM</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#part-ii-skills-proficiencies">Part II: Skills, Proficiencies, and Mechanical Reference</a>
+        <ul>
+          <li><a href="#ch-14-skills-system-overview">14. Skills System Overview</a></li>
+          <li><a href="#ch-15-skills-reference-by-attribute">15. Skills Reference</a></li>
+          <li><a href="#ch-16-proficiencies-system-overview">16. Proficiencies System Overview</a></li>
+          <li><a href="#ch-17-proficiencies-reference-by-domain">17. Proficiencies Reference by Domain</a></li>
+          <li><a href="#ch-18-extended-tags-conditions-reference">18. Extended Tags and Conditions Reference</a></li>
+          <li><a href="#ch-19-advancement-long-term-growth">19. Advancement and Long Term Growth</a></li>
+          <li><a href="#ch-20-optional-variant-rules">20. Optional and Variant Rules</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#part-iii-reference-and-gm">Part III: Game Master Section</a>
+        <ul>
+          <li><a href="#ch-21-running-sessions">21. Running Sessions</a></li>
+          <li><a href="#ch-22-running-campaigns">22. Running Campaigns</a></li>
+          <li><a href="#ch-23-designing-scenarios-one-shots">23. Designing Scenarios and One Shots</a></li>
+          <li><a href="#ch-24-npcs-vpcs-enemies">24. NPCs, VPCs, and Enemies</a></li>
+          <li><a href="#ch-25-factions-fronts-world-pressure">25. Factions, Fronts, and World Pressure</a></li>
+          <li><a href="#ch-26-gmless-shared-authority-play">26. GMless and Shared Authority Play</a></li>
+          <li><a href="#ch-27-solo-framework">27. Solo Framework</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#part-iv-glossary-index">Part IV: Glossary and Index</a>
+        <ul>
+          <li><a href="#ch-28-glossary">28. Glossary</a></li>
+          <li><a href="#ch-29-index">29. Index</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- Part I: Foundations -->
+    <section id="part-i-foundations" class="part-intro">
+      <h1>Part I: Foundations</h1>
+      <p>
+        Part I introduces the core ideas of the game: what it is about, how to read and use this rulebook, and
+        how to build characters who feel grounded in the world. These chapters define Attributes, Actions,
+        Checks, Tags, Conditions, Clocks, and the overall flow of play.
+      </p>
+      <p>
+        By the end of Part I, you should understand how to create a character, how to resolve uncertainty at the
+        table, how combat, exploration, and social scenes work, and how to collaborate with your group and GM to
+        tell stories together.
+      </p>
+    </section>
+    <header id="ch-01-welcome-to-the-game">
+      <h1 id="welcome-to-the-game">1. Welcome to the Game</h1>
+      <p>
+        This Core Rulebook is the single source of truth for the system. It explains how to create characters,
+        how to resolve uncertain moments, and how to build stories together across many different genres. You do
+        not need to memorize the entire book before you play. You only need to know where to look when questions
+        arise.
+      </p>
+      <p>
+        The rules are written with a fiction first mindset. The story comes first. Mechanics support the story
+        when the outcome of an action is uncertain and meaningful. When the outcome is clear, you simply describe
+        what happens and move on.
+      </p>
+      <p>
+        This game is built for cooperative play. The table is a creative team. Players bring characters to life.
+        The Game Master presents the world, its challenges, and its opportunities. The rules help everyone answer
+        a single question together: what happens next?
+      </p>
+      <p>
+        The chapters that follow will introduce the core concepts, show you how to use this book, and guide you
+        through creating your first character. Later sections deepen the rules and provide tools for long running
+        campaigns, solo journeys, and shared authority play.
+      </p>
+    </header>
+
+    <section id="ch-02-core-concepts">
+      <h2 id="core-concepts-at-a-glance-heading">2. Core Concepts at a Glance</h2>
+      <p>
+        This chapter introduces the most important ideas in the system in a compact form. Later chapters expand
+        and refine them, but everything begins here. You can return to these concepts whenever you need to realign
+        on how the game is meant to feel at the table.
+      </p>
+      <h3 id="core-concepts-fiction-first">Fiction First</h3>
+      <p>
+        The story is always the starting point. You begin by understanding the situation, describing what the
+        characters do, and only then reaching for rules if the outcome is uncertain and meaningful. You do not
+        start with a rule and then try to force the fiction to match it.
+      </p>
+      <h3 id="core-concepts-characters">Characters</h3>
+      <p>
+        Characters are the main lens through which you experience the world. They are defined by four Attributes
+        (Might (MIG), Agility (AGI), Presence (PRE), Reason (RSN)), a small set of Skills, a focused group of Proficiencies, and the
+        choices they make. Characters also have histories, goals, and unresolved threads that tie them to the
+        world.
+      </p>
+      <h3 id="core-concepts-checks-outcomes">Checks and Outcomes</h3>
+      <p>
+        A Check is the system's way of resolving uncertainty when the stakes matter. When you make a Check, you
+        use an Attribute, a Skill, and the shared fiction to determine what is at risk. The result produces an
+        outcome tier, which becomes the next beat in the story. Success, partial success, and failure are all
+        ways for the story to move forward.
+      </p>
+      <h3 id="core-concepts-tags-conditions-clocks">Tags, Conditions, and Clocks</h3>
+      <p>
+        Tags and Conditions are short descriptors that shape how the world and characters behave. Tags are applied
+        to scenes, locations, or situations. Conditions are ongoing states on characters. Clocks are visual
+        trackers of danger, opportunity, or change. Together they help the table feel the weight of time and
+        consequence.
+      </p>
+      <h3 id="core-concepts-table-collaboration">Table Collaboration</h3>
+      <p>
+        The system assumes that everyone at the table contributes to the story. The GM presents the world
+        honestly. Players act through their characters with clear intent and approach. The rules help resolve
+        what happens when those actions encounter uncertainty or resistance.
+      </p>
+      <p>
+        You can begin play after reading Chapters 1 through 6. The rest of the book deepens and extends the core
+        ideas as your table needs them.
+      </p>
+    </section>
+
+    <section id="ch-03-how-to-use-this-rulebook">
+      <h2 id="how-to-use-this-rulebook-heading">3. How to Use This Rulebook</h2>
+
+      <p>
+        This chapter explains how to navigate the Core Rulebook, how to understand the structure of the system,
+        and how to use the text at the table. You do not need to memorize everything before you begin play. The
+        book is designed so that you can learn the basics, then return to specific chapters as questions arise.
+      </p>
+
+      <h3 id="navigating-the-book">Navigating the Book</h3>
+
+      <p>
+        The Core Rulebook is organized to support both reading and quick reference. The structure is:
+      </p>
+
+      <ul>
+        <li><strong>Chapters 1 through 5</strong> introduce the game, the core concepts, how to use the book, the principles of play, and the different ways to play.</li>
+        <li><strong>Chapters 6 through 13</strong> present the core rules that players will use most often at the table, including character creation, attributes, and core resolution.</li>
+        <li><strong>Chapters 14 through 17</strong> provide the full Skills and Proficiencies references.</li>
+        <li><strong>Chapters 18 through 20</strong> collect key mechanical references such as Tags, Conditions, and advancement.</li>
+        <li><strong>Chapters 21 through 26</strong> give the Game Master tools for running scenes, campaigns, and alternative modes of play.</li>
+        <li><strong>Chapters 27 and 28</strong> provide the glossary and index.</li>
+      </ul>
+
+      <p>
+        If you are new to tabletop roleplaying, it is helpful to read Chapters 1 through 5 in order. If you
+        already have experience, you can skim the early chapters, then focus on Chapters 6 and 7, where the
+        core resolution and character structure are introduced in detail.
+      </p>
+
+      <h3 id="rules-as-tools">Rules as Tools</h3>
+
+      <p>
+        The rules in this book are tools. They help the table answer the question of what happens next. You do
+        not exist to serve the rules. The rules exist to support your story. When a rule clarifies a moment, use
+        it. When a rule does not add anything useful, resolve the situation through conversation instead. The
+        game is at its best when the rules and the fiction work together.
+      </p>
+
+      <p>
+        The system is built around a single resolution structure. Attributes, Skills, Proficiencies, Tags,
+        Conditions, and Clocks all connect to this structure. Once you understand how Checks work, the rest of
+        the mechanics will feel familiar and consistent.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        The group reaches a sealed laboratory door. The GM describes the control panel and the faint glow
+        of backup power. The players discuss how their characters might open it. No one grabs dice yet. The
+        table first decides whether the action is risky and meaningful. Only then do the rules become
+        necessary.
+      </div>
+
+      <h3 id="what-a-rule-explains">What a Rule Explains</h3>
+
+      <p>
+        Every major rule in this book answers three questions. What does this rule cover. When does it
+        apply. How does it influence the fiction. These three ideas appear in the way chapters are written
+        and in the examples that follow them. If a rule feels confusing, return to these questions. They
+        usually point to the intended use.
+      </p>
+
+      <h3 id="fiction-first-structure">Fiction First Structure</h3>
+
+      <p>
+        The rules always follow the fiction. You begin by understanding the situation, the environment, and
+        the characters. You describe what is happening in the story. Only when the outcome of an action is
+        uncertain and meaningful do you reach for mechanics. You do not start with a rule and then try to
+        force the fiction to match it.
+      </p>
+
+      <h3 id="checks-in-context">Checks in Context</h3>
+
+      <p>
+        Checks are the system's way of resolving uncertainty. Later chapters explain the procedure in
+        detail. This chapter focuses on how to think about Checks as you read. A Check is a signal that the
+        scene has reached a point where chance and consequence matter. When a Check is called for, the
+        chapter you are reading will explain exactly which part of the system is in focus.
+      </p>
+
+      <h3 id="learning-the-flow">Learning the Flow of the System</h3>
+
+      <p>
+        The system has a flow that you will learn over time. You do not need to master everything at once.
+        Instead, you can approach the book in layers. First, read enough to understand the core loop. Then,
+        as your group encounters new situations, you can read or reread the chapters that support those
+        scenes.
+      </p>
+
+      <h3 id="intent-and-approach-in-the-text">Intent and Approach in the Text</h3>
+
+      <p>
+        As you read rule examples, notice how often the words intent and approach appear. They are used
+        deliberately. Intent describes what the character wants to achieve. Approach describes how the
+        character is trying to achieve it. Many examples in this book use that pairing to show why certain
+        Attributes, Skills, or Proficiencies apply.
+      </p>
+
+      <h3 id="recognizing-rule-triggers">Recognizing Rule Triggers</h3>
+
+      <p>
+        Not every scene needs mechanical resolution. One of the skills you develop as you read and play is
+        the ability to recognize which moments call for specific rules. When the story reaches a point where
+        uncertainty and consequence align, a rule triggers. A chapter might say that a certain kind of
+        situation often triggers a Check, or that a specific type of danger often advances a Clock.
+      </p>
+
+      <h3 id="using-examples">Using Examples</h3>
+
+      <p>
+        Examples appear throughout this book to demonstrate the rules in action. They follow a consistent
+        pattern. The scene is described. A player states intent and approach. The GM decides whether a Check
+        is needed. Dice are rolled. The outcome changes the situation. The example then shows how that
+        change affects the next moment of the story.
+      </p>
+
+      <h3 id="using-the-glossary">Using the Glossary</h3>
+
+      <p>
+        The glossary at the end of the book is the authoritative source for terms. When a word has a
+        glossary definition, it will appear with a link the first time it is used in a chapter. If you are
+        uncertain about the meaning of a term, check the glossary entry. It often clears up confusion that
+        might arise from casual reading.
+      </p>
+
+      <h3 id="reading-as-a-group">Reading as a Group</h3>
+
+      <p>
+        Many groups benefit from reading the early chapters together. A session zero that includes a shared
+        read through of the welcome, core concepts, and principles of play chapters helps everyone align on
+        tone and expectations. Chapter 5, Ways to Play the Game, is also useful to read as a group so that
+        everyone understands which play style you are aiming for.
+      </p>
+
+      <h3 id="chapter-3-summary">Chapter Summary</h3>
+
+      <p>
+        This chapter has given you a lens for reading the rest of the book. Treat the rules as tools that
+        support your story. Let the fiction guide when mechanics come into play. Use examples and the
+        glossary to deepen your understanding. Move at a pace that feels comfortable. The next chapter
+        introduces the core principles of play that shape every session at your table.
+      </p>
+    </section>
+
+    <section id="ch-04-core-principles-of-play">
+      <h2 id="core-principles-of-play-heading">4. Core Principles of Play</h2>
+
+      <p>
+        This chapter explains the principles that shape every session of the game. These principles guide how
+        players describe actions, how the GM presents situations, and how the table works together to move the
+        story forward. They are not rules in the mechanical sense. They are values and habits that help the
+        system produce consistent and engaging play.
+      </p>
+      <p>
+        The game uses a fiction first approach. You begin with the situation, decide what the characters do,
+        and let the rules support the story when uncertainty and consequence appear. The principles below help
+        the table maintain that flow.
+      </p>
+
+      <h3 id="core-principles-table-creative-team">The Table Is a Creative Team</h3>
+      <p>
+        Every player at the table is part of the creative process. The GM presents the world. Players bring
+        characters to life. The conversation between them becomes the engine of play. No one person controls
+        the story. The table builds it together.
+      </p>
+      <p>
+        The GM describes locations, events, and pressures. Players respond by stating what their characters
+        attempt. When the situation contains meaningful risk, the rules support the moment. In scenes that are
+        calm or certain, the group continues the story through simple narration.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        The GM describes a run down depot on the outskirts of a coastal town. A player says their character
+        wants to scout the area quietly. Another player suggests checking the rail lines for signs of use. The
+        GM listens, considers what is true about this place, and describes what those actions reveal. No rule
+        is required yet. The table is building the fiction through conversation.
+      </div>
+
+      <h3 id="core-principles-player-intent">Player Intent Drives Action</h3>
+      <p>
+        A player states what their character wants to accomplish. This is intent. They then explain how their
+        character attempts it. This is approach. The GM uses intent and approach to decide whether the action
+        succeeds automatically or whether risk is present.
+      </p>
+      <p>
+        Intent focuses the scene. Approach shapes which Attributes, Skills, or Proficiencies may apply. The
+        rules always interpret a character's attempt in the context of the fiction, not as a puzzle of
+        modifiers.
+      </p>
+
+      <h3 id="core-principles-gm-honesty">The GM Presents the World Honestly</h3>
+      <p>
+        The GM is responsible for portraying the world clearly and fairly. This means describing situations
+        honestly, sharing sensory details, and revealing information that the characters would reasonably
+        perceive. The GM does not use surprises to punish the players. Instead, surprises serve the fiction and
+        come from established threats or incomplete information.
+      </p>
+
+      <div class="gm">
+        <strong>GM Insight</strong>
+        Honesty does not mean revealing every detail. It means playing the world as it is, not as a tool to
+        control the players. Present danger when danger exists. Present opportunity when opportunity exists.
+      </div>
+
+      <h3 id="core-principles-fiction-first-mechanics-second">Fiction First, Mechanics Second</h3>
+      <p>
+        Mechanics never replace the shared imagination of the table. Instead, they provide structure when the
+        story reaches a point of risk or uncertainty. If no risk exists, the GM simply narrates the outcome of
+        the player's action. This keeps the pace smooth and avoids unnecessary rules.
+      </p>
+      <p>
+        A Check only occurs when the outcome is meaningfully uncertain, the stakes matter to the story, and
+        failure or partial success would move the scene forward in an interesting way.
+      </p>
+
+      <h3 id="core-principles-failure-momentum">Failure Creates Momentum</h3>
+      <p>
+        Failure is not an end point. It is a change in direction. When a Check fails, the story moves forward
+        into a new state. This might introduce complications, new dangers, or shifts in position. Failure
+        should never stop the story. It should bend it.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        A character tries to leap across a narrow canal. The Check fails. The GM does not say the character
+        falls into the water and nothing more happens. Instead, the GM describes how the character grabs a
+        rusted ladder, swings against the wall, and attracts the attention of guards nearby. The failure adds
+        motion to the scene.
+      </div>
+
+      <h3 id="core-principles-partial-success">Partial Success Is a Core Story Beat</h3>
+      <p>
+        Partial success provides a result that sits between success and failure. The character achieves part of
+        what they intended, but not all of it, or they succeed with a cost. This outcome creates tension,
+        opportunity, and interesting decisions.
+      </p>
+
+      <h3 id="core-principles-gm-describes-outcomes">The GM Describes Outcomes, Not Numbers</h3>
+      <p>
+        The players roll dice. The GM interprets the results in the fiction. A number never appears without
+        narrative meaning. The GM describes what the dice reveal. The story changes in ways that make sense in
+        the scene.
+      </p>
+
+      <h3 id="core-principles-player-agency">Player Agency Comes From Clear Choices</h3>
+      <p>
+        Agency in this system comes from informed decision making. The GM describes situations in enough detail
+        that players can understand what is at stake and choose their actions freely. When the stakes are clear,
+        Checks feel meaningful and satisfying.
+      </p>
+
+      <h3 id="core-principles-world-responds">The World Responds to Character Action</h3>
+      <p>
+        Every action changes the situation. When the players act, the GM updates the fiction. Threats advance.
+        Opportunities emerge. Characters alter their position, their resources, or their standing with others.
+        The world is not static. It reacts.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        A character tries to convince a merchant to delay a shipment. The Check is a partial success. The
+        merchant agrees to a delay, but only if the character promises to return a personal favor. The world
+        changes. The favor becomes a new thread in the story.
+      </div>
+
+      <h3 id="core-principles-player-ownership">Respect for Player Ownership</h3>
+      <p>
+        Players own their characters. They express their thoughts, motivations, and actions. The GM does not
+        decide how a character feels or what a character chooses. The GM presents the world. Players choose how
+        their characters engage with it.
+      </p>
+
+      <h3 id="core-principles-scenes-direction">Scenes Have Direction</h3>
+      <p>
+        A good scene moves toward something. Sometimes this is an objective. Sometimes it is a revelation.
+        Sometimes it is a moment of tension or a decision. The GM frames scenes with purpose. Players act with
+        intent. Checks provide turning points.
+      </p>
+
+      <h3 id="core-principles-trust">Trust at the Table</h3>
+      <p>
+        Trust supports everything. The GM trusts players to act with the fiction in mind. Players trust the GM
+        to run the world honestly. The table trusts the system to provide structure when necessary. This trust
+        allows everyone to play boldly.
+      </p>
+
+      <h3 id="core-principles-summary">Chapter Summary</h3>
+      <p>
+        The principles in this chapter describe how the table works together. The GM presents the world
+        honestly. Players express intent and approach. The fiction leads. Mechanics support. Failure creates
+        momentum. Partial success adds tension. The world responds. Scenes have direction. Trust holds
+        everything in place. The next chapter expands on these principles by showing how different modes of play
+        shape the experience of the system.
+      </p>
+    </section>
+
+    <section id="ch-05-ways-to-play">
+      <h2 id="ways-to-play-the-game-heading">5. Ways to Play the Game</h2>
+
+      <p>
+        This game supports multiple styles of play. Some groups meet weekly around a table. Others play online
+        in short sessions. Some prefer a single player experience. Others use a shared world without a
+        designated Game Master. The system is flexible and does not assume one standard format. The rules in
+        later chapters work for all modes of play.
+      </p>
+      <p>
+        This chapter gives an overview of each play style. It also points to the sections of the book that
+        support them. You do not need to choose one style forever. Many groups switch between modes depending on
+        who is available or what kind of story they want to tell.
+      </p>
+
+      <h3 id="ways-to-play-group-play-gm">Group Play With a GM</h3>
+      <p>
+        A group gathers with one person acting as Game Master. The GM presents the world, plays its characters,
+        and describes the consequences of player actions. The players control their own characters and make
+        decisions that drive the story forward.
+      </p>
+
+      <h3 id="ways-to-play-duet-play">Duet Play</h3>
+      <p>
+        Duet play involves one player and one GM. It feels more intimate and often focuses on personal stories
+        or character driven arcs. Scenes can shift quickly. The pacing is flexible.
+      </p>
+
+      <h3 id="ways-to-play-gmless-cooperative">GMless Cooperative Play</h3>
+      <p>
+        In GMless play, the group shares narrative responsibility. No single person controls the world. Instead,
+        the table uses procedures that rotate authority and help distribute scene framing, consequences, and
+        world building. The game still uses the core resolution system, but each player takes turns providing
+        challenges or interpreting outcomes.
+      </p>
+
+      <h3 id="ways-to-play-solo-play">Solo Play</h3>
+      <p>
+        Solo play is designed for a single player. The player controls one or more characters and uses
+        structured tools to emulate the world. These tools include prompts, oracles, and scene framing
+        procedures. Solo play keeps the core mechanics intact.
+      </p>
+
+      <h3 id="ways-to-play-asynchronous">Asynchronous and Play by Post</h3>
+      <p>
+        Asynchronous play occurs through messages, email, shared documents, or online platforms. Players take
+        turns responding when they have time. Because asynchronous play lacks immediate conversation, clarity
+        is essential. Players describe intent and approach carefully. The GM presents outcomes with enough
+        detail to move the story forward between posts.
+      </p>
+
+      <h3 id="ways-to-play-one-shot-sessions">One Shot Sessions</h3>
+      <p>
+        A one shot is a complete adventure played in a single session. These sessions help introduce new
+        players to the system and work well for conventions or special events. One shots focus on clear stakes
+        and strong pacing.
+      </p>
+
+      <h3 id="ways-to-play-campaign-play">Campaign Play</h3>
+      <p>
+        A campaign is a longer story told over multiple sessions. Campaigns grow through character development,
+        evolving threats, and unfolding consequences. The GM builds on player actions and uses tools like
+        Clocks and Tags to maintain continuity.
+      </p>
+
+      <h3 id="ways-to-play-hybrid-styles">Hybrid Styles</h3>
+      <p>
+        Many tables blend modes. Some groups use solo play between sessions to develop character arcs. Others
+        rotate GMless scenes inside a GM led campaign. Some begin with a one shot and transition into a long
+        form campaign. The system supports these transitions without additional rules.
+      </p>
+
+      <h3 id="ways-to-play-choosing-mode">Choosing the Right Mode</h3>
+      <p>
+        There is no single correct way to play. Each mode offers a different experience. Choose group play for
+        shared storytelling and dynamic character interaction. Choose duet play for intimate stories. Choose
+        GMless for collaborative world building. Choose solo play for personal exploration. Choose asynchronous
+        play for flexible schedules. Choose one shots for quick adventures. Choose campaigns for deep, evolving
+        narratives.
+      </p>
+
+      <h3 id="ways-to-play-summary">Chapter Summary</h3>
+      <p>
+        This chapter described the supported modes of play. The system works whether you have one player or six,
+        whether you have a GM or distribute authority, and whether you play in person or through messages. The
+        next chapter introduces the character framework that supports all of these play styles.
+      </p>
+    </section>
+
+    <section id="ch-06-character-creation">
+      <h2 id="character-creation-heading">6. Character Creation</h2>
+
+      <p>
+        Character Creation is the process of turning an idea into a fully playable character. You begin with a
+        concept, shape it through narrative and mechanical choices, and finish with a complete sheet that
+        reflects who your character is and how they participate in the world. You do not need to know every rule
+        before you start. This chapter guides you step by step and tells you when to reference later chapters
+        for details.
+      </p>
+
+      <h3 id="character-creation-learning-by-example">Learning by Example</h3>
+      <p>
+        Some players prefer to see a full character before reading detailed steps. If you want to follow a
+        character build from start to finish, you can skip ahead to the example character later in this chapter
+        and return to each step as needed.
+      </p>
+
+      <h3 id="character-creation-flow">The Creation Flow</h3>
+      <p>
+        Character Creation follows a clear sequence. You begin with story driven questions, then add mechanical
+        structure, then return to fiction to finalize your concept. Each step builds on the previous one.
+      </p>
+      <ol>
+        <li>Step One: Choose a Concept</li>
+        <li>Step Two: Define Core Identity Elements</li>
+        <li>Step Three: Assign Attributes</li>
+        <li>Before You Choose Skills and Proficiencies</li>
+        <li>Step Four: Choose Skills</li>
+        <li>Step Five: Choose Proficiencies</li>
+        <li>Step Six: Determine Starting Gear</li>
+        <li>Step Seven: Establish Background and Relationships</li>
+        <li>Step Eight: Define Goals, Drives, and Personal Threads</li>
+        <li>Step Nine: Final Review and Campaign Fit</li>
+      </ol>
+
+      <h3 id="step-one-choose-a-concept">Step One: Choose a Concept</h3>
+      <p>
+        Every character begins with a concept. A concept is the short answer to the question, who is this
+        person. It is the foundation for every choice you make later in the process. The concept does not depend
+        on mechanics. It does not require a long backstory. It is a clean expression of identity, role, and
+        theme.
+      </p>
+      <p>
+        Strong concepts are specific enough to suggest habits and history, but open enough to leave room for
+        discovery. A concept like retired scout with a guilty conscience offers a clearer direction than simply
+        fighter. The first concept suggests relationships, regrets, and a way of moving through the world. The
+        second is mostly a job title.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        A player chooses the concept former telegraph engineer who searches for meaning in strange message
+        patterns. This concept suggests a quiet, technical character whose life has been shaped by long hours,
+        delicate tools, and unanswered questions.
+      </div>
+
+      <p>
+        Your concept should tell you what kind of scenes you want to be in, what skills you might have learned,
+        and what challenges might matter to you. If you feel stuck, talk with the GM and the other players. The
+        group can help you find a concept that fits the tone of the campaign.
+      </p>
+
+      <h3 id="step-two-core-identity-elements">Step Two: Define Core Identity Elements</h3>
+      <p>
+        Identity elements are the personal details that give your character depth. They are the details that
+        help you imagine how your character thinks, speaks, and reacts. You do not need to define everything at
+        once. The goal is to add enough information that the character feels real.
+      </p>
+      <p>
+        Useful identity elements include:
+      </p>
+      <ul>
+        <li>Name and pronouns</li>
+        <li>Origin or home environment</li>
+        <li>Everyday role or profession before the story begins</li>
+        <li>Notable habits and mannerisms</li>
+        <li>First impressions and social style</li>
+        <li>One or two key experiences that shaped them</li>
+      </ul>
+      <p>
+        These details are most helpful when they connect to your concept. If your concept involves quiet work
+        and technical skill, identity elements that reflect that focus will make the character feel grounded.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        The telegraph engineer concept becomes a character named Rella. She grew up in a narrow canyon settlement
+        built around a relay hub. She is quiet, observant, and prefers to think before she speaks. Her clothes
+        are practical and layered. Her hands are steady from years of fine repair work.
+      </div>
+
+      <p>
+        You can expand or revise identity elements later if the story reveals new truths about your character.
+        For now, capture the parts that feel most important.
+      </p>
+
+      <h3 id="step-three-assign-attributes">Step Three: Assign Attributes</h3>
+      <p>
+        Attributes describe your character's natural capabilities. They reflect how your character tends to
+        approach challenges when there is no time to prepare a careful strategy. Attributes are not personality
+        traits. They are expressions of how your character acts when the moment demands action.
+      </p>
+      <p>
+        The system uses four Attributes:
+      </p>
+      <ul>
+        <li><strong>Might (MIG)</strong>: Physical strength, force, and raw endurance.</li>
+        <li><strong>Agility (AGI)</strong>: Balance, coordination, stealth, and quick reaction.</li>
+        <li><strong>Presence (PRE)</strong>: Social force, confidence, emotional expression, and leadership.</li>
+        <li><strong>Reason (RSN)</strong>: Logic, analysis, memory, and structured thinking.</li>
+      </ul>
+      <p>
+        New characters begin with the following Attribute spread.
+      </p>
+      <ul>
+        <li>One Attribute at 2</li>
+        <li>Two Attributes at 1</li>
+        <li>One Attribute at 0</li>
+      </ul>
+      <p>
+        No Attribute may be negative during creation. This spread represents balanced capability. Characters
+        begin competent but not exceptional in every area. As the campaign progresses, advancement rules will
+        allow Attributes to grow.
+      </p>
+      <p>
+        Assign these values based on your concept and identity elements. Ask yourself which Attribute your
+        character relies on most often, which areas they find challenging, and which weaknesses might create
+        interesting story moments.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        Rella is analytical and steady. Her player chooses Reason 2, Agility 1, Presence 1, Might 0. This
+        emphasizes her careful thinking, modest coordination, quiet presence, and relative physical weakness.
+      </div>
+
+      <h3 id="before-skills-proficiencies">Before You Choose Skills and Proficiencies</h3>
+      <p>
+        This system does not rely on a fixed or exhaustive list of Skills or Proficiencies. The rulebook
+        provides examples and frameworks, but players are encouraged to work with their GM to define custom
+        entries that reflect their character's experiences, training, and background.
+      </p>
+      <p>
+        Skills and Proficiencies serve different purposes.
+      </p>
+      <ul>
+        <li><strong>Skills</strong> are action based competencies. They are used directly in Checks when your character attempts something under pressure or uncertainty.</li>
+        <li><strong>Proficiencies</strong> are narrow domains of expertise. They describe tools, environments, or disciplines that your character understands well and that shape how the GM interprets the fiction.</li>
+      </ul>
+      <p>
+        Open lists and collaboration allow the system to support many different genres and character concepts
+        without requiring constant balance adjustments. Because the resolution system and advantage rules keep
+        extremes in check, creative choices stay within a stable range.
+      </p>
+      <p>
+        The GM has final approval over the scope of any custom Skill or Proficiency. A good entry is grounded in
+        the setting, clear in purpose, and neither so broad that it covers everything nor so narrow that it
+        rarely matters.
+      </p>
+
+      <h3 id="step-four-choose-skills">Step Four: Choose Skills</h3>
+      <p>
+        Skills represent learned abilities and practiced competencies. They describe what your character has
+        done often enough to rely on in uncertain moments. Skills connect directly to action. When your
+        character makes a Check, a Skill often shapes their approach.
+      </p>
+      <p>
+        Skills answer the question, what have you practiced enough to apply under stress. They cover actions
+        such as moving quietly, reading a room, patching an injury, climbing, or analyzing a pattern. Skills are
+        usually written as verbs or verb like phrases.
+      </p>
+      <p>
+        During Character Creation, choose a small set of Skills that reflect your concept and background. These
+        are the actions your character knows how to perform with some confidence. Later chapters describe
+        Skills in more detail and provide example lists grouped by Attribute.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        Rella's life has involved careful observation, technical upkeep, and quiet movement. Her player chooses
+        the Skills Observation, Stealth, Technical Work, and Machinery Handling. These Skills reflect actions
+        she has performed many times in relay stations and narrow maintenance tunnels.
+      </div>
+
+      <p>
+        You do not need to optimize your Skills. The best choices are the ones that support the kinds of scenes
+        you want to experience. If your group plans to focus on investigation, travel, or social tension, choose
+        Skills that will shine in those situations.
+      </p>
+
+      <h3 id="step-five-choose-proficiencies">Step Five: Choose Proficiencies</h3>
+      <p>
+        Proficiencies represent narrower areas of expertise that influence how the GM interprets the fiction.
+        They describe tools, technologies, environments, or disciplines that your character understands deeply.
+        Proficiencies often do not require a roll at all. Instead, they change what is reasonable, what is
+        obvious, or how serious a risk feels.
+      </p>
+      <p>
+        Proficiencies answer the question, what have you studied or handled enough to use responsibly. They
+        often appear as nouns or domain labels, such as medical tools, survey equipment, or small boat
+        navigation.
+      </p>
+      <p>
+        During Character Creation, choose a small number of Proficiencies that grow naturally out of your
+        concept and background. Work with the GM to make sure each Proficiency has a clear scope and fits the
+        setting.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        Rella learned to keep delicate instruments working in harsh conditions. Her player chooses the
+        Proficiencies Telegraph Instruments and Precision Tools. These Proficiencies signal that she understands
+        the internal workings of communication devices better than the average person.
+      </div>
+
+      <p>
+        Proficiencies do not add numbers to Checks. Instead, they influence difficulty, consequences, and
+        access to information. A character with the correct Proficiency may identify a hazard more quickly,
+        avoid an unnecessary roll, or reduce the severity of a complication.
+      </p>
+
+      <h3 id="step-six-starting-gear">Step Six: Determine Starting Gear</h3>
+      <p>
+        Your character begins play with a small set of equipment that fits their background, reflects their
+        concept, and supports the type of stories they are about to enter. Gear does not provide numerical
+        bonuses. It provides narrative capability, fictional positioning, and a sense of grounded reality.
+      </p>
+      <p>
+        Starting gear should feel personal and practical. It represents what your character already knows how
+        to use. It also helps the GM understand what kind of situations your character is prepared for.
+      </p>
+
+      <h4>Basic Gear Package</h4>
+      <p>New characters begin with the following items:</p>
+      <ul>
+        <li>Clothing suited to their environment</li>
+        <li>A backpack or satchel</li>
+        <li>Basic travel supplies</li>
+        <li>A personal item that holds meaning</li>
+      </ul>
+      <p>
+        These are the essentials that allow any character to operate in the world.
+      </p>
+
+      <h4>Concept Driven Gear</h4>
+      <p>
+        In addition to the basic gear, each character chooses up to three items that reflect their background or
+        profession. These items help define who they were before the story begins. They also give the GM material
+        to work with when shaping scenes.
+      </p>
+      <p>Examples include:</p>
+      <ul>
+        <li>A well used toolkit</li>
+        <li>A compact field journal</li>
+        <li>A collection of reference notes</li>
+        <li>A handmade navigation compass</li>
+        <li>A signal mirror</li>
+        <li>A small medical pouch</li>
+        <li>A set of precision tools</li>
+        <li>A reliable lantern</li>
+        <li>A simple musical instrument</li>
+        <li>A deck of analysis cards</li>
+        <li>A set of rope and climbing spikes</li>
+      </ul>
+      <p>
+        These items should feel directly connected to your concept and identity.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        Rella begins with a travel satchel, a compact set of communication tools, a notebook filled with cipher
+        fragments, and a small insulated lantern used for nighttime relay work.
+      </div>
+
+      <h4>Tools and Equipment as Fictional Authority</h4>
+      <p>
+        Gear provides fictional authority. If your character carries the right tools for a task, the GM may:
+      </p>
+      <ul>
+        <li>Lower difficulty</li>
+        <li>Remove uncertainty</li>
+        <li>Change the stakes</li>
+        <li>Provide clearer approaches</li>
+      </ul>
+      <p>
+        Gear does not guarantee success. It enables meaningful choices and supports your character’s expertise.
+      </p>
+      <p>
+        If the character does not have suitable gear, the GM might increase difficulty or introduce
+        complications. Gear matters most when the environment or situation is demanding.
+      </p>
+
+      <h4>Weapons and Dangerous Tools</h4>
+      <p>
+        If the campaign tone allows for weapons or hazardous tools, characters may begin with one simple item
+        that fits their concept. This might be:
+      </p>
+      <ul>
+        <li>A pocket knife</li>
+        <li>A small baton</li>
+        <li>A bow with a few arrows</li>
+        <li>A sturdy multi tool</li>
+        <li>A simple sidearm, if the genre supports it</li>
+      </ul>
+      <p>
+        Weapons should be grounded in the fiction of your setting. They are not meant to be superior mechanical
+        objects. They are narrative tools that help shape how your character approaches risk.
+      </p>
+      <p>
+        If your world does not include weapons or includes them only sparingly, this section may be reduced or
+        removed based on GM preference.
+      </p>
+
+      <h4>Custom Gear</h4>
+      <p>
+        The player and GM may collaborate to create custom gear that supports the concept. The item should be:
+      </p>
+      <ul>
+        <li>Clear in purpose</li>
+        <li>Grounded in the setting</li>
+        <li>Useful in scenes</li>
+        <li>Not mechanically overwhelming</li>
+      </ul>
+      <p>
+        Good custom gear is memorable and unique without dominating the story.
+      </p>
+
+      <h3 id="step-seven-background-relationships">Step Seven: Establish Background and Relationships</h3>
+      <p>
+        Every character comes from somewhere. They have lived a life before the story begins. They have
+        connections, memories, challenges, and unfinished business. Establishing background and relationships
+        gives the character emotional depth and provides the GM with narrative tools that will enrich scenes,
+        challenges, and future arcs.
+      </p>
+      <p>
+        Background should answer simple questions about where you grew up, what kind of work you used to do,
+        which pressures shaped you, and who influenced your habits. You do not need a long timeline. Focus on
+        the few details that explain your current self.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        Rella grew up near a canyon relay hub, listening to coded traffic echo along the wires. Her days were
+        spent checking connections, cleaning contacts, and logging patterns. The steady routine and quiet
+        tension of relay work shaped her temperament and made her comfortable with long stretches of focused
+        attention.
+      </div>
+
+      <p>
+        In addition to background, define one or two meaningful relationships. These might be mentors, rivals,
+        family members, coworkers, or friends. The relationship does not need to be fully detailed. It only
+        needs to be important enough that it might matter later.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        Rella names a former coworker, Isten, who taught her how to keep unstable relay junctions from failing.
+        Their relationship ended after an argument about unsafe repair methods. The disagreement left tension
+        that has never been resolved.
+      </div>
+
+      <p>
+        You do not need to define every relationship up front. Leave space for new connections to emerge in
+        play. When a new NPC feels important, you can add them to your relationship list.
+      </p>
+
+      <h3 id="step-eight-goals-drives-threads">Step Eight: Define Goals, Drives, and Personal Threads</h3>
+      <p>
+        Goals and drives explain why your character keeps moving. They are the internal pressures that shape
+        choices and responses. A goal is something concrete your character wants to achieve. A drive is a deeper
+        motivation or fear that pushes them.
+      </p>
+      <p>
+        Personal threads are unresolved elements in your character's life. They might be unanswered questions,
+        unfulfilled promises, or lingering tensions. These threads give the GM material to weave into future
+        scenes.
+      </p>
+
+      <div class="example">
+        <strong>Example</strong>
+        Rella has a goal to decode an anomalous pattern she once intercepted and a drive to avoid causing harm
+        through her work. A personal thread involves the mysterious origin of the pattern and who might have
+        sent it.
+      </div>
+
+      <p>
+        Try to define at least one short-term goal, one long-term goal, and one or two personal threads. You can
+        always revise these as the story unfolds.
+      </p>
+
+      <h3 id="step-nine-final-review">Step Nine: Final Review and Campaign Fit</h3>
+      <p>
+        Once you have completed the previous steps, review your character as a whole. Ask whether the concept,
+        identity elements, Attributes, Skills, Proficiencies, gear, background, relationships, goals, and
+        threads feel like parts of the same person.
+      </p>
+      <p>
+        Talk with the GM and other players about how your character fits into the campaign. Look for natural
+        connections, shared history, or complementary goals. Adjust details where needed so that the group feels
+        like a cohesive cast.
+      </p>
+
+      <h3 id="example-character-rella">Example Character Build: Rella</h3>
+      <p>
+        This section presents Rella as a complete example character, summarizing the choices made in each step.
+        Use this example as a reference when creating your own characters.
+      </p>
+
+      <h3 id="character-creation-summary">Chapter Summary</h3>
+      <p>
+        Character Creation turns an idea into a playable character who fits naturally into the world and the
+        campaign. By moving from concept to identity, Attributes, Skills, Proficiencies, gear, background,
+        relationships, and goals, you build a character who feels grounded and ready for play. Later chapters
+        explain how these elements interact with the core mechanics during sessions.
+      </p>
+    </section>
+
+    <!-- Part I remainder and Parts II–V will be filled in chapter-by-chapter -->
+
+    <section id="ch-07-characters-and-attributes">
+      <h2 id="characters-and-attributes-heading">7. Characters and Attributes</h2>
+
+      <p>
+        This chapter deepens the character framework introduced in Character Creation. It explains how
+        Attributes define what your character is naturally good at, how those ratings interact with intent and
+        approach, and how to think about Attribute growth over time. Skills and Proficiencies add texture and
+        specialization. Attributes provide the core pillars those details rest on.
+      </p>
+
+      <h3 id="attributes-overview">Attributes Overview</h3>
+      <p>
+        Every character has four Attributes:
+      </p>
+      <ul>
+        <li><strong>Might (MIG)</strong> – Physical power, endurance, and resilience.</li>
+        <li><strong>Agility (AGI)</strong> – Speed, precision, balance, and reflexes.</li>
+        <li><strong>Presence (PRE)</strong> – Charisma, willpower, and social influence.</li>
+        <li><strong>Reason (RSN)</strong> – Logic, perception, memory, and analytical thinking.</li>
+      </ul>
+      <p>
+        Attribute ratings are small numbers that reflect how strongly each pillar shows up in play. During
+        Character Creation, you assign a starting spread (usually 2, 1, 1, 0) across MIG, AGI, PRE, and RSN.
+        Those ratings are then added to relevant checks throughout the campaign.
+      </p>
+      <p>
+        Attributes are always interpreted through the fiction. A high MIG character does not simply “have +2.”
+        They push through heavy doors, endure long marches, and soak physical hardship more easily. A high RSN
+        character spots patterns, recalls obscure details, and notices when something does not fit.
+      </p>
+
+      <h3 id="attribute-ratings-and-meaning">Attribute Ratings and What They Mean</h3>
+      <p>
+        Attribute ratings are intentionally compact. Most characters begin with values between 0 and 2. This
+        keeps the focus on intent, approach, Skills, Proficiencies, Tags, Conditions, and the `4d6` dice
+        results instead of on large numerical bonuses.
+      </p>
+      <p>
+        As a general guideline:
+      </p>
+      <ul>
+        <li><strong>0</strong> – Unremarkable. You can attempt normal tasks with no special edge or penalty.</li>
+        <li><strong>1</strong> – Competent. You are noticeably capable in this area compared to an average person.</li>
+        <li><strong>2</strong> – Exceptional. You stand out in most situations that rely on this Attribute.</li>
+      </ul>
+      <p>
+        When you make a Check, you roll <strong>4d6</strong>, sum the dice, and add your Attribute rating (and
+        any other bonuses or penalties). You compare that total against a Difficulty Class (DC) from the
+        standard ladder (typically DC 12–22). The difference between your total and the DC is the margin, which
+        determines the outcome tier. A higher Attribute nudges those margins upward without guaranteeing any
+        particular result.
+      </p>
+
+      <h3 id="choosing-your-starting-spread">Choosing Your Starting Spread</h3>
+      <p>
+        During Character Creation, you assign a small array of values across your four Attributes. The default
+        array is:
+      </p>
+      <ul>
+        <li>One Attribute at <strong>2</strong></li>
+        <li>Two Attributes at <strong>1</strong></li>
+        <li>One Attribute at <strong>0</strong></li>
+      </ul>
+      <p>
+        This spread creates characters who are competent across several areas with a clear primary strength and
+        one relative weakness. You can think of this as your character’s natural “starting shape” before Skills,
+        Proficiencies, Tags, and gear are layered on.
+      </p>
+      <p>
+        A useful way to choose your spread is to ask three questions:
+      </p>
+      <ul>
+        <li>Which Attribute describes how you most often solve problems when under pressure?</li>
+        <li>Which Attribute fits your concept but should remain a supporting strength rather than your main focus?</li>
+        <li>Which Attribute would be interesting to struggle with?</li>
+      </ul>
+      <p>
+        Answering these questions usually reveals where to place your 2, your two 1s, and your 0. You are not
+        optimizing a build—you are deciding what kind of situations will feel natural, challenging, or risky for
+        this character.
+      </p>
+
+      <h3 id="attributes-and-archetypes">Attributes and Archetypes</h3>
+      <p>
+        Different spreads suggest different kinds of characters. The table below offers a few example archetypes.
+        You do not need to use these labels at the table—they are here to help you think about possibilities.
+      </p>
+      <table>
+        <caption>Example Attribute Spreads and Archetypes</caption>
+        <thead>
+          <tr>
+            <th>Spread</th>
+            <th>Example Archetype</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MIG 2, AGI 1, PRE 1, RSN 0</td>
+            <td>Front-line problem solver</td>
+            <td>Leads with physical action and presence; relies on others for deep analysis.</td>
+          </tr>
+          <tr>
+            <td>MIG 0, AGI 2, PRE 1, RSN 1</td>
+            <td>Scout or infiltrator</td>
+            <td>Excels at movement and precision; must negotiate around brute-force obstacles.</td>
+          </tr>
+          <tr>
+            <td>MIG 1, AGI 0, PRE 2, RSN 1</td>
+            <td>Negotiator or leader</td>
+            <td>Strong in social scenes; needs help when delicate physical work is required.</td>
+          </tr>
+          <tr>
+            <td>MIG 1, AGI 1, PRE 0, RSN 2</td>
+            <td>Analyst or investigator</td>
+            <td>Solves problems through observation and planning; may struggle to command a room.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Use these examples as prompts, not prescriptions. You can apply any spread to any concept. A physically
+        powerful scholar or a socially adept scout can be just as compelling as the “expected” combinations.
+      </p>
+
+      <h3 id="attributes-intent-approach">Attributes, Intent, and Approach</h3>
+      <p>
+        Attributes are chosen based on <em>how</em> your character attempts something, not on what they would
+        like to roll. The GM listens to your intent (what you are trying to achieve) and your approach (how you
+        attempt it), then chooses the Attribute that best matches that description.
+      </p>
+      <p>
+        The same fictional goal can be resolved with different Attributes depending on approach:
+      </p>
+      <ul>
+        <li>Prying open a stuck hatch with brute force might call for <strong>MIG</strong>.</li>
+        <li>Picking the lock or working delicate mechanisms might call for <strong>AGI</strong>.</li>
+        <li>Coaxing someone on the other side to open it might call for <strong>PRE</strong>.</li>
+        <li>Analyzing the structure to find a weak point might call for <strong>RSN</strong>.</li>
+      </ul>
+      <p>
+        This flexibility keeps Attributes tied to the story. You do not choose an Attribute from a menu. You
+        describe what your character does. The Attribute follows naturally from that description.
+      </p>
+
+      <div class="gm">
+        <strong>GM Guidance – Calling for an Attribute</strong>
+        When a player describes intent and approach, repeat back what you heard in your own words, then say
+        which Attribute you think applies and why. If the table disagrees, adjust together. The goal is shared
+        understanding, not surprise rulings. If two Attributes seem equally valid, choose the one that fits the
+        character’s established habits, or offer the player a choice with different risks attached.
+      </div>
+
+      <h3 id="working-with-low-attributes">Working with Low Attributes</h3>
+      <p>
+        A rating of 0 is not a punishment. It means your character does not naturally lean on that Attribute
+        when things get tense. The game expects you to have at least one area where you are merely ordinary.
+      </p>
+      <p>
+        Low Attributes shape the story in interesting ways:
+      </p>
+      <ul>
+        <li>A low MIG character might avoid direct contests of strength and instead look for tools, allies, or alternate routes.</li>
+        <li>A low AGI character might favor careful planning over risky stunts.</li>
+        <li>A low PRE character might rely on written communication, intermediaries, or quiet influence.</li>
+        <li>A low RSN character might lean on intuition, experience, or other party members for analysis.</li>
+      </ul>
+      <p>
+        Play your weaknesses honestly and creatively. They provide hooks for growth, tension, and teamwork.
+        When a situation hinges on your low Attribute, it does not mean you should stay silent. It means the
+        stakes are higher, and failure may reveal something important about who you are.
+      </p>
+
+      <h3 id="attribute-examples-by-attribute">Examples by Attribute</h3>
+
+      <h4 id="attribute-mig">Might (MIG)</h4>
+      <p>
+        Might represents physical strength, raw effort, and bodily resilience. It appears whenever you forcefully
+        move, lift, or endure something.
+      </p>
+      <div class="example">
+        <strong>Example – MIG Check</strong><br />
+        <em>Trigger:</em> A storm has washed out a small bridge. The group needs to move a heavy improvised
+        plank into place before the river rises further.<br />
+        <em>Roll:</em> The GM calls for a MIG-based Check using <strong>4d6</strong> against DC 16 (Tough). The
+        character with MIG 2 and the appropriate Skill rolls `4d6+2`.<br />
+        <em>Consequence:</em> On a full success, the plank is set and the group crosses safely. On a partial
+        success, the plank holds but the character gains a Strained condition. On a failure, the plank slips,
+        and the GM advances a flood Clock.
+      </div>
+
+      <h4 id="attribute-agi">Agility (AGI)</h4>
+      <p>
+        Agility covers balance, precision, and quick reactions. It appears when you dodge, climb, sneak, or
+        operate fine mechanisms under pressure.
+      </p>
+      <div class="example">
+        <strong>Example – AGI Check</strong><br />
+        <em>Trigger:</em> A character sprints across slick rooftop tiles to reach a signal mast before an alarm
+        spreads.<br />
+        <em>Roll:</em> The GM sets DC 18 (Hard) due to rain and height. The character with AGI 1 and a relevant
+        Skill rolls `4d6+1`. A hazardous Tag on the roof may impose Disadvantage if the group ignored earlier
+        warnings.<br />
+        <em>Consequence:</em> On a full success, they reach the mast in time. On a partial success, they make
+        it but leave evidence behind or trigger a lesser alarm. On a failure, they slip, and the GM ticks a
+        danger Clock or applies a Condition such as Exposed or Dazed.
+      </div>
+
+      <h4 id="attribute-pre">Presence (PRE)</h4>
+      <p>
+        Presence governs social force, confidence, and emotional weight. It appears when you persuade, command,
+        intimidate, or rally others.
+      </p>
+      <div class="example">
+        <strong>Example – PRE Check</strong><br />
+        <em>Trigger:</em> The group needs a nervous official to delay a shipment. A character steps forward to
+        make the case.<br />
+        <em>Roll:</em> The GM sets DC 14 (Routine) if the request is modest, or higher if the stakes are severe.
+        The character with PRE 2 and an appropriate Skill rolls `4d6+2`. Helpful Tags (Shared History) or
+        Proficiencies (Bureaucratic Procedures) may grant Advantage.<br />
+        <em>Consequence:</em> On a full success, the delay is granted cleanly. On a partial success, the delay
+        comes with a favor owed or a complication. On a failure, the official refuses and alerts a rival faction.
+      </div>
+
+      <h4 id="attribute-rsn">Reason (RSN)</h4>
+      <p>
+        Reason covers analysis, pattern recognition, and careful observation. It appears when you investigate,
+        deduce, plan, or notice hidden details.
+      </p>
+      <div class="example">
+        <strong>Example – RSN Check</strong><br />
+        <em>Trigger:</em> A character studies overlapping telegraph logs to determine whether a recent outage is
+        natural or engineered.<br />
+        <em>Roll:</em> The GM sets DC 16 (Tough). The character with RSN 2 and an appropriate Skill rolls
+        `4d6+2`. A relevant Proficiency (Telegraph Instruments) may lower the DC or reveal extra context on a
+        success.<br />
+        <em>Consequence:</em> On a full success, they identify the outage as deliberate and tie it to a specific
+        region. On a partial success, they confirm it was engineered but only narrow the possibilities. On a
+        failure, they misinterpret the data and the GM advances a faction Clock based on that error.
+      </div>
+
+      <h3 id="multi-attribute-actions-and-teamwork">Multi-Attribute Actions and Teamwork</h3>
+      <p>
+        Many scenes involve multiple characters and overlapping actions. Instead of treating every moment as a
+        separate Check, think about how Attributes combine across the group.
+      </p>
+      <ul>
+        <li>One character might use MIG to hold a door while another uses RSN to bypass its lock.</li>
+        <li>A PRE-focused character might draw attention so an AGI-focused ally can move unseen.</li>
+        <li>Two characters with different strengths might both roll, with the table focusing on the more
+          interesting result.</li>
+      </ul>
+      <p>
+        The GM decides whether each character rolls separately, one character rolls with assistance, or a single
+        roll represents the group’s combined effort. Whichever option you choose, keep intent and approach in
+        view. Assistance should make sense in the fiction, not just on the character sheet.
+      </p>
+
+      <h3 id="attribute-growth-preview">Attribute Growth Preview</h3>
+      <p>
+        Attributes do not change every session. They grow slowly across a campaign as characters reach important
+        milestones, resolve personal threads, and survive significant consequences. Advancement rules appear in
+        the Advancement and Long Term Growth chapter later in this book.
+      </p>
+      <p>
+        When Attributes do increase, the change should feel meaningful in the fiction. A rise in MIG might come
+        after a season of hard labor or survival in harsh conditions. A rise in RSN might follow extended study,
+        investigative breakthroughs, or hard lessons learned from mistakes. Treat Attribute growth as an
+        opportunity to reflect on how the character has changed, not just as a numerical upgrade.
+      </p>
+
+      <div class="gm">
+        <strong>GM Guidance – Signaling Growth</strong>
+        When a player increases an Attribute, ask them to describe one moment from the campaign that symbolizes
+        that change. Then add a Tag to the world, a new relationship, or an updated detail on the character’s
+        sheet that reflects their growth. This keeps advancement grounded in the shared story rather than only
+        in numbers.
+      </div>
+    </section>
+
+    <section id="ch-08-actions-checks-outcomes">
+      <h2 id="actions-checks-outcomes-heading">8. Actions, Checks, and Outcomes</h2>
+
+      <p>
+        This chapter describes the core resolution engine of the game. Whenever a character takes an action and
+        the outcome is uncertain, consequential, and within their reach to influence, the table may call for a
+        Check. Checks turn intent and approach into dice, and dice back into story beats. Understanding how to
+        call for, perform, and interpret Checks is essential for both players and the GM.
+      </p>
+
+      <h3 id="when-to-roll-and-when-not-to">When to Roll (and When Not To)</h3>
+      <p>
+        You roll when the GM calls for a Check. The GM should only do this when three conditions are all true:
+      </p>
+      <ul>
+        <li><strong>Uncertainty</strong>: The outcome is not predetermined. A trained character performing a routine task in ideal
+          conditions does not roll.</li>
+        <li><strong>Consequence</strong>: Failure or partial success would introduce tension, cost, or change. If failure just means
+          “try again until it works,” do not roll.</li>
+        <li><strong>Agency</strong>: The character can meaningfully influence the result. Do not roll for things entirely outside
+          the characters’ control.</li>
+      </ul>
+      <p>
+        If all three are present, a Check is appropriate. If one or more are missing, the GM either says “yes”
+        and narrates success, or “no” and explains why it is impossible or out of scope. Checks are tools for
+        focusing on interesting uncertainty, not a gate in front of every action.
+      </p>
+
+      <div class="example">
+        <strong>Example – When to Roll</strong><br />
+        <em>Trigger:</em> A character wants to leap between rooftops during a chase in heavy rain. The gap is
+        significant, the conditions are poor, and falling would be dangerous.<br />
+        <em>Assessment:</em> The outcome is uncertain, the stakes are serious, and the character’s choices
+        matter. The GM calls for a Check.<br />
+        <em>Counter‑example:</em> The same character crossing a sturdy bridge in calm weather does not roll.
+        Success is assumed; the story moves forward.
+      </div>
+
+      <h3 id="the-core-check-procedure">The Core Check Procedure</h3>
+      <p>
+        Every Check follows the same basic loop:
+      </p>
+      <ol>
+        <li>The player declares intent and approach.</li>
+        <li>The GM decides whether a Check is needed.</li>
+        <li>If needed, the GM selects an Attribute and relevant Skill, sets a DC, and notes any Tags,
+          Conditions, or Proficiencies that might grant Advantage or Disadvantage.</li>
+        <li>The player rolls <strong>4d6</strong>, applies modifiers, and compares the total to the DC.</li>
+        <li>The table interprets the outcome tier (critical success, full success, partial success, failure,
+          critical failure) and updates the fiction accordingly.</li>
+      </ol>
+
+      <h3 id="declaring-intent-and-approach">Declaring Intent and Approach</h3>
+      <p>
+        When you declare an action, you state two things:
+      </p>
+      <ul>
+        <li><strong>Intent</strong>: What you want to achieve in the fiction.</li>
+        <li><strong>Approach</strong>: How you are trying to achieve it.</li>
+      </ul>
+      <p>
+        Intent focuses the scene. Approach determines which Attribute, Skills, Proficiencies, Tags, and
+        Conditions are relevant. The more concrete and grounded your description, the easier it is for the GM to
+        set an appropriate DC and for the group to picture the moment.
+      </p>
+
+      <div class="example">
+        <strong>Example – Intent and Approach</strong><br />
+        <em>Intent:</em> “I want to get the factory foreman to delay shipment of the crates.”<br />
+        <em>Approach:</em> “I speak with her in private, emphasize the safety risks, and show her evidence of the
+        faulty wiring we found.”<br />
+        The GM recognizes this as a PRE‑based approach with a relevant social Skill and possibly a Proficiency
+        related to safety procedures or technical documentation.
+      </div>
+
+      <h3 id="setting-dcs">Setting DCs</h3>
+      <p>
+        The GM sets a Difficulty Class (DC) to represent how hard the task is under current circumstances. The
+        system uses a standard ladder:
+      </p>
+      <ul>
+        <li><strong>DC 12</strong> – Easy</li>
+        <li><strong>DC 14</strong> – Routine</li>
+        <li><strong>DC 16</strong> – Tough</li>
+        <li><strong>DC 18</strong> – Hard</li>
+        <li><strong>DC 20</strong> – Heroic</li>
+        <li><strong>DC 22</strong> – Legendary</li>
+      </ul>
+      <p>
+        Start by imagining what success would look like in the scene and how far it is from effortless. Use
+        lower DCs when characters have strong fictional positioning, good information, and safe conditions. Use
+        higher DCs when time is short, the environment is hostile, or the task is at the edge of what is
+        possible in the setting.
+      </p>
+
+      <h3 id="advantage-disadvantage-tags-conditions">Advantage, Disadvantage, Tags, and Conditions</h3>
+      <p>
+        Rather than constantly adjusting the DC, the game often represents favorable or unfavorable circumstances
+        through Advantage and Disadvantage.
+      </p>
+      <ul>
+        <li><strong>+1 Advantage</strong>: Roll 5d6, keep the best 4.</li>
+        <li><strong>+2 Advantage</strong>: Roll 6d6, keep the best 4.</li>
+        <li><strong>-1 Disadvantage</strong>: Roll 5d6, keep the worst 4.</li>
+        <li><strong>-2 Disadvantage</strong>: Roll 6d6, keep the worst 4.</li>
+      </ul>
+      <p>
+        Advantage and Disadvantage usually come from Tags, Conditions, environment, tools, Proficiencies, or
+        prior setup actions. They represent the table’s shared sense that the character is favored or hindered in
+        this moment. Multiple sources combine into a single level of Advantage or Disadvantage and are capped at
+        ±2—several small edges do not create infinite Advantage, and multiple problems do not push you below −2.
+        If a character would have both Advantage and Disadvantage, reduce them against each other (for example,
+        +2 and −1 becomes +1) until only one side remains, then apply the final level.
+      </p>
+      <p>
+        Tags and Conditions described in earlier chapters provide a shared vocabulary for these modifiers:
+        <em>Dim Light</em>, <em>Slick</em>, or <em>Exposed</em> might impose Disadvantage; <em>Solid Cover</em>
+        or <em>Marked</em> might grant Advantage in specific contexts or to specific parties.
+      </p>
+
+      <h3 id="rolling-4d6-and-calculating-margin">Rolling 4d6 and Calculating Margin</h3>
+      <p>
+        When a Check is called for, follow this procedure:
+      </p>
+      <ol>
+        <li>Roll <strong>4d6</strong>, adjusting the number of dice kept if Advantage or Disadvantage applies.</li>
+        <li>Add the relevant Attribute rating and any bonuses from Skills or temporary effects.</li>
+        <li>Compare the total to the DC to find the margin (Roll − DC).</li>
+      </ol>
+      <p>
+        The margin determines the outcome tier:
+      </p>
+      <ul>
+        <li><strong>Critical Success</strong>: Margin ≥ +5.</li>
+        <li><strong>Full Success</strong>: Margin ≥ 0.</li>
+        <li><strong>Partial Success</strong>: Margin −1 to −2.</li>
+        <li><strong>Failure</strong>: Margin ≤ −3.</li>
+        <li><strong>Critical Failure</strong>: Margin ≤ −7 or all 1s.</li>
+      </ul>
+
+      <h3 id="interpreting-outcomes">Interpreting Outcomes</h3>
+      <p>
+        Every outcome tier should change the situation. The GM and players work together to describe what the
+        dice mean in the fiction.
+      </p>
+      <ul>
+        <li><strong>Critical Success</strong> – You achieve more than you aimed for. Extra benefits, stronger
+          position, or accelerated progress.</li>
+        <li><strong>Full Success</strong> – You get what you wanted with no significant cost. The scene moves
+          forward cleanly.</li>
+        <li><strong>Partial Success</strong> – You succeed, but with a cost, complication, or reduced effect.
+          Momentum continues, tension rises.</li>
+        <li><strong>Failure</strong> – You do not achieve your goal, and the situation complicates. Threats
+          advance, resources strain, or positions worsen.</li>
+        <li><strong>Critical Failure</strong> – Things go significantly wrong. Use sparingly for dramatic beats:
+          broken tools, dangerous exposure, or major escalations.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – Cross‑Genre Check</strong><br />
+        <em>Trigger:</em> In a cozy town, a character tries to calm a panicked neighbor during a storm. In a
+        sci‑fi station, a character tries to reassure a frightened technician during a systems failure.<br />
+        <em>Roll:</em> Both are PRE‑based Checks against DC 14 (Routine) with an appropriate social Skill. The
+        cozy scene might grant Advantage if the characters have a strong existing relationship.<br />
+        <em>Consequence:</em> Full success calms the NPC and stabilizes the scene. Partial success calms them but
+        attaches a new obligation or rumor. Failure escalates the panic, spreading fear or misinformation.
+      </div>
+
+      <h3 id="group-checks-and-assistance">Group Checks and Assistance</h3>
+      <p>
+        Many actions involve more than one character. Rather than rolling for everyone separately every time, the
+        GM can use:
+      </p>
+      <ul>
+        <li><strong>Assistance</strong>: One character leads the action, another assists. If the assistance is
+          credible in the fiction, the leader gains Advantage or a small bonus.</li>
+        <li><strong>Representative Checks</strong>: One Check stands in for a coordinated group effort. The
+          outcome tier describes how the whole group fares.</li>
+        <li><strong>Split Risks</strong>: Two or more characters each roll, and the GM focuses on the most
+          interesting combination of results rather than tracking every detail.</li>
+      </ul>
+      <p>
+        Pick the method that best fits the moment. Use single rolls when you want quick resolution. Use
+        individual rolls when it is important that different characters face different consequences.
+      </p>
+
+      <h3 id="checks-and-clocks">Checks and Clocks</h3>
+      <p>
+        Some obstacles are too big for a single Check. Instead, the GM creates a Clock with several segments.
+        Successful Checks tick the Clock forward; failures or partial successes may tick related threat Clocks.
+      </p>
+      <p>
+        Use Clocks when:
+      </p>
+      <ul>
+        <li>Characters are working toward a long‑term goal, such as investigating a mystery or repairing a ship.</li>
+        <li>A danger is mounting over time, such as a collapsing tunnel, spreading fire, or advancing enemy force.</li>
+        <li>Two or more forces are racing toward different outcomes (opposing Clocks).</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – Clock and Checks</strong><br />
+        <em>Trigger:</em> The group works to evacuate a district before floodwaters arrive.<br />
+        <em>Clocks:</em> “Evacuation Complete” (6 segments) and “Flood Waters Rise” (4 segments).<br />
+        <em>Rolls:</em> Each scene, characters make MIG, AGI, PRE, or RSN Checks based on their chosen
+        contributions—lifting sandbags, coordinating crowds, analyzing routes. Successes advance the evacuation
+        clock; failures or partials tick the flood clock or create new complications.<br />
+        <em>Outcome:</em> Which clock fills first determines whether the district is saved, partially saved, or
+        overwhelmed.
+      </div>
+
+      <h3 id="keeping-momentum">Keeping Momentum</h3>
+      <p>
+        Checks should move the story forward, not stall it. When in doubt:
+      </p>
+      <ul>
+        <li>Use Partial successes to trade progress for cost rather than stopping action.</li>
+        <li>Let Failures create new problems, reveal information, or shift the situation rather than blocking
+          all paths.</li>
+        <li>Allow retries only when the circumstances or approach meaningfully change.</li>
+      </ul>
+      <p>
+        The goal is not to punish characters for rolling poorly. The goal is to discover what happens next when
+        risk meets intent. If the table keeps that in view, Checks will feel like natural beats in the story
+        rather than interruptions.
+      </p>
+    </section>
+
+    <section id="ch-09-tags-conditions-clocks">
+      <h2 id="tags-conditions-clocks-heading">9. Tags, Conditions, and Clocks</h2>
+
+      <p>
+        Tags, Conditions, and Clocks are the tools the game uses to make the world feel solid and responsive.
+        They connect description to mechanics so that rain, fear, injuries, crowds, and looming deadlines all
+        matter at the table. This chapter explains what each of these tools is for, how to use them, and how
+        they interact with Checks.
+      </p>
+
+      <h3 id="tags-vs-conditions">Tags vs. Conditions</h3>
+      <p>
+        Tags describe <strong>the environment or situation</strong>. They belong to places, scenes, objects, or
+        circumstances: <em>Dim Light</em>, <em>Slick</em>, <em>Crowded</em>, <em>Fragile Cover</em>. Tags affect
+        what you can do in a space and how you do it.
+      </p>
+      <p>
+        Conditions describe <strong>your character’s state</strong>. They follow you from one location to the
+        next until cleared: <em>Exhausted</em>, <em>Bleeding</em>, <em>Frightened</em>, <em>Restrained</em>.
+        Conditions affect your actions wherever you go.
+      </p>
+      <p>
+        Tags and Conditions are the shared vocabulary the table uses to talk about advantages, risks, and
+        lingering consequences. They are not extra subsystems to memorize. They are the names you give to
+        things you are already describing.
+      </p>
+
+      <h3 id="what-tags-do">What Tags Do</h3>
+      <p>
+        A Tag is a short descriptor applied to a scene, location, object, or situation. It becomes a flag:
+        “remember this when resolving actions here.” Tags typically:
+      </p>
+      <ul>
+        <li>Grant Advantage or Disadvantage on certain Checks.</li>
+        <li>Raise or lower DCs for specific actions.</li>
+        <li>Change position or effect (how risky an action feels or how big its impact is).</li>
+      </ul>
+      <p>
+        You do not tag every detail. A room is just a room until its darkness, instability, crowd, or sacred
+        significance matters to what characters are attempting. Tag the things that will shape decisions.
+      </p>
+
+      <h3 id="common-tag-categories">Common Tag Categories</h3>
+      <p>
+        While Chapter 18 provides an extended reference, this chapter introduces three broad categories:
+      </p>
+      <ul>
+        <li><strong>Environmental Tags</strong> – Physical features of space: <em>Dim Light</em>, <em>Slick</em>,
+          <em>Cramped</em>, <em>Elevated</em>, <em>Solid Cover</em>, <em>Fragile Cover</em>, <em>Unstable</em>.</li>
+        <li><strong>Situational Tags</strong> – Circumstances and pressures: <em>Crowded</em>, <em>Alert</em>,
+          <em>Hazardous</em>, <em>Obscured</em>, <em>Surveillance</em>, <em>Networked</em>.</li>
+        <li><strong>Atmospheric Tags</strong> – Social or emotional tone: <em>Tense</em>, <em>Festive</em>,
+          <em>Solemn</em>, <em>Suspicious</em>.</li>
+      </ul>
+      <p>
+        You can invent new Tags that fit your setting. The important part is agreeing at the table what a Tag
+        does in practice: which actions it helps, which it hinders, and how it shapes consequences.
+      </p>
+
+      <div class="example">
+        <strong>Example – Tags in a Warehouse Fight</strong><br />
+        The GM describes a warehouse full of stacked crates, narrow aisles, and oil-spotted floors. They assign
+        the Tags <em>Cramped</em>, <em>Fragile Cover</em>, and <em>Slick</em>.<br />
+        <em>Cramped</em> makes wide swings and large weapons awkward. <em>Fragile Cover</em> means wooden crates
+        can be shredded by fire, potentially stripping cover away. <em>Slick</em> imposes Disadvantage on fast
+        movement or acrobatic maneuvers. Every decision in this scene now has texture.
+      </div>
+
+      <h3 id="what-conditions-do">What Conditions Do</h3>
+      <p>
+        Conditions represent persistent states that modify what a character can safely attempt. They are the
+        mechanical mark left by consequences. When something important happens to you—injury, fear, strain,
+        affliction—it often becomes a Condition.
+      </p>
+      <p>
+        Conditions typically:
+      </p>
+      <ul>
+        <li>Impose Disadvantage on certain actions.</li>
+        <li>Limit available options (cannot run, cannot act this turn, cannot speak clearly).</li>
+        <li>Threaten further harm if ignored (ongoing damage, ticking Clocks).</li>
+      </ul>
+
+      <h3 id="examples-of-common-conditions">Examples of Common Conditions</h3>
+      <p>
+        A full alphabetical list appears in the Glossary. Here are a few you will see often:
+      </p>
+      <ul>
+        <li><strong>Exhausted</strong> – Disadvantage on demanding physical actions until you rest or receive
+          meaningful aid.</li>
+        <li><strong>Bleeding</strong> – Time pressure from an untreated wound. If not stabilized, it may tick a
+          personal Clock or escalate to worse states.</li>
+        <li><strong>Restrained</strong> – You are held or pinned. You cannot move freely and must break free or
+          be helped.</li>
+        <li><strong>Dazed</strong> – Disoriented; Disadvantage on perception and reaction until you recover.</li>
+        <li><strong>Frightened</strong> – Disadvantage on actions while a specific threat is visible; clears when
+          you rally, escape, or defeat the source.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – From Event to Condition</strong><br />
+        A character fails a Check while crossing a compromised catwalk. Rather than simple damage, the GM
+        describes how they slam into the railing and twist their knee. They gain the Condition
+        <em>Exhausted</em> or <em>Weakened</em>, representing reduced stamina. Future physical actions are harder
+        until they rest or receive treatment.
+      </div>
+
+      <h3 id="using-tags-and-conditions-with-checks">Using Tags and Conditions with Checks</h3>
+      <p>
+        Tags and Conditions do not require new rules. They plug directly into the Check system:
+      </p>
+      <ul>
+        <li>Tags often grant Advantage or Disadvantage on Checks that interact with them.</li>
+        <li>Conditions usually impose Disadvantage or limit which approaches are reasonable.</li>
+        <li>Some Tags shift DCs or change position and effect instead of modifying dice directly.</li>
+      </ul>
+      <p>
+        When you are about to roll, quickly review which Tags and Conditions are relevant. Ask: “Does this make
+        the action easier, harder, or riskier?” Then adjust Advantage/Disadvantage, DC, or consequences
+        accordingly.
+      </p>
+
+      <div class="example">
+        <strong>Example – Tag and Condition Interaction</strong><br />
+        In a horror‑tinged mystery, a character stalks through a foggy graveyard at night. The scene has Tags
+        <em>Dim Light</em> and <em>Obscured</em>. The character is also <em>Frightened</em> from a previous
+        encounter.<br />
+        When they attempt to sneak past patrolling figures, <em>Dim Light</em> and <em>Obscured</em> might grant
+        Advantage on Stealth, but <em>Frightened</em> could impose Disadvantage on actions taken while the threat
+        is visible. The GM weighs these factors, cancels opposing modifiers as needed, and describes how the
+        character’s shaky nerves show up in the fiction.
+      </div>
+
+      <h3 id="introducing-and-clearing-conditions">Introducing and Clearing Conditions</h3>
+      <p>
+        Conditions should follow naturally from events. A failed Check in a hazardous area might cause
+        <em>Bleeding</em> or <em>Poisoned</em>. Exposure to overwhelming sights might cause <em>Frightened</em>.
+        Pushing beyond safe limits might cause <em>Exhausted</em>.
+      </p>
+      <p>
+        When you introduce a Condition, state:
+      </p>
+      <ul>
+        <li>What it represents in the fiction.</li>
+        <li>How it affects actions (which Checks it modifies and how).</li>
+        <li>How it can be cleared (time, rest, treatment, facing a fear, or completing a Clock).</li>
+      </ul>
+      <p>
+        Minor Conditions should clear quickly once addressed. Major Conditions may persist across several scenes
+        or form the basis for character‑driven goals.
+      </p>
+
+      <h3 id="what-clocks-are">What Clocks Are</h3>
+      <p>
+        Clocks are segmented trackers that answer “how close are we?” for goals and threats. A Clock is a circle
+        or track divided into 4, 6, or 8 segments. As actions succeed, time passes, or events occur, segments
+        fill. When the Clock completes, something happens.
+      </p>
+      <p>
+        Use Clocks to represent:
+      </p>
+      <ul>
+        <li><strong>Long‑term goals</strong> – Research projects, faction plans, character endeavors.</li>
+        <li><strong>Mounting threats</strong> – Approaching storms, advancing enemies, spreading plagues.</li>
+        <li><strong>Ticking dangers</strong> – Rituals completing, bombs counting down, collapsing structures.</li>
+        <li><strong>Faction projects</strong> – Off‑screen activities of NPCs and organizations.</li>
+      </ul>
+
+      <h3 id="advancing-clocks">Advancing Clocks</h3>
+      <p>
+        Clocks advance in several ways:
+      </p>
+      <ul>
+        <li><strong>Success‑based</strong> – Successful Checks tick a project Clock forward.</li>
+        <li><strong>Time‑based</strong> – Segments fill as scenes pass or as in‑world time moves.</li>
+        <li><strong>Event‑based</strong> – Specific narrative events advance background or faction Clocks.</li>
+      </ul>
+      <p>
+        Partial successes often advance a Clock and introduce a complication. Exceptional successes may jump a
+        Clock by more than one segment. Failures might leave a Clock unchanged while pushing forward a related
+        threat Clock.
+      </p>
+
+      <div class="example">
+        <strong>Example – Investigation and Cover‑Up Clocks</strong><br />
+        The group is investigating a corrupt official.</div>
+      <p>
+        The GM creates an “Expose the Official” Clock with 6 segments and a “Cover‑Up” Clock with 4 segments.
+        Successful RSN‑based investigation, social, or infiltration Checks advance the first Clock. Certain
+        failures, loud approaches, or conspicuous visits advance the second. Which Clock fills first determines
+        whether the truth comes out cleanly, is revealed with fallout, or is buried.
+      </p>
+
+      <h3 id="combining-tags-conditions-clocks">Combining Tags, Conditions, and Clocks</h3>
+      <p>
+        These tools are most powerful when used together:
+      </p>
+      <ul>
+        <li>Tags set the stage: terrain, lighting, crowds, magical effects.</li>
+        <li>Conditions show how previous events cling to characters and shape their options.</li>
+        <li>Clocks track momentum toward outcomes that matter over time.</li>
+      </ul>
+      <p>
+        A single scene might involve a <em>Hazardous</em> Tag, characters who are <em>Exhausted</em>, and a
+        “Structural Collapse” Clock. Every roll becomes a meaningful choice about risk, effort, and timing.
+      </p>
+
+      <div class="gm">
+        <strong>GM Guidance – Start Small</strong>
+        You do not need Tags, Conditions, and Clocks on every scene. Start with one or two Tags that matter, a
+        few Conditions that arise naturally, and a single important Clock. Add more only when they clarify the
+        fiction rather than clutter it. When in doubt, ask: “Does this tool make the situation clearer and more
+        interesting?” If yes, use it.
+      </div>
+    </section>
+
+    <section id="ch-10-combat-basics">
+      <h2 id="combat-basics-heading">10. Combat Basics</h2>
+
+      <p>
+        Combat is one kind of scene the system supports. It uses the same resolution tools you have already
+        learned—Attributes, Skills, Checks, Tags, Conditions, and Clocks—focused on immediate danger and tactical
+        choices. This chapter introduces how combat scenes are framed, how turns work, and how to use the core
+        combat actions to shape the fiction.
+      </p>
+
+      <h3 id="combat-as-a-scene">Combat as a Scene</h3>
+      <p>
+        Combat starts when violence breaks out and the moment‑to‑moment sequence of actions matters. The GM does
+        not call for “initiative” the first time someone raises a voice. They wait until it is important to know
+        who acts in what order and how threats respond.
+      </p>
+      <p>
+        The table can always ask, “Is this a structured combat now, or are we still in free conversation?” Use
+        structured turns when:
+      </p>
+      <ul>
+        <li>Multiple combatants are acting and order matters.</li>
+        <li>Position, timing, and action economy are tactically significant.</li>
+        <li>Players benefit from clarity about who goes when.</li>
+      </ul>
+      <p>
+        Stay in loose, conversational play when a moment can be resolved with a few Checks and clear narration.
+        Not every scuffle needs the full structure of a fight. Many tense scenes will move fluidly between free
+        narration, a short exchange of blows, and back again without ever feeling like a separate “combat mode.”
+      </p>
+
+      <h3 id="resolve-instead-of-hit-points">Resolve Instead of Hit Points</h3>
+      <p>
+        The system does not track hit points. Instead, it uses Clocks and Conditions to represent how close
+        someone is to being taken out of a fight.
+      </p>
+      <ul>
+        <li><strong>Resolve Clocks</strong> track how much pressure or harm a character, VPC, or enemy can absorb
+          before they are out of the scene.</li>
+        <li><strong>Conditions</strong> such as <em>Bleeding</em>, <em>Exhausted</em>, or <em>Stunned</em> mark
+          lasting effects of blows, hazards, or fear.</li>
+      </ul>
+      <p>
+        When you land solid Strikes or create meaningful pressure with Maneuvers and Set Ups, the GM ticks your
+        opponent’s Resolve Clock. When the Clock fills, they are out—fleeing, unconscious, captured, or worse,
+        depending on the fiction and the stakes the table agreed to.
+      </p>
+
+      <h4 id="why-clocks-not-hit-points">Why Clocks and Not Hit Points?</h4>
+      <p>
+        Clocks keep combat aligned with the goals of this system:
+      </p>
+      <ul>
+        <li><strong>Fiction first</strong> – A character is taken out when the story supports it, not at an
+          arbitrary number. A VPC might quit the field when they are cornered, not only at “0 HP.”</li>
+        <li><strong>Visible progress</strong> – A Resolve Clock filling is easy to read at the table. Everyone
+          can feel that a fight is turning without tracking hidden totals.</li>
+        <li><strong>Flexible stakes</strong> – Clocks can represent being driven off, captured, convinced, or
+          killed, depending on the stakes you set. Not every fight needs to end in death.</li>
+        <li><strong>Pacing control</strong> – The GM can size clocks to match the scene: 2–3 segments for quick,
+          cinematic threats, more for major foes or climactic battles.</li>
+      </ul>
+      <p>
+        Hit points tend to push every fight toward the same outcome—gradual depletion to zero. Resolve Clocks and
+        Conditions instead invite you to think in terms of moments: when does this opponent falter, when do they
+        become desperate, when do they finally break. That emphasis keeps combat tied to character, genre, and
+        story rather than pure attrition.
+      </p>
+
+      <div class="example">
+        <strong>Example – Enemy Resolve</strong><br />
+        A dangerous VPC has a 6‑segment Resolve Clock. Each Full Success on a Strike or a particularly effective
+        Maneuver ticks 2 segments; Partial successes tick 1 segment with a cost. As the Clock fills, the GM
+        describes them becoming desperate, defensive, or reckless. When the sixth segment ticks, they are out of
+        the fight in a way that fits the story.
+      </div>
+
+      <p>
+        Player characters can be tracked in the same way. The GM will make it clear when you are close to being
+        taken out so you can decide whether to keep pressing or break contact and regroup.
+      </p>
+
+      <p>
+        Before a fight begins, the table should briefly agree on what “taken out” means in this scene. Are you
+        trying to kill, rout, capture, or simply delay? The same Resolve Clock can represent different outcomes
+        depending on those stakes. This keeps combat aligned with the tone of your campaign and avoids surprises
+        about consequences.
+      </p>
+
+      <h3 id="turns-and-order">Turns and Order</h3>
+      <p>
+        Combat uses structured turns, but order does not have to be rigid. The GM chooses an ordering approach
+        that fits the scene:
+      </p>
+      <ul>
+        <li><strong>Conversational order</strong> – The GM asks “Who acts next?” and rotates spotlight. Simple
+          and flexible for small skirmishes.</li>
+        <li><strong>Popcorn order</strong> – After you resolve your turn, you choose who goes next. This keeps
+          attention moving and avoids predictable patterns.</li>
+        <li><strong>Initiative (optional)</strong> – If the table prefers, you can use a simple initiative roll
+          or fiction‑based ordering for more structure.</li>
+      </ul>
+      <p>
+        Whatever method you choose, keep it consistent within a given combat and make sure everyone understands
+        who is up next.
+      </p>
+
+      <div class="example">
+        <strong>Example – Conversational vs. Structured Order</strong><br />
+        A heated argument with a gang in a market turns violent when someone draws a knife. The GM first handles
+        a quick exchange in conversation: a shove here, a shouted warning there. When three different people all
+        want to act at once—one flees, one attacks, one grabs a hostage—the GM says, “We’re in structured turns
+        now,” and switches to popcorn order so everyone sees how the moment unfolds.
+      </div>
+
+      <h3 id="your-turn-structure">Your Turn: Structure and Options</h3>
+      <p>
+        On your turn, you usually:
+      </p>
+      <ul>
+        <li>Describe what you do in the fiction.</li>
+        <li>Move within the space as needed (closing, retreating, repositioning).</li>
+        <li>Take one main action, such as Strike, Maneuver, Set Up, or Defend/Withdraw.</li>
+      </ul>
+      <p>
+        If you want to do something small alongside your main action—call out a warning, kick over a chair, draw
+        a weapon—talk with the GM. If it feels reasonable and cinematic without overshadowing other characters,
+        it often fits into the same turn.
+      </p>
+
+      <p>
+        Your turn is a spotlight, not a restriction. The structure exists to make sure everyone gets time to act
+        and react. Think about what your character cares about in the scene—who they are protecting, what they
+        are afraid of losing—and let that guide how you use your turn.
+      </p>
+
+      <h3 id="core-combat-actions">Core Combat Actions</h3>
+      <p>
+        Combat does not introduce a separate rule set. It highlights a small group of common actions:
+      </p>
+      <ul>
+        <li><strong>Strike</strong> – Directly attack a target.</li>
+        <li><strong>Maneuver</strong> – Change position, create openings, or control space.</li>
+        <li><strong>Set Up</strong> – Create Advantage or helpful Tags for yourself or allies.</li>
+        <li><strong>Defend / Withdraw</strong> – Protect yourself or break contact to recover.</li>
+      </ul>
+
+      <h4 id="action-strike">Strike</h4>
+      <p>
+        Strike represents any direct attempt to harm or overpower an opponent: swinging a weapon, firing a shot,
+        hurling debris, or unleashing focused abilities. You describe your attack, the GM sets the DC based on
+        your opponent’s awareness, cover, and Tags, and you roll a Check.
+      </p>
+      <p>
+        On a Full Success, you significantly advance their Resolve or impose serious pressure. On a Partial
+        Success, you still make progress but at a cost—perhaps you become <em>Exposed</em>, suffer a counterblow,
+        or worsen the environment. On a Failure, your attack misses or glances off, and the GM may give your
+        opponent a positional or narrative advantage.
+      </p>
+
+      <p>
+        Strike is the most straightforward way to change the board, but not always the best first move. Against
+        tough opponents in strong positions, consider using Set Up or Maneuver to tilt the field before you
+        commit to repeated Strikes.
+      </p>
+
+      <h4 id="action-maneuver">Maneuver</h4>
+      <p>
+        Maneuver covers tactical actions that change the situation rather than simply dealing harm: shoving an
+        enemy off high ground, tripping them, pulling an ally out of danger, seizing cover, or knocking aside
+        a weapon.
+      </p>
+      <p>
+        Use Maneuver when position, Tags, or Conditions matter more than raw damage. A successful Maneuver can
+        create <em>Prone</em>, strip <em>Solid Cover</em>, or apply a useful Tag such as <em>Exposed</em> that
+        allies can exploit on later turns.
+      </p>
+
+      <p>
+        Maneuvers are where you see genre shine. In cozy scenes, a Maneuver might be flipping a table to block a
+        doorway or herding people toward safety. In horror, it might be slamming a vault door shut or cutting a
+        rope bridge. In sci‑fi, venting a compartment or cycling gravity can change everything without a single
+        Strike.
+      </p>
+
+      <h4 id="action-setup">Set Up</h4>
+      <p>
+        Set Up sacrifices immediate impact to create better opportunities: laying down suppressing fire, feinting
+        to draw attention, calling out weak points, or coordinating a flanking position. On a Full Success, you
+        grant Advantage or establish a helpful Tag for yourself or allies; on a Partial, you still create the
+        opening but at some cost.
+      </p>
+      <p>
+        Good use of Set Up can turn a desperate fight into a manageable one. It shines when your own Strike
+        chances are low or when an ally can capitalize more effectively on the Advantage you create.
+      </p>
+
+      <p>
+        As a rule of thumb, if the group is facing a higher‑tier threat (a dangerous VPC or major enemy), expect
+        the first rounds to involve more Set Ups and Maneuvers than Strikes. Once the table has created better
+        positions, cover, and Advantage, Strikes become dramatically more effective.
+      </p>
+
+      <h4 id="action-defend-withdraw">Defend / Withdraw</h4>
+      <p>
+        Defend/Withdraw represents actively protecting yourself or pulling back from danger: diving behind cover,
+        blocking an attack, or breaking contact to regroup. On a Full Success, you avoid incoming harm or reach
+        a safer position. On a Partial, you mitigate the danger but pay a cost—perhaps taking a lesser Condition
+        or yielding ground.
+      </p>
+      <p>
+        This action is how you buy time when Conditions stack up or your Resolve is nearly full. Using
+        Defend/Withdraw at the right moment is often the difference between a character being taken out or
+        surviving to fight another day.
+      </p>
+
+      <p>
+        Defend/Withdraw is also how you signal a change in priorities. When multiple characters start using it,
+        the fiction is telling you the fight is shifting from “win here” to “escape, regroup, or change the
+        stakes.” Pay attention to those moments; they often mark turning points in a campaign.
+      </p>
+
+      <h3 id="positioning-and-environment">Positioning and Environment</h3>
+      <p>
+        Tags play a major role in combat. <em>Dim Light</em>, <em>Cramped</em>, <em>Elevated</em>,
+        <em>Fragile Cover</em>, <em>Slick</em>, and similar Tags can make certain actions easier or harder, or
+        change what is possible at all. Manege position and Tags as carefully as you manage Checks.
+      </p>
+
+      <div class="example">
+        <strong>Example – Using the Battlefield</strong><br />
+        In a rooftop fight marked as <em>Elevated</em> with scattered <em>Fragile Cover</em>, one character uses
+        Maneuver to shove a foe toward the edge, threatening a fall. Another uses Set Up to flank, granting
+        Advantage on subsequent Strikes. The GM treats <em>Elevated</em> as granting Advantage on ranged attacks
+        from high ground and adds extra risk to any failed Checks near the edge.
+      </div>
+
+      <h3 id="conditions-in-combat">Conditions in Combat</h3>
+      <p>
+        Many combat consequences are expressed as Conditions: being <em>Stunned</em> by a concussive blast,
+        <em>Bleeding</em> after a severe hit, or <em>Suppressed</em> by incoming fire. These Conditions modify
+        subsequent Checks and shape choices.
+      </p>
+      <p>
+        Whenever a Condition is applied in combat, the GM should state how long it lasts and how it can be
+        cleared. For example, <em>Stunned</em> might end after you lose your next action, while
+        <em>Exhausted</em> may persist until you rest between scenes.
+      </p>
+
+      <p>
+        Multiple Conditions can stack in dangerous ways. A character who is both <em>Bleeding</em> and
+        <em>Exhausted</em> is under pressure each round and rolling with Disadvantage on many actions. Scenes
+        like this are signals to change tactics—seek cover, call for help, or end the fight on your own terms.
+      </p>
+
+      <h3 id="putting-it-together">Putting It Together</h3>
+      <p>
+        A typical combat turn might look like this:
+      </p>
+      <ol>
+        <li>The GM describes the scene, including relevant Tags and visible threats.</li>
+        <li>You state intent and approach, choosing a core combat action.</li>
+        <li>The GM sets DC, notes any Advantage/Disadvantage, and clarifies stakes.</li>
+        <li>You roll <strong>4d6</strong>, apply modifiers, and compare to DC.</li>
+        <li>The group interprets the outcome tier, ticking Clocks and applying Tags or Conditions as needed.</li>
+      </ol>
+      <p>
+        Across several rounds, you will see patterns emerge: early positioning and Set Ups, decisive Strikes when
+        Advantage and Tags line up, Conditions and Clocks signaling rising danger, and Defend/Withdraw actions
+        when the tide turns. Treat each fight as a story with a beginning, middle, and end rather than as a
+        series of disconnected attacks.
+      </p>
+      <p>
+        The rest of this book expands on combat by showing how Tags, Conditions, Skills, Proficiencies, NPCs,
+        VPCs, and GM tools combine to create varied, genre‑flexible fights. The goal is always the same: keep
+        the fiction moving, keep consequences meaningful, and let the battlefield tell part of the story.
+      </p>
+    </section>
+
+    <section id="ch-11-exploration-social-play">
+      <h2 id="exploration-social-play-heading">11. Exploration and Social Play</h2>
+
+      <p>
+        Exploration and social play cover everything that happens outside of direct combat. Investigating crime
+        scenes, navigating dangerous terrain, decoding signals, negotiating alliances, and reading a crowded
+        room all use the same core mechanics—Checks, Tags, Conditions, and Clocks—focused on discovery, choice,
+        and momentum rather than immediate harm.
+      </p>
+
+      <h3 id="exploration-overview">Exploration Overview</h3>
+      <p>
+        In exploration scenes, the GM presents situations, spaces, and mysteries. Players describe what their
+        characters do: search, travel, tinker, observe, or test. When uncertainty, consequence, and agency are
+        present, a Check resolves whether the attempt reveals information, overcomes an obstacle, or creates a
+        new problem.
+      </p>
+      <p>
+        Exploration is not “filler between fights.” It is where many campaigns decide their tone: cozy
+        neighborhood investigations, tense horror crawls, sprawling journeys, or intricate political maneuvering.
+        Treat exploration choices as meaningful as any combat decision.
+      </p>
+
+      <h3 id="investigation-and-discovery">Investigation and Discovery</h3>
+      <p>
+        When investigating, start with a clear question: “What am I trying to learn?” Then describe how you
+        pursue it. Examples:
+      </p>
+      <ul>
+        <li>“I examine the desk for hidden compartments and false bottoms.”</li>
+        <li>“I compare the shipping logs with telegraph records for discrepancies.”</li>
+        <li>“I walk the perimeter, looking for unusual footprints or tool marks.”</li>
+      </ul>
+      <p>
+        The GM chooses an Attribute and any relevant Skills, sets a DC based on how well‑hidden or complex the
+        information is, and calls for a Check if needed. On a Full Success, you get a clear answer or strong
+        lead. On a Partial Success, you learn something useful but pay a cost—time passes, someone notices, or
+        the clue is incomplete. On a Failure, you miss the key detail or trigger a complication.
+      </p>
+
+      <p>
+        Investigation often uses paired Clocks:
+      </p>
+      <ul>
+        <li><strong>Progress Clocks</strong> for goals such as “Identify the culprit,” “Decode the pattern,” or
+          “Map the tunnels.” Successful Checks tick these forward.</li>
+        <li><strong>Pressure Clocks</strong> for dangers such as “Guards return,” “Evidence destroyed,” or
+          “Storm closes in.” Partial successes and Failures may tick these.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – Dual Investigation Clocks</strong><br />
+        The group investigates a sabotaged telegraph relay. The GM creates a 6‑segment “Find the saboteur” Clock
+        and a 4‑segment “Relay shutdown” Clock. Each successful RSN‑based Check (examining equipment, tracing
+        messages, interviewing operators) advances the first. Certain Failures or time‑consuming approaches tick
+        the second. Which fills first determines whether the saboteur is exposed before the network goes dark.
+      </div>
+
+      <h3 id="travel-and-environmental-challenges">Travel and Environmental Challenges</h3>
+      <p>
+        Journeys, hazardous terrain, and environmental puzzles are handled with the same principles:
+      </p>
+      <ul>
+        <li>Define the route, obstacles, and stakes.</li>
+        <li>Assign Tags to the environment (<em>Slick</em>, <em>Cramped</em>, <em>Hazardous</em>,
+          <em>Obscured</em>).</li>
+        <li>Use Checks and Clocks to track progress and risk.</li>
+      </ul>
+      <p>
+        Long journeys can be condensed into a handful of key scenes. Each scene presents a meaningful choice: push
+        for speed at higher risk, detour for safety at the cost of time, or engage with an opportunity or threat
+        the GM introduces along the way.
+      </p>
+
+      <div class="example">
+        <strong>Example – Crossing the Floodplain</strong><br />
+        The group must cross a floodplain before the next storm. The GM tags the region as <em>Hazardous</em> and
+        <em>Unstable</em> and creates a “Reach Higher Ground” Clock and a “Waters Rise” Clock. Each scene, the
+        players choose approaches—careful scouting, constructing makeshift bridges, or pushing through quickly.
+        RSN, MIG, or AGI Checks advance progress or risk. Fictional choices about camps, supplies, and routes
+        matter as much as the dice.
+      </div>
+
+      <h3 id="social-interaction">Social Interaction</h3>
+      <p>
+        Social scenes—persuasion, negotiation, deception, and reading people—use the same core loop:
+      </p>
+      <ol>
+        <li>Clarify what you want from the other party.</li>
+        <li>Describe your approach and how you present yourself.</li>
+        <li>GM sets DC and Tags for the scene (<em>Tense</em>, <em>Festive</em>, <em>Suspicious</em>,
+          <em>Profit‑Minded</em>).</li>
+        <li>Roll Checks and interpret outcome tiers as changes in trust, position, or opportunity.</li>
+      </ol>
+      <p>
+        Presence‑based Skills often lead here, but other Attributes can matter. A Reasoned argument, a Might‑backed
+        display of capability, or an Agility‑based demonstration can all shift attitudes when grounded in the
+        fiction.
+      </p>
+
+      <h3 id="negotiation-and-leverage">Negotiation and Leverage</h3>
+      <p>
+        Effective negotiation starts with understanding what the other side values. Before making big offers,
+        consider using Insight or similar approaches to read their priorities. Are they driven by profit, duty,
+        fear, or reputation? Tags like <em>Profit‑Minded</em>, <em>Honor‑Bound</em>, or <em>Desperate</em> can
+        help anchor these traits.
+      </p>
+      <p>
+        Once you know what matters to them:
+      </p>
+      <ul>
+        <li><strong>Identify leverage</strong> – information, access, protection, or resources that speak directly
+          to their needs.</li>
+        <li><strong>Frame your offer</strong> – present your proposal in terms of their goals, not yours.</li>
+        <li><strong>Use Clocks for complex deals</strong> – “Deal Secured” or “Trust Established” can track
+          multi‑round negotiations.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – Multi‑Round Negotiation</strong><br />
+        The group negotiates safe passage with a gang leader tagged as <em>Ruthless</em> and
+        <em>Profit‑Minded</em>. Early rounds focus on proving value and reliability, filling a “Consider Their
+        Offer” Clock. Later rounds solidify terms. Each Check can move the Clock forward or back, with Partial
+        successes adding new demands or concessions. When the Clock completes, the leader commits to a course of
+        action—ally, neutral, or rival.
+      </div>
+
+      <h3 id="deception-and-reading-people">Deception and Reading People</h3>
+      <p>
+        Deception is high‑risk and high‑reward. Successful lies open doors; failed lies create enemies. Keep lies
+        simple, grounded in partial truths, and aligned with visible facts when possible. The GM may grant
+        Advantage when your story matches what NPCs can already see or believe.
+      </p>
+      <p>
+        Reading people through Insight or similar approaches lets you detect lies, gauge mood, and identify
+        pressure points. On Full Success, the GM can tell you what an NPC most wants right now or what they are
+        afraid will happen. On Partial Success, you get a rough sense with some uncertainty or risk being
+        noticed.
+      </p>
+
+      <div class="example">
+        <strong>Example – Interrogation Contest</strong><br />
+        A smuggler is captured in a quiet back room. First, intimidation fails to crack his loyalty, but ticks a
+        Pressure Clock as his crew starts wondering where he is. Then the characters switch to deception,
+        claiming his boss has already betrayed him. A contested Check between the character’s PRE‑based deception
+        and the smuggler’s Insight decides whether he believes the story. The outcome determines whether he
+        reveals the shipment’s location or shuts down entirely.
+      </div>
+
+      <h3 id="structuring-scenes-with-clocks">Structuring Scenes with Clocks</h3>
+      <p>
+        Clocks are especially valuable in exploration and social play, where many small actions add up to big
+        changes. Use them to:
+      </p>
+      <ul>
+        <li>Track layered goals (investigation, preparation, influence).</li>
+        <li>Represent background events (faction plans, approaching deadlines).</li>
+        <li>Create tension in otherwise open‑ended situations.</li>
+      </ul>
+      <p>
+        In many campaigns, the most memorable scenes are not single Checks but sequences where Clocks visibly
+        advance, threats close in, and players make hard choices about which fronts to address first.
+      </p>
+
+      <h3 id="tying-exploration-and-social-back-to-combat">Tying Exploration and Social Back to Combat</h3>
+      <p>
+        Exploration and social play are not separate from combat—they shape it. Successfully mapping a site,
+        securing allies, or learning an enemy’s habits can create Tags, Clocks, or Advantages that pay off
+        immediately when blades are drawn. Likewise, the outcome of a fight often creates new questions to
+        investigate or relationships to repair.
+      </p>
+      <p>
+        When planning sessions, think in arcs: exploration reveals opportunities and risks, social play navigates
+        them, and combat resolves the moments where words and careful planning are no longer enough. Then the
+        story returns to exploration and social play, changed by what happened in the heat of the moment.
+      </p>
+    </section>
+
+    <section id="ch-12-downtime-recovery-advancement-overview">
+      <h2 id="downtime-recovery-advancement-heading">12. Downtime, Recovery, and Advancement Overview</h2>
+
+      <p>
+        Downtime and advancement connect sessions together. They answer two questions: what happens to characters
+        between high‑pressure scenes, and how do they grow over time. This chapter provides an overview of
+        recovery, downtime activities, and progression models. Later chapters and references expand each area in
+        more detail.
+      </p>
+
+      <h3 id="downtime-overview">Downtime Overview</h3>
+      <p>
+        Downtime represents the hours, days, or weeks when characters are not in immediate danger. It is a space
+        for rest, training, projects, and relationships. Good downtime:
+      </p>
+      <ul>
+        <li>Lets characters recover from consequences and Conditions.</li>
+        <li>Creates room for personal goals beyond the main plot.</li>
+        <li>Seeds future adventures through projects and connections.</li>
+      </ul>
+      <p>
+        The GM and players decide how much in‑world time passes. A short downtime might cover a night between
+        missions; a long one might span a season.
+      </p>
+
+      <h3 id="recovery-and-rest">Recovery and Rest</h3>
+      <p>
+        Rest is the foundation of recovery:
+      </p>
+      <ul>
+        <li><strong>Short rest</strong> – A few hours to catch breath, bind wounds, and clear minor Conditions.</li>
+        <li><strong>Long rest</strong> – A full night or more to reset after major exertion.</li>
+        <li><strong>Extended downtime</strong> – Days or weeks that allow deep recovery, training, and projects.</li>
+      </ul>
+      <p>
+        Many Conditions clear automatically with appropriate rest: <em>Exhausted</em> fades after sleep,
+        <em>Bleeding</em> resolves after treatment and time, minor <em>Frightened</em> states ease once the threat
+        passes. More serious Conditions—<em>Poisoned</em>, <em>Cursed</em>, or long‑term injuries—may require
+        specialized care, quests, or narrative solutions.
+      </p>
+
+      <h3 id="downtime-activities">Downtime Activities</h3>
+      <p>
+        Beyond simple rest, characters can dedicate downtime to structured activities. Common examples include:
+      </p>
+      <ul>
+        <li><strong>Training</strong> – Practicing with mentors, refining Skills, or conditioning Attributes.</li>
+        <li><strong>Research</strong> – Studying lore, tracking rumors, or analyzing data.</li>
+        <li><strong>Crafting</strong> – Building or modifying gear, tools, or infrastructure.</li>
+        <li><strong>Relationships</strong> – Strengthening bonds with NPCs, factions, or communities.</li>
+        <li><strong>Projects</strong> – Pursuing long‑term goals like founding a safehouse or establishing a
+          network.</li>
+      </ul>
+      <p>
+        Each activity usually:
+      </p>
+      <ul>
+        <li>Consumes a defined unit of downtime (a day, a week, a season).</li>
+        <li>May involve one or more Checks, often against a progress Clock.</li>
+        <li>Produces concrete outcomes: Skills gained, information uncovered, allies won, or structures built.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – Training as a Clock</strong><br />
+        A character seeks to learn a new Blades Skill from a retired duelist. The GM creates a 6‑segment “Train
+        with Master Valen” Clock. Each week of focused training, the player rolls AGI or RSN against a moderate
+        DC. Full successes tick 2 segments, partials tick 1. When the Clock fills, they gain the Skill and a new
+        relationship with Valen as an ongoing contact.
+      </div>
+
+      <h3 id="long-term-projects">Long‑Term Projects</h3>
+      <p>
+        Some goals are too large for a single downtime period. Long‑term projects use bigger Clocks and are often
+        tied directly to campaign arcs. Examples:
+      </p>
+      <ul>
+        <li>Establishing a spy network in a city.</li>
+        <li>Building or upgrading a stronghold.</li>
+        <li>Rehabilitating a neighborhood or recovering from a disaster.</li>
+        <li>Reconciling or reshaping relationships between factions.</li>
+      </ul>
+      <p>
+        For each project, work with the GM to:
+      </p>
+      <ul>
+        <li>Define the end state (what “complete” looks like).</li>
+        <li>Set a progress Clock sized to the goal.</li>
+        <li>Identify key milestones or phases.</li>
+      </ul>
+      <p>
+        Progress can come from downtime, on‑screen adventures, or both. Setbacks may create separate “Complication”
+        Clocks that, if filled, delay or transform the project. Treat these as story opportunities rather than
+        punishment.
+      </p>
+
+      <h3 id="relationships-factions-and-standing">Relationships, Factions, and Standing</h3>
+      <p>
+        Downtime is also when you invest in people. Characters can nurture friendships, manage obligations, and
+        shift their standing with factions. Many groups find it helpful to track faction standing on a simple
+        ladder:
+      </p>
+      <ul>
+        <li><strong>Hostile</strong> – actively opposed, may move against you.</li>
+        <li><strong>Unfriendly</strong> – suspicious, minimal cooperation, inflated prices.</li>
+        <li><strong>Neutral</strong> – transactional; standard treatment.</li>
+        <li><strong>Friendly</strong> – helpful; discounts, information, and small favors.</li>
+        <li><strong>Honored</strong> – invested in your success; serious support and protection.</li>
+      </ul>
+      <p>
+        Significant actions—rescuing allies, defending territory, forwarding or opposing a faction’s goals—move
+        standing up or down. Neglect can also matter; if you ignore an important relationship for a long time,
+        the GM may introduce a Clock that tracks fading trust until you reconnect.
+      </p>
+
+      <h3 id="advancement-overview">Advancement Overview</h3>
+      <p>
+        Advancement represents mechanical growth: new Skills, expanded Proficiencies, and occasional Attribute
+        improvements. It should also reflect narrative change: what your character has learned, how they have
+        changed, and which arcs have moved forward.
+      </p>
+      <p>
+        There are three common progression models. Your table can use one or blend them:
+      </p>
+      <ul>
+        <li><strong>XP‑based advancement</strong> – You earn experience points for overcoming challenges and
+          achieving goals, then spend XP on Skills, Proficiencies, or Attributes.</li>
+        <li><strong>Milestone‑based advancement</strong> – You advance when you reach narrative milestones, such
+          as completing arcs or defeating major threats.</li>
+        <li><strong>Session‑based advancement</strong> – You advance after a set number of sessions, regardless of
+          specific story beats.</li>
+      </ul>
+      <p>
+        Chapter 19, “Advancement and Long Term Growth,” provides detailed guidance, including costs, pacing, and
+        genre‑specific advice. This chapter focuses on how advancement feels and how it connects to downtime.
+      </p>
+
+      <h3 id="narrative-arcs-and-growth">Narrative Arcs and Growth</h3>
+      <p>
+        Progression is most satisfying when mechanical changes follow narrative arcs. When you advance, ask:
+      </p>
+      <ul>
+        <li>What has my character learned or survived recently?</li>
+        <li>How have their beliefs, relationships, or goals shifted?</li>
+        <li>Which new capabilities reflect that change?</li>
+      </ul>
+      <p>
+        Tie new Skills, Proficiencies, or Attribute bumps to concrete experiences in play: training scenes,
+        pivotal choices, or climactic confrontations. This keeps growth feeling earned and grounded.
+      </p>
+
+      <div class="example">
+        <strong>Example – Advancement Tied to Arc</strong><br />
+        After exposing a corrupt official and choosing to protect whistleblowers instead of seeking revenge, a
+        character gains a social Proficiency focused on coordination and advocacy and a new investigative Skill.
+        These advancements reflect their shift from lone operator to community organizer, making future scenes
+        about those themes richer.
+      </div>
+
+      <h3 id="connecting-advancement-to-downtime">Connecting Advancement to Downtime</h3>
+      <p>
+        Downtime activities and advancement reinforce each other:
+      </p>
+      <ul>
+        <li>Training and projects can justify or accelerate new Skills and Proficiencies.</li>
+        <li>Research and relationships can unlock opportunities that become advancement milestones.</li>
+        <li>Long‑term projects can culminate in major advancement events (new Attributes, expanded domains).</li>
+      </ul>
+      <p>
+        When the table discusses advancement, consider what downtime scenes you want to play to show that growth.
+        Likewise, when you plan downtime, think about which kinds of growth you hope it will make possible.
+      </p>
+
+      <h3 id="table-practices-for-downtime-and-advancement">Table Practices for Downtime and Advancement</h3>
+      <p>
+        A few simple practices keep downtime and advancement smooth:
+      </p>
+      <ul>
+        <li>Talk about goals openly—what each player wants for their character between arcs.</li>
+        <li>Choose a progression model together and revisit it if the pacing feels off.</li>
+        <li>Use Clocks to track projects and relationships you care about, not every minor task.</li>
+        <li>Let advancement decisions wait until you see how a story beat lands; pick changes that fit the outcome.</li>
+      </ul>
+      <p>
+        Downtime, recovery, and advancement are where the campaign breathes. Use them to give characters room to
+        change, deepen ties to the world, and set up the next set of hard choices.
+      </p>
+    </section>
+
+    <section id="ch-13-roleplaying-guidance-working-with-gm">
+      <h2 id="roleplaying-guidance-working-with-gm-heading">13. Roleplaying Guidance and Working with the GM</h2>
+
+      <p>
+        This chapter focuses on how to play the game well at the table—how to inhabit your character, share
+        spotlight, read the fiction, and collaborate with the GM and other players. The mechanics in earlier
+        chapters provide tools. This chapter helps you use them in a way that keeps play fun, clear, and
+        respectful for everyone.
+      </p>
+
+      <h3 id="roleplaying-fundamentals">Roleplaying Fundamentals</h3>
+      <p>
+        Roleplaying means making decisions from your character’s point of view. You do not need to speak in
+        accents or stay “in character” every minute, but it helps to:
+      </p>
+      <ul>
+        <li>Think about what your character wants, fears, and cares about.</li>
+        <li>Let those priorities shape your choices, even when they are not tactically perfect.</li>
+        <li>React to events as your character, not just as a player solving a puzzle.</li>
+      </ul>
+      <p>
+        Your goal is not to “win” the story. It is to help create a story that everyone at the table is excited
+        to remember.
+      </p>
+
+      <h3 id="creating-memorable-characters">Creating Memorable Characters</h3>
+      <p>
+        Memorable characters often share three traits:
+      </p>
+      <ul>
+        <li><strong>Distinct voice</strong> – A recognizable way of speaking or behaving.</li>
+        <li><strong>Clear motivations</strong> – Goals and drives that explain why they act.</li>
+        <li><strong>Flaws and strengths</strong> – Imperfections that create conflict and qualities that carry them.</li>
+      </ul>
+      <p>
+        Voice can be as simple as a few phrases, a posture, or a habit. Motivations might be justice, curiosity,
+        loyalty, or survival. Flaws—stubbornness, pride, mistrust—give scenes bite. Strengths—compassion,
+        courage, expertise—give your character ways to shine.
+      </p>
+
+      <h3 id="engaging-with-the-fiction">Engaging with the Fiction</h3>
+      <p>
+        The game works best when everyone treats the fiction as real and worth caring about:
+      </p>
+      <ul>
+        <li><strong>Describe actions</strong> – Go beyond “I attack.” Show how you move, what you say, what it looks like.</li>
+        <li><strong>React to outcomes</strong> – Let successes, partials, and failures change how your character feels and behaves.</li>
+        <li><strong>Build on details</strong> – When someone adds a detail, treat it as a resource, not background noise.</li>
+      </ul>
+      <p>
+        If the GM says the tavern smells of smoke, decide whether that makes your character nostalgic, uneasy, or
+        indifferent. Small reactions accumulate into a rich portrayal.
+      </p>
+
+      <h3 id="making-meaningful-choices">Making Meaningful Choices</h3>
+      <p>
+        Meaningful choices are grounded in both character and situation:
+      </p>
+      <ul>
+        <li>Ask, “What would my character do here?” and take that seriously, even if it is risky.</li>
+        <li>Embrace consequences; partial successes and failures are fuel for interesting scenes.</li>
+        <li>Consider how your decision opens space for other characters to respond or grow.</li>
+      </ul>
+      <p>
+        You always retain control over your character’s actions and internal life. The GM brings the world; you
+        decide how your character engages with it.
+      </p>
+
+      <h3 id="roleplaying-in-different-scenes">Roleplaying in Different Scenes</h3>
+
+      <h4 id="roleplaying-in-combat">Combat Scenes</h4>
+      <p>
+        Combat is not only about tactics. It is also about how your character responds to danger:
+      </p>
+      <ul>
+        <li>Use your choices of Strike, Maneuver, Set Up, and Defend/Withdraw to show priorities—who you protect,
+          what risks you accept.</li>
+        <li>Let Conditions and Resolve Clocks show up in your description. Stagger when hurt, hesitate when
+          <em>Frightened</em>, push through when it matters.</li>
+        <li>React when others suffer; a quiet character might become decisive when an ally falls.</li>
+      </ul>
+
+      <h4 id="roleplaying-in-social-scenes">Social Scenes</h4>
+      <p>
+        In social scenes, your words and posture matter. You do not have to improvise every line, but try to:
+      </p>
+      <ul>
+        <li>Summarize what your character says, focusing on tone and intent.</li>
+        <li>Show emotion through description—body language, pauses, eye contact.</li>
+        <li>Pay attention to NPC reactions and adjust your approach when the fiction calls for it.</li>
+      </ul>
+
+      <h4 id="roleplaying-in-exploration">Exploration Scenes</h4>
+      <p>
+        Exploration scenes reveal what your character notices and cares about when there is no immediate threat.
+        Curious characters poke at details; cautious ones check exits; idealists look for people to help. Use
+        these scenes to reinforce who you are outside of crisis.
+      </p>
+
+      <h3 id="player-tips-for-success">Player Tips for Success</h3>
+      <p>
+        A few practical habits make play smoother and more satisfying. Taking five minutes before a session to
+        review your character, their current situation, and what you want to pursue can make a big difference.
+        Jotting simple notes—names, locations, promises—keeps threads from slipping away between games.
+      </p>
+      <p>
+        Many players find it helpful to set a small, personal goal each session: “I want to confront my mentor,”
+        “I want to make peace with that faction,” or “I want to learn more about the vanished relay line.” These
+        goals give the GM something to weave into scenes and help you decide what your character pushes toward
+        when choices arise.
+      </p>
+      <p>
+        Tactically, you do not need to master every rule to play well. Focus on three questions:
+      </p>
+      <ul>
+        <li>How can we use terrain and Tags to our advantage in this scene?</li>
+        <li>Is anyone carrying dangerous Conditions we should clear or mitigate?</li>
+        <li>What can I do this turn to make an ally’s next action stronger?</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – A Simple Plan</strong><br />
+        Before a session, a player notes that their character wants to repair trust with a contact they previously
+        lied to. When the GM frames a scene at that contact’s workshop, the player leans into it—offering a sincere
+        apology and a concrete favor. The GM rewards this with a small improvement in standing and a future lead.
+        A few minutes of preparation turned a casual scene into a memorable character moment.
+      </div>
+
+      <h3 id="reading-the-table">Reading the Table</h3>
+      <p>
+        Good play also means paying attention to the table, not just the fiction. When another player leans
+        forward, takes notes, or lights up at a detail, that is a cue that this thread matters to them. When
+        someone has been quiet for a while, you can create space for them with a simple question: “What is your
+        character doing while this happens?”
+      </p>
+      <p>
+        The GM’s descriptions are cues as well. If they linger on a Tag, repeat an NPC’s name, or mention a small
+        oddity twice, it usually means that element is important. If you are unsure what a scene is about, ask
+        briefly out of character: “What is at stake here?” Clarity helps everyone aim their actions in the same
+        direction.
+      </p>
+
+      <div class="example">
+        <strong>Example – Inviting Someone In</strong><br />
+        During an investigation scene, two players are debating theories while a third stays quiet. One of the
+        debaters pauses and says, “You grew up in this district—what do you think is really going on?” The quiet
+        player’s character suddenly becomes central to the scene, sharing local knowledge the others lacked. A
+        small invitation shifted focus in a way that felt natural in the fiction.
+      </div>
+
+      <h3 id="spotlight-sharing-and-party-cohesion">Spotlight Sharing and Party Cohesion</h3>
+      <p>
+        Sharing spotlight keeps the game from becoming “the story of one character with supporting cast.” You do
+        not need to track minutes of talk time, but it helps to be aware of patterns. If you have been at the
+        center of the last few scenes, consider how your character might support others next—by asking for help,
+        following someone else’s lead, or taking an assisting action instead of the decisive one.
+      </p>
+      <p>
+        Stepping forward and stepping back are both generous acts. Step forward when your character’s skills,
+        history, or goals are central to the moment. Step back when someone else is in their focus scene and make
+        their moment stronger with Set Ups, assistance, or simply by reacting in character.
+      </p>
+      <p>
+        Many tables like to create shared backstory—why the group is together, who they owe, what they have
+        survived. These connections make it easier to care about one another’s scenes.
+      </p>
+
+      <div class="example">
+        <strong>Example – Supporting Someone Else’s Spotlight</strong><br />
+        A session centers on another character’s estranged sibling arriving in town. Rather than trying to solve
+        the sibling’s problems, the rest of the group plays into the situation: one offers quiet moral support,
+        another runs interference with a suspicious faction, a third uses a Set Up action in a later conflict to
+        give the spotlight character Advantage. Everyone gets to act, but the emotional core of the session stays
+        with the sibling relationship.
+      </div>
+
+      <h3 id="working-with-the-gm">Working with the GM</h3>
+      <p>
+        The GM is your collaborator, not your opponent. They present the world, frame situations, and play NPCs.
+        You bring your character’s perspective and choices. Good collaboration looks like:
+      </p>
+      <p>
+        Share your character’s goals and interests so the GM knows what to put on screen. Ask clarifying
+        questions when stakes or details are unclear; it is better to pause for thirty seconds than to play
+        through a scene everyone misunderstood. When consequences land, treat them as prompts for new choices
+        rather than reasons to pull back from the game.
+      </p>
+      <p>
+        If something at the table is not working for you—tone, pacing, or content—say so. Adjusting together is
+        part of collaborative play.
+      </p>
+
+      <div class="example">
+        <strong>Example – Sharing a Goal</strong><br />
+        A player tells the GM between sessions, “I want my character’s missing mentor to matter this arc.” A few
+        sessions later, clues about the mentor’s fate appear in a side investigation. Because the player shared
+        that interest, the GM could weave it into existing plots rather than guessing what would land.
+      </div>
+
+      <h3 id="session-zero-and-safety">Session Zero and Safety</h3>
+      <p>
+        Before a campaign begins, many groups hold a session zero to set expectations:
+      </p>
+      <p>
+        Use this time to talk about tone (cozy, gritty, heroic, horrific), the kinds of stories you want, and
+        content that is off‑limits or should be handled gently. Agree on how you will pause or check in if
+        something feels uncomfortable. A few minutes of honest conversation can prevent misunderstandings later.
+      </p>
+      <p>
+        Safety tools can be as simple as an agreement to pause and talk when someone feels uncomfortable, or as
+        formal as a written set of lines and veils. The important part is that everyone feels they can speak up.
+      </p>
+
+      <div class="example">
+        <strong>Example – Using a Safety Pause</strong><br />
+        Midway through a tense interrogation, a player says, “Can we pause a second?” The table briefly steps out
+        of character and the player explains that a specific detail is hitting too close to home. The group and GM
+        adjust the scene—keeping the stakes, changing the flavor—and continue in a way that everyone can enjoy.
+      </div>
+
+      <h3 id="handling-disagreements">Handling Disagreements</h3>
+      <p>
+        Disagreements will happen, both in character and out of character. To keep them from derailing play:
+      </p>
+      <p>
+        First, separate character conflict from player conflict. It is fine for characters to argue fiercely or
+        make incompatible choices; it is not fine for players to feel attacked or sidelined. If a plan discussion
+        stalls or tempers rise, step briefly out of character and ask, “What do we each want from this scene?”
+      </p>
+      <p>
+        If needed, the GM can frame the stakes and ask for a decision so the story can move: “If you split the
+        party here, these risks apply; if you stay together, you miss this opportunity. Which do you prefer?”
+        Once a choice is made, treat it as a shared direction and see where it leads.
+      </p>
+
+      <div class="example">
+        <strong>Example – Resolving a Plan Disagreement</strong><br />
+        Two players argue in character about whether to confront a faction now or gather more evidence. After a
+        few minutes, a third player says, “Let’s pause—what do we want as players?” They discover one wants a
+        tense confrontation, another wants to see more investigation scenes. Together with the GM, they decide to
+        stage a smaller confrontation that reveals new clues, giving both desires some space.
+      </div>
+
+      <h3 id="bringing-it-all-together">Bringing It All Together</h3>
+      <p>
+        Roleplaying and collaboration are what turn mechanics into stories. Use the tools in this chapter to:
+      </p>
+      <ul>
+        <li>Portray characters who change over time.</li>
+        <li>Support one another’s arcs and share spotlight.</li>
+        <li>Work with the GM to shape a campaign that reflects everyone’s interests and boundaries.</li>
+      </ul>
+      <p>
+        The rules in earlier chapters tell you how to resolve actions. This chapter is your reminder that how you
+        choose those actions—and how you respond to the results—is just as important.
+      </p>
+    </section>
+
+    <!-- Part II: Skills, Proficiencies, and Mechanical Reference -->
+    <section id="part-ii-skills-proficiencies" class="part-intro">
+      <h1>Part II: Skills, Proficiencies, and Mechanical Reference</h1>
+      <p>
+        Part II explains the Skills and Proficiencies that give characters texture and focus, and collects key
+        mechanical references used at the table. Skills represent what your character can reliably do under
+        pressure; Proficiencies represent domains where their knowledge or training changes how the GM interprets
+        the fiction. Extended Tags and Conditions, advancement options, and optional rules round out the
+        mechanical toolkit.
+      </p>
+      <p>
+        These chapters describe how to build and customize skill lists, how to group examples by Attribute and
+        domain, and how to use mechanical references to tune campaigns. GMs and players can work together here to
+        define new entries and options that fit the tone and needs of each table.
+      </p>
+    </section>
+    <section id="ch-14-skills-system-overview">
+      <h2 id="skills-system-overview-heading">14. Skills System Overview</h2>
+
+      <p>
+        Skills are fiction‑first capabilities that define what your character can reliably do when the outcome is
+        uncertain. They represent practiced competencies—from climbing a precarious cliff to negotiating a trade
+        deal, from repairing relay equipment to navigating orbital traffic. This chapter explains what Skills
+        represent, how they interact with Attributes and Checks, and how to choose and create Skills that fit
+        your campaign.
+      </p>
+
+      <h3 id="what-skills-represent">What Skills Represent</h3>
+      <p>
+        Skills are not abstract numbers. They are grounded in your character’s experiences, training, and
+        environment. A character with Stealth knows how to move quietly, read patrol patterns, and exploit
+        shadows. A character with Persuasion understands how to frame requests, read social dynamics, and build
+        rapport. When you roll a Skill Check, you are asking: “Given who this character is and what the situation
+        is, can they accomplish this goal?”
+      </p>
+      <p>
+        Skills always operate on the fiction‑first principle introduced earlier:
+      </p>
+      <ul>
+        <li>If the fiction does not support an action, no roll happens.</li>
+        <li>If the action is certain to succeed or fail given the situation, the GM simply describes the result.</li>
+        <li>Only when uncertainty, consequence, and agency align does a Skill Check come into play.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – When a Skill Matters</strong><br />
+        In a cozy neighborhood campaign, a character with Baking might roll to impress a skeptical community elder
+        with a carefully prepared cake, gaining Advantage on future social scenes with that community. In a sci‑fi
+        relay station, a character with Systems Diagnostics might roll to stabilize failing life support. Both are
+        “skills,” but the way they appear in the fiction depends on the setting and the situation.
+      </div>
+
+      <h3 id="skills-and-attributes">Skills and Attributes</h3>
+      <p>
+        Skills and Attributes work together. Attributes describe broad tendencies—Might (MIG), Agility (AGI),
+        Presence (PRE), and Reason (RSN). Skills sharpen those tendencies into specific competencies. A Check
+        typically uses one Attribute and, when appropriate, one Skill that fits the declared intent and approach.
+      </p>
+      <p>
+        The same Skill can pair with different Attributes depending on how you act:
+      </p>
+      <ul>
+        <li>Using Stealth with AGI when you move quietly through a crowded market.</li>
+        <li>Using Stealth with RSN when you plan a route that avoids patrol patterns entirely.</li>
+        <li>Using Persuasion with PRE when you speak with emotional conviction.</li>
+        <li>Using Persuasion with RSN when you construct a careful, logical argument.</li>
+      </ul>
+      <p>
+        This flexibility keeps Skills tied to the story rather than locked into fixed formulas. The GM chooses
+        the Attribute that best matches your described approach, then checks whether a Skill meaningfully applies.
+      </p>
+
+      <h3 id="skill-categories">Skill Categories</h3>
+      <p>
+        To make it easier to navigate options, Skills are loosely grouped into broad categories. These categories
+        are descriptive, not restrictive, and can overlap:
+      </p>
+      <ul>
+        <li><strong>Exploration</strong> – Perception, Wayfinding, Investigation, Climbing, Tinkering.</li>
+        <li><strong>Social</strong> – Persuasion, Negotiation, Insight, Deception, Comfort.</li>
+        <li><strong>Technical</strong> – Medicine, Thievery, Hacking, Engineering, Forensics.</li>
+        <li><strong>Conflict</strong> – Melee Combat, Firearms, Tactics, Zero‑G Combat, Crowd Control.</li>
+        <li><strong>Arcane or Supernatural</strong> – Arcana, Occult Lore, Ritual, Divination.</li>
+        <li><strong>Wilderness and Environment</strong> – Survival, Animal Handling, Gardening, Foraging.</li>
+      </ul>
+      <p>
+        Chapters 15 and 17 provide example Skills grouped by Attribute and domain, with genre‑specific lists you
+        can use as written or adapt to your setting.
+      </p>
+
+      <h3 id="reading-skill-entries">Reading Skill Entries</h3>
+      <p>
+        Each Skill entry in the reference chapters follows a consistent structure:
+      </p>
+      <ul>
+        <li><strong>Name and category</strong> – The Skill’s name and where it fits (Exploration, Social, etc.).</li>
+        <li><strong>Description</strong> – A fiction‑first explanation of what the Skill covers and how it feels in play.</li>
+        <li><strong>Default actions</strong> – Common tasks and typical DC ranges (using the standard DC ladder).</li>
+        <li><strong>Synergies</strong> – Tags, Conditions, or Proficiencies that make this Skill more effective.</li>
+        <li><strong>Counters</strong> – Situations or Tags that hinder the Skill.</li>
+        <li><strong>GM usage notes</strong> – Advice on when to call for rolls and how to interpret outcome tiers.</li>
+        <li><strong>Example</strong> – A short worked example showing the Skill in context.</li>
+      </ul>
+      <p>
+        When you read a Skill entry, start with the description and example. They tell you how it shows up in the
+        fiction. Numbers and DCs come after.
+      </p>
+
+      <h3 id="choosing-skills">Choosing Skills at Character Creation</h3>
+      <p>
+        During Character Creation, you select a small set of Skills that define what your character reliably does
+        under pressure. When choosing Skills, keep four questions in mind:
+      </p>
+      <ul>
+        <li><strong>Does this fit the genre?</strong> A haunted relay station game will see more use from
+          Engineering and Occult Lore than from Tournament Jousting.</li>
+        <li><strong>Does this fit my concept?</strong> A former smuggler might take Navigation, Streetwise, and
+          Deception; a village healer might focus on Medicine, Gardening, and Comfort.</li>
+        <li><strong>Does this complement the group?</strong> If no one has Medicine or Tactics, consider covering
+          that gap. Redundancy can be fun, but shared blind spots are risky.</li>
+        <li><strong>Is this a Skill I want to lean into?</strong> Choose Skills you are excited to see in play; you
+          can grow into new areas later.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example – Selecting Skills for a Concept</strong><br />
+        A player creates Rami, a courier who once worked the telegraph lines in a canyon region. They choose
+        Stealth, Systems Diagnostics, Wayfinding, and Mediation. Stealth and Wayfinding reflect years of moving
+        through rough terrain unnoticed. Systems Diagnostics ties into relay maintenance. Mediation represents
+        their habit of smoothing over disputes between outposts. The Skill list says as much about who Rami is as
+        their attributes do.
+      </div>
+
+      <h3 id="creating-custom-skills">Creating Custom Skills</h3>
+      <p>
+        The provided Skill lists are starting points. If a Skill you want is missing, you and your GM can create a
+        custom one. A good custom Skill has a clear scope, fits your genre, and gives the GM obvious hooks for
+        scenes where it matters. “Social Media Savvy” might be perfect for a modern campaign but feel out of
+        place in a low‑magic village game; “Wayfinding” makes sense across many genres.
+      </p>
+      <p>
+        When you design a new Skill together, start by writing a short description in plain language. Decide what
+        kinds of actions it covers, what typical difficulties feel like, and what situations make it shine or
+        struggle. You do not need to list every possible use; two or three concrete examples are enough to anchor
+        the Skill in play.
+      </p>
+
+      <div class="example">
+        <strong>Example – Defining a Custom Skill</strong><br />
+        In a modern investigative campaign, the group adds <em>Digital Forensics</em> as a Technical Skill.<br />
+        <em>Description:</em> Analyze digital devices, recover deleted data, and trace online activity.<br />
+        <em>Default actions:</em> Recover deleted files (DC 14–18), trace a message’s origin (DC 16–20), detect
+        tampering (DC 12–16).<br />
+        <em>Synergies:</em> Networked or Surveillance Tags, relevant Proficiencies like Cybercrime.<br />
+        <em>Counters:</em> Air‑gapped systems, encrypted drives, Alert adversaries.<br />
+        The GM now has a clear sense of when and how to call for Digital Forensics Checks.
+      </div>
+
+      <h3 id="skills-proficiencies-tags-and-conditions">Skills, Proficiencies, Tags, and Conditions</h3>
+      <p>
+        Skills rarely act alone. Proficiencies deepen them, Tags color the environment around them, and Conditions
+        bend them out of shape. A Proficiency in a particular domain often makes related Skill Checks easier or
+        safer. Tags such as <em>Dim Light</em>, <em>Cramped</em>, or <em>Networked</em> tilt odds toward or away
+        from certain Skills. Conditions like <em>Exhausted</em> or <em>Frightened</em> can narrow which approaches
+        remain reasonable, even when you technically have the Skill.
+      </p>
+
+      <div class="example">
+        <strong>Example – Skill with Proficiency and Tags</strong><br />
+        A character with the Systems Diagnostics Skill and the “Telegraph Instruments” Proficiency attempts to
+        stabilize a failing relay in a canyon station. The scene has the Tags <em>Dim Light</em> and
+        <em>Unstable</em> due to flickering lamps and tremors.<br />
+        The GM decides the Proficiency lowers the effective DC and grants Advantage on RSN + Systems Diagnostics
+        Checks. However, <em>Unstable</em> means failures may tick a “Structural Collapse” Clock. The Skill,
+        Proficiency, and Tags combine to make the moment specific and tense.
+      </div>
+
+      <h3 id="using-the-skill-reference-chapters">Using the Skill Reference Chapters</h3>
+      <p>
+        The chapters that follow provide concrete Skill lists and examples. Chapter 15 groups Skills by Attribute
+        and offers sample entries you can adopt or adapt. Chapter 17 does the same for Proficiencies, showing how
+        they sharpen certain Skills or open new options in the fiction.
+      </p>
+      <p>
+        You do not need to memorize every entry. When you create or advance a character, scan the parts that match
+        your campaign’s tone and pick what supports your concept. During play, treat the lists as inspiration. If
+        you describe an approach that fits the fiction, you and the GM can decide together which Skill applies,
+        even if it is not on a printed menu.
+      </p>
+    </section>
+
+    <section id="ch-15-skills-reference-by-attribute">
+      <h2 id="skills-reference-by-attribute-heading">15. Skills Reference</h2>
+
+      <p>
+        This chapter offers example Skills grouped by Attribute. It is not an exhaustive catalog. Instead, it
+        shows the kinds of capabilities that naturally lean on Might (MIG), Agility (AGI), Presence (PRE), and
+        Reason (RSN), with short descriptions and sample uses. After each group, a few Skills are expanded into
+        detailed entries that follow the structure described in the previous chapter.
+      </p>
+
+      <h3 id="skills-mig">Might (MIG) Skills</h3>
+      <p>
+        Might‑leaning Skills focus on strength, endurance, and direct physical effort. They often appear when you
+        push, lift, resist, or endure things that would overwhelm most people. MIG Skills are not just about
+        violence—they also cover hard labor, rescue work, and physically demanding crafts.
+      </p>
+
+      <table>
+        <caption>Example MIG‑Facing Skills</caption>
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>What It Represents</th>
+            <th>Sample Uses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Athletic Movement</strong></td>
+            <td>Running, jumping, climbing, and other full‑body movements under pressure.</td>
+            <td>Chasing a fleeing suspect across rooftops; hauling yourself and a companion up a crumbling ledge; forcing your way through a crowded platform before the train departs.</td>
+          </tr>
+          <tr>
+            <td><strong>Heavy Lifting &amp; Carrying</strong></td>
+            <td>Moving and stabilizing heavy loads without specialized equipment.</td>
+            <td>Shifting a fallen beam to free a trapped worker; carrying an injured ally out of a collapsing tunnel; loading crates quickly before a storm hits.</td>
+          </tr>
+          <tr>
+            <td><strong>Grit &amp; Endurance</strong></td>
+            <td>Withstanding fatigue, harsh environments, and prolonged exertion.</td>
+            <td>Marching through a heatwave without proper shade; rowing against the current for hours; staying on your feet during a long night watch after earlier exertions.</td>
+          </tr>
+          <tr>
+            <td><strong>Close‑Quarters Struggle</strong></td>
+            <td>Grappling, holding, and breaking free at arm’s reach.</td>
+            <td>Wrestling a saboteur away from a control panel; restraining a panicked passenger without hurting them; fighting to keep a door closed against a crowd.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 id="skill-athletic-movement">Athletic Movement — Exploration / Conflict (MIG)</h4>
+      <p>
+        <strong>Description:</strong> Athletic Movement covers running, jumping, climbing, swimming, and other full‑body movement under pressure. Characters with this Skill know how to conserve momentum, balance speed and safety, and read terrain for opportunities.
+      </p>
+      <p>
+        <strong>Default actions:</strong> Climbing rough surfaces, crossing gaps, sprinting through unstable ground, or swimming against a current. Routine efforts in good conditions might be DC 12–14; risky leaps in bad weather or climbs while encumbered may push DCs into the 16–20 range.
+      </p>
+      <p>
+        <strong>Synergies and counters:</strong> Tags like <em>Cramped</em> or <em>Unstable</em> make movement riskier, while secure anchor points or safety gear can justify Advantage. Conditions such as <em>Exhausted</em> or <em>Injured</em> often impose Disadvantage or raise effective DCs.
+      </p>
+      <p>
+        <strong>GM usage notes:</strong> Use this Skill when movement itself is the source of tension. Partial successes are good places to introduce new Tags or tick environmental Clocks—reaching the ledge but dislodging debris, for example.
+      </p>
+      <div class="example">
+        <strong>Example – Athletic Movement</strong><br />
+        The group needs to cross between two rooftops before a patrol arrives. The gap is wide, the night is rainy, and the Tag <em>Slick</em> is in play. The GM calls for a MIG + Athletic Movement Check at DC 16. On a Full Success, the character clears the gap cleanly. On a Partial Success, they make it but knock tiles loose, adding <em>Unstable</em> to the landing roof and ticking a “Guards Alerted” Clock by one.
+      </div>
+
+      <h3 id="skills-agi">Agility (AGI) Skills</h3>
+      <p>
+        Agility‑leaning Skills emphasize precision, balance, reflexes, and fine control. They cover stealthy
+        movement, delicate manipulation, and actions where timing and positioning matter more than raw power. AGI
+        Skills often determine who moves first, who avoids danger, and who can operate safely in constrained or
+        unstable environments.
+      </p>
+
+      <table>
+        <caption>Example AGI‑Facing Skills</caption>
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>What It Represents</th>
+            <th>Sample Uses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Stealth &amp; Evasion</strong></td>
+            <td>Moving quietly, staying out of sight, and slipping past attention.</td>
+            <td>Crossing a dim relay hall while guards converse nearby; disappearing into a festival crowd when spotted; circling around to flank an enemy without drawing fire.</td>
+          </tr>
+          <tr>
+            <td><strong>Fine Manipulation</strong></td>
+            <td>Delicate handwork under pressure—lockpicking, tools, instruments.</td>
+            <td>Bypassing a mechanical lock in a cramped stairwell; patching a cable while the platform shakes; quickly reconfiguring a delicate device during a scene.</td>
+          </tr>
+          <tr>
+            <td><strong>Acrobatic Positioning</strong></td>
+            <td>Balancing, tumbling, and using the environment to your advantage.</td>
+            <td>Leaping from balcony to balcony in a theater; sliding under a closing gate; navigating a derailed carriage without falling through gaps.</td>
+          </tr>
+          <tr>
+            <td><strong>Ranged Technique</strong></td>
+            <td>Accurate attacks or precise throws with ranged tools.</td>
+            <td>Taking a careful shot from an elevated walkway; tossing a grappling line to a rooftop; hurling a lantern to shatter at just the right spot.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 id="skill-stealth-evasion">Stealth &amp; Evasion — Exploration / Conflict (AGI)</h4>
+      <p>
+        <strong>Description:</strong> Stealth &amp; Evasion is the ability to move quietly, stay out of sight, and slip through gaps in attention. It includes reading patrol patterns, choosing routes, and using cover effectively.
+      </p>
+      <p>
+        <strong>Default actions:</strong> Crossing guarded spaces without being seen, hiding in cluttered environments, shadowing someone through a crowd, or breaking line of sight. DCs depend on alertness and environment: DC 12–14 for casual observation, 16–18 against active patrols or <em>Alert</em> Tags.
+      </p>
+      <p>
+        <strong>Synergies and counters:</strong> Tags like <em>Dim Light</em>, <em>Crowded</em>, or <em>Obscured</em> often support this Skill, granting Advantage or lowering effective DCs. <em>Alert</em>, <em>Surveillance</em>, or noisy gear can impose Disadvantage or raise DCs.
+      </p>
+      <p>
+        <strong>GM usage notes:</strong> When a Stealth Check fails, think about how the story changes—guards might become suspicious rather than immediately sounding alarms, or a partial reveal might create a tense chase instead of a static fight.
+      </p>
+      <div class="example">
+        <strong>Example – Stealth &amp; Evasion</strong><br />
+        A character tries to slip past a checkpoint in a foggy yard at night. The Tags <em>Dim Light</em> and
+        <em>Obscured</em> are present, but the guards are on <em>Alert</em>. The GM calls for an AGI + Stealth &amp;
+        Evasion Check at DC 16, ruling that the helpful Tags and the <em>Alert</em> state balance out. On a Full
+        Success, the character passes unseen. On a Partial, they get through but one guard notices footprints in
+        the mud, ticking a “Suspicion Rising” Clock.
+      </div>
+
+      <h3 id="skills-pre">Presence (PRE) Skills</h3>
+      <p>
+        Presence‑leaning Skills are about influence, emotional resonance, and social navigation. They come to the
+        forefront when your character speaks, negotiates, performs, or stands firm under social pressure. PRE
+        Skills shape how NPCs and factions feel about you and how scenes change when you step in.
+      </p>
+
+      <table>
+        <caption>Example PRE‑Facing Skills</caption>
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>What It Represents</th>
+            <th>Sample Uses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Persuasion &amp; Appeal</strong></td>
+            <td>Convincing others through argument, empathy, or shared interest.</td>
+            <td>Talking a station chief into delaying a dangerous launch; persuading a frightened neighbor to share what they saw; calming a restless crowd before panic spreads.</td>
+          </tr>
+          <tr>
+            <td><strong>Command &amp; Coordination</strong></td>
+            <td>Directing allies, issuing orders, and aligning efforts under stress.</td>
+            <td>Coordinating a multi‑step evacuation; calling out tactics in a tense standoff; rallying scattered workers to resist a threat together.</td>
+          </tr>
+          <tr>
+            <td><strong>Deception &amp; Performance</strong></td>
+            <td>Presenting a convincing façade, playing roles, or masking intent.</td>
+            <td>Passing as an official inspector; staging a minor argument as a distraction; delivering a stirring speech that hides a coded message.</td>
+          </tr>
+          <tr>
+            <td><strong>Insight &amp; Empathy</strong></td>
+            <td>Reading people’s moods, motivations, and tells.</td>
+            <td>Noticing when a witness is omitting something; sensing that a faction leader is more afraid than angry; spotting who in a crowd is truly listening.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 id="skill-persuasion-appeal">Persuasion &amp; Appeal — Social (PRE)</h4>
+      <p>
+        <strong>Description:</strong> Persuasion &amp; Appeal is the ability to convince others through argument, empathy, or shared interest. It helps you change minds or soften positions without deception.
+      </p>
+      <p>
+        <strong>Default actions:</strong> Negotiating terms, calming frightened NPCs, or advocating for a course of action. Everyday requests might sit at DC 12–14; high‑stakes persuasion against resistant targets can reach DC 18–20.
+      </p>
+      <p>
+        <strong>Synergies and counters:</strong> Positive standing with a faction, prior favors, or supportive Tags (such as <em>Friendly</em> atmosphere) can justify Advantage or lower DCs. Deep grudges, conflicting goals, or a <em>Tense</em> Tag make success harder.
+      </p>
+      <p>
+        <strong>GM usage notes:</strong> Use outcome tiers to adjust both content and tone of NPC responses. Partial successes might grant what the PCs want at a cost, such as obligations or strings attached.
+      </p>
+      <div class="example">
+        <strong>Example – Persuasion &amp; Appeal</strong><br />
+        The characters ask a guild leader to delay a crucial shipment. The guild’s standing with them is
+        <em>Neutral</em>, but they recently helped with a separate problem. The GM calls for a PRE + Persuasion
+        Check at DC 16, noting that success means the delay is granted, while a Partial success means the delay
+        comes with a promised favor the guild will collect later.
+      </div>
+
+      <h3 id="skills-rsn">Reason (RSN) Skills</h3>
+      <p>
+        Reason‑leaning Skills focus on analysis, memory, perception, and structured thinking. They shine when you
+        sift clues, diagnose problems, plan ahead, or notice what others overlook. RSN Skills often drive
+        investigation, engineering tasks, and long‑term strategies.
+      </p>
+
+      <table>
+        <caption>Example RSN‑Facing Skills</caption>
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>What It Represents</th>
+            <th>Sample Uses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Perception &amp; Awareness</strong></td>
+            <td>Noticing details, patterns, and subtle changes in the environment.</td>
+            <td>Spotting a disturbed patch of dust near a hidden panel; hearing the telltale click of a misaligned relay; realizing a crowd’s mood is shifting before anyone speaks.</td>
+          </tr>
+          <tr>
+            <td><strong>Investigation</strong></td>
+            <td>Following leads, connecting evidence, and reconstructing events.</td>
+            <td>Piecing together a sabotage timeline from logs; reconstructing a confrontation from scattered signs; determining which of several suspects had the opportunity to act.</td>
+          </tr>
+          <tr>
+            <td><strong>Systems &amp; Diagnostics</strong></td>
+            <td>Understanding and troubleshooting complex systems—mechanical, social, or digital.</td>
+            <td>Tracing a glitch in a relay network; modeling how a faction will react to a policy change; identifying weak points in a fortress layout.</td>
+          </tr>
+          <tr>
+            <td><strong>Lore &amp; Analysis</strong></td>
+            <td>Recalling knowledge, interpreting texts, and applying theory.</td>
+            <td>Identifying a symbol from an old campaign; interpreting the implications of a new law; recognizing that a pattern in strange messages matches an old cipher style.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 id="skill-investigation">Investigation — Exploration (RSN)</h4>
+      <p>
+        <strong>Description:</strong> Investigation covers following leads, connecting evidence, and reconstructing events. Where Perception tells you what is present, Investigation helps you determine why and how.
+      </p>
+      <p>
+        <strong>Default actions:</strong> Analyzing a crime scene, comparing records for inconsistencies, or tracing the path of a missing person. Straightforward inquiries might be DC 12–14; complex puzzles or well‑hidden schemes push toward DC 18–22.
+      </p>
+      <p>
+        <strong>Synergies and counters:</strong> Access to records, helpful NPCs, or prior research can lower DCs or justify Advantage. Tags such as <em>Obscured</em>, <em>Hazardous</em> locations, or active Cover‑Up Clocks raise stakes and complicate interpretation.
+      </p>
+      <p>
+        <strong>GM usage notes:</strong> Treat Investigation Checks as steps in a process, not single all‑or‑nothing gates. Use Clocks to track progress toward understanding, and let partial results reveal some truths while leaving room for future discoveries—or mistakes.
+      </p>
+      <div class="example">
+        <strong>Example – Investigation</strong><br />
+        The group examines a sabotaged relay hub. The GM sets a 6‑segment “Understand the Sabotage” Clock and
+        calls for an RSN + Investigation Check at DC 14. A Full Success both advances the Clock and clearly links
+        the damage to a particular toolset. A Partial advances the Clock but hints at two possible culprits,
+        leaving ambiguity the group will need to resolve later.
+      </div>
+
+      <h3 id="mixing-attributes-and-skills">Mixing Attributes and Skills</h3>
+      <p>
+        These examples show where Skills most often lean, but they are not rigid assignments. In play, you will
+        often mix Attributes and Skills in flexible ways: a MIG‑focused character might pair Investigation with
+        physical intimidation, while a PRE‑focused character might use Systems &amp; Diagnostics to explain a
+        problem convincingly to a nervous crowd. When in doubt, start from the fiction: what is your character
+        doing, and which Attribute and Skill combination best captures that attempt.
+      </p>
+    </section>
+
+    <section id="ch-16-proficiencies-system-overview">
+      <h2>16. Proficiencies System Overview</h2>
+      <!-- TODO: draft Chapter 16 content -->
+    </section>
+
+    <section id="ch-17-proficiencies-reference-by-domain">
+      <h2>17. Proficiencies Reference by Domain</h2>
+      <!-- TODO: draft Chapter 17 content -->
+    </section>
+
+    <!-- Part III: Mechanical and Game Master Reference -->
+    <section id="part-iii-reference-and-gm" class="part-intro">
+      <h1>Part III: Mechanical and Game Master Reference</h1>
+      <p>
+        Part III gathers extended mechanical references and GM tools. Here you will find deeper lists of Tags and
+        Conditions, detailed advancement options, optional and variant rules, and guidance for running sessions,
+        campaigns, factions, and alternative play modes.
+      </p>
+      <p>
+        Use these chapters as a toolkit. You can run the game with only Part I and Part II, but Part III helps you
+        tune pacing and difficulty, build richer scenarios, and manage long‑term pressures and fronts in a way
+        that fits your table.
+      </p>
+    </section>
+    <section id="ch-18-extended-tags-conditions-reference">
+      <h2>18. Extended Tags and Conditions Reference</h2>
+      <!-- TODO: draft Chapter 18 content -->
+    </section>
+
+    <section id="ch-19-advancement-long-term-growth">
+      <h2>19. Advancement and Long Term Growth</h2>
+      <!-- TODO: draft Chapter 19 content -->
+    </section>
+
+    <section id="ch-20-optional-variant-rules">
+      <h2>20. Optional and Variant Rules</h2>
+      <!-- TODO: draft Chapter 20 content -->
+    </section>
+
+    <!-- Part IV: Game Master Section -->
+    <section id="part-iv-game-master-section" class="part-intro">
+      <h1>Part IV: Game Master Section</h1>
+      <p>
+        Part IV is written primarily for Game Masters, but curious players are welcome to read it as well. These
+        chapters focus on framing sessions and scenes, managing pacing, designing scenarios and campaigns, and
+        making effective use of NPCs, VPCs, factions, and fronts.
+      </p>
+      <p>
+        Together with the earlier rules, this section forms a complete toolkit for running the game: from first
+        session to long‑term arcs, from intimate character drama to sweeping faction conflicts.
+      </p>
+    </section>
+    <section id="ch-21-running-sessions">
+      <h2>21. Running Sessions</h2>
+      <!-- TODO: draft Chapter 21 content -->
+    </section>
+
+    <section id="ch-22-running-campaigns">
+      <h2>22. Running Campaigns</h2>
+      <!-- TODO: draft Chapter 22 content -->
+    </section>
+
+    <section id="ch-23-designing-scenarios-one-shots">
+      <h2>23. Designing Scenarios and One Shots</h2>
+      <!-- TODO: draft Chapter 23 content -->
+    </section>
+
+    <section id="ch-24-npcs-vpcs-enemies">
+      <h2>24. NPCs, VPCs, and Enemies</h2>
+      <!-- TODO: draft Chapter 24 content -->
+    </section>
+
+    <section id="ch-25-factions-fronts-world-pressure">
+      <h2>25. Factions, Fronts, and World Pressure</h2>
+      <!-- TODO: draft Chapter 25 content -->
+    </section>
+
+    <section id="ch-26-gmless-shared-authority-play">
+      <h2>26. GMless and Shared Authority Play</h2>
+      <!-- TODO: draft Chapter 26 content -->
+    </section>
+
+    <section id="ch-27-solo-framework">
+      <h2>27. Solo Framework</h2>
+      <!-- TODO: draft Chapter 27 content -->
+    </section>
+
+    <!-- Part V: Glossary and Index -->
+    <section id="part-v-glossary-index" class="part-intro">
+      <h1>Part V: Glossary and Index</h1>
+      <p>
+        Part V provides quick reference tools: a glossary of key terms used across the system and an index to help
+        you find topics quickly. The glossary ensures that everyone uses the same language for Attributes, Skills,
+        Proficiencies, Tags, Conditions, Clocks, and outcome tiers.
+      </p>
+      <p>
+        Use these chapters as anchors during play. When a term feels ambiguous or you are unsure where to look for
+        a specific rule, start here.
+      </p>
+    </section>
+    <section id="ch-28-glossary">
+      <h2>28. Glossary</h2>
+      <!-- TODO: build glossary from source/codex/GLOSSARY.md -->
+    </section>
+
+    <section id="ch-29-index">
+      <h2>29. Index</h2>
+      <!-- TODO: build index once chapter content is stable -->
+    </section>
+  </main>
+</body>
+</html>
