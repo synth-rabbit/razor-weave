@@ -117,7 +117,6 @@ affinities:
     weight: 0.9
 
   - combination:
-      social_emotional_traits: Anxious Newbie
+      social_emotional_traits: [Anxious Newbie, Conflict-Averse]
       experience_levels: "Newbie (0-1 years)"
-      social_emotional_traits: Conflict-Averse
     weight: 0.6
