@@ -5,6 +5,7 @@ import { createTables } from './schema.js';
 import { StateClient } from './state-client.js';
 import { SnapshotClient } from './snapshot-client.js';
 import { ArtifactClient } from './artifact-client.js';
+import { PersonaClient } from './persona-client.js';
 
 export class ProjectDatabase {
   private db: Database.Database;
@@ -12,6 +13,7 @@ export class ProjectDatabase {
   public readonly state: StateClient;
   public readonly snapshots: SnapshotClient;
   public readonly artifacts: ArtifactClient;
+  public readonly personas: PersonaClient;
 
   constructor(dbPath?: string) {
     const finalPath = dbPath || join(process.cwd(), 'data', 'project.db');
@@ -26,6 +28,7 @@ export class ProjectDatabase {
     this.state = new StateClient(this.db);
     this.snapshots = new SnapshotClient(this.db);
     this.artifacts = new ArtifactClient(this.db);
+    this.personas = new PersonaClient(this.db);
   }
 
   close(): void {

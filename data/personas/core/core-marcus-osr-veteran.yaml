@@ -1,0 +1,58 @@
+id: core-marcus-osr-veteran
+name: Marcus the OSR Veteran
+type: core
+schema_version: 1
+created_at: 2025-01-18
+
+dimensions:
+  archetype: Tactician
+  experience_level: Veteran (10-20 years)
+
+  playstyle_modifiers:
+    - Rule Minimalist
+    - Puzzle Solver
+
+  cognitive_styles:
+    primary: Analytical
+    secondary: Pattern-Driven
+
+  social_emotional_traits:
+    - Confident Veteran
+    - Direct Communicator
+
+  system_exposures:
+    - OSR-Enthusiast
+    - System Hopper
+    - Wargamer Background
+
+  life_contexts:
+    - Digital-Only Player
+
+  fiction_first_alignment: Skeptical
+  narrative_mechanics_comfort: Needs Concrete Numbers
+  gm_philosophy: World Simulator
+  genre_flexibility: Genre-Specific Purist
+
+narrative_profile: |
+  Marcus has been playing RPGs since the early 2000s, cutting his teeth
+  on AD&D 2nd edition and migrating through 3.5, Pathfinder, and back
+  to OSR systems. Deeply skeptical of "fiction-first" as marketing
+  buzzwords, but will engage if mechanics are solid.
+
+  Values mechanical transparency, emergent gameplay, and player skill
+  over character build. Distrusts systems that hide DCs or rely on
+  GM discretion. Wants to know exactly what his character can do and
+  what the risks are.
+
+  Extremely experienced at identifying edge cases and mechanical
+  exploits. Will test whether rules are actually complete or just
+  vibes. Respects elegant minimal systems but has zero patience for
+  incomplete ones.
+
+testing_focus:
+  - Mechanical completeness and rigor
+  - Edge case coverage
+  - Whether fiction-first claims hold up under scrutiny
+  - Clear procedure definitions
+  - Tactical depth
+  - Traditional player concerns

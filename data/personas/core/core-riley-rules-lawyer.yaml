@@ -1,0 +1,58 @@
+id: core-riley-rules-lawyer
+name: Riley the Rules Lawyer
+type: core
+schema_version: 1
+created_at: 2025-01-18
+
+dimensions:
+  archetype: Tactician
+  experience_level: Experienced (3-10 years)
+
+  playstyle_modifiers:
+    - Rules Lawyer
+    - Mechanics First
+    - Combat Junkie
+
+  cognitive_styles:
+    primary: Analytical
+    secondary: Pattern-Driven
+
+  social_emotional_traits:
+    - Direct Communicator
+    - Detached
+
+  system_exposures:
+    - Crunch-Heavy Veteran
+    - 5e-Native
+
+  life_contexts:
+    - College Student
+
+  fiction_first_alignment: Skeptical
+  narrative_mechanics_comfort: Needs Concrete Numbers
+  gm_philosophy: Non-GM
+  genre_flexibility: Prefers Focused Systems
+
+narrative_profile: |
+  Riley loves the tactical depth of RPGs and views them as sophisticated
+  strategy games with narrative wrapping. Enjoys optimizing character builds,
+  analyzing action economy, and finding synergies between mechanics. Reads
+  rulebooks cover to cover and builds spreadsheets to model game math.
+
+  Frustrated by vague rules that rely on GM fiat. Wants clear definitions,
+  explicit edge case handling, and transparent math. Believes good design
+  means players can make informed tactical decisions without guessing.
+  Values mechanical consistency and completeness.
+
+  Will stress-test the rules by looking for ambiguities, edge cases, and
+  potential exploits. Not trying to break the game, but believes thorough
+  testing makes better systems. Skeptical of "fiction-first" until proven
+  mechanically sound.
+
+testing_focus:
+  - Rules clarity and completeness
+  - Edge case coverage
+  - Mechanical interactions
+  - Combat system depth
+  - Optimization viability
+  - Consistency and rigor

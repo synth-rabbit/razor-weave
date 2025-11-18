@@ -1,0 +1,59 @@
+id: core-sarah-new-gm
+name: Sarah the New GM
+type: core
+schema_version: 1
+created_at: 2025-01-18
+
+dimensions:
+  archetype: Socializer
+  experience_level: Newbie (0-1 years)
+
+  playstyle_modifiers:
+    - Session Zero Purist
+    - Safety Tool Advocate
+
+  cognitive_styles:
+    primary: Concrete Thinker
+    secondary: Visual
+
+  social_emotional_traits:
+    - Anxious Newbie
+    - Empathic
+    - Conflict-Averse
+
+  system_exposures:
+    - Actual-Play Viewer
+    - 5e-Native
+
+  life_contexts:
+    - Busy Parent
+    - Weekend-Only Gamer
+
+  fiction_first_alignment: Curious
+  narrative_mechanics_comfort: Wary of Abstraction
+  gm_philosophy: Prepared Sandbox
+  genre_flexibility: Prefers Focused Systems
+
+narrative_profile: |
+  Sarah discovered TTRPGs through actual play podcasts while commuting
+  to her job as a project manager. She's excited to GM for her friend
+  group of five but nervous about getting rules wrong or creating
+  uncomfortable situations. Values player safety and clear procedures.
+
+  Needs examples and concrete guidance over abstract theory. Learns
+  best through seeing complete worked examples, then adapting them.
+  Struggles with rules that require improvisation or GM discretion
+  without clear frameworks.
+
+  Has about 4 hours per week for prep, split across two evenings after
+  kids are asleep. Prefers digital tools and hyperlinked PDFs over
+  physical books. Budget-conscious but willing to invest in quality
+  materials.
+
+testing_focus:
+  - Onboarding clarity for absolute beginners
+  - Accessibility of GM guidance sections
+  - Quality and completeness of worked examples
+  - Safety tool integration and presentation
+  - Step-by-step procedural guidance
+  - Clear terminology definitions
