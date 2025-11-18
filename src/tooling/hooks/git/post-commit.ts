@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { updateAgentsMd } from '../../updaters/agents-updater.js';
 import { resetPromptMd } from '../../updaters/prompt-updater.js';
+import { getDatabase } from '../../database/index.js';
 
 export async function postCommit(): Promise<void> {
   console.log('🎣 Running post-commit updates...\n');
@@ -19,9 +20,19 @@ export async function postCommit(): Promise<void> {
   await resetPromptMd();
   filesUpdated = true;
 
-  // 3. Amend commit with updated files if any changed
+  // 3. Mark recent snapshots as committed
+  const commitSha = getLastCommit();
+  const db = getDatabase();
+  db.snapshots.markAsCommitted(commitSha);
+  console.log(`✅ Marked snapshots as committed: ${commitSha.substring(0, 7)}\n`);
+
+  // Update state
+  db.state.set('last_commit', commitSha);
+  db.state.set('last_commit_time', new Date().toISOString());
+
+  // 4. Amend commit with updated files if any changed
   if (filesUpdated) {
-    console.log('\n📦 Amending commit with updated files...');
+    console.log('📦 Amending commit with updated files...');
     try {
       execSync('git add AGENTS.md PROMPT.md', { stdio: 'inherit' });
       execSync('git commit --amend --no-edit --no-verify', { stdio: 'inherit' });
