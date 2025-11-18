@@ -120,3 +120,105 @@
 **Quality Observations:**
 
 ---
+
+## Part II: Advanced Topics (Chapters 11-20)
+
+### Chapter 11: Clocks & Progress Tracking
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 12: Social Conflict
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 13: Equipment & Resources
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 14: Magic & Powers
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 15: Setting Elements
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 16: Sample Characters
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 17: Example of Play
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 18: Running the Game
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 19: Campaign Structures
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
+
+### Chapter 20: Session Zero
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+---
