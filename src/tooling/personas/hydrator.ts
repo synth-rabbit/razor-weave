@@ -75,7 +75,15 @@ export async function hydratePersona(persona: PersonaFile): Promise<void> {
 export async function hydrateAllCorePersonas(): Promise<number> {
   const coreIds = [
     'core-sarah-new-gm',
-    // Will add more as we create them
+    'core-marcus-osr-veteran',
+    'core-alex-indie-convert',
+    'core-jordan-busy-parent',
+    'core-riley-rules-lawyer',
+    'core-morgan-method-actor',
+    'core-sam-forever-gm',
+    'core-casey-neurodivergent',
+    'core-devon-solo-player',
+    'core-taylor-video-game-convert'
   ];
 
   let count = 0;
