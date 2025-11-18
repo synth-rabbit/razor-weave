@@ -33,31 +33,31 @@ describe('personas CLI commands', () => {
   });
 
   describe('hydrate-core command', () => {
-    it('should load all core personas', async () => {
-      vi.mocked(hydrateAllCorePersonas).mockResolvedValue(10);
+    it('should load all core personas', () => {
+      vi.mocked(hydrateAllCorePersonas).mockReturnValue(10);
 
-      await hydrateCore();
+      hydrateCore();
 
       expect(hydrateAllCorePersonas).toHaveBeenCalledOnce();
       expect(consoleLogSpy).toHaveBeenCalledWith('Hydrating core personas...');
       expect(consoleLogSpy).toHaveBeenCalledWith('✓ Loaded 10 core personas');
     });
 
-    it('should be idempotent (safe to run multiple times)', async () => {
-      vi.mocked(hydrateAllCorePersonas).mockResolvedValue(10);
+    it('should be idempotent (safe to run multiple times)', () => {
+      vi.mocked(hydrateAllCorePersonas).mockReturnValue(10);
 
       // Run twice
-      await hydrateCore();
-      await hydrateCore();
+      hydrateCore();
+      hydrateCore();
 
       expect(hydrateAllCorePersonas).toHaveBeenCalledTimes(2);
       // Should not throw errors
     });
 
-    it('should report success count', async () => {
-      vi.mocked(hydrateAllCorePersonas).mockResolvedValue(5);
+    it('should report success count', () => {
+      vi.mocked(hydrateAllCorePersonas).mockReturnValue(5);
 
-      await hydrateCore();
+      hydrateCore();
 
       expect(consoleLogSpy).toHaveBeenCalledWith('✓ Loaded 5 core personas');
     });

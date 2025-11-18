@@ -15,9 +15,9 @@ describe('Hydrator', () => {
   });
 
   describe('hydratePersona', () => {
-    it('loads persona to database', async () => {
+    it('loads persona to database', () => {
       const persona = loadPersonaFromFile('core-sarah-new-gm');
-      await hydratePersona(persona);
+      hydratePersona(persona);
 
       const db = getDatabase();
       const loaded = db.personas.get('core-sarah-new-gm');

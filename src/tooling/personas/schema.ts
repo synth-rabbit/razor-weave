@@ -1,6 +1,42 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, existsSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import YAML from 'yaml';
+
+/**
+ * Find the project root by walking up from current directory
+ * looking for the root package.json with @razorweave scope
+ */
+function findProjectRoot(): string {
+  // Start from the directory containing this file
+  const currentFile = fileURLToPath(import.meta.url);
+  let dir = dirname(currentFile);
+
+  // Walk up until we find the root package.json
+  while (dir !== '/' && dir !== '.') {
+    const packageJsonPath = join(dir, 'package.json');
+    if (existsSync(packageJsonPath)) {
+      try {
+        const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
+          name?: string;
+          workspaces?: unknown;
+        };
+        // Check if this is the root package (has pnpm workspace or name without scope prefix for tooling)
+        if (pkg.name === 'razorweave' || pkg.workspaces !== undefined) {
+          return dir;
+        }
+      } catch {
+        // Invalid JSON, keep searching
+      }
+    }
+    dir = dirname(dir);
+  }
+
+  // Fallback to process.cwd() if we can't find root
+  return process.cwd();
+}
+
+const PROJECT_ROOT = findProjectRoot();
 
 export interface DimensionSchema {
   version: number;
@@ -55,8 +91,8 @@ export function loadSchema(): Schema {
     return cachedSchema;
   }
 
-  const dimensionsPath = join(process.cwd(), 'data/personas/schema/dimensions.yaml');
-  const rulesPath = join(process.cwd(), 'data/personas/schema/combination-rules.yaml');
+  const dimensionsPath = join(PROJECT_ROOT, 'data/personas/schema/dimensions.yaml');
+  const rulesPath = join(PROJECT_ROOT, 'data/personas/schema/combination-rules.yaml');
 
   const dimensionsYaml = readFileSync(dimensionsPath, 'utf-8');
   const rulesYaml = readFileSync(rulesPath, 'utf-8');

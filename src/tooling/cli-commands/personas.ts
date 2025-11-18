@@ -11,9 +11,9 @@ export interface GenerateOptions {
  * Command: hydrate-core
  * Loads all 10 core personas into the database
  */
-export async function hydrateCore(): Promise<void> {
+export function hydrateCore(): void {
   console.log('Hydrating core personas...');
-  const count = await hydrateAllCorePersonas();
+  const count = hydrateAllCorePersonas();
   console.log(`✓ Loaded ${count} core personas`);
 }
 

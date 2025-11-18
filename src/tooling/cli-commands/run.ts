@@ -16,7 +16,7 @@ async function main() {
 
   try {
     if (command === 'hydrate-core') {
-      await hydrateCore();
+      hydrateCore();
     } else if (command === 'generate') {
       const count = parseInt(args[1], 10);
       if (isNaN(count) || count <= 0) {
@@ -52,4 +52,4 @@ async function main() {
   }
 }
 
-main();
+void main();

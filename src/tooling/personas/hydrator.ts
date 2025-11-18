@@ -1,8 +1,39 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, existsSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import YAML from 'yaml';
 import { getDatabase } from '../database/index.js';
 import type { PersonaData } from '../database/persona-client.js';
+
+/**
+ * Find the project root by walking up from current directory
+ */
+function findProjectRoot(): string {
+  const currentFile = fileURLToPath(import.meta.url);
+  let dir = dirname(currentFile);
+
+  while (dir !== '/' && dir !== '.') {
+    const packageJsonPath = join(dir, 'package.json');
+    if (existsSync(packageJsonPath)) {
+      try {
+        const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
+          name?: string;
+          workspaces?: unknown;
+        };
+        if (pkg.name === 'razorweave' || pkg.workspaces !== undefined) {
+          return dir;
+        }
+      } catch {
+        // Invalid JSON, keep searching
+      }
+    }
+    dir = dirname(dir);
+  }
+
+  return process.cwd();
+}
+
+const PROJECT_ROOT = findProjectRoot();
 
 export interface PersonaFile {
   id: string;
@@ -32,7 +63,7 @@ export interface PersonaFile {
 
 export function loadPersonaFromFile(id: string): PersonaFile {
   const personaPath = join(
-    process.cwd(),
+    PROJECT_ROOT,
     'data/personas/core',
     `${id}.yaml`
   );
@@ -41,7 +72,7 @@ export function loadPersonaFromFile(id: string): PersonaFile {
   return YAML.parse(yaml) as PersonaFile;
 }
 
-export async function hydratePersona(persona: PersonaFile): Promise<void> {
+export function hydratePersona(persona: PersonaFile): void {
   const db = getDatabase();
 
   // Check if persona already exists
@@ -72,7 +103,7 @@ export async function hydratePersona(persona: PersonaFile): Promise<void> {
   db.personas.create(data);
 }
 
-export async function hydrateAllCorePersonas(): Promise<number> {
+export function hydrateAllCorePersonas(): number {
   const coreIds = [
     'core-sarah-new-gm',
     'core-marcus-osr-veteran',
@@ -89,7 +120,7 @@ export async function hydrateAllCorePersonas(): Promise<number> {
   let count = 0;
   for (const id of coreIds) {
     const persona = loadPersonaFromFile(id);
-    await hydratePersona(persona);
+    hydratePersona(persona);
     count++;
   }
 
