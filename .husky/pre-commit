@@ -1,0 +1,2 @@
+#!/bin/sh
+pnpm --filter @razorweave/tooling exec tsx hooks/git/pre-commit.ts
