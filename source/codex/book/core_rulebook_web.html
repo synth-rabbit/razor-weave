@@ -85,6 +85,19 @@
     nav a:hover {
       text-decoration: underline;
     }
+
+    /* Scroll-spy active state for TOC links */
+    nav a.active {
+      background: #e8f4ff;
+      font-weight: bold;
+      border-left: 3px solid #004b8d;
+      padding-left: calc(0.5rem - 3px); /* Adjust for border */
+    }
+
+    /* Ensure active state visible in all contexts */
+    nav a.active:hover {
+      background: #d0e8ff;
+    }
     .example, .gm {
       border-left: 4px solid #004b8d;
       background: #f7fbff;
@@ -9000,6 +9013,60 @@
 
     // Initial check in case page is loaded scrolled
     handleScroll();
+  })();
+  </script>
+
+  <!-- Scroll-Spy Navigation Highlighting -->
+  <script>
+  (function() {
+    'use strict';
+
+    const sections = document.querySelectorAll('section[id], article[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    // Create a map of section IDs to nav links
+    const linkMap = new Map();
+    navLinks.forEach(link => {
+      const targetId = link.getAttribute('href').substring(1);
+      if (targetId) {
+        linkMap.set(targetId, link);
+      }
+    });
+
+    // Intersection Observer for efficient scroll detection
+    const observerOptions = {
+      rootMargin: '-100px 0px -66%',
+      threshold: [0, 0.25, 0.5, 0.75, 1]
+    };
+
+    let currentActive = null;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const link = linkMap.get(id);
+
+          if (link && link !== currentActive) {
+            // Remove previous active
+            if (currentActive) {
+              currentActive.classList.remove('active');
+            }
+
+            // Set new active
+            link.classList.add('active');
+            currentActive = link;
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    sections.forEach(section => {
+      if (section.id) {
+        observer.observe(section);
+      }
+    });
   })();
   </script>
 </body>
