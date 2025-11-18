@@ -8,9 +8,10 @@ Welcome to the Razorweave project documentation. This directory contains all des
 
 Start here if you're new to the project:
 
-1. **[Getting Started](../README.md)** - Project overview and introduction
-2. **[Directory Structure](plans/DIRECTORY_STRUCTURE.md)** - How the project is organized
-3. **[Style Guides](style_guides/README.md)** - Coding and writing standards
+1. **[Getting Started](GETTING_STARTED.md)** - Installation, setup, and first steps
+2. **[Project README](../README.md)** - Project overview and introduction
+3. **[Directory Structure](plans/DIRECTORY_STRUCTURE.md)** - How the project is organized
+4. **[Style Guides](style_guides/README.md)** - Coding and writing standards
 
 ### Documentation Categories
 
@@ -81,6 +82,8 @@ Review reports and findings:
 
 **I need to understand workflows:**
 - [End-to-End Pipeline](workflows/END_TO_END_PIPELINE.md)
+- [Git Hooks Guide](workflows/GIT_HOOKS.md)
+- [Project Database Guide](workflows/PROJECT_DATABASE.md)
 - [Agentic Processes](agents/AGENTIC_PROCESSES.md)
 
 **I need to write documentation:**
@@ -91,6 +94,24 @@ Review reports and findings:
 - [Directory Structure](plans/DIRECTORY_STRUCTURE.md)
 - [Project README](../README.md)
 - [Project Index](../INDEX.md)
+
+### Common Tasks
+
+**Setting up the project:**
+- [Getting Started Guide](GETTING_STARTED.md) - Complete setup instructions
+- [Troubleshooting Setup](GETTING_STARTED.md#troubleshooting) - Common issues
+
+**Working with git:**
+- [Git Hooks Guide](workflows/GIT_HOOKS.md) - What hooks do and how to use them
+- [Git Commit Conventions](style_guides/git/commit-conventions.md) - Message format
+
+**Using the database:**
+- [Project Database Guide](workflows/PROJECT_DATABASE.md) - Query and recover content
+- [Database Schema](workflows/PROJECT_DATABASE.md#schema-overview) - Tables and structure
+
+**Running validation:**
+- [Validation Commands](GETTING_STARTED.md#validation) - How to run validators
+- [Git Hooks Pre-commit](workflows/GIT_HOOKS.md#pre-commit) - What's checked automatically
 
 ## Documentation Standards
 

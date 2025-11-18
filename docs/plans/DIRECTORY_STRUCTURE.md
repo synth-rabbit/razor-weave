@@ -1,21 +1,27 @@
-# Razorweave Directory Structure Proposal
+# Razorweave Directory Structure
+
+**Status:** Implemented (with noted deviations from original proposal)
+**Last Updated:** 2025-11-18
 
 ## Overview
 
-This document describes a proposed directory structure for the Razorweave project. It is intended to support the full lifecycle of creating, reviewing, editing, and releasing tabletop role playing game books.
+This document describes the directory structure of the Razorweave project. The structure supports the full lifecycle of creating, reviewing, editing, and releasing tabletop role-playing game books.
+
+This structure has been implemented with some modifications from the original proposal (see [Deviations](#deviations-from-original-proposal)).
 
 ## Root Files
 
-- **AGENTS.md**  
-  Instructions for all automated agents working in the project.
-- **README.md**  
-  Human facing entry point that explains how to work within the project.
-- **INDEX.md**  
-  Reference map that helps humans and agents navigate the project.
-- **PLAN.md**  
-  High level project plan and milestone tracking.
-- **PROMPT.md**  
-  Shared meta prompt used by orchestration agents.
+**Implemented:**
+- **README.md** - Human-facing entry point and project overview
+- **INDEX.md** - Reference map for project navigation
+- **PLAN.md** - High-level project plan and milestone tracking
+- **PROMPT.md** - Shared meta prompt used by orchestration agents
+- **package.json** - Node.js package configuration and scripts
+- **pnpm-workspace.yaml** - Monorepo workspace configuration
+- **tsconfig.json** - TypeScript compiler configuration
+
+**Planned:**
+- **AGENTS.md** - Instructions for automated agents (to be created)
 
 ## books Directory
 
@@ -95,27 +101,67 @@ data/
 
 Holds documentation for processes, style guides, and agent instructions.
 
+**Implemented:**
 ```
 docs/
-    agents/
-    plans/
-    style_guides/
+    agents/              # Agent documentation
+    plans/               # Design documents and implementation plans
+    reviews/             # Review reports and findings
+    style_guides/        # Writing and coding standards
         prose/
         rules/
         book/
         pdf/
-    workflows/
-        content_pipeline/
-        review_pipeline/
-        playtest_pipeline/
-        pdf_pipeline/
-        release_pipeline/
+        git/
+        docs/
+        typescript/
+    workflows/           # Process and workflow documentation
+    GETTING_STARTED.md   # Developer onboarding guide
+    README.md            # Documentation hub
+```
+
+**Changes from proposal:**
+- Added `reviews/` directory for review reports
+- Added `GETTING_STARTED.md` for developer onboarding
+- Workflows are documented as individual files, not subdirectories
+- Added git, docs, and typescript style guides
+
+## Configuration Directories
+
+**Implemented:**
+
+### .claude Directory
+
+Claude Code configuration and hooks:
+
+```
+.claude/
+    hooks/               # Claude Code hook implementations
+        session_start.ts
+        before_tool_call.ts
+        after_tool_call.ts
+        user_prompt_submit.ts
+```
+
+### .husky Directory
+
+Git hooks managed by Husky:
+
+```
+.husky/
+    pre-commit           # Pre-commit validation
+    commit-msg           # Commit message format validation
+    post-commit          # Post-commit updates
+    post-checkout        # Context display on checkout
 ```
 
 ## rules Directory
 
-Canonical system rules kept separate from specific book versions.
+**Status:** Proposed but not yet implemented
 
+Canonical system rules to be kept separate from specific book versions.
+
+**Planned structure:**
 ```
 rules/
     core/
@@ -131,50 +177,118 @@ rules/
 
 ## src Directory
 
-Source code for all agentic and workflow processes.
+Source code for all agentic and workflow processes. Organized as a monorepo with multiple packages.
 
+**Implemented:**
 ```
 src/
-    agents/
-        content/
-        review/
-        playtest/
-        pdf/
-        release/
-    maintenance/
-    workflows/
-    cli/
-    site/
-        generator/
-        templates/
-        static/
+    agents/              # Agentic systems (future implementations)
+    cli/                 # Command-line interface tools
+    maintenance/         # Maintenance utilities
+    shared/              # Shared utilities across packages
+    site/                # Website generator
+    tooling/             # Build tools, hooks, validators, database
+        database/        # SQLite database client
+        hooks/           # Git and Claude Code hooks
+        linters/         # ESLint, Prettier, Markdownlint configs
+        scripts/         # Setup and maintenance scripts
+        validators/      # Validation scripts
+        data/            # Database files
+    tools/               # Additional development tools
+    workflows/           # Workflow automation
 ```
 
-## site Directory
+**Changes from proposal:**
+- Added `tooling/` package for build tools and validation
+- Added `shared/` package for shared utilities
+- Site generator is in `src/site/` not root `site/`
+- Tools are in `src/tools/` not root `tools/`
 
-Output for the statically generated website.
+## scripts Directory
 
-```
-site/
-    public/
-        v1/
-        v2/
-```
+**Implemented:**
 
-## tools Directory
-
-```
-tools/
-    scripts/
-    templates/
-```
-
-## _archive Directory
+Validation and review scripts:
 
 ```
-_archive/
-    drafts/
-    experiments/
+scripts/
+    review/              # Content review scripts
+    verify-database.ts   # Database integrity verification
 ```
 
-This directory is for old versions and experimental work no longer part of the active development cycle.
+## data Directory (Implementation)
+
+**Implemented:**
+
+Database storage for project state and content history:
+
+```
+data/
+    project.db           # SQLite database (via src/tooling/data/)
+```
+
+**Note:** Personas, reviews, play sessions, and metrics are planned but not yet fully implemented.
+
+## Deviations from Original Proposal
+
+### Implemented Differently
+
+1. **tools/ → src/tools/**
+   - **Reason:** Better organization within monorepo structure
+   - **Impact:** Tools are now a workspace package
+
+2. **site/ → src/site/**
+   - **Reason:** Site generator is a workspace package
+   - **Impact:** Can share code with other packages
+
+3. **Added src/tooling/**
+   - **Reason:** Need centralized build tools and validation
+   - **Contains:** Database, hooks, linters, validators
+   - **Impact:** Improved developer experience
+
+4. **Added src/shared/**
+   - **Reason:** Share utilities across packages
+   - **Impact:** Reduces code duplication
+
+5. **Added configuration directories**
+   - **.claude/** - Claude Code hooks
+   - **.husky/** - Git hooks
+   - **Reason:** Tool integration
+   - **Impact:** Automated quality checks
+
+### Not Yet Implemented
+
+1. **rules/** - Canonical rules directory
+   - **Status:** Planned for future
+   - **Workaround:** Rules currently in book manuscripts
+
+2. **_archive/** - Archive directory
+   - **Status:** Planned for future
+   - **Workaround:** Use git history for old versions
+
+3. **site/public/** - Generated website output
+   - **Status:** Planned for future
+   - **Note:** Will be output from src/site/ generator
+
+### Future Additions
+
+As the project evolves, the following may be added:
+
+- **rules/** - When canonical rules are extracted
+- **_archive/** - For explicit archival
+- **site/public/** - For website deployment
+- **docs/developers/** - Advanced developer documentation
+- Additional packages in **src/** as needed
+
+## Summary
+
+The current structure successfully supports:
+- ✅ Content creation and organization (books/)
+- ✅ Documentation (docs/)
+- ✅ Source code organization (src/)
+- ✅ Build tooling and validation (src/tooling/)
+- ✅ Git and Claude Code integration (.husky/, .claude/)
+- ✅ Database-backed content history (data/)
+- ⏳ Canonical rules (planned: rules/)
+- ⏳ Archival (planned: _archive/)
+- ⏳ Website deployment (planned: site/public/)
