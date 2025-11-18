@@ -18,6 +18,12 @@ export function validatePlanNaming(filePath: string): ValidationResult {
   }
 
   const filename = filePath.split('/').pop()!;
+
+  // Skip README.md files - they're navigation, not plans
+  if (filename === 'README.md') {
+    return { valid: true, format: 'readme' };
+  }
+
   const nameWithoutExt = filename.replace('.md', '');
 
   // Format 1: Index file

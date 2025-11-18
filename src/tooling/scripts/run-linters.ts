@@ -9,9 +9,26 @@ export async function runLinters(files?: string[]): Promise<void> {
   if (tsFiles.length > 0 || !files) {
     console.log('📝 Linting TypeScript...');
     try {
-      execSync(`eslint ${files ? tsFiles.join(' ') : 'src/**/*.ts'}`, {
-        stdio: 'inherit',
-      });
+      // Group files by workspace
+      const toolingFiles = tsFiles.filter(f => f.startsWith('src/tooling/'));
+      const otherFiles = tsFiles.filter(f => !f.startsWith('src/tooling/'));
+
+      // Lint tooling files from within the tooling workspace
+      if (toolingFiles.length > 0) {
+        const relativeFiles = toolingFiles.map(f => f.replace('src/tooling/', ''));
+        execSync(`cd src/tooling && eslint ${relativeFiles.join(' ')}`, {
+          stdio: 'inherit',
+          shell: '/bin/bash',
+        });
+      }
+
+      // Lint other TypeScript files from root
+      if (otherFiles.length > 0 || (!files && otherFiles.length === 0 && toolingFiles.length === 0)) {
+        execSync(`eslint ${!files || otherFiles.length === 0 ? 'src/**/*.ts' : otherFiles.join(' ')}`, {
+          stdio: 'inherit',
+        });
+      }
+
       console.log('✅ TypeScript lint passed\n');
     } catch {
       console.error('❌ TypeScript lint failed');
