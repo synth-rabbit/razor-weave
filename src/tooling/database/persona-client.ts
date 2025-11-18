@@ -86,6 +86,16 @@ export class PersonaClient {
     return row ? (row as Persona) : null;
   }
 
+  getAll(): Persona[] {
+    const stmt = this.db.prepare(`
+      SELECT * FROM personas WHERE active = TRUE
+      ORDER BY created_at DESC
+    `);
+
+    const rows = stmt.all();
+    return rows as Persona[];
+  }
+
   getDimensions(personaId: string): PersonaDimensions {
     const stmt = this.db.prepare(`
       SELECT dimension_type, value

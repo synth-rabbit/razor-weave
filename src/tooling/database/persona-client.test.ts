@@ -95,4 +95,46 @@ describe('PersonaClient', () => {
       expect(dims.social_emotional_traits).toEqual(['Empathic', 'Enthusiastic']);
     });
   });
+
+  describe('getAll', () => {
+    it('retrieves all active personas', () => {
+      client.create({
+        id: 'core-1',
+        name: 'Persona 1',
+        type: 'core',
+        archetype: 'Explorer',
+        experience_level: 'Newbie (0-1 years)',
+        fiction_first_alignment: 'Curious',
+        narrative_mechanics_comfort: 'Neutral',
+        gm_philosophy: 'Non-GM',
+        genre_flexibility: 'Neutral',
+        primary_cognitive_style: 'Analytical'
+      });
+
+      client.create({
+        id: 'gen-1',
+        name: 'Persona 2',
+        type: 'generated',
+        archetype: 'Mentor',
+        experience_level: 'Advanced (5+ years)',
+        fiction_first_alignment: 'Balanced',
+        narrative_mechanics_comfort: 'High',
+        gm_philosophy: 'Facilitative',
+        genre_flexibility: 'High',
+        primary_cognitive_style: 'Creative'
+      });
+
+      const allPersonas = client.getAll();
+
+      expect(allPersonas).toHaveLength(2);
+      const names = allPersonas.map(p => p.name);
+      expect(names).toContain('Persona 1');
+      expect(names).toContain('Persona 2');
+    });
+
+    it('returns empty array when no personas exist', () => {
+      const allPersonas = client.getAll();
+      expect(allPersonas).toEqual([]);
+    });
+  });
 });
