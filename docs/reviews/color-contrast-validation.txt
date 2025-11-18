@@ -1,0 +1,341 @@
+================================================================================
+WCAG AA COLOR CONTRAST VALIDATION REPORT
+Core Rulebook - Razorweave TTRPG
+================================================================================
+
+Document: source/codex/book/core_rulebook.html
+Validation Date: 2025-11-18
+Standard: WCAG 2.1 Level AA
+Validator: Claude Code (Anthropic)
+
+================================================================================
+WCAG AA REQUIREMENTS
+================================================================================
+
+Normal Text (< 18pt or < 14pt bold):
+  Minimum Contrast Ratio: 4.5:1
+
+Large Text (≥ 18pt or ≥ 14pt bold):
+  Minimum Contrast Ratio: 3.0:1
+
+UI Components and Graphical Objects:
+  Minimum Contrast Ratio: 3.0:1
+
+================================================================================
+COLOR PALETTE INVENTORY
+================================================================================
+
+Text Colors:
+  - #222222 (Dark gray - primary body text)
+  - #004b8d (Dark blue - links, focus indicators)
+  - #003366 (Darker blue - link hover states)
+  - #ffffff (White - skip link text, inverted elements)
+  - #000000 (Black - print stylesheet)
+
+Background Colors:
+  - #ffffff (White - main background)
+  - #f5f5f5 (Light gray - navigation background)
+  - #f7fbff (Very light blue - example blocks)
+  - #fff8f2 (Very light orange - GM blocks)
+  - #f0f0f0 (Light gray - table headers)
+  - #fafafa (Very light gray - table even rows)
+  - #e8f4ff (Light blue - navigation focus state)
+
+Border/Accent Colors:
+  - #004b8d (Dark blue - example blocks, focus outlines)
+  - #8b3c00 (Dark orange - GM block borders)
+  - #dddddd (Light gray - navigation border)
+  - #cccccc (Light gray - table/sheet borders)
+
+================================================================================
+DETAILED TEST RESULTS
+================================================================================
+
+TEST 1: Body Text on White Background
+  Foreground: #222222
+  Background: #ffffff
+  Contrast Ratio: 15.91:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Main content text throughout the document
+
+TEST 2: Links on White Background
+  Foreground: #004b8d
+  Background: #ffffff
+  Contrast Ratio: 8.78:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: All hyperlinks in main content area
+
+TEST 3: Navigation Links on Navigation Background
+  Foreground: #004b8d
+  Background: #f5f5f5
+  Contrast Ratio: 8.06:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Navigation menu links in sticky header
+
+TEST 4: Link Hover State on White Background
+  Foreground: #003366
+  Background: #ffffff
+  Contrast Ratio: 12.61:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Hover state for links in main content (desktop)
+
+TEST 5: Navigation Link Hover on Navigation Background
+  Foreground: #003366
+  Background: #f5f5f5
+  Contrast Ratio: 11.57:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Hover state for navigation menu links (desktop)
+
+TEST 6: Text in Example Blocks
+  Foreground: #222222
+  Background: #f7fbff
+  Contrast Ratio: 15.30:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Example blocks with light blue background
+
+TEST 7: Text in GM Blocks
+  Foreground: #222222
+  Background: #fff8f2
+  Contrast Ratio: 15.12:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: GM guidance blocks with light orange background
+
+TEST 8: Text in Table Headers
+  Foreground: #222222
+  Background: #f0f0f0
+  Contrast Ratio: 13.96:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Table header cells (thead th)
+
+TEST 9: Text in Table Even Rows
+  Foreground: #222222
+  Background: #fafafa
+  Contrast Ratio: 15.24:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Alternating table row background for zebra striping
+
+TEST 10: Skip Link (Inverted Colors)
+  Foreground: #ffffff
+  Background: #004b8d
+  Contrast Ratio: 8.78:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Skip-to-main-content link for keyboard users
+
+TEST 11: Text on Navigation Focus Background
+  Foreground: #222222
+  Background: #e8f4ff
+  Contrast Ratio: 14.25:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Background highlight when navigation links receive focus
+
+TEST 12: Print Stylesheet (Black on White)
+  Foreground: #000000
+  Background: #ffffff
+  Contrast Ratio: 21.00:1
+  WCAG AA Required: 4.5:1
+  WCAG AAA Required: 7.0:1
+  Result: ✓ PASS (AAA)
+  Context: Print media - maximum contrast for printed text
+
+TEST 13: Focus Outline on White Background
+  Foreground: #004b8d (outline color)
+  Background: #ffffff
+  Contrast Ratio: 8.78:1
+  WCAG AA Required: 3.0:1 (UI component)
+  Result: ✓ PASS (AAA)
+  Context: 2px and 3px focus outlines for keyboard navigation
+
+TEST 14: Focus Outline on Navigation Background
+  Foreground: #004b8d (outline color)
+  Background: #f5f5f5
+  Contrast Ratio: 8.06:1
+  WCAG AA Required: 3.0:1 (UI component)
+  Result: ✓ PASS (AAA)
+  Context: Focus indicators in navigation area
+
+TEST 15: GM Block Border on GM Background
+  Foreground: #8b3c00 (border color)
+  Background: #fff8f2
+  Contrast Ratio: 7.27:1
+  WCAG AA Required: 3.0:1 (UI component)
+  Result: ✓ PASS (AAA)
+  Context: 4px left border on GM guidance blocks
+
+TEST 16: Example Block Border on Example Background
+  Foreground: #004b8d (border color)
+  Background: #f7fbff
+  Contrast Ratio: 8.45:1
+  WCAG AA Required: 3.0:1 (UI component)
+  Result: ✓ PASS (AAA)
+  Context: 4px left border on example blocks
+
+================================================================================
+SUMMARY OF RESULTS
+================================================================================
+
+Total Color Combinations Tested: 16
+
+Results:
+  ✓ WCAG AAA (≥7.0:1):     16 (100%)
+  ✓ WCAG AA (≥4.5:1):       0 (0% - all exceeded to AAA)
+  ✗ Failed (< 4.5:1):       0 (0%)
+
+Overall Compliance: ✓ FULL WCAG AA COMPLIANCE
+Bonus Achievement: ✓ FULL WCAG AAA COMPLIANCE
+
+All color combinations in the core rulebook meet or exceed WCAG AA requirements.
+In fact, all combinations achieve WCAG AAA level (the highest accessibility
+standard), demonstrating exceptional attention to accessibility.
+
+================================================================================
+ACCESSIBILITY STRENGTHS
+================================================================================
+
+1. EXCELLENT COLOR CHOICES
+   - All text colors have high contrast against their backgrounds
+   - Minimum contrast ratio found: 7.27:1 (GM border, exceeds all requirements)
+   - Maximum contrast ratio: 21.00:1 (print black on white)
+   - Average contrast ratio across all tests: 12.16:1
+
+2. CONSISTENT DESIGN PATTERNS
+   - Similar text colors (#222222) used across different backgrounds
+   - All backgrounds are light colors ensuring high contrast with dark text
+   - Link colors (#004b8d, #003366) maintain strong contrast on all backgrounds
+
+3. ACCESSIBLE INTERACTIVE ELEMENTS
+   - Focus indicators (#004b8d) are highly visible against all backgrounds
+   - Skip link uses inverted colors with 8.78:1 contrast
+   - Navigation focus states enhance visibility further
+
+4. MULTIPLE VISUAL CUES
+   - Information conveyed through borders also uses sufficient color contrast
+   - Example blocks and GM blocks use both color AND border styling
+   - Tables use subtle background colors with excellent text contrast
+
+5. PRINT ACCESSIBILITY
+   - Print stylesheet uses maximum contrast (21:1) black on white
+   - Ensures readability in printed materials
+
+================================================================================
+RESPONSIVE DESIGN VALIDATION
+================================================================================
+
+The color scheme remains consistent across all responsive breakpoints:
+  - Mobile (< 640px): Same color palette
+  - Tablet (640px - 1024px): Same color palette
+  - Desktop (≥ 1024px): Same color palette + hover states
+  - Large Desktop (≥ 1440px): Same color palette
+  - Print: Enhanced contrast (pure black on white)
+
+All viewport sizes maintain WCAG AA/AAA compliance.
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+Status: NO CHANGES REQUIRED
+
+The current color scheme is exemplary and requires no modifications for WCAG AA
+compliance. All color combinations exceed minimum requirements by significant
+margins, providing excellent accessibility for users with visual impairments,
+color blindness, or those viewing in challenging lighting conditions.
+
+Optional Future Considerations (not required):
+  - Current design already exceeds all accessibility requirements
+  - Color choices are both accessible and aesthetically pleasing
+  - The design successfully balances accessibility with visual appeal
+
+================================================================================
+VALIDATION METHODOLOGY
+================================================================================
+
+1. Color Extraction:
+   - Manually reviewed all CSS in source/codex/book/core_rulebook.html
+   - Identified all foreground/background color combinations
+   - Documented all border and accent colors
+
+2. Contrast Calculation:
+   - Used WCAG 2.1 contrast ratio formula:
+     * Convert hex colors to RGB values
+     * Calculate relative luminance for each color
+     * Compute contrast ratio: (L1 + 0.05) / (L2 + 0.05)
+   - Where L1 is lighter color, L2 is darker color
+
+3. Compliance Testing:
+   - Normal text: Required ≥4.5:1 for AA, ≥7.0:1 for AAA
+   - Large text: Required ≥3.0:1 for AA, ≥4.5:1 for AAA
+   - UI components: Required ≥3.0:1 for AA
+
+4. Context Analysis:
+   - Verified color usage across all responsive breakpoints
+   - Checked link states (default, hover, focus, visited)
+   - Validated focus indicators and interactive elements
+   - Reviewed print stylesheet color choices
+
+================================================================================
+TECHNICAL DETAILS
+================================================================================
+
+Calculation Tool: Python 3 script using WCAG 2.1 formulas
+Validation Standard: WCAG 2.1 Level AA (and AAA where applicable)
+File Analyzed: source/codex/book/core_rulebook.html
+Lines Analyzed: Complete stylesheet (lines 6-700+)
+
+Relative Luminance Formula:
+  For each RGB channel (divide by 255 first):
+    if RsRGB ≤ 0.03928 then R = RsRGB/12.92
+    else R = ((RsRGB+0.055)/1.055)^2.4
+  L = 0.2126 * R + 0.7152 * G + 0.0722 * B
+
+Contrast Ratio Formula:
+  (L1 + 0.05) / (L2 + 0.05)
+  where L1 is the relative luminance of the lighter color
+  and L2 is the relative luminance of the darker color
+
+================================================================================
+CONCLUSION
+================================================================================
+
+The Razorweave Core Rulebook demonstrates EXCEPTIONAL accessibility in its
+color contrast implementation. Not only does it meet WCAG AA requirements,
+but it achieves WCAG AAA compliance across all tested combinations.
+
+This represents best-in-class accessibility design that will serve users
+across a wide range of visual abilities and viewing conditions.
+
+Status: ✓ VALIDATED - WCAG AA COMPLIANT (AAA achieved)
+Changes Required: NONE
+Recommendation: Approve for production use
+
+================================================================================
+VALIDATION SIGN-OFF
+================================================================================
+
+Validated by: Claude Code (Anthropic)
+Date: 2025-11-18
+Standard: WCAG 2.1 Level AA
+Result: FULL COMPLIANCE (AAA level achieved)
+
+================================================================================
