@@ -400,6 +400,310 @@
         transition: none;
       }
     }
+
+    /* ===================================
+       PRINT STYLESHEET
+       =================================== */
+    @media print {
+      /* Page Setup */
+      @page {
+        margin: 2cm;
+        size: letter;
+      }
+
+      /* Base Typography - Optimized for Print */
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        font-size: 11pt;
+        line-height: 1.5;
+        background: white;
+        color: black;
+      }
+
+      main {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Headings - Clear Hierarchy */
+      h1, h2, h3, h4, h5, h6 {
+        font-family: "Georgia", "Times New Roman", serif;
+        color: black;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+
+      h1 {
+        font-size: 20pt;
+        margin-top: 0;
+        margin-bottom: 12pt;
+      }
+
+      h2 {
+        font-size: 16pt;
+        margin-top: 18pt;
+        margin-bottom: 10pt;
+        page-break-before: always;
+      }
+
+      h3 {
+        font-size: 13pt;
+        margin-top: 14pt;
+        margin-bottom: 8pt;
+      }
+
+      h4 {
+        font-size: 11pt;
+        margin-top: 12pt;
+        margin-bottom: 6pt;
+        font-weight: bold;
+      }
+
+      /* Remove Interactive Elements */
+      nav {
+        display: none !important;
+      }
+
+      /* Remove Visual Effects */
+      * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        transition: none !important;
+        animation: none !important;
+      }
+
+      /* Links - Show URLs for External Links */
+      a {
+        color: black;
+        text-decoration: none;
+      }
+
+      a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        font-style: italic;
+      }
+
+      /* Internal links - no URL display */
+      a[href^="#"]:after {
+        content: "";
+      }
+
+      /* Glossary links - keep clean */
+      .glossary-link:after {
+        content: "";
+      }
+
+      /* Page Break Controls */
+      header, section, article {
+        page-break-inside: avoid;
+        margin-bottom: 18pt;
+      }
+
+      .part-intro {
+        page-break-after: always;
+      }
+
+      /* Prevent Orphans and Widows */
+      p, li {
+        orphans: 3;
+        widows: 3;
+      }
+
+      p {
+        margin: 0 0 8pt 0;
+      }
+
+      /* Examples and GM Guidance - Print Friendly */
+      .example, .gm {
+        border-left: 3pt solid black;
+        background: white;
+        padding: 8pt 10pt;
+        margin: 10pt 0;
+        page-break-inside: avoid;
+      }
+
+      .gm {
+        border-left-color: #333;
+      }
+
+      .example:before {
+        content: "Example: ";
+        font-weight: bold;
+        display: block;
+        margin-bottom: 4pt;
+      }
+
+      .gm:before {
+        content: "GM Guidance: ";
+        font-weight: bold;
+        display: block;
+        margin-bottom: 4pt;
+      }
+
+      /* Sheet Blocks */
+      .sheet-block {
+        border: 2pt solid black;
+        padding: 10pt 12pt;
+        margin: 12pt 0;
+        background: white;
+        page-break-inside: avoid;
+      }
+
+      /* Tables - Optimized for Print */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 12pt 0;
+        font-size: 9pt;
+        page-break-inside: avoid;
+      }
+
+      /* Table Headers Repeat on Each Page */
+      thead {
+        display: table-header-group;
+      }
+
+      tfoot {
+        display: table-footer-group;
+      }
+
+      th, td {
+        border: 1pt solid black;
+        padding: 4pt 6pt;
+        text-align: left;
+      }
+
+      thead th {
+        background: #e0e0e0;
+        font-weight: bold;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #f5f5f5;
+      }
+
+      caption {
+        font-weight: bold;
+        margin-bottom: 6pt;
+        text-align: left;
+        font-size: 10pt;
+      }
+
+      /* Lists - Clean and Readable */
+      ul, ol {
+        margin: 8pt 0;
+        padding-left: 24pt;
+      }
+
+      li {
+        margin-bottom: 4pt;
+      }
+
+      /* Remove Background Colors and Images */
+      * {
+        background-image: none !important;
+      }
+
+      .example, .gm, tbody tr:nth-child(even), thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Ensure High Contrast */
+      strong, b {
+        color: black;
+        font-weight: bold;
+      }
+
+      em, i {
+        color: black;
+        font-style: italic;
+      }
+
+      /* Code and Preformatted Text */
+      code, pre {
+        font-family: "Courier New", monospace;
+        font-size: 9pt;
+        background: white;
+        border: 1pt solid black;
+        padding: 2pt 4pt;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        page-break-inside: avoid;
+      }
+
+      /* Glossary Section - Two Column Layout */
+      #ch-28-glossary dl {
+        column-count: 2;
+        column-gap: 20pt;
+      }
+
+      #ch-28-glossary dt {
+        font-weight: bold;
+        margin-top: 8pt;
+        page-break-after: avoid;
+      }
+
+      #ch-28-glossary dd {
+        margin-left: 0;
+        margin-bottom: 8pt;
+        page-break-before: avoid;
+      }
+
+      /* Index Section - Two Column Layout */
+      #ch-29-index ul {
+        column-count: 2;
+        column-gap: 20pt;
+        list-style: none;
+        padding: 0;
+      }
+
+      #ch-29-index li {
+        page-break-inside: avoid;
+        margin-bottom: 4pt;
+      }
+
+      /* Character Sheets and Forms */
+      input, textarea, select, button {
+        display: none;
+      }
+
+      /* Print-specific utility classes */
+      .no-print {
+        display: none !important;
+      }
+
+      .page-break-before {
+        page-break-before: always;
+      }
+
+      .page-break-after {
+        page-break-after: always;
+      }
+
+      /* Ensure all content is visible */
+      details {
+        display: block;
+      }
+
+      summary {
+        display: block;
+        font-weight: bold;
+      }
+
+      details[open] summary:after {
+        content: "";
+      }
+
+      /* Remove any overflow issues */
+      * {
+        overflow: visible !important;
+      }
+    }
   </style>
 </head>
 <body>
