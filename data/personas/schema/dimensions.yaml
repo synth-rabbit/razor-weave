@@ -1,0 +1,125 @@
+version: 1
+created: 2025-01-18
+
+# Standard Dimensions (7)
+archetypes:
+  - Achiever
+  - Explorer
+  - Socializer
+  - Killer
+  - Tactician
+  - Storyteller
+  - Power Gamer
+  - Method Actor
+  - Casual Gamer
+
+playstyle_modifiers:
+  - Rule Minimalist
+  - Rule Maximalist
+  - Dice Goblin
+  - Homebrew Addict
+  - Solo Gamer
+  - Campaign Purist
+  - Chaos Gremlin
+  - Mechanics First
+  - Theme First
+  - Optimization Skeptic
+  - Rules Lawyer
+  - Vibes-Based Player
+  - Puzzle Solver
+  - Combat Junkie
+  - Non-Combat Roleplayer
+  - Session Zero Purist
+  - Safety Tool Advocate
+
+cognitive_styles:
+  - Analytical
+  - Intuitive
+  - Visual
+  - Verbal
+  - Pattern-Driven
+  - Experimental
+  - Cautious
+  - Abstract Thinker
+  - Concrete Thinker
+  - Systems Integrator
+  - Simplicity Seeker
+  - Complexity Tolerant
+
+social_emotional_traits:
+  - Empathic
+  - Detached
+  - Enthusiastic
+  - Conflict-Averse
+  - Direct Communicator
+  - Introvert
+  - Extrovert
+  - Anxious Newbie
+  - Confident Veteran
+  - Group-Focused
+  - Calm Mediator
+
+experience_levels:
+  - Newbie (0-1 years)
+  - Early Intermediate (1-3 years)
+  - Experienced (3-10 years)
+  - Veteran (10-20 years)
+  - Long-term GM
+  - Forever GM
+  - Hybrid GM/Player
+
+system_exposures:
+  - 5e-Native
+  - OSR-Enthusiast
+  - PbtA Player
+  - Indie/Storygame Fan
+  - Crunch-Heavy Veteran
+  - Solo-RPG Enthusiast
+  - Actual-Play Viewer
+  - Video-Game RPG Convert
+  - Wargamer Background
+  - System Hopper
+  - System Loyalist
+
+life_contexts:
+  - Busy Parent
+  - College Student
+  - Digital-Only Player
+  - Accessibility Needs
+  - Weekend-Only Gamer
+  - Remote-Only Group
+  - Neurodivergent
+  - Budget Limited
+  - Prefers PDF Hyperlinks
+
+# Razorweave-Specific Dimensions (4)
+fiction_first_alignment:
+  - Skeptical
+  - Curious
+  - Converting
+  - Native
+  - Evangelical
+
+narrative_mechanics_comfort:
+  - Needs Concrete Numbers
+  - Wary of Abstraction
+  - Neutral
+  - Comfortable with Abstraction
+  - Prefers Narrative Tools
+  - Narrative Purist
+
+gm_philosophy:
+  - Railroad Conductor
+  - Prepared Sandbox
+  - Scene Framer
+  - World Simulator
+  - Collaborative Storyteller
+  - GMless Advocate
+  - Non-GM
+
+genre_flexibility:
+  - Genre-Specific Purist
+  - Prefers Focused Systems
+  - Neutral
+  - Enjoys Flexibility
+  - Genre-Agnostic Enthusiast
