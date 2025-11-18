@@ -388,6 +388,78 @@
       }
     }
 
+    /* ===================================
+       ACCESSIBILITY FEATURES
+       =================================== */
+
+    /* Skip Links - Allow keyboard users to skip to main content */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #004b8d;
+      color: #ffffff;
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      z-index: 1000;
+      font-weight: 600;
+      border-radius: 0 0 4px 0;
+    }
+
+    .skip-link:focus {
+      top: 0;
+      outline: 3px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    /* Focus Indicators - Clear visual feedback for keyboard navigation */
+    a:focus,
+    button:focus,
+    summary:focus,
+    [tabindex]:focus {
+      outline: 2px solid #004b8d;
+      outline-offset: 2px;
+    }
+
+    /* Enhanced focus for keyboard-only users (not mouse clicks) */
+    a:focus-visible,
+    button:focus-visible,
+    summary:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid #004b8d;
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* Remove outline for mouse users while keeping keyboard focus */
+    a:focus:not(:focus-visible),
+    button:focus:not(:focus-visible),
+    summary:focus:not(:focus-visible),
+    [tabindex]:focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    /* Screen Reader Only Content */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Focus within navigation */
+    nav a:focus {
+      background: #e8f4ff;
+      border-radius: 3px;
+      padding: 2px 6px;
+      margin: -2px -6px;
+    }
+
     /* Accessibility: Reduced motion preference */
     @media (prefers-reduced-motion: reduce) {
       * {
@@ -397,6 +469,11 @@
       }
 
       nav {
+        transition: none;
+      }
+
+      /* Disable focus animations for reduced motion */
+      .skip-link {
         transition: none;
       }
     }
@@ -707,7 +784,12 @@
   </style>
 </head>
 <body>
-  <nav>
+  <!-- Skip Links for Keyboard Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#table-of-contents" class="skip-link">Skip to table of contents</a>
+
+  <nav id="table-of-contents" aria-label="Table of Contents" role="navigation">
+    <h2 class="sr-only">Table of Contents</h2>
     <ul class="toc-root">
       <li>
         <a href="#part-i-foundations">Part I: Foundations</a>
@@ -761,10 +843,10 @@
     </ul>
   </nav>
 
-  <main>
+  <main id="main-content" role="main" aria-label="Core Rulebook Content">
     <!-- Part I: Foundations -->
-    <section id="part-i-foundations" class="part-intro">
-      <h1>Part I: Foundations</h1>
+    <section id="part-i-foundations" class="part-intro" aria-labelledby="part-i-heading">
+      <h1 id="part-i-heading">Part I: Foundations</h1>
       <p>
         Part I introduces the core ideas of the game: what it is about, how to read and use this rulebook, and
         how to build characters who feel grounded in the world. These chapters define Attributes, Actions,
@@ -3280,8 +3362,8 @@
     </section>
 
     <!-- Part II: Skills, Proficiencies, and Mechanical Reference -->
-    <section id="part-ii-skills-proficiencies" class="part-intro">
-      <h1>Part II: Skills, Proficiencies, and Mechanical Reference</h1>
+    <section id="part-ii-skills-proficiencies" class="part-intro" aria-labelledby="part-ii-heading">
+      <h1 id="part-ii-heading">Part II: Skills, Proficiencies, and Mechanical Reference</h1>
       <p>
         Part II explains the Skills and Proficiencies that give characters texture and focus, and collects key
         mechanical references used at the table. Skills represent what your character can reliably do under
@@ -5897,8 +5979,8 @@
     </section>
 
     <!-- Part III: Game Master Section -->
-    <section id="part-iii-reference-and-gm" class="part-intro">
-      <h1>Part III: Game Master Section</h1>
+    <section id="part-iii-reference-and-gm" class="part-intro" aria-labelledby="part-iii-heading">
+      <h1 id="part-iii-heading">Part III: Game Master Section</h1>
       <p>
         Part III is written primarily for Game Masters, but curious players are welcome to read it as well. These
         chapters focus on framing sessions and scenes, managing pacing, designing scenarios and campaigns, and
@@ -7158,8 +7240,8 @@
 
 
     <!-- Part IV: Reference Sheets, Glossary, and Index -->
-    <section id="part-iv-glossary-index" class="part-intro">
-      <h1>Part IV: Reference Sheets, Glossary, and Index</h1>
+    <section id="part-iv-glossary-index" class="part-intro" aria-labelledby="part-iv-heading">
+      <h1 id="part-iv-heading">Part IV: Reference Sheets, Glossary, and Index</h1>
       <p>
         Part IV provides quick reference tools for play: printable sheets for characters, GMs, and shared campaign
         elements, plus a glossary of key terms and an index to help you find topics quickly. The glossary ensures
@@ -7775,13 +7857,13 @@
     <!-- CHAPTER 28: GLOSSARY                                         -->
     <!-- ============================================================ -->
 
-    <section id="ch-28-glossary" class="chapter">
+    <section id="ch-28-glossary" class="chapter" aria-labelledby="glossary-heading">
       <header class="chapter-header">
-        <h1 class="chapter-title">Chapter 28: Glossary</h1>
+        <h1 id="glossary-heading" class="chapter-title">Chapter 28: Glossary</h1>
         <p class="chapter-subtitle">Comprehensive definitions of game terms and concepts</p>
       </header>
 
-      <nav class="glossary-nav" aria-label="Glossary sections">
+      <nav class="glossary-nav" aria-label="Glossary sections" role="navigation">
         <ul>
           <li><a href="#glossary-core-mechanics">Core Mechanics</a></li>
           <li><a href="#glossary-attributes">Attributes</a></li>
@@ -7791,10 +7873,10 @@
         </ul>
       </nav>
 
-      <section id="glossary-core-mechanics" class="glossary-section">
-        <h2>Core Mechanics</h2>
+      <section id="glossary-core-mechanics" class="glossary-section" aria-labelledby="glossary-core-mechanics-heading">
+        <h2 id="glossary-core-mechanics-heading">Core Mechanics</h2>
 
-        <dl class="glossary-terms">
+        <dl class="glossary-terms" role="list">
           <dt id="advantage">
             <strong>Advantage</strong>
           </dt>
@@ -7909,10 +7991,10 @@
         </dl>
       </section>
 
-      <section id="glossary-attributes" class="glossary-section">
-        <h2>Attributes</h2>
+      <section id="glossary-attributes" class="glossary-section" aria-labelledby="glossary-attributes-heading">
+        <h2 id="glossary-attributes-heading">Attributes</h2>
 
-        <dl class="glossary-terms">
+        <dl class="glossary-terms" role="list">
           <dt id="agility">
             <strong>Agility (AGI)</strong>
           </dt>
@@ -7947,10 +8029,10 @@
         </dl>
       </section>
 
-      <section id="glossary-character-types" class="glossary-section">
-        <h2>Character Types</h2>
+      <section id="glossary-character-types" class="glossary-section" aria-labelledby="glossary-character-types-heading">
+        <h2 id="glossary-character-types-heading">Character Types</h2>
 
-        <dl class="glossary-terms">
+        <dl class="glossary-terms" role="list">
           <dt id="gm">
             <strong>GM (Game Master)</strong>
           </dt>
@@ -7985,10 +8067,10 @@
         </dl>
       </section>
 
-      <section id="glossary-conditions" class="glossary-section">
-        <h2>Common Conditions</h2>
+      <section id="glossary-conditions" class="glossary-section" aria-labelledby="glossary-conditions-heading">
+        <h2 id="glossary-conditions-heading">Common Conditions</h2>
 
-        <dl class="glossary-terms">
+        <dl class="glossary-terms" role="list">
           <dt id="bleeding">
             <strong>Bleeding</strong>
           </dt>
@@ -8079,10 +8161,10 @@
         </dl>
       </section>
 
-      <section id="glossary-tags" class="glossary-section">
-        <h2>Common Tags</h2>
+      <section id="glossary-tags" class="glossary-section" aria-labelledby="glossary-tags-heading">
+        <h2 id="glossary-tags-heading">Common Tags</h2>
 
-        <dl class="glossary-terms">
+        <dl class="glossary-terms" role="list">
           <dt id="area">
             <strong>Area</strong>
           </dt>
@@ -8203,13 +8285,13 @@
     <!-- CHAPTER 29: INDEX                                            -->
     <!-- ============================================================ -->
 
-    <section id="ch-29-index" class="chapter">
+    <section id="ch-29-index" class="chapter" aria-labelledby="index-heading">
       <header class="chapter-header">
-        <h1 class="chapter-title">Chapter 29: Comprehensive Index</h1>
+        <h1 id="index-heading" class="chapter-title">Chapter 29: Comprehensive Index</h1>
         <p class="chapter-subtitle">Quick reference and complete topical index</p>
       </header>
 
-      <nav class="index-nav" aria-label="Index sections">
+      <nav class="index-nav" aria-label="Index sections" role="navigation">
         <ul>
           <li><a href="#index-quick-reference">Quick Reference</a></li>
           <li><a href="#index-topical">Topical Index</a></li>
@@ -8217,20 +8299,20 @@
         </ul>
       </nav>
 
-      <section id="index-quick-reference" class="index-section quick-ref">
-        <h2>Quick Reference</h2>
+      <section id="index-quick-reference" class="index-section quick-ref" aria-labelledby="index-quick-reference-heading">
+        <h2 id="index-quick-reference-heading">Quick Reference</h2>
         <p class="section-intro">The most commonly referenced rules during play.</p>
 
         <div class="quick-ref-grid">
           <!-- DC Ladder -->
           <div class="quick-ref-card">
-            <h3>DC Ladder</h3>
-            <table class="dc-ladder-table">
+            <h3 id="dc-ladder-heading">DC Ladder</h3>
+            <table class="dc-ladder-table" aria-labelledby="dc-ladder-heading">
               <thead>
                 <tr>
-                  <th>Difficulty</th>
-                  <th>DC</th>
-                  <th>Description</th>
+                  <th scope="col">Difficulty</th>
+                  <th scope="col">DC</th>
+                  <th scope="col">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -8271,13 +8353,13 @@
 
           <!-- Outcome Tiers -->
           <div class="quick-ref-card">
-            <h3>Outcome Tiers</h3>
-            <table class="outcome-tiers-table">
+            <h3 id="outcome-tiers-heading">Outcome Tiers</h3>
+            <table class="outcome-tiers-table" aria-labelledby="outcome-tiers-heading">
               <thead>
                 <tr>
-                  <th>Tier</th>
-                  <th>Margin</th>
-                  <th>Result</th>
+                  <th scope="col">Tier</th>
+                  <th scope="col">Margin</th>
+                  <th scope="col">Result</th>
                 </tr>
               </thead>
               <tbody>
@@ -8313,13 +8395,13 @@
 
           <!-- Advantage/Disadvantage -->
           <div class="quick-ref-card">
-            <h3>Advantage & Disadvantage</h3>
-            <table class="adv-disadv-table">
+            <h3 id="adv-disadv-heading">Advantage & Disadvantage</h3>
+            <table class="adv-disadv-table" aria-labelledby="adv-disadv-heading">
               <thead>
                 <tr>
-                  <th>Type</th>
-                  <th>Level</th>
-                  <th>Roll</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Level</th>
+                  <th scope="col">Roll</th>
                 </tr>
               </thead>
               <tbody>
@@ -8386,8 +8468,8 @@
         </div>
       </section>
 
-      <section id="index-topical" class="index-section">
-        <h2>Topical Index</h2>
+      <section id="index-topical" class="index-section" aria-labelledby="index-topical-heading">
+        <h2 id="index-topical-heading">Topical Index</h2>
         <p class="section-intro">Major topics grouped by category.</p>
 
         <div class="topical-index">
@@ -8471,8 +8553,8 @@
         </div>
       </section>
 
-      <section id="index-alphabetical" class="index-section">
-        <h2>Alphabetical Index</h2>
+      <section id="index-alphabetical" class="index-section" aria-labelledby="index-alphabetical-heading">
+        <h2 id="index-alphabetical-heading">Alphabetical Index</h2>
         <p class="section-intro">Complete A-Z listing of all terms and topics.</p>
 
         <div class="alphabetical-index">
