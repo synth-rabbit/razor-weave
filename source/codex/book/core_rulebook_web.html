@@ -783,6 +783,57 @@
         overflow: visible !important;
       }
     }
+
+    /* Back to Top Button */
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 3rem;
+      height: 3rem;
+      background: #004b8d;
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 99;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    #back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #back-to-top:hover {
+      background: #003366;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    #back-to-top:focus {
+      outline: 3px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    /* Hide on print */
+    @media print {
+      #back-to-top {
+        display: none !important;
+      }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      #back-to-top {
+        transition: none;
+        transform: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -8911,5 +8962,45 @@
 
     </section>
   </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" aria-label="Back to top" title="Back to top">
+    ↑
+  </button>
+
+  <!-- Back to Top Button JavaScript -->
+  <script>
+  (function() {
+    'use strict';
+
+    const backToTopButton = document.getElementById('back-to-top');
+    const scrollThreshold = 300; // Show after scrolling 300px
+
+    // Show/hide button based on scroll position
+    function handleScroll() {
+      if (window.scrollY > scrollThreshold) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
+    }
+
+    // Smooth scroll to top
+    function scrollToTop(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Event listeners
+    window.addEventListener('scroll', handleScroll);
+    backToTopButton.addEventListener('click', scrollToTop);
+
+    // Initial check in case page is loaded scrolled
+    handleScroll();
+  })();
+  </script>
 </body>
 </html>
