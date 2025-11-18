@@ -38,3 +38,8 @@ source/codex/
 
 # Git worktrees
 .worktrees/
+
+# Project database
+data/project.db
+data/project.db-shm
+data/project.db-wal
