@@ -222,3 +222,98 @@
 **Quality Observations:**
 
 ---
+
+## Part III: GM Section (Chapters 21-26)
+
+### Chapter 21: Fronts & Threats
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+**VPC Guidance:**
+- [ ] Does this chapter include VPC-aware guidance?
+
+---
+
+### Chapter 22: Creating Scenarios
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+**VPC Guidance:**
+- [ ] Does this chapter include VPC-aware guidance?
+
+---
+
+### Chapter 23: NPCs & Creatures
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+**VPC Guidance:**
+- [ ] Does this chapter include VPC-aware guidance?
+
+---
+
+### Chapter 24: Worldbuilding
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+**VPC Guidance:**
+- [ ] Does this chapter include VPC-aware guidance?
+
+---
+
+### Chapter 25: Alternative Play Modes
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+**VPC Guidance:**
+- [ ] Does this chapter include VPC-aware guidance?
+
+---
+
+### Chapter 26: Safety Tools
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+**VPC Guidance:**
+- [ ] Does this chapter include VPC-aware guidance?
+
+---
+
+## Part IV: Reference (Chapter 27)
+
+### Chapter 27: Character Sheets & Play Aids
+
+**Consistency Issues:**
+
+**Completeness Issues:**
+
+**Quality Observations:**
+
+**Sheet References:**
+- [ ] Verify references match files in `source/codex/sheets/`
+
+---
