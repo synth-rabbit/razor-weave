@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { runLinters } from '../../scripts/run-linters.js';
 import { validatePlanNaming } from '../../validators/plan-naming-validator.js';
+import { getDatabase } from '../../database/index.js';
 
 export async function preCommit(): Promise<void> {
   console.log('🎣 Running pre-commit checks...\n');
@@ -34,6 +35,26 @@ export async function preCommit(): Promise<void> {
       }
     }
     console.log('✅ Plan naming validated\n');
+  }
+
+  // 5. Snapshot staged book files before commit
+  const bookFiles = stagedFiles.filter(f =>
+    f.startsWith('books/') && f.endsWith('.md')
+  );
+
+  if (bookFiles.length > 0) {
+    console.log('📸 Creating pre-commit snapshots...');
+    const db = getDatabase();
+
+    for (const file of bookFiles) {
+      try {
+        await db.snapshots.createChapterSnapshot(file, 'git');
+        console.log(`  ✓ ${file}`);
+      } catch (error) {
+        console.error(`  ✗ ${file}:`, error);
+      }
+    }
+    console.log('');
   }
 
   console.log('✨ All pre-commit checks passed!\n');
