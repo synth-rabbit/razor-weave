@@ -847,18 +847,62 @@
         transform: none !important;
       }
     }
+
+    /* Keyboard shortcut styling */
+    kbd {
+      display: inline-block;
+      padding: 0.2rem 0.4rem;
+      font-family: monospace;
+      font-size: 0.9em;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    }
+
+    .keyboard-shortcuts {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-left: 4px solid #4a90e2;
+      border-radius: 4px;
+    }
+
+    .keyboard-shortcuts h3 {
+      margin-top: 0;
+    }
+
+    .keyboard-shortcuts dl {
+      margin: 1rem 0;
+    }
+
+    .keyboard-shortcuts dt {
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    .keyboard-shortcuts dd {
+      margin-left: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .keyboard-shortcuts .note {
+      margin-top: 1rem;
+      font-style: italic;
+      color: #666;
+    }
   </style>
 </head>
 <body>
   <!-- Skip Links for Keyboard Navigation -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
-  <a href="#table-of-contents" class="skip-link">Skip to table of contents</a>
+  <a href="#table-of-contents" class="skip-link" accesskey="t">Skip to table of contents</a>
 
   <nav id="table-of-contents" aria-label="Table of Contents" role="navigation">
     <h2 class="sr-only">Table of Contents</h2>
     <ul class="toc-root">
       <li>
-        <a href="#part-i-foundations">Part I: Foundations</a>
+        <a href="#part-i-foundations" accesskey="1">Part I: Foundations</a>
         <ul>
           <li><a href="#ch-01-welcome-to-the-game">1. Welcome to the Game</a></li>
           <li><a href="#ch-02-core-concepts">2. Core Concepts at a Glance</a></li>
@@ -876,7 +920,7 @@
         </ul>
       </li>
       <li>
-        <a href="#part-ii-skills-proficiencies">Part II: Skills, Proficiencies, and Mechanical Reference</a>
+        <a href="#part-ii-skills-proficiencies" accesskey="2">Part II: Skills, Proficiencies, and Mechanical Reference</a>
         <ul>
           <li><a href="#ch-14-skills-system-overview">14. Skills System Overview</a></li>
           <li><a href="#ch-15-skills-reference-by-attribute">15. Skills Reference</a></li>
@@ -888,7 +932,7 @@
         </ul>
       </li>
       <li>
-        <a href="#part-iii-reference-and-gm">Part III: Game Master Section</a>
+        <a href="#part-iii-reference-and-gm" accesskey="3">Part III: Game Master Section</a>
         <ul>
           <li><a href="#ch-21-running-sessions">21. Running Sessions</a></li>
           <li><a href="#ch-22-running-campaigns">22. Running Campaigns</a></li>
@@ -899,11 +943,11 @@
         </ul>
       </li>
       <li>
-        <a href="#part-iv-glossary-index">Part IV: Reference Sheets, Glossary, and Index</a>
+        <a href="#part-iv-glossary-index" accesskey="4">Part IV: Reference Sheets, Glossary, and Index</a>
         <ul>
           <li><a href="#ch-27-sheets-and-play-aids">27. Sheets and Play Aids</a></li>
-          <li><a href="#ch-28-glossary">28. Glossary</a></li>
-          <li><a href="#ch-29-index">29. Index</a></li>
+          <li><a href="#ch-28-glossary" accesskey="g">28. Glossary</a></li>
+          <li><a href="#ch-29-index" accesskey="i">29. Index</a></li>
         </ul>
       </li>
     </ul>
@@ -1119,6 +1163,32 @@
         uncertain about the meaning of a term, check the glossary entry. It often clears up confusion that
         might arise from casual reading.
       </p>
+
+      <section id="keyboard-shortcuts" class="keyboard-shortcuts">
+        <h3>Keyboard Shortcuts</h3>
+        <p>
+          When reading the web version of this rulebook, you can use keyboard shortcuts for quick navigation
+          to major sections. These shortcuts help you jump directly to the content you need without scrolling
+          through the entire document.
+        </p>
+        <dl>
+          <dt><kbd>Alt+1</kbd></dt>
+          <dd>Jump to Part I: Foundations</dd>
+          <dt><kbd>Alt+2</kbd></dt>
+          <dd>Jump to Part II: Skills & Proficiencies</dd>
+          <dt><kbd>Alt+3</kbd></dt>
+          <dd>Jump to Part III: Reference & GM</dd>
+          <dt><kbd>Alt+4</kbd></dt>
+          <dd>Jump to Part IV: Glossary & Index</dd>
+          <dt><kbd>Alt+G</kbd></dt>
+          <dd>Jump to Glossary</dd>
+          <dt><kbd>Alt+I</kbd></dt>
+          <dd>Jump to Index</dd>
+          <dt><kbd>Alt+T</kbd></dt>
+          <dd>Jump to Table of Contents</dd>
+        </dl>
+        <p class="note">On Mac, use <kbd>Ctrl</kbd> instead of <kbd>Alt</kbd>.</p>
+      </section>
 
       <h3 id="reading-as-a-group">Reading as a Group</h3>
 
@@ -9065,6 +9135,54 @@
     sections.forEach(section => {
       if (section.id) {
         observer.observe(section);
+      }
+    });
+  })();
+  </script>
+
+  <!-- Keyboard Navigation Shortcuts -->
+  <script>
+  (function() {
+    'use strict';
+
+    // Keyboard shortcuts mapping
+    const shortcuts = {
+      '1': '#part-i-foundations',
+      '2': '#part-ii-skills-proficiencies',
+      '3': '#part-iii-reference-and-gm',
+      '4': '#part-iv-glossary-index',
+      'g': '#ch-28-glossary',
+      'i': '#ch-29-index',
+      't': '#table-of-contents'
+    };
+
+    document.addEventListener('keydown', function(e) {
+      // Only trigger if Alt key is pressed (Windows/Linux)
+      // Or Ctrl key (Mac - accesskey uses Ctrl on Mac)
+      if (!e.altKey && !e.ctrlKey) return;
+
+      // Ignore if user is typing in an input/textarea
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+      const targetId = shortcuts[key];
+
+      if (targetId) {
+        e.preventDefault();
+        const element = document.querySelector(targetId);
+        if (element) {
+          // Smooth scroll to element
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+          // Set focus for screen readers
+          // Only add tabindex if element doesn't already have one
+          if (!element.hasAttribute('tabindex')) {
+            element.setAttribute('tabindex', '-1');
+          }
+          element.focus();
+        }
       }
     });
   })();
