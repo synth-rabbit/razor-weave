@@ -22,18 +22,6 @@ All detailed documentation is located in `docs/`:
 - **Plans**: [docs/plans/](docs/plans/)
 
 ## Context
-I need to implement some styleguides for the project and introduce things like linters.
 
 ## Instructions
-
-### Linters/Code Formatters
-- Code `/src` - Eslint and Prettier
-- Markdown (whole project)
-- Content validation for PLAN.md, README.md, AGENTS.md, and INDEX.md
-
-### Style Guides (`docs/style_guides`)
-- Best practices for typescript code
-- Book writing guide (currently in `source/STYLE.md`)
-- Guide for content in `/docs`
-- Any other guides you think can be written now
 
