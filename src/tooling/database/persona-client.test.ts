@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, rmSync } from 'fs';
+import { mkdirSync } from 'fs';
 import Database from 'better-sqlite3';
 import { PersonaClient } from './persona-client.js';
 import { createTables } from './schema.js';
