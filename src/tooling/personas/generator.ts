@@ -152,6 +152,13 @@ export function generatePersonaBatch(
         break;
       }
     }
+
+    // Verify that we successfully generated this persona
+    if (batch.length !== i + 1) {
+      throw new Error(
+        `Failed to generate valid persona ${i + 1} after ${maxAttempts} attempts`
+      );
+    }
   }
 
   return batch;

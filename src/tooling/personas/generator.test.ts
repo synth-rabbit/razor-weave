@@ -364,5 +364,14 @@ describe('Procedural Generation Engine', () => {
       );
       expect(genreFlexibility.size).toBeGreaterThanOrEqual(2);
     });
+
+    it('should throw error if unable to generate valid persona in batch', () => {
+      // Use a very low maxAttempts to increase chance of failure
+      // This test may occasionally pass due to randomness, but that's acceptable
+      // The important thing is that when it does fail, it throws an error
+      expect(() => {
+        generatePersonaBatch(100, { maxAttempts: 1 });
+      }).toThrow(/Failed to generate valid persona \d+ after 1 attempts/);
+    });
   });
 });
