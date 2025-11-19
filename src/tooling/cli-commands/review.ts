@@ -2,10 +2,10 @@
 import { getDatabase } from '../database/index.js';
 import {
   CampaignClient,
+  ReviewOrchestrator,
   type CampaignStatus,
   type ContentType,
-} from '../reviews/campaign-client.js';
-import { ReviewOrchestrator } from '../reviews/review-orchestrator.js';
+} from '../reviews/index.js';
 
 export interface ReviewBookOptions {
   personas?: string;
