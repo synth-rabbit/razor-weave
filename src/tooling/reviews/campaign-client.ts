@@ -146,4 +146,28 @@ export class CampaignClient {
     const row = stmt.get(id);
     return row ? (row as Campaign) : null;
   }
+
+  updateStatus(
+    campaignId: string,
+    status: CampaignStatus,
+    completedAt?: Date
+  ): void {
+    // Determine completed_at value:
+    // 1. If completedAt explicitly provided, use it
+    // 2. Else if status is 'completed', auto-generate
+    // 3. Else null
+    const completedAtStr = completedAt
+      ? completedAt.toISOString()
+      : status === 'completed'
+        ? new Date().toISOString()
+        : null;
+
+    const stmt = this.db.prepare(`
+      UPDATE review_campaigns
+      SET status = ?, completed_at = ?
+      WHERE id = ?
+    `);
+
+    stmt.run(status, completedAtStr, campaignId);
+  }
 }
