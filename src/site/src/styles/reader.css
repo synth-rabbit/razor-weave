@@ -30,7 +30,7 @@
 .reader-toc {
   position: sticky;
   top: 0;
-  height: 100vh;
+  max-height: 100vh;
   overflow-y: auto;
   padding: var(--spacing-lg) var(--spacing-md) var(--spacing-lg) 0;
 }

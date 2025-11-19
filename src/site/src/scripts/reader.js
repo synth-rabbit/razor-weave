@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const tocLinks = document.querySelectorAll('.toc-root a, .toc-list a');
   const sections = document.querySelectorAll('.reader-content section[id], .reader-content h2[id], .reader-content h3[id]');
 
+  let previousActiveId = '';
+
   function updateActiveSection() {
     let current = '';
     const scrollPosition = window.scrollY + 100;
@@ -50,6 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
         current = section.getAttribute('id');
       }
     });
+
+    // Only update if the active section has actually changed
+    if (current === previousActiveId) {
+      return;
+    }
+
+    previousActiveId = current;
 
     let activeLink = null;
     tocLinks.forEach(link => {
