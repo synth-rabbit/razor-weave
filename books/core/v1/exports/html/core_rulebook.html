@@ -114,7 +114,7 @@
     code, pre, .monospace {
       font-family: "JetBrains Mono", "SF Mono", Monaco, Consolas, monospace;
     }
-    nav {
+    #table-of-contents {
       position: fixed;
       left: 0;
       top: 0;
@@ -128,23 +128,23 @@
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
     }
 
-    nav h1 {
+    #table-of-contents h2 {
       font-size: 1.25rem;
       margin-bottom: 1rem;
       color: var(--color-electric-blue);
     }
 
-    nav ul {
+    #table-of-contents ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    nav li {
+    #table-of-contents li {
       margin: 0.5rem 0;
     }
 
-    nav a {
+    #table-of-contents a {
       color: var(--color-deep-purple);
       text-decoration: none;
       display: block;
@@ -153,19 +153,19 @@
       transition: all 0.2s ease;
     }
 
-    nav a:hover {
+    #table-of-contents a:hover {
       color: var(--color-electric-blue);
       background: var(--color-light-blue);
     }
 
-    nav a:active,
-    nav a.active {
+    #table-of-contents a:active,
+    #table-of-contents a.active {
       color: var(--color-hot-pink);
       background: var(--color-light-pink);
     }
 
     /* Nested navigation */
-    nav ul ul {
+    #table-of-contents ul ul {
       margin-left: 1rem;
       font-size: 0.95rem;
     }
@@ -207,7 +207,7 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .sheet-block {
-      border: 2px solid var(--color-electric-blue);
+      border-left: 4px solid var(--color-electric-blue);
       border-radius: 4px;
       padding: 1.5rem 1.25rem;
       margin: 2rem 0;
@@ -675,7 +675,7 @@
       }
 
       /* Hide navigation and restore content width */
-      nav {
+      #table-of-contents {
         display: none !important;
       }
 
@@ -7911,6 +7911,7 @@
         • _______________________________<br />
         • _______________________________
       </p>
+      </div>
 
       <hr />
 
