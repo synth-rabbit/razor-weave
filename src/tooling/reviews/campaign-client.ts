@@ -104,6 +104,12 @@ export interface CampaignAnalysis {
   created_at: string;
 }
 
+export interface CampaignListFilters {
+  status?: CampaignStatus;
+  contentType?: ContentType;
+  contentId?: number;
+}
+
 export class CampaignClient {
   private db: Database.Database;
 
@@ -229,5 +235,31 @@ export class CampaignClient {
 
     const row = stmt.get(campaignId);
     return row ? (row as CampaignAnalysis) : null;
+  }
+
+  listCampaigns(filters: CampaignListFilters): Campaign[] {
+    let sql = 'SELECT * FROM review_campaigns WHERE 1=1';
+    const params: unknown[] = [];
+
+    if (filters.status) {
+      sql += ' AND status = ?';
+      params.push(filters.status);
+    }
+
+    if (filters.contentType) {
+      sql += ' AND content_type = ?';
+      params.push(filters.contentType);
+    }
+
+    if (filters.contentId !== undefined) {
+      sql += ' AND content_id = ?';
+      params.push(filters.contentId);
+    }
+
+    sql += ' ORDER BY created_at DESC';
+
+    const stmt = this.db.prepare(sql);
+    const rows = stmt.all(...params);
+    return rows as Campaign[];
   }
 }
