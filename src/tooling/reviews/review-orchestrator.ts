@@ -2,6 +2,7 @@ import type Database from 'better-sqlite3';
 import { CampaignClient, type Campaign } from './campaign-client.js';
 import { snapshotBook, snapshotChapter } from './content-snapshot.js';
 import { PersonaClient } from '../database/persona-client.js';
+import { writePromptFiles, writeAnalyzerPromptFile } from './prompt-writer.js';
 
 export interface InitializeCampaignParams {
   campaignName: string;
@@ -95,26 +96,29 @@ export class ReviewOrchestrator {
       throw new Error('Campaign must be in pending status to execute reviews');
     }
 
+    // Update status to in_progress
     this.campaignClient.updateStatus(campaignId, 'in_progress');
 
+    // Resolve persona IDs
     const personaIds = this.resolvePersonaIds(campaign);
     if (personaIds.length === 0) {
       throw new Error('No personas selected for review');
     }
 
-    console.log(`\nExecuting reviews for ${personaIds.length} personas:`);
+    // Generate prompt files
+    const writtenFiles = writePromptFiles(this.db, campaignId);
 
-    for (const personaId of personaIds) {
-      console.log(`  - ${personaId}`);
-    }
-
-    console.log('\nNote: Agent execution requires Task tool - implement with human approval');
-    console.log('Expected flow:');
-    console.log('  1. Launch parallel Task agents (one per persona)');
-    console.log('  2. Each agent generates review using reviewer-prompt.ts');
-    console.log('  3. Each agent writes markdown using markdown-writer.ts');
-    console.log('  4. Each agent calls campaignClient.createPersonaReview()');
-    console.log('  5. Orchestrator waits for all agents to complete');
+    // Output instructions for user
+    console.log(`\n✅ Campaign created: ${campaignId}`);
+    console.log(`✅ Generated ${writtenFiles.length} review prompts\n`);
+    console.log(`📁 Prompts directory: data/reviews/prompts/${campaignId}/\n`);
+    console.log('Next: Tell Claude Code to execute reviews\n');
+    console.log('────────────────────────────────────────────────────────');
+    console.log(`Read prompts from data/reviews/prompts/${campaignId}/`);
+    console.log(`and execute reviewer agents in batches of 5`);
+    console.log('────────────────────────────────────────────────────────\n');
+    console.log(`After agents complete, check status with:`);
+    console.log(`  pnpm review status ${campaignId}\n`);
   }
 
   executeAnalysis(campaignId: string): void {
@@ -127,21 +131,27 @@ export class ReviewOrchestrator {
       throw new Error('Campaign must be in in_progress status to execute analysis');
     }
 
-    // Update status
+    // Get all reviews to verify they exist
+    const reviews = this.campaignClient.getCampaignReviews(campaignId);
+    if (reviews.length === 0) {
+      throw new Error(`No reviews found for campaign: ${campaignId}`);
+    }
+
+    // Update status to analyzing
     this.campaignClient.updateStatus(campaignId, 'analyzing');
 
-    // Get all reviews
-    const reviews = this.campaignClient.getCampaignReviews(campaignId);
+    // Generate analyzer prompt file
+    const analyzerPromptPath = writeAnalyzerPromptFile(this.db, campaignId);
 
-    console.log(`\nExecuting analysis for campaign ${campaignId}`);
-    console.log(`Found ${reviews.length} reviews to analyze`);
-    console.log('\nNote: Analyzer agent execution requires Task tool');
-    console.log('Expected flow:');
-    console.log('  1. Launch single Task agent (analyzer role)');
-    console.log('  2. Agent generates analysis using analyzer-prompt.ts');
-    console.log('  3. Agent writes markdown to data/reviews/analysis/{campaignId}.md');
-    console.log('  4. Agent calls campaignClient.createCampaignAnalysis()');
-    console.log('  5. Orchestrator marks campaign as completed');
+    // Output instructions for user
+    console.log(`\n✅ All reviews complete! Ready for analysis.`);
+    console.log(`✅ Found ${reviews.length} reviews to analyze\n`);
+    console.log(`📁 Analyzer prompt: ${analyzerPromptPath}\n`);
+    console.log('Next: Tell Claude Code to run analysis\n');
+    console.log('────────────────────────────────────────────────────────');
+    console.log(`Read analyzer prompt from ${analyzerPromptPath}`);
+    console.log(`and execute analyzer agent`);
+    console.log('────────────────────────────────────────────────────────\n');
   }
 
   completeCampaign(campaignId: string): void {

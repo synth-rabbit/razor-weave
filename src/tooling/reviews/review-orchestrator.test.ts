@@ -5,14 +5,15 @@ import { CampaignClient } from './campaign-client.js';
 import { PersonaClient } from '../database/persona-client.js';
 import { ReviewOrchestrator } from './review-orchestrator.js';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
+import { resolve } from 'path';
 
 describe('ReviewOrchestrator', () => {
   let db: Database.Database;
   let campaignClient: CampaignClient;
   let personaClient: PersonaClient;
   let orchestrator: ReviewOrchestrator;
-  const testDir = '../../data/test';
-  const testBookPath = '../../data/test/orchestrator-book.html';
+  const testDir = resolve(process.cwd(), 'data/test');
+  const testBookPath = resolve(testDir, 'orchestrator-book.html');
 
   beforeEach(() => {
     mkdirSync(testDir, { recursive: true });
@@ -144,8 +145,10 @@ describe('ReviewOrchestrator', () => {
       orchestrator.executeReviews(campaignId);
 
       const output = consoleSpy.join('\n');
-      expect(output).toContain('Executing reviews for 1 personas');
-      expect(output).toContain('test-persona-1');
+      expect(output).toContain('Campaign created:');
+      expect(output).toContain('Generated 1 review prompts');
+      expect(output).toContain('Prompts directory:');
+      expect(output).toContain('execute reviewer agents in batches of 5');
 
       console.log = originalLog;
     });
