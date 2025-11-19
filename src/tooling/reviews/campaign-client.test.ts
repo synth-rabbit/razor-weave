@@ -299,4 +299,54 @@ describe('CampaignClient', () => {
       expect(analysis?.markdown_path).toBe('data/reviews/analysis/test.md');
     });
   });
+
+  describe('listCampaigns', () => {
+    beforeEach(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      client.createCampaign({
+        campaignName: 'Campaign 1',
+        contentType: 'book',
+        contentId: 1,
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah'],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const id2 = client.createCampaign({
+        campaignName: 'Campaign 2',
+        contentType: 'chapter',
+        contentId: 2,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['core-alex'],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      client.updateStatus(id2, 'completed');
+    });
+
+    it('lists all campaigns', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaigns = client.listCampaigns({});
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(campaigns).toHaveLength(2);
+    });
+
+    it('filters by status', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaigns = client.listCampaigns({ status: 'completed' });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(campaigns).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(campaigns[0].campaign_name).toBe('Campaign 2');
+    });
+
+    it('filters by content type', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaigns = client.listCampaigns({ contentType: 'book' });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(campaigns).toHaveLength(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(campaigns[0].campaign_name).toBe('Campaign 1');
+    });
+  });
 });
