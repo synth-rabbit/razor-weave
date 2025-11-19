@@ -125,5 +125,29 @@ describe('ReviewOrchestrator', () => {
       const campaign = campaignClient.getCampaign(campaignId);
       expect(campaign?.status).toBe('in_progress');
     });
+
+    it('logs agent execution plan', () => {
+      const consoleSpy: string[] = [];
+      const originalLog = console.log;
+      console.log = (...args: unknown[]) => {
+        consoleSpy.push(args.join(' '));
+      };
+
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+
+      const output = consoleSpy.join('\n');
+      expect(output).toContain('Executing reviews for 1 personas');
+      expect(output).toContain('test-persona-1');
+
+      console.log = originalLog;
+    });
   });
 });

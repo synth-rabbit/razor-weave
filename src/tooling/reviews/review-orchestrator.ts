@@ -102,7 +102,18 @@ export class ReviewOrchestrator {
       throw new Error('No personas selected for review');
     }
 
-    console.log(`Executing reviews for ${personaIds.length} personas...`);
-    console.log('Note: Agent execution not yet implemented');
+    console.log(`\nExecuting reviews for ${personaIds.length} personas:`);
+
+    for (const personaId of personaIds) {
+      console.log(`  - ${personaId}`);
+    }
+
+    console.log('\nNote: Agent execution requires Task tool - implement with human approval');
+    console.log('Expected flow:');
+    console.log('  1. Launch parallel Task agents (one per persona)');
+    console.log('  2. Each agent generates review using reviewer-prompt.ts');
+    console.log('  3. Each agent writes markdown using markdown-writer.ts');
+    console.log('  4. Each agent calls campaignClient.createPersonaReview()');
+    console.log('  5. Orchestrator waits for all agents to complete');
   }
 }
