@@ -145,6 +145,42 @@
   background: var(--color-light-pink);
 }
 
+/* Breadcrumb Navigation */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) 0;
+  margin-bottom: var(--spacing-lg);
+  font-size: 0.9rem;
+  color: var(--color-medium-gray);
+}
+
+.breadcrumb a {
+  color: var(--color-electric-blue);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  color: var(--color-medium-gray);
+}
+
+.breadcrumb-current {
+  font-weight: 600;
+  color: var(--color-ink-black);
+}
+
+@media (max-width: 768px) {
+  .breadcrumb {
+    font-size: 0.85rem;
+    padding: var(--spacing-sm) 0;
+  }
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;

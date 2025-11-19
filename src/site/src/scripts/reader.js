@@ -57,6 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
         link.classList.add('active');
       }
     });
+
+    // Update breadcrumb
+    const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+    if (breadcrumbCurrent && current) {
+      const activeLink = document.querySelector(`.toc-list a[href="#${current}"], .toc-root a[href="#${current}"]`);
+      if (activeLink) {
+        breadcrumbCurrent.textContent = activeLink.textContent;
+      }
+    }
   }
 
   if (sections.length > 0) {
