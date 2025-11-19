@@ -41,6 +41,7 @@
 }
 
 /* TOC Styling */
+.toc-root,
 .toc-list {
   list-style: none;
   margin: 0;
@@ -70,7 +71,7 @@
   color: var(--color-hot-pink);
   font-weight: 700;
   border-left: 3px solid var(--color-hot-pink);
-  padding-left: calc(var(--spacing-sm) + 2px);
+  padding-left: var(--spacing-xs);
 }
 
 /* Content Typography */
