@@ -197,4 +197,10 @@ export class CampaignClient {
     const row = stmt.get(id);
     return row ? (row as PersonaReview) : null;
   }
+
+  getCampaignReviews(campaignId: string): PersonaReview[] {
+    const stmt = this.db.prepare('SELECT * FROM persona_reviews WHERE campaign_id = ?');
+    const rows = stmt.all(campaignId);
+    return rows as PersonaReview[];
+  }
 }
