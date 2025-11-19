@@ -160,12 +160,13 @@
 }
 
 .reader-content .sheet-block {
-  /* Remove all styling for sheet blocks - let them render naturally */
-  background: none;
-  border: none;
-  padding: 0;
-  margin: var(--spacing-lg) 0;
-  border-radius: 0;
+  /* Subtle purple border with light background and shadow */
+  background: rgba(98, 71, 170, 0.03); /* Very light purple tint */
+  border: 2px solid var(--color-deep-purple);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Breadcrumb Navigation */
@@ -178,12 +179,13 @@
   font-size: 0.9rem;
   color: var(--color-medium-gray);
   position: sticky;
-  top: 0;
+  top: 70px; /* Below header (header height + padding) */
   background: var(--color-white);
-  z-index: 100;
+  z-index: 999; /* Just below header (1000) but above content */
   border-bottom: 1px solid var(--color-border-gray);
   margin-left: calc(var(--spacing-lg) * -1);
   margin-right: calc(var(--spacing-lg) * -1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .breadcrumb a {
