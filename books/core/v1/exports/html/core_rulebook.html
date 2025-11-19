@@ -667,73 +667,14 @@
        =================================== */
     @media print {
       /* ===================================
-         TASK 12: PAGE SETUP
+         PAGE SETUP
          =================================== */
       @page {
-        margin: 0.75in 0.5in; /* Tighter margins for more content */
+        margin: 0.75in 0.5in;
         size: letter;
       }
 
-      /* Base Typography - Optimized for Print */
-      body {
-        font-family: "Inter", system-ui, -apple-system, sans-serif; /* Match screen fonts */
-        font-size: 11pt;
-        line-height: 1.5;
-        background: white;
-        color: black;
-        margin-left: 0 !important;
-        padding: 0 !important;
-        background-image: none !important;
-      }
-
-      main {
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      /* Headings - Clear Hierarchy with Synthwave Colors */
-      h1, h2, h3, h4, h5, h6 {
-        font-family: "Space Grotesk", system-ui, -apple-system, sans-serif; /* Match screen fonts */
-        color: black;
-        page-break-after: avoid;
-        page-break-inside: avoid;
-      }
-
-      h1 {
-        font-size: 20pt;
-        margin-top: 0;
-        margin-bottom: 12pt;
-        color: #00D9FF; /* Keep Electric Blue for print */
-      }
-
-      h2 {
-        font-size: 16pt;
-        margin-top: 18pt;
-        margin-bottom: 10pt;
-        page-break-before: auto; /* Let sections flow naturally, not always */
-        color: #00D9FF; /* Keep Electric Blue for print */
-      }
-
-      h3 {
-        font-size: 13pt;
-        margin-top: 14pt;
-        margin-bottom: 8pt;
-        color: #FF006E; /* Hot Pink for print */
-      }
-
-      h4 {
-        font-size: 11pt;
-        margin-top: 12pt;
-        margin-bottom: 6pt;
-        font-weight: bold;
-        color: #FF006E; /* Hot Pink for print */
-      }
-
-      /* ===================================
-         TASK 14: ELEMENT HIDING & EFFECTS
-         =================================== */
-      /* Remove Interactive Elements */
+      /* Hide navigation and restore content width */
       nav {
         display: none !important;
       }
@@ -742,18 +683,160 @@
         display: none !important;
       }
 
-      /* Remove Visual Effects (shadows only) */
+      body {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        background-image: none !important;
+        background: white !important;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        font-size: 11pt;
+        line-height: 1.5;
+        color: black;
+      }
+
+      main {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ===================================
+         CRITICAL: Remove ALL borders and decorative elements
+         =================================== */
+      .example,
+      .gm,
+      .sheet-block,
+      table,
+      .character-sheet,
+      .reference-sheet {
+        border: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+        border-bottom: none !important;
+        clip-path: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Remove all visual effects */
       * {
         box-shadow: none !important;
         text-shadow: none !important;
+        clip-path: none !important;
         transition: none !important;
         animation: none !important;
+        background-image: none !important;
       }
 
-      /* Links - Show URLs for External Links */
+      /* Maintain structure with generous padding and spacing */
+      .example,
+      .gm,
+      .sheet-block {
+        padding: 1.5rem 2rem;
+        margin: 1.5rem 0;
+      }
+
+      /* Preserve backgrounds for visual organization */
+      .example {
+        background: var(--color-light-blue);
+      }
+
+      .gm {
+        background: var(--color-light-pink);
+      }
+
+      /* Color preservation */
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* ===================================
+         CRITICAL PAGE-BREAK STRATEGY
+         =================================== */
+
+      /* Character sheets: Force single-page */
+      .character-sheet,
+      .reference-sheet,
+      .sheet-block.full-page {
+        page-break-before: always;
+        page-break-after: always;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Content blocks: Keep together if possible, but allow breaking if needed */
+      .sheet-block {
+        page-break-inside: avoid;
+      }
+
+      /* Example and GM boxes: Prefer keeping together */
+      .example,
+      .gm {
+        page-break-inside: avoid;
+        orphans: 3;
+        widows: 3;
+      }
+
+      /* Tables: Keep small tables together, allow large tables to break */
+      table {
+        page-break-inside: auto;
+      }
+
+      thead {
+        display: table-header-group;
+      }
+
+      tbody tr {
+        page-break-inside: avoid;
+      }
+
+      /* Headings: Prevent orphan headings */
+      h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        orphans: 3;
+        widows: 3;
+        font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+        page-break-inside: avoid;
+      }
+
+      h1 {
+        font-size: 20pt;
+        margin-top: 0;
+        margin-bottom: 12pt;
+        color: var(--color-electric-blue) !important;
+      }
+
+      h2 {
+        font-size: 16pt;
+        margin-top: 18pt;
+        margin-bottom: 10pt;
+        color: var(--color-electric-blue) !important;
+      }
+
+      h3 {
+        font-size: 13pt;
+        margin-top: 14pt;
+        margin-bottom: 8pt;
+        color: var(--color-hot-pink) !important;
+      }
+
+      h4 {
+        font-size: 11pt;
+        margin-top: 12pt;
+        margin-bottom: 6pt;
+        font-weight: bold;
+        color: var(--color-hot-pink) !important;
+      }
+
+      /* ===================================
+         PRESERVE COLORS AND TYPOGRAPHY IN PRINT
+         =================================== */
+
+      /* Preserve link colors */
       a {
-        color: black;
-        text-decoration: none;
+        color: var(--color-electric-blue);
+        text-decoration: underline;
       }
 
       a[href^="http"]:after {
@@ -772,90 +855,7 @@
         content: "";
       }
 
-      /* ===================================
-         TASK 13: PAGE BREAK CONTROLS (CRITICAL)
-         =================================== */
-      /* Sheet blocks MUST stay on single pages - THIS IS THE PRIMARY FIX */
-      .sheet-block,
-      .character-sheet,
-      .reference-sheet {
-        page-break-before: always; /* Always start new page */
-        page-break-after: always;  /* Always end before next page */
-        page-break-inside: avoid;  /* Never split across pages */
-        break-inside: avoid; /* Modern browsers */
-      }
-
-      /* Tables must not split */
-      table {
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-
-      /* Example and GM boxes must not split */
-      .example, .gm {
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-
-      /* Keep headings with following content */
-      h1, h2, h3, h4, h5, h6 {
-        page-break-after: avoid;
-        break-after: avoid;
-      }
-
-      /* Full-page sheets (forces exactly one page) */
-      .full-page-sheet {
-        height: 9.5in; /* Letter height (11in) minus margins (2 * 0.75in) */
-        page-break-before: always;
-        page-break-after: always;
-        overflow: hidden; /* Clip if content too long */
-        box-sizing: border-box;
-      }
-
-      /* Allow natural breaks for sections */
-      header, section, article {
-        page-break-inside: auto; /* Changed from avoid - let them break naturally */
-        margin-bottom: 18pt;
-      }
-
-      .part-intro {
-        page-break-after: always;
-      }
-
-      /* Prevent Orphans and Widows */
-      p, li {
-        orphans: 3;
-        widows: 3;
-      }
-
-      p {
-        margin: 0 0 8pt 0;
-      }
-
-      /* ===================================
-         TASK 14: COMPONENT COLORS (Synthwave)
-         =================================== */
-      /* Examples and GM Guidance - Keep Synthwave Colors */
-      .example, .gm {
-        padding: 8pt 10pt;
-        margin: 10pt 0;
-        page-break-inside: avoid;
-      }
-
-      .example {
-        border-left: 4px solid #00D9FF; /* Keep Electric Blue */
-        background: #E5FAFF; /* Keep light blue tint */
-        -webkit-print-color-adjust: exact; /* Force color printing */
-        print-color-adjust: exact;
-      }
-
-      .gm {
-        border-left: 4px solid #FF006E; /* Keep Hot Pink */
-        background: #FFE5F3; /* Keep light pink tint */
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-
+      /* Examples and GM Guidance - Labels */
       .example:before {
         content: "Example: ";
         font-weight: bold;
@@ -870,66 +870,67 @@
         margin-bottom: 4pt;
       }
 
-      /* Sheet Blocks - Keep Synthwave Styling */
-      .sheet-block {
-        border: 2px solid #00D9FF; /* Keep Electric Blue border */
-        padding: 10pt 12pt;
-        margin: 12pt 0;
-        background: white;
-        page-break-inside: avoid;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+      /* Prevent Orphans and Widows */
+      p, li {
+        orphans: 3;
+        widows: 3;
       }
 
-      /* Tables - Optimized for Print with Synthwave Colors */
+      p {
+        margin: 0 0 8pt 0;
+      }
+
+      /* Allow natural breaks for sections */
+      header, section, article {
+        page-break-inside: auto;
+        margin-bottom: 18pt;
+      }
+
+      .part-intro {
+        page-break-after: always;
+      }
+
+      /* ===================================
+         TABLE STYLING (NO BORDERS)
+         =================================== */
       table {
         border-collapse: collapse;
         width: 100%;
         margin: 12pt 0;
         font-size: 9pt;
-        page-break-inside: avoid;
-      }
-
-      /* Table Headers Repeat on Each Page */
-      thead {
-        display: table-header-group;
       }
 
       tfoot {
         display: table-footer-group;
       }
 
+      /* NO borders on table cells */
       th, td {
-        border: 1pt solid #E0E0E0; /* Lighter gray border */
-        padding: 4pt 6pt;
+        border: none !important;
+        padding: 0.75rem 1rem;
         text-align: left;
       }
 
       thead th {
-        background: #00D9FF; /* Keep Electric Blue header */
-        color: white;
-        font-weight: bold;
-        -webkit-print-color-adjust: exact; /* Force color printing */
-        print-color-adjust: exact;
+        background: var(--color-electric-blue);
+        color: var(--color-white);
+        font-weight: 600;
+      }
+
+      tbody td {
+        padding: 0.5rem 1rem;
       }
 
       tbody tr:nth-child(even) {
-        background: #E5FAFF; /* Keep light blue rows */
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        background: var(--color-light-blue);
       }
 
-      /* Hot Pink alternating tables */
       table:nth-of-type(2n) thead th {
-        background: #FF006E; /* Hot Pink header */
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        background: var(--color-hot-pink);
       }
 
       table:nth-of-type(2n) tbody tr:nth-child(even) {
-        background: #FFE5F3; /* Light pink rows */
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        background: var(--color-light-pink);
       }
 
       caption {
@@ -969,14 +970,15 @@
       code, pre {
         font-family: "Courier New", monospace;
         font-size: 9pt;
-        background: white;
-        border: 1pt solid black;
+        background: var(--color-light-gray);
+        border: none !important;
         padding: 2pt 4pt;
       }
 
       pre {
         white-space: pre-wrap;
         page-break-inside: avoid;
+        padding: 8pt;
       }
 
       /* Glossary Section - Two Column Layout */
