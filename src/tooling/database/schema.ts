@@ -183,6 +183,20 @@ export function createTables(db: Database.Database): void {
     CREATE INDEX IF NOT EXISTS idx_persona_reviews_status ON persona_reviews(status);
   `);
 
+  // Create campaign_analyses table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS campaign_analyses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      campaign_id TEXT NOT NULL UNIQUE,
+      analysis_data TEXT NOT NULL,
+      markdown_path TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (campaign_id) REFERENCES review_campaigns(id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_campaign_analyses_campaign ON campaign_analyses(campaign_id);
+  `);
+
   // Store schema version
   db.exec(`
     CREATE TABLE IF NOT EXISTS schema_info (
