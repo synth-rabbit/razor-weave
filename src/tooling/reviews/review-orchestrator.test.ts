@@ -79,5 +79,17 @@ describe('ReviewOrchestrator', () => {
       const campaign = campaignClient.getCampaign(campaignId);
       expect(campaign?.persona_selection_strategy).toBe('manual');
     });
+
+    it('throws error if manual selection has no personas', () => {
+      expect(() => {
+        orchestrator.initializeCampaign({
+          campaignName: 'Test Campaign',
+          contentType: 'book',
+          contentPath: testBookPath,
+          personaSelectionStrategy: 'manual',
+          personaIds: [],
+        });
+      }).toThrow('personaIds required when using manual persona selection strategy');
+    });
   });
 });

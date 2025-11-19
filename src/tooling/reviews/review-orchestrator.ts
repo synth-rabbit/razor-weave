@@ -30,6 +30,11 @@ export class ReviewOrchestrator {
       chapterName,
     } = params;
 
+    // Validate manual persona selection has personas
+    if (personaSelectionStrategy === 'manual' && (!personaIds || personaIds.length === 0)) {
+      throw new Error('personaIds required when using manual persona selection strategy');
+    }
+
     // Snapshot content
     let contentId: number;
     if (contentType === 'book') {
