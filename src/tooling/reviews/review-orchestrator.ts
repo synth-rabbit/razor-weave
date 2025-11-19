@@ -1,6 +1,7 @@
 import type Database from 'better-sqlite3';
-import { CampaignClient } from './campaign-client.js';
+import { CampaignClient, type Campaign } from './campaign-client.js';
 import { snapshotBook, snapshotChapter } from './content-snapshot.js';
+import { PersonaClient } from '../database/persona-client.js';
 
 export interface InitializeCampaignParams {
   campaignName: string;
@@ -69,5 +70,39 @@ export class ReviewOrchestrator {
     });
 
     return campaignId;
+  }
+
+  private resolvePersonaIds(campaign: Campaign): string[] {
+    const personaClient = new PersonaClient(this.db);
+
+    if (campaign.persona_selection_strategy === 'all_core') {
+      const allPersonas = personaClient.getAll();
+      const corePersonas = allPersonas.filter((p) => p.type === 'core');
+      return corePersonas.map((p) => p.id);
+    } else {
+      // Manual selection
+      return JSON.parse(campaign.persona_ids || '[]') as string[];
+    }
+  }
+
+  executeReviews(campaignId: string): void {
+    const campaign = this.campaignClient.getCampaign(campaignId);
+    if (!campaign) {
+      throw new Error(`Campaign not found: ${campaignId}`);
+    }
+
+    if (campaign.status !== 'pending') {
+      throw new Error('Campaign must be in pending status to execute reviews');
+    }
+
+    this.campaignClient.updateStatus(campaignId, 'in_progress');
+
+    const personaIds = this.resolvePersonaIds(campaign);
+    if (personaIds.length === 0) {
+      throw new Error('No personas selected for review');
+    }
+
+    console.log(`Executing reviews for ${personaIds.length} personas...`);
+    console.log('Note: Agent execution not yet implemented');
   }
 }

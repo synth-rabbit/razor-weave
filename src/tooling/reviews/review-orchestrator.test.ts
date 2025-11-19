@@ -92,4 +92,38 @@ describe('ReviewOrchestrator', () => {
       }).toThrow('personaIds required when using manual persona selection strategy');
     });
   });
+
+  describe('executeReviews', () => {
+    it('throws error if campaign not in pending status', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      // Move to in_progress
+      campaignClient.updateStatus(campaignId, 'in_progress');
+
+      expect(() => {
+        orchestrator.executeReviews(campaignId);
+      }).toThrow('Campaign must be in pending status');
+    });
+
+    it('updates status to in_progress', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      expect(campaign?.status).toBe('in_progress');
+    });
+  });
 });
