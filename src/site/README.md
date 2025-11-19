@@ -1,30 +1,34 @@
-# @razorweave/site
+# Razorweave Website
 
-Static site generator for Razorweave.
+Static website for razorweave.com - tabletop RPG core rulebook.
 
-## Purpose
+## Local Development
 
-Generates the static website for publishing Razorweave books and content.
+```bash
+cd src/site
+pnpm install
+pnpm dev       # Start local server at localhost:3000
+```
+
+## Build
+
+```bash
+pnpm build     # Outputs to dist/
+```
+
+## Deploy
+
+Automatic deployment to GitHub Pages on push to main branch.
 
 ## Structure
 
-- `generator/` - Site generation logic
-- `templates/` - HTML templates
-- `static/` - Static assets (CSS, images, etc.)
+- `public/` - Static assets (images, PDFs, fonts)
+- `src/pages/` - HTML page templates
+- `src/styles/` - CSS files
+- `src/scripts/` - JavaScript files
+- `src/partials/` - Shared HTML components (header, footer)
+- `scripts/` - Build scripts
 
-## Output
+## Design
 
-Generated site is output to the `site/public/` directory.
-
-## Development
-
-```bash
-# Build
-pnpm build
-
-# Watch mode
-pnpm build:watch
-
-# Type check
-pnpm typecheck
-```
+See `../../docs/plans/2025-11-19-razorweave-site-design.md` for complete design specifications.

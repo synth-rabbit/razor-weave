@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read Online - Razorweave</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/components.css">
+
+  <style>
+    .reader-placeholder {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--spacing-2xl);
+    }
+
+    .reader-placeholder h1 {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .reader-placeholder p {
+      color: var(--color-medium-gray);
+      max-width: 600px;
+      margin: 0 auto var(--spacing-lg);
+    }
+  </style>
+</head>
+<body>
+  {{HEADER}}
+
+  <main class="reader-placeholder">
+    <div class="container">
+      <h1>Enhanced Reader Coming Soon</h1>
+      <p>The enhanced online reading experience with navigation, search, and bookmarking will be implemented in Phase 2.</p>
+      <p>For now, you can download the PDF to read the complete core rulebook.</p>
+      <a href="/index.html#downloads" class="btn btn-primary">Download PDF</a>
+    </div>
+  </main>
+
+  {{FOOTER}}
+</body>
+</html>
