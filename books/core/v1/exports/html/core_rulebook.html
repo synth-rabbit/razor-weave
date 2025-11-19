@@ -558,15 +558,17 @@
        PRINT STYLESHEET
        =================================== */
     @media print {
-      /* Page Setup */
+      /* ===================================
+         TASK 12: PAGE SETUP
+         =================================== */
       @page {
-        margin: 2cm;
+        margin: 0.75in 0.5in; /* Tighter margins for more content */
         size: letter;
       }
 
       /* Base Typography - Optimized for Print */
       body {
-        font-family: "Georgia", "Times New Roman", serif;
+        font-family: "Inter", system-ui, -apple-system, sans-serif; /* Match screen fonts */
         font-size: 11pt;
         line-height: 1.5;
         background: white;
@@ -579,9 +581,9 @@
         padding: 0;
       }
 
-      /* Headings - Clear Hierarchy */
+      /* Headings - Clear Hierarchy with Synthwave Colors */
       h1, h2, h3, h4, h5, h6 {
-        font-family: "Georgia", "Times New Roman", serif;
+        font-family: "Space Grotesk", system-ui, -apple-system, sans-serif; /* Match screen fonts */
         color: black;
         page-break-after: avoid;
         page-break-inside: avoid;
@@ -591,13 +593,15 @@
         font-size: 20pt;
         margin-top: 0;
         margin-bottom: 12pt;
+        color: #00D9FF; /* Keep Electric Blue for print */
       }
 
       h2 {
         font-size: 16pt;
         margin-top: 18pt;
         margin-bottom: 10pt;
-        page-break-before: always;
+        page-break-before: auto; /* Let sections flow naturally, not always */
+        color: #00D9FF; /* Keep Electric Blue for print */
       }
 
       h3 {
@@ -613,12 +617,19 @@
         font-weight: bold;
       }
 
+      /* ===================================
+         TASK 14: ELEMENT HIDING & EFFECTS
+         =================================== */
       /* Remove Interactive Elements */
       nav {
         display: none !important;
       }
 
-      /* Remove Visual Effects */
+      .skip-link {
+        display: none !important;
+      }
+
+      /* Remove Visual Effects (shadows only) */
       * {
         box-shadow: none !important;
         text-shadow: none !important;
@@ -648,9 +659,49 @@
         content: "";
       }
 
-      /* Page Break Controls */
-      header, section, article {
+      /* ===================================
+         TASK 13: PAGE BREAK CONTROLS (CRITICAL)
+         =================================== */
+      /* Sheet blocks MUST stay on single pages - THIS IS THE PRIMARY FIX */
+      .sheet-block,
+      .character-sheet,
+      .reference-sheet {
+        page-break-before: always; /* Always start new page */
+        page-break-after: always;  /* Always end before next page */
+        page-break-inside: avoid;  /* Never split across pages */
+        break-inside: avoid; /* Modern browsers */
+      }
+
+      /* Tables must not split */
+      table {
         page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Example and GM boxes must not split */
+      .example, .gm {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Keep headings with following content */
+      h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+
+      /* Full-page sheets (forces exactly one page) */
+      .full-page-sheet {
+        height: 9.5in; /* Letter height (11in) minus margins (2 * 0.75in) */
+        page-break-before: always;
+        page-break-after: always;
+        overflow: hidden; /* Clip if content too long */
+        box-sizing: border-box;
+      }
+
+      /* Allow natural breaks for sections */
+      header, section, article {
+        page-break-inside: auto; /* Changed from avoid - let them break naturally */
         margin-bottom: 18pt;
       }
 
@@ -668,17 +719,28 @@
         margin: 0 0 8pt 0;
       }
 
-      /* Examples and GM Guidance - Print Friendly */
+      /* ===================================
+         TASK 14: COMPONENT COLORS (Synthwave)
+         =================================== */
+      /* Examples and GM Guidance - Keep Synthwave Colors */
       .example, .gm {
-        border-left: 3pt solid black;
-        background: white;
         padding: 8pt 10pt;
         margin: 10pt 0;
         page-break-inside: avoid;
       }
 
+      .example {
+        border-left: 4px solid #00D9FF; /* Keep Electric Blue */
+        background: #E5FAFF; /* Keep light blue tint */
+        -webkit-print-color-adjust: exact; /* Force color printing */
+        print-color-adjust: exact;
+      }
+
       .gm {
-        border-left-color: #333;
+        border-left: 4px solid #FF006E; /* Keep Hot Pink */
+        background: #FFE5F3; /* Keep light pink tint */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
 
       .example:before {
@@ -695,16 +757,18 @@
         margin-bottom: 4pt;
       }
 
-      /* Sheet Blocks */
+      /* Sheet Blocks - Keep Synthwave Styling */
       .sheet-block {
-        border: 2pt solid black;
+        border: 2px solid #00D9FF; /* Keep Electric Blue border */
         padding: 10pt 12pt;
         margin: 12pt 0;
         background: white;
         page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
 
-      /* Tables - Optimized for Print */
+      /* Tables - Optimized for Print with Synthwave Colors */
       table {
         border-collapse: collapse;
         width: 100%;
@@ -723,18 +787,23 @@
       }
 
       th, td {
-        border: 1pt solid black;
+        border: 1pt solid #E0E0E0; /* Lighter gray border */
         padding: 4pt 6pt;
         text-align: left;
       }
 
       thead th {
-        background: #e0e0e0;
+        background: #00D9FF; /* Keep Electric Blue header */
+        color: white;
         font-weight: bold;
+        -webkit-print-color-adjust: exact; /* Force color printing */
+        print-color-adjust: exact;
       }
 
       tbody tr:nth-child(even) {
-        background: #f5f5f5;
+        background: #E5FAFF; /* Keep light blue rows */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
 
       caption {
@@ -754,14 +823,9 @@
         margin-bottom: 4pt;
       }
 
-      /* Remove Background Colors and Images */
+      /* Remove Background Images (but keep background colors) */
       * {
         background-image: none !important;
-      }
-
-      .example, .gm, tbody tr:nth-child(even), thead th {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
       }
 
       /* Ensure High Contrast */
