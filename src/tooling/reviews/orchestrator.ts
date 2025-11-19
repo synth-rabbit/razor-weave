@@ -26,6 +26,31 @@ export interface OrchestratorResult {
   errors: string[];
 }
 
+/**
+ * ReviewOrchestrator manages the review campaign lifecycle.
+ *
+ * Responsibilities:
+ * 1. Initialize campaigns and snapshot content
+ * 2. Launch parallel reviewer agents via Task tool
+ * 3. Poll for completion and validate outputs
+ * 4. Handle failures and provide diagnostics
+ * 5. Trigger analysis after all reviews complete
+ *
+ * Usage:
+ * ```typescript
+ * const orchestrator = new ReviewOrchestrator(db, campaignClient);
+ *
+ * const campaignId = orchestrator.initializeCampaign({
+ *   campaignName: 'Core Rulebook v1.2 Review',
+ *   contentType: 'book',
+ *   contentPath: 'src/site/core_rulebook_web.html',
+ *   personaSelectionStrategy: 'all_core'
+ * });
+ *
+ * await orchestrator.executeReviews(campaignId);
+ * await orchestrator.runAnalysis(campaignId);
+ * ```
+ */
 export class ReviewOrchestrator {
   constructor(
     private db: Database.Database,
