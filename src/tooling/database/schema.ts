@@ -140,6 +140,30 @@ export function createTables(db: Database.Database): void {
       ON persona_generation_stats(batch_id);
   `);
 
+  // Create review_campaigns table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS review_campaigns (
+      id TEXT PRIMARY KEY,
+      campaign_name TEXT NOT NULL,
+      content_type TEXT NOT NULL CHECK(content_type IN ('book', 'chapter')),
+      content_id INTEGER NOT NULL,
+      persona_selection_strategy TEXT NOT NULL CHECK(
+        persona_selection_strategy IN ('all_core', 'manual', 'smart_sampling')
+      ),
+      persona_ids TEXT NOT NULL,
+      status TEXT NOT NULL CHECK(
+        status IN ('pending', 'in_progress', 'analyzing', 'completed', 'failed')
+      ),
+      metadata TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      completed_at TIMESTAMP
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_campaigns_status ON review_campaigns(status);
+    CREATE INDEX IF NOT EXISTS idx_campaigns_content ON review_campaigns(content_type, content_id);
+    CREATE INDEX IF NOT EXISTS idx_campaigns_created ON review_campaigns(created_at);
+  `);
+
   // Store schema version
   db.exec(`
     CREATE TABLE IF NOT EXISTS schema_info (
