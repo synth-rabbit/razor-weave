@@ -116,4 +116,31 @@ export class ReviewOrchestrator {
     console.log('  4. Each agent calls campaignClient.createPersonaReview()');
     console.log('  5. Orchestrator waits for all agents to complete');
   }
+
+  executeAnalysis(campaignId: string): void {
+    const campaign = this.campaignClient.getCampaign(campaignId);
+    if (!campaign) {
+      throw new Error(`Campaign not found: ${campaignId}`);
+    }
+
+    if (campaign.status !== 'in_progress') {
+      throw new Error('Campaign must be in in_progress status to execute analysis');
+    }
+
+    // Update status
+    this.campaignClient.updateStatus(campaignId, 'analyzing');
+
+    // Get all reviews
+    const reviews = this.campaignClient.getCampaignReviews(campaignId);
+
+    console.log(`\nExecuting analysis for campaign ${campaignId}`);
+    console.log(`Found ${reviews.length} reviews to analyze`);
+    console.log('\nNote: Analyzer agent execution requires Task tool');
+    console.log('Expected flow:');
+    console.log('  1. Launch single Task agent (analyzer role)');
+    console.log('  2. Agent generates analysis using analyzer-prompt.ts');
+    console.log('  3. Agent writes markdown to data/reviews/analysis/{campaignId}.md');
+    console.log('  4. Agent calls campaignClient.createCampaignAnalysis()');
+    console.log('  5. Orchestrator marks campaign as completed');
+  }
 }
