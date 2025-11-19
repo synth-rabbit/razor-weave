@@ -73,6 +73,29 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveSection(); // Initial call
   }
 
+  // Reading Progress Bar
+  const progressBar = document.querySelector('.reading-progress-bar');
+
+  function updateReadingProgress() {
+    if (!progressBar) return;
+
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.scrollY;
+
+    // Calculate percentage scrolled
+    const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+
+    // Update progress bar width
+    progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+  }
+
+  if (progressBar) {
+    window.addEventListener('scroll', updateReadingProgress);
+    window.addEventListener('resize', updateReadingProgress);
+    updateReadingProgress(); // Initial call
+  }
+
   // Smooth scroll polyfill for older browsers
   tocLinks.forEach(link => {
     link.addEventListener('click', (e) => {

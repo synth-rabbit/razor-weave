@@ -1,3 +1,22 @@
+/* Reading Progress Bar */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--color-light-gray);
+  z-index: 1001;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reading-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-electric-blue), var(--color-hot-pink));
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
 /* Reader Layout */
 .reader-container {
   display: grid;
