@@ -50,6 +50,10 @@
       color: var(--color-ink-black);
       margin-left: var(--sidebar-width);
       padding: 2rem 3rem;
+
+      /* Subtle paper texture */
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23noise)" opacity="0.05"/></svg>');
+      background-repeat: repeat;
     }
     main {
       max-width: 960px;
@@ -679,6 +683,7 @@
         color: black;
         margin-left: 0 !important;
         padding: 0 !important;
+        background-image: none !important;
       }
 
       main {
