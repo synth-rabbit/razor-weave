@@ -1,3 +1,7 @@
+// src/tooling/reviews/campaign-client.ts
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Database from 'better-sqlite3';
+
 export type CampaignStatus =
   | 'pending'
   | 'in_progress'
