@@ -67,14 +67,10 @@
 
 .toc-root a.active,
 .toc-list a.active {
-  background: var(--color-electric-blue);
-  color: var(--color-white);
-  font-weight: 600;
+  color: var(--color-hot-pink);
+  font-weight: 700;
   border-left: 3px solid var(--color-hot-pink);
-  transform: translateX(2px);
-  box-shadow: 0 2px 8px rgba(0, 217, 255, 0.3);
-  padding-left: var(--spacing-md);
-  padding-right: var(--spacing-md);
+  padding-left: calc(var(--spacing-sm) + 2px);
 }
 
 /* Content Typography */
