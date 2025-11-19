@@ -1214,10 +1214,18 @@
     /* Print styles for cover */
     @media print {
       .cover-page {
-        margin: 0;
-        padding: 0;
+        margin: 0 !important;
+        padding: 0 !important;
         page-break-after: always;
         height: 100vh;
+        width: 100%;
+        overflow: visible;
+      }
+
+      .cover-content {
+        padding: 2rem;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .cover-title {
@@ -1225,10 +1233,24 @@
         -webkit-text-fill-color: var(--color-electric-blue);
         text-shadow: none;
         filter: none;
+        font-size: 5rem;
+        letter-spacing: 0.1em;
       }
 
       .cover-subtitle {
         text-shadow: none;
+        font-size: 1.75rem;
+        letter-spacing: 0.2em;
+      }
+
+      .cover-author {
+        color: var(--color-ink-black);
+        font-size: 1.25rem;
+        border-top-color: var(--color-hot-pink);
+      }
+
+      .corner-decor {
+        display: block;
       }
     }
   </style>
