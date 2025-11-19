@@ -186,4 +186,168 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   insertChapterNavigation();
+
+  // Quick Jump Modal (Ctrl+K)
+  const quickJumpModal = document.getElementById('quickJumpModal');
+  const quickJumpSearch = document.getElementById('quickJumpSearch');
+  const quickJumpResults = document.getElementById('quickJumpResults');
+
+  if (quickJumpModal && quickJumpSearch && quickJumpResults) {
+    // Build search index from TOC
+    const searchIndex = [];
+    const tocLinks = document.querySelectorAll('.toc-root a, .toc-list a');
+
+    tocLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      const text = link.textContent.trim();
+
+      // Build path (parent sections)
+      let path = [];
+      let parent = link.closest('li')?.parentElement?.closest('li');
+      while (parent) {
+        const parentLink = parent.querySelector(':scope > a');
+        if (parentLink) {
+          path.unshift(parentLink.textContent.trim());
+        }
+        parent = parent.parentElement?.closest('li');
+      }
+
+      searchIndex.push({
+        title: text,
+        path: path.join(' › '),
+        href: href
+      });
+    });
+
+    let selectedIndex = 0;
+
+    // Open modal with Ctrl+K / Cmd+K
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        openQuickJump();
+      }
+
+      // Close with Escape
+      if (e.key === 'Escape' && quickJumpModal.classList.contains('open')) {
+        closeQuickJump();
+      }
+    });
+
+    function openQuickJump() {
+      quickJumpModal.classList.add('open');
+      quickJumpSearch.value = '';
+      quickJumpSearch.focus();
+      selectedIndex = 0;
+      renderResults(searchIndex);
+    }
+
+    function closeQuickJump() {
+      quickJumpModal.classList.remove('open');
+      quickJumpSearch.blur();
+    }
+
+    // Click outside to close
+    quickJumpModal.addEventListener('click', (e) => {
+      if (e.target === quickJumpModal) {
+        closeQuickJump();
+      }
+    });
+
+    // Search input
+    quickJumpSearch.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      selectedIndex = 0;
+
+      if (query === '') {
+        renderResults(searchIndex);
+      } else {
+        const filtered = searchIndex.filter(item => {
+          return item.title.toLowerCase().includes(query) ||
+                 item.path.toLowerCase().includes(query);
+        });
+        renderResults(filtered);
+      }
+    });
+
+    // Keyboard navigation
+    quickJumpSearch.addEventListener('keydown', (e) => {
+      const results = quickJumpResults.querySelectorAll('.quick-jump-result');
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
+        updateSelection();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, 0);
+        updateSelection();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const selected = results[selectedIndex];
+        if (selected) {
+          const href = selected.dataset.href;
+          navigateToSection(href);
+          closeQuickJump();
+        }
+      }
+    });
+
+    function renderResults(results) {
+      if (results.length === 0) {
+        quickJumpResults.innerHTML = '<li class="quick-jump-empty">No results found</li>';
+        return;
+      }
+
+      quickJumpResults.innerHTML = results.map((item, index) => `
+        <li class="quick-jump-result ${index === selectedIndex ? 'selected' : ''}"
+            data-href="${item.href}"
+            data-index="${index}">
+          <div class="quick-jump-result-title">${item.title}</div>
+          ${item.path ? `<div class="quick-jump-result-path">${item.path}</div>` : ''}
+        </li>
+      `).join('');
+
+      // Add click handlers
+      quickJumpResults.querySelectorAll('.quick-jump-result').forEach(result => {
+        result.addEventListener('click', () => {
+          const href = result.dataset.href;
+          navigateToSection(href);
+          closeQuickJump();
+        });
+
+        result.addEventListener('mouseenter', () => {
+          selectedIndex = parseInt(result.dataset.index);
+          updateSelection();
+        });
+      });
+    }
+
+    function updateSelection() {
+      const results = quickJumpResults.querySelectorAll('.quick-jump-result');
+      results.forEach((result, index) => {
+        if (index === selectedIndex) {
+          result.classList.add('selected');
+          result.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          result.classList.remove('selected');
+        }
+      });
+    }
+
+    function navigateToSection(href) {
+      if (!href || !href.startsWith('#')) return;
+
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+        // Update URL hash
+        history.pushState(null, null, href);
+      }
+    }
+  }
 });
