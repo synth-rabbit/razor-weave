@@ -112,4 +112,78 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Chapter Navigation (Prev/Next buttons)
+  function insertChapterNavigation() {
+    const readerContent = document.querySelector('.reader-content');
+    if (!readerContent) return;
+
+    // Find all H2 chapter headings
+    const chapters = Array.from(readerContent.querySelectorAll('h2[id]'));
+    if (chapters.length === 0) return;
+
+    chapters.forEach((chapter, index) => {
+      // Find the next H2 or end of content
+      let nextElement = chapter.nextElementSibling;
+      let insertPoint = null;
+
+      // Walk through siblings until we find the next H2 or run out
+      while (nextElement) {
+        if (nextElement.tagName === 'H2') {
+          // Found next chapter, insert before it
+          insertPoint = nextElement;
+          break;
+        }
+        nextElement = nextElement.nextElementSibling;
+      }
+
+      // If no next H2 found, we're at the last chapter
+      if (!insertPoint && index === chapters.length - 1) {
+        // Don't add nav after last chapter
+        return;
+      }
+
+      // Create navigation element
+      const nav = document.createElement('nav');
+      nav.className = 'chapter-nav';
+      nav.setAttribute('aria-label', 'Chapter navigation');
+
+      // Previous button
+      if (index > 0) {
+        const prevChapter = chapters[index - 1];
+        const prevBtn = document.createElement('a');
+        prevBtn.href = '#' + prevChapter.id;
+        prevBtn.className = 'chapter-nav-btn prev';
+        prevBtn.textContent = prevChapter.textContent;
+        prevBtn.setAttribute('aria-label', 'Previous chapter: ' + prevChapter.textContent);
+        nav.appendChild(prevBtn);
+      } else {
+        // Spacer to push next button to the right
+        const spacer = document.createElement('div');
+        spacer.className = 'chapter-nav-spacer';
+        nav.appendChild(spacer);
+      }
+
+      // Next button
+      if (index < chapters.length - 1) {
+        const nextChapter = chapters[index + 1];
+        const nextBtn = document.createElement('a');
+        nextBtn.href = '#' + nextChapter.id;
+        nextBtn.className = 'chapter-nav-btn next';
+        nextBtn.textContent = nextChapter.textContent;
+        nextBtn.setAttribute('aria-label', 'Next chapter: ' + nextChapter.textContent);
+        nav.appendChild(nextBtn);
+      }
+
+      // Insert the navigation
+      if (insertPoint) {
+        insertPoint.parentNode.insertBefore(nav, insertPoint);
+      } else if (nextElement) {
+        // Insert after the last sibling before the next chapter
+        nextElement.parentNode.insertBefore(nav, nextElement);
+      }
+    });
+  }
+
+  insertChapterNavigation();
 });

@@ -207,6 +207,69 @@
   }
 }
 
+/* Chapter Navigation (Prev/Next buttons) */
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--spacing-2xl) 0;
+  padding: var(--spacing-lg);
+  background: var(--color-light-blue);
+  border-radius: var(--radius-md);
+  gap: var(--spacing-md);
+}
+
+.chapter-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-electric-blue);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.chapter-nav-btn:hover {
+  background: var(--color-hot-pink);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.chapter-nav-btn.prev::before {
+  content: '←';
+  font-size: 1.2em;
+}
+
+.chapter-nav-btn.next::after {
+  content: '→';
+  font-size: 1.2em;
+}
+
+.chapter-nav-spacer {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .chapter-nav {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .chapter-nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .chapter-nav-spacer {
+    display: none;
+  }
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
