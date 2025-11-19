@@ -755,7 +755,15 @@
          CRITICAL PAGE-BREAK STRATEGY
          =================================== */
 
-      /* Character sheets: Force single-page */
+      /* Character sheets and sheet blocks: Force single-page */
+      .sheet-block {
+        page-break-before: always;
+        page-break-after: always;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Legacy selectors for compatibility */
       .character-sheet,
       .reference-sheet,
       .sheet-block.full-page {
@@ -763,11 +771,6 @@
         page-break-after: always;
         page-break-inside: avoid;
         break-inside: avoid;
-      }
-
-      /* Content blocks: Keep together if possible, but allow breaking if needed */
-      .sheet-block {
-        page-break-inside: avoid;
       }
 
       /* Example and GM boxes: Prefer keeping together */
