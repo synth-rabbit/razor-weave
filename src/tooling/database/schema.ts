@@ -164,6 +164,25 @@ export function createTables(db: Database.Database): void {
     CREATE INDEX IF NOT EXISTS idx_campaigns_created ON review_campaigns(created_at);
   `);
 
+  // Create persona_reviews table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS persona_reviews (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      campaign_id TEXT NOT NULL,
+      persona_id TEXT NOT NULL,
+      review_data TEXT NOT NULL,
+      agent_execution_time INTEGER,
+      status TEXT NOT NULL CHECK(status IN ('pending', 'completed', 'failed')),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (campaign_id) REFERENCES review_campaigns(id) ON DELETE CASCADE,
+      FOREIGN KEY (persona_id) REFERENCES personas(id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_persona_reviews_campaign ON persona_reviews(campaign_id);
+    CREATE INDEX IF NOT EXISTS idx_persona_reviews_persona ON persona_reviews(persona_id);
+    CREATE INDEX IF NOT EXISTS idx_persona_reviews_status ON persona_reviews(status);
+  `);
+
   // Store schema version
   db.exec(`
     CREATE TABLE IF NOT EXISTS schema_info (
