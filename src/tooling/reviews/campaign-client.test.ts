@@ -174,4 +174,87 @@ describe('CampaignClient', () => {
       expect(review?.status).toBe('completed');
     });
   });
+
+  describe('getCampaignReviews', () => {
+    it('returns all reviews for a campaign', () => {
+      // Create test personas first (required for foreign key constraint)
+      db.prepare(`
+        INSERT INTO personas (id, name, type, archetype, experience_level,
+          fiction_first_alignment, narrative_mechanics_comfort, gm_philosophy,
+          genre_flexibility, primary_cognitive_style)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        'core-sarah',
+        'Sarah',
+        'core',
+        'storyteller',
+        'experienced',
+        'high',
+        'high',
+        'collaborative',
+        'high',
+        'narrative'
+      );
+
+      db.prepare(`
+        INSERT INTO personas (id, name, type, archetype, experience_level,
+          fiction_first_alignment, narrative_mechanics_comfort, gm_philosophy,
+          genre_flexibility, primary_cognitive_style)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        'core-alex',
+        'Alex',
+        'core',
+        'tactician',
+        'experienced',
+        'medium',
+        'high',
+        'structured',
+        'medium',
+        'analytical'
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 1,
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah', 'core-alex'],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      client.createPersonaReview({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        campaignId,
+        personaId: 'core-sarah',
+        reviewData: {
+          ratings: { clarity_readability: 8, rules_accuracy: 9, persona_fit: 7, practical_usability: 8 },
+          narrative_feedback: 'Great!',
+          issue_annotations: [],
+          overall_assessment: 'Good',
+        },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      client.createPersonaReview({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        campaignId,
+        personaId: 'core-alex',
+        reviewData: {
+          ratings: { clarity_readability: 7, rules_accuracy: 8, persona_fit: 6, practical_usability: 7 },
+          narrative_feedback: 'Nice!',
+          issue_annotations: [],
+          overall_assessment: 'Decent',
+        },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const reviews = client.getCampaignReviews(campaignId);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(reviews).toHaveLength(2);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      expect(reviews.map((r) => r.persona_id)).toEqual(['core-sarah', 'core-alex']);
+    });
+  });
 });
