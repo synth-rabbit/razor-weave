@@ -1,7 +1,12 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import Database from 'better-sqlite3';
-import { snapshotBook, getBookSnapshot } from './content-snapshot.js';
+import {
+  snapshotBook,
+  getBookSnapshot,
+  snapshotChapter,
+  getChapterSnapshot,
+} from './content-snapshot.js';
 import { createTables } from '../database/schema.js';
 
 describe('Content Snapshot', () => {
@@ -46,6 +51,43 @@ describe('Content Snapshot', () => {
       expect(() =>
         snapshotBook(db, {
           bookPath: 'nonexistent.html',
+          version: 'v1.0',
+          source: 'git',
+        })
+      ).toThrow('File not found');
+    });
+  });
+
+  describe('snapshotChapter', () => {
+    const testChapterPath = 'data/test/chapter-01.md';
+
+    beforeEach(() => {
+      writeFileSync(testChapterPath, '# Chapter 1\n\nTest content');
+    });
+
+    it('creates chapter snapshot with file hash', () => {
+      const id = snapshotChapter(db, {
+        bookPath: 'core/v1',
+        chapterPath: testChapterPath,
+        version: 'v1.2',
+        source: 'git',
+        commitSha: 'abc123',
+      });
+
+      expect(id).toBeGreaterThan(0);
+
+      const snapshot = getChapterSnapshot(db, id);
+      expect(snapshot).toBeDefined();
+      expect(snapshot?.chapter_path).toBe(testChapterPath);
+      expect(snapshot?.file_hash).toMatch(/^[a-f0-9]{64}$/);
+      expect(snapshot?.content).toContain('Chapter 1');
+    });
+
+    it('throws if file does not exist', () => {
+      expect(() =>
+        snapshotChapter(db, {
+          bookPath: 'core/v1',
+          chapterPath: 'nonexistent.md',
           version: 'v1.0',
           source: 'git',
         })
