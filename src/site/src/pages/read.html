@@ -3,48 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Read Online - Razorweave</title>
+  <title>Read Online - Razorweave Core Rulebook</title>
 
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
+  <!-- Styles -->
   <link rel="stylesheet" href="/styles/theme.css">
   <link rel="stylesheet" href="/styles/components.css">
-
-  <style>
-    .reader-placeholder {
-      min-height: 70vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: var(--spacing-2xl);
-    }
-
-    .reader-placeholder h1 {
-      margin-bottom: var(--spacing-md);
-    }
-
-    .reader-placeholder p {
-      color: var(--color-medium-gray);
-      max-width: 600px;
-      margin: 0 auto var(--spacing-lg);
-    }
-  </style>
+  <link rel="stylesheet" href="/styles/reader.css">
 </head>
 <body>
   {{HEADER}}
 
-  <main class="reader-placeholder">
-    <div class="container">
-      <h1>Enhanced Reader Coming Soon</h1>
-      <p>The enhanced online reading experience with navigation, search, and bookmarking will be implemented in Phase 2.</p>
-      <p>For now, you can download the PDF to read the complete core rulebook.</p>
-      <a href="/index.html#downloads" class="btn btn-primary">Download PDF</a>
-    </div>
-  </main>
+  <!-- TOC Toggle Button (mobile only) -->
+  <button class="toc-toggle">Table of Contents</button>
+
+  <div class="reader-container">
+    <!-- Table of Contents Sidebar -->
+    <aside class="reader-toc">
+      <h2>Contents</h2>
+      <ul class="toc-list">
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#core-mechanics">Core Mechanics</a></li>
+        <li><a href="#character-creation">Character Creation</a></li>
+        <li><a href="#combat">Combat</a></li>
+        <li><a href="#gm-guide">GM Guide</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="reader-content">
+      <section id="introduction">
+        <h1>Razorweave Core Rulebook</h1>
+        <p><strong>A fiction-first tabletop RPG where narrative drives mechanics.</strong></p>
+
+        <h2 id="what-is-razorweave">What is Razorweave?</h2>
+        <p>Razorweave is a tabletop roleplaying game designed for collaborative storytelling. The rules are simple, the narrative is central, and the mechanics get out of your way.</p>
+
+        <h3 id="core-philosophy">Core Philosophy</h3>
+        <p>Fiction first. Always. The narrative determines what happens, and the mechanics support the story.</p>
+      </section>
+
+      <section id="core-mechanics">
+        <h2>Core Mechanics</h2>
+        <p>This section describes the fundamental game mechanics...</p>
+
+        <h3 id="resolution">Resolution System</h3>
+        <p>When the outcome is uncertain, roll dice...</p>
+      </section>
+
+      <section id="character-creation">
+        <h2>Character Creation</h2>
+        <p>Create your character in 5 simple steps...</p>
+      </section>
+
+      <section id="combat">
+        <h2>Combat</h2>
+        <p>Combat in Razorweave is fast and narrative-focused...</p>
+      </section>
+
+      <section id="gm-guide">
+        <h2>GM Guide</h2>
+        <p>Running Razorweave requires minimal prep...</p>
+      </section>
+    </main>
+  </div>
 
   {{FOOTER}}
+
+  <script src="/scripts/reader.js"></script>
 </body>
 </html>
