@@ -110,4 +110,49 @@ describe('CampaignClient', () => {
       expect(completedCampaign?.completed_at).toBeTruthy();
     });
   });
+
+  describe('createPersonaReview', () => {
+    it('creates a persona review record', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 1,
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah'],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const reviewId = client.createPersonaReview({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        campaignId,
+        personaId: 'core-sarah',
+        reviewData: {
+          ratings: {
+            clarity_readability: 8,
+            rules_accuracy: 9,
+            persona_fit: 7,
+            practical_usability: 8,
+          },
+          narrative_feedback: 'Great content!',
+          issue_annotations: [],
+          overall_assessment: 'Solid work',
+        },
+        agentExecutionTime: 5000,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      expect(reviewId).toBeGreaterThan(0);
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const review = client.getPersonaReview(reviewId);
+      expect(review).toBeDefined();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(review?.campaign_id).toBe(campaignId);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(review?.persona_id).toBe('core-sarah');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(review?.status).toBe('completed');
+    });
+  });
 });
