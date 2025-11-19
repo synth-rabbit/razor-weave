@@ -27,6 +27,9 @@ export function generateReviewerPromptFile(
     content_hash: string;
     version: string;
   };
+  if (!content) {
+    throw new Error(`Content not found: ${campaign.content_id}`);
+  }
 
   const prompt = `You are conducting a review for campaign-${campaignId}.
 

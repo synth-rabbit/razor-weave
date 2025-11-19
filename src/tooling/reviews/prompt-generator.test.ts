@@ -72,4 +72,44 @@ describe('generateReviewerPromptFile', () => {
     expect(promptText).toContain('campaignClient.createPersonaReview');
     expect(promptText).toContain('writeReviewMarkdown');
   });
+
+  it('throws error when campaign not found', () => {
+    expect(() => {
+      generateReviewerPromptFile(db, 'nonexistent-campaign', 'test-sarah');
+    }).toThrow('Campaign not found: nonexistent-campaign');
+  });
+
+  it('throws error when persona not found', () => {
+    // Create campaign
+    const contentId = snapshotBook(db, {
+      bookPath: testBookPath,
+      version: 'v1.0',
+      source: 'claude',
+    });
+
+    const campaignId = campaignClient.createCampaign({
+      campaignName: 'Test Campaign',
+      contentType: 'book',
+      contentId,
+      personaSelectionStrategy: 'manual',
+      personaIds: ['test-sarah'],
+    });
+
+    expect(() => {
+      generateReviewerPromptFile(db, campaignId, 'nonexistent-persona');
+    }).toThrow('Persona not found: nonexistent-persona');
+  });
+
+  it('throws error when content not found', () => {
+    // Manually insert campaign with invalid content_id
+    const invalidContentId = 99999;
+    db.prepare(
+      `INSERT INTO review_campaigns (id, campaign_name, content_type, content_id, persona_selection_strategy, persona_ids, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`
+    ).run('test-campaign-invalid', 'Invalid Campaign', 'book', invalidContentId, 'manual', '[]', 'pending');
+
+    expect(() => {
+      generateReviewerPromptFile(db, 'test-campaign-invalid', 'test-sarah');
+    }).toThrow('Content not found: 99999');
+  });
 });
