@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
-import type { ReviewData } from './schemas.js';
+import type { ReviewData, AnalysisData } from './schemas.js';
 
 export interface ReviewMarkdownData {
   campaignId: string;
@@ -61,4 +61,89 @@ ${reviewData.overall_assessment}
 
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, markdown, 'utf-8');
+}
+
+export interface AnalysisMarkdownData {
+  campaignId: string;
+  campaignName: string;
+  contentType: 'book' | 'chapter';
+  contentTitle: string;
+  personaCount: number;
+  analysisData: AnalysisData;
+  createdAt: string;
+  outputPath?: string;
+}
+
+export function writeAnalysisMarkdown(data: AnalysisMarkdownData): void {
+  const {
+    campaignId,
+    campaignName,
+    contentTitle,
+    personaCount,
+    analysisData,
+    createdAt,
+    outputPath,
+  } = data;
+
+  // Build Priority Rankings section
+  const priorityRankingsContent = analysisData.priority_rankings
+    .map((ranking, idx) => {
+      const affectedPersonas = ranking.affected_personas.join(', ');
+      return `${idx + 1}. **${ranking.category}** (Severity: ${ranking.severity}, Frequency: ${ranking.frequency}/${personaCount})
+   - Affected personas: ${affectedPersonas}
+   - Description: ${ranking.description}`;
+    })
+    .join('\n\n');
+
+  // Build Dimension Summaries section
+  const dimensionSummariesContent = `### Clarity & Readability
+Average: ${analysisData.dimension_summaries.clarity_readability.average}/10 | Common themes: ${analysisData.dimension_summaries.clarity_readability.themes.join(', ')}
+
+### Rules Accuracy
+Average: ${analysisData.dimension_summaries.rules_accuracy.average}/10 | Common themes: ${analysisData.dimension_summaries.rules_accuracy.themes.join(', ')}
+
+### Persona Fit
+Average: ${analysisData.dimension_summaries.persona_fit.average}/10 | Common themes: ${analysisData.dimension_summaries.persona_fit.themes.join(', ')}
+
+### Practical Usability
+Average: ${analysisData.dimension_summaries.practical_usability.average}/10 | Common themes: ${analysisData.dimension_summaries.practical_usability.themes.join(', ')}`;
+
+  // Build Persona Breakdowns section
+  const personaBreakdownsContent = Object.entries(analysisData.persona_breakdowns)
+    .map(([groupName, breakdown]) => {
+      const strengthsCount = breakdown.strengths.length;
+      const strugglesCount = breakdown.struggles.length;
+      const totalItems = strengthsCount + strugglesCount;
+
+      return `### ${groupName} (${totalItems} items)
+- Strengths: ${breakdown.strengths.join(', ')}
+- Struggles: ${breakdown.struggles.join(', ')}`;
+    })
+    .join('\n\n');
+
+  // Build Trend Analysis section
+  const trendAnalysisContent = analysisData.trend_analysis
+    ? `## Trend Analysis\n${analysisData.trend_analysis}`
+    : '';
+
+  const markdown = `# Campaign Analysis: ${campaignName}
+Date: ${createdAt} | Personas: ${personaCount} | Content: ${contentTitle}
+
+## Executive Summary
+${analysisData.executive_summary}
+
+## Priority Rankings
+${priorityRankingsContent}
+
+## Dimension Summaries
+${dimensionSummariesContent}
+
+## Persona Breakdowns
+${personaBreakdownsContent}
+
+${trendAnalysisContent}`.trim();
+
+  const finalOutputPath = outputPath || `data/reviews/analysis/${campaignId}.md`;
+  mkdirSync(dirname(finalOutputPath), { recursive: true });
+  writeFileSync(finalOutputPath, markdown, 'utf-8');
 }
