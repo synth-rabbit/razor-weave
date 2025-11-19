@@ -143,4 +143,28 @@ export class ReviewOrchestrator {
     console.log('  4. Agent calls campaignClient.createCampaignAnalysis()');
     console.log('  5. Orchestrator marks campaign as completed');
   }
+
+  completeCampaign(campaignId: string): void {
+    const campaign = this.campaignClient.getCampaign(campaignId);
+    if (!campaign) {
+      throw new Error(`Campaign not found: ${campaignId}`);
+    }
+
+    if (campaign.status !== 'analyzing') {
+      throw new Error('Campaign must be in analyzing status to complete');
+    }
+
+    // Update status
+    this.campaignClient.updateStatus(campaignId, 'completed');
+
+    console.log(`\n✅ Campaign ${campaignId} completed successfully`);
+
+    const reviews = this.campaignClient.getCampaignReviews(campaignId);
+    const analysis = this.campaignClient.getCampaignAnalysis(campaignId);
+
+    console.log(`\nSummary:`);
+    console.log(`  Reviews: ${reviews.length}`);
+    console.log(`  Analysis: ${analysis ? 'Generated' : 'Not found'}`);
+    console.log(`  Status: completed`);
+  }
 }

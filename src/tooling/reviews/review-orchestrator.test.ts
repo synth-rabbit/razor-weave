@@ -202,4 +202,55 @@ describe('ReviewOrchestrator', () => {
       expect(campaign?.status).toBe('analyzing');
     });
   });
+
+  describe('completeCampaign', () => {
+    it('throws error if campaign not in analyzing status', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      expect(() => {
+        orchestrator.completeCampaign(campaignId);
+      }).toThrow('Campaign must be in analyzing status');
+    });
+
+    it('updates status to completed and sets timestamp', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+      campaignClient.createPersonaReview({
+        campaignId,
+        personaId: 'test-persona-1',
+        reviewData: {
+          ratings: {
+            clarity_readability: 8,
+            rules_accuracy: 9,
+            persona_fit: 7,
+            practical_usability: 8,
+          },
+          narrative_feedback: 'Test',
+          issue_annotations: [],
+          overall_assessment: 'Good',
+        },
+        agentExecutionTime: 5000,
+      });
+      orchestrator.executeAnalysis(campaignId);
+
+      orchestrator.completeCampaign(campaignId);
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      expect(campaign?.status).toBe('completed');
+      expect(campaign?.completed_at).toBeDefined();
+    });
+  });
 });
