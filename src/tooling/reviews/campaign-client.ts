@@ -103,3 +103,47 @@ export interface CampaignAnalysis {
   markdown_path: string;
   created_at: string;
 }
+
+export class CampaignClient {
+  private db: Database.Database;
+
+  constructor(db: Database.Database) {
+    this.db = db;
+  }
+
+  createCampaign(data: CreateCampaignData): string {
+    // Generate campaign ID in format: campaign-YYYYMMDD-HHMMSS-randomString
+    const now = new Date();
+    const datePart = now.toISOString().slice(0, 10).replace(/-/g, '');
+    const timePart = now.toTimeString().slice(0, 8).replace(/:/g, '');
+    const randomPart = Math.random().toString(36).substring(2, 10);
+    const id = `campaign-${datePart}-${timePart}-${randomPart}`;
+
+    // Insert into database
+    const stmt = this.db.prepare(`
+      INSERT INTO review_campaigns (
+        id, campaign_name, content_type, content_id,
+        persona_selection_strategy, persona_ids, status, metadata
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      id,
+      data.campaignName,
+      data.contentType,
+      data.contentId,
+      data.personaSelectionStrategy,
+      JSON.stringify(data.personaIds),
+      'pending',
+      data.metadata ? JSON.stringify(data.metadata) : null
+    );
+
+    return id;
+  }
+
+  getCampaign(id: string): Campaign | undefined {
+    const stmt = this.db.prepare('SELECT * FROM review_campaigns WHERE id = ?');
+    const row = stmt.get(id) as Campaign | undefined;
+    return row;
+  }
+}
