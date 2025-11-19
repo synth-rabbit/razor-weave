@@ -796,6 +796,11 @@
         page-break-inside: avoid;
       }
 
+      /* Chapters: Always start on new page */
+      [id^="ch-"] {
+        page-break-before: always;
+      }
+
       /* Headings: Prevent orphan headings */
       h1, h2, h3, h4, h5, h6 {
         page-break-after: avoid;
