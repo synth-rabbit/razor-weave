@@ -138,38 +138,52 @@
       color: var(--color-hot-pink);
     }
     .example, .gm {
-      border-left: 4px solid #004b8d;
-      background: #f7fbff;
-      padding: 0.75rem 1rem;
-      margin: 1rem 0;
+      padding: 1.25rem;
+      margin: 2rem 0;
       font-size: 0.95rem;
     }
+    .example {
+      border-left: 4px solid var(--color-electric-blue);
+      background: var(--color-light-blue);
+    }
     .gm {
-      border-left-color: #8b3c00;
-      background: #fff8f2;
+      border-left: 4px solid var(--color-hot-pink);
+      background: var(--color-light-pink);
     }
     .sheet-block {
-      border: 1px solid #cccccc;
-      padding: 1rem 1.25rem;
-      margin: 1.5rem 0;
-      background: #ffffff;
+      border: 2px solid var(--color-electric-blue);
+      border-radius: 4px;
+      padding: 1.5rem 1.25rem;
+      margin: 2rem 0;
+      background: var(--color-white);
+      page-break-inside: avoid;
     }
     table {
       border-collapse: collapse;
       width: 100%;
-      margin: 1.5rem 0;
+      margin: 2rem 0;
       font-size: 0.95rem;
+      page-break-inside: avoid;
     }
     th, td {
-      border: 1px solid #cccccc;
-      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--color-border-gray);
+      padding: 0.5rem 0.8rem;
       text-align: left;
     }
     thead th {
-      background: #f0f0f0;
+      background: var(--color-electric-blue);
+      color: var(--color-white);
+      font-weight: 600;
     }
     tbody tr:nth-child(even) {
-      background: #fafafa;
+      background: var(--color-light-blue);
+    }
+    tbody tr:nth-child(odd) {
+      background: var(--color-white);
+    }
+    tbody tr:hover {
+      background: var(--color-light-blue);
+      filter: brightness(0.98);
     }
     caption {
       font-weight: 600;
