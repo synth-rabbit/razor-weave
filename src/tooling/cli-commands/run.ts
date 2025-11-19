@@ -14,10 +14,11 @@ import {
   reviewChapter,
   listCampaigns,
   viewCampaign,
+  statusCampaign,
   type ListCampaignsFilters,
 } from './review.js';
 
-async function main() {
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const command = args[0];
 
@@ -48,7 +49,15 @@ async function main() {
     } else if (command === 'review') {
       const subcommand = args[1];
 
-      if (subcommand === 'book') {
+      if (subcommand === 'status') {
+        const campaignId = args[2];
+        if (!campaignId) {
+          console.error('Error: Please provide a campaign ID');
+          console.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review status <campaign-id>');
+          process.exit(1);
+        }
+        statusCampaign(campaignId);
+      } else if (subcommand === 'book') {
         const bookPath = args[2];
         if (!bookPath) {
           console.error('Error: Please provide a book path');
@@ -63,7 +72,7 @@ async function main() {
           }
         }
 
-        await reviewBook(bookPath, options);
+        reviewBook(bookPath, options);
       } else if (subcommand === 'chapter') {
         const chapterPath = args[2];
         if (!chapterPath) {
@@ -79,7 +88,7 @@ async function main() {
           }
         }
 
-        await reviewChapter(chapterPath, options);
+        reviewChapter(chapterPath, options);
       } else if (subcommand === 'list') {
         const filters: Partial<ListCampaignsFilters> = {};
         for (let i = 2; i < args.length; i++) {
@@ -90,7 +99,7 @@ async function main() {
           }
         }
 
-        await listCampaigns(filters);
+        listCampaigns(filters);
       } else if (subcommand === 'view') {
         const campaignId = args[2];
         if (!campaignId) {
@@ -109,10 +118,10 @@ async function main() {
           }
         }
 
-        await viewCampaign(campaignId, options);
+        viewCampaign(campaignId, options);
       } else {
         console.error('Unknown review subcommand:', subcommand);
-        console.error('Available subcommands: book, chapter, list, view');
+        console.error('Available subcommands: book, chapter, list, view, status');
         process.exit(1);
       }
     } else {
@@ -125,6 +134,7 @@ async function main() {
       console.error('  review chapter <path> [--personas=...]    - Review a markdown chapter');
       console.error('  review list [--status=...] [--content-type=...] - List campaigns');
       console.error('  review view <id> [--format=text|json]    - View campaign details');
+      console.error('  review status <id>                        - Check campaign status');
       process.exit(1);
     }
   } catch (error) {

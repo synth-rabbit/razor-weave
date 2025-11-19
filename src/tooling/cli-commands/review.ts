@@ -146,3 +146,63 @@ export function viewCampaign(
     console.log(`\nAnalysis: ${analysis.markdown_path}`);
   }
 }
+
+/**
+ * Command: review status <campaign-id>
+ * Shows campaign status with review progress and next steps
+ */
+export function statusCampaign(campaignId: string): void {
+  const db = getDatabase();
+  const rawDb = db.getDb();
+  const campaignClient = new CampaignClient(rawDb);
+
+  const campaign = campaignClient.getCampaign(campaignId);
+  if (!campaign) {
+    console.error(`Campaign not found: ${campaignId}`);
+    process.exit(1);
+  }
+
+  const reviews = campaignClient.getCampaignReviews(campaignId);
+  const analysis = campaignClient.getCampaignAnalysis(campaignId);
+
+  // Parse persona IDs to determine expected count
+  const personaIds = JSON.parse(campaign.persona_ids || '[]') as string[];
+  const expectedReviews = personaIds.length;
+  const completedReviews = reviews.length;
+
+  console.log(`\nCampaign: ${campaignId}`);
+  console.log(`Status: ${campaign.status}`);
+  console.log(`Expected reviews: ${expectedReviews}`);
+  console.log(`Completed reviews: ${completedReviews}`);
+
+  // Show missing reviews if any
+  if (completedReviews < expectedReviews) {
+    const completedPersonaIds = reviews.map((r) => r.persona_id);
+    const missingPersonaIds = personaIds.filter((id) => !completedPersonaIds.includes(id));
+    console.log(`Missing reviews: ${missingPersonaIds.join(', ')}`);
+  } else {
+    console.log('Missing reviews: (none)');
+  }
+
+  // Provide next step instructions
+  if (campaign.status === 'in_progress' && completedReviews === expectedReviews) {
+    console.log('\n✅ All reviews complete! Ready for analysis.\n');
+    console.log('Next: Tell Claude Code to run analysis\n');
+    console.log('────────────────────────────────────────────────────────');
+    console.log(`Read analyzer prompt from data/reviews/prompts/${campaignId}/analyzer.txt`);
+    console.log(`and execute analyzer agent`);
+    console.log('────────────────────────────────────────────────────────\n');
+  } else if (campaign.status === 'analyzing' && analysis) {
+    console.log('\n✅ Analysis complete!\n');
+    console.log(`📁 Outputs:`);
+    console.log(`  Reviews: data/reviews/raw/${campaignId}/`);
+    console.log(`  Analysis: data/reviews/analysis/${campaignId}.md\n`);
+  } else if (campaign.status === 'completed') {
+    console.log('\n✅ Campaign completed!\n');
+    console.log(`📁 Outputs:`);
+    console.log(`  Reviews: ${completedReviews} reviews`);
+    console.log(`  Analysis: ${analysis ? 'Generated' : 'Not found'}\n`);
+  } else {
+    console.log('\nWaiting for reviews to complete...\n');
+  }
+}
