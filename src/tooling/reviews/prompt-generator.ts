@@ -1,6 +1,7 @@
 import type Database from 'better-sqlite3';
 import { CampaignClient } from './campaign-client.js';
 import { PersonaClient } from '../database/persona-client.js';
+import type { ReviewData } from './schemas.js';
 
 export function generateReviewerPromptFile(
   db: Database.Database,
@@ -122,6 +123,113 @@ import { ReviewDataSchema } from '@razorweave/tooling/reviews/schemas';
 
 Validate with:
 ReviewDataSchema.parse(reviewData); // Throws if invalid
+`;
+
+  return prompt;
+}
+
+export function generateAnalyzerPromptFile(
+  db: Database.Database,
+  campaignId: string
+): string {
+  const campaignClient = new CampaignClient(db);
+  const personaClient = new PersonaClient(db);
+
+  const campaign = campaignClient.getCampaign(campaignId);
+  if (!campaign) {
+    throw new Error(`Campaign not found: ${campaignId}`);
+  }
+
+  const reviews = campaignClient.getCampaignReviews(campaignId);
+  if (reviews.length === 0) {
+    throw new Error(`No reviews found for campaign: ${campaignId}`);
+  }
+
+  // Format reviews for display
+  const reviewSummaries = reviews
+    .map((review) => {
+      const persona = personaClient.get(review.persona_id);
+      const data = JSON.parse(review.review_data) as ReviewData;
+
+      return `
+**Persona:** ${review.persona_id} - ${persona?.name} (${persona?.archetype}, ${persona?.experience_level})
+**Ratings:**
+- clarity_readability: ${data.ratings.clarity_readability}/10
+- rules_accuracy: ${data.ratings.rules_accuracy}/10
+- persona_fit: ${data.ratings.persona_fit}/10
+- practical_usability: ${data.ratings.practical_usability}/10
+
+**Feedback:** ${data.narrative_feedback}
+**Assessment:** ${data.overall_assessment}
+**Issues:** ${data.issue_annotations.length} identified
+`;
+    })
+    .join('\n---\n');
+
+  const prompt = `You are analyzing reviews for campaign-${campaignId}.
+
+# Review Data
+
+${reviewSummaries}
+
+# Analysis Task
+
+Analyze the ${reviews.length} reviews above and provide comprehensive analysis.
+
+OUTPUT REQUIREMENTS:
+
+1. Write analysis JSON to database:
+
+import { getDatabase } from '@razorweave/tooling/database';
+import { CampaignClient } from '@razorweave/tooling/reviews';
+
+const db = getDatabase();
+const campaignClient = new CampaignClient(db.raw);
+
+campaignClient.createCampaignAnalysis({
+  campaignId: '${campaignId}',
+  analysisData: {
+    executive_summary: "<2-3 sentence overview>",
+    priority_rankings: [
+      {
+        category: "<issue category>",
+        severity: <1-10>,
+        frequency: <count>,
+        affected_personas: ["<persona-id>"],
+        description: "<what and why>"
+      }
+    ],
+    dimension_summaries: {
+      clarity_readability: {
+        average: <calculated average>,
+        themes: ["<common theme>"]
+      },
+      rules_accuracy: {
+        average: <calculated average>,
+        themes: ["<common theme>"]
+      },
+      persona_fit: {
+        average: <calculated average>,
+        themes: ["<common theme>"]
+      },
+      practical_usability: {
+        average: <calculated average>,
+        themes: ["<common theme>"]
+      }
+    },
+    persona_breakdowns: {
+      "<group name>": {
+        strengths: ["<what worked>"],
+        struggles: ["<what didn't>"]
+      }
+    }
+  },
+  markdownPath: 'data/reviews/analysis/${campaignId}.md'
+});
+
+2. Write markdown file to data/reviews/analysis/${campaignId}.md
+
+Use markdown formatting for readability.
 `;
 
   return prompt;

@@ -4,7 +4,7 @@ import { createTables } from '../database/schema.js';
 import { PersonaClient } from '../database/persona-client.js';
 import { CampaignClient } from './campaign-client.js';
 import { snapshotBook } from './content-snapshot.js';
-import { generateReviewerPromptFile } from './prompt-generator.js';
+import { generateReviewerPromptFile, generateAnalyzerPromptFile } from './prompt-generator.js';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 
 describe('generateReviewerPromptFile', () => {
@@ -111,5 +111,51 @@ describe('generateReviewerPromptFile', () => {
     expect(() => {
       generateReviewerPromptFile(db, 'test-campaign-invalid', 'test-sarah');
     }).toThrow('Content not found: 99999');
+  });
+
+  it('generates analyzer prompt with all reviews', () => {
+    // Create campaign with reviews
+    const contentId = snapshotBook(db, {
+      bookPath: testBookPath,
+      version: 'v1.0',
+      source: 'claude',
+    });
+
+    const campaignId = campaignClient.createCampaign({
+      campaignName: 'Test Campaign',
+      contentType: 'book',
+      contentId,
+      personaSelectionStrategy: 'manual',
+      personaIds: ['test-sarah'],
+    });
+
+    // Create mock review
+    campaignClient.updateStatus(campaignId, 'in_progress');
+    campaignClient.createPersonaReview({
+      campaignId,
+      personaId: 'test-sarah',
+      reviewData: {
+        ratings: {
+          clarity_readability: 8,
+          rules_accuracy: 9,
+          persona_fit: 7,
+          practical_usability: 8,
+        },
+        narrative_feedback: 'Good content',
+        issue_annotations: [],
+        overall_assessment: 'Solid',
+      },
+      agentExecutionTime: 5000,
+    });
+
+    // Generate analyzer prompt
+    const promptText = generateAnalyzerPromptFile(db, campaignId);
+
+    // Verify sections
+    expect(promptText).toContain('You are analyzing reviews for campaign');
+    expect(promptText).toContain('test-sarah');
+    expect(promptText).toContain('Sarah Chen');
+    expect(promptText).toContain('clarity_readability: 8');
+    expect(promptText).toContain('campaignClient.createCampaignAnalysis');
   });
 });
