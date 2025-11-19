@@ -257,4 +257,46 @@ describe('CampaignClient', () => {
       expect(reviews.map((r) => r.persona_id)).toEqual(['core-sarah', 'core-alex']);
     });
   });
+
+  describe('createCampaignAnalysis', () => {
+    it('creates campaign analysis record', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 1,
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah'],
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const analysisId = client.createCampaignAnalysis({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        campaignId,
+        analysisData: {
+          executive_summary: 'Overall good',
+          priority_rankings: [],
+          dimension_summaries: {
+            clarity_readability: { average: 8, themes: [] },
+            rules_accuracy: { average: 9, themes: [] },
+            persona_fit: { average: 7, themes: [] },
+            practical_usability: { average: 8, themes: [] },
+          },
+          persona_breakdowns: {},
+        },
+        markdownPath: 'data/reviews/analysis/test.md',
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      expect(analysisId).toBeGreaterThan(0);
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const analysis = client.getCampaignAnalysis(campaignId);
+      expect(analysis).toBeDefined();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(analysis?.campaign_id).toBe(campaignId);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(analysis?.markdown_path).toBe('data/reviews/analysis/test.md');
+    });
+  });
 });
