@@ -45,11 +45,18 @@ pnpm review view campaign-20251118-143025-abc123
 - Each review is a campaign with unique ID
 - Snapshots content for consistency
 - Tracks all reviews and analysis
+- Managed by ReviewOrchestrator
 
 **Three Agent Roles:**
-1. **Orchestrator** - Manages campaign lifecycle
-2. **Reviewer** - One per persona, evaluates content
-3. **Analyzer** - Aggregates reviews into insights
+1. **Orchestrator** - Manages campaign lifecycle (ReviewOrchestrator class)
+2. **Reviewer** - One per persona, evaluates content (parallel execution)
+3. **Analyzer** - Aggregates reviews into insights (sequential after reviews)
+
+**Campaign Lifecycle:**
+1. `initializeCampaign()` → Creates campaign, snapshots content (status: pending)
+2. `executeReviews()` → Launches reviewer agents in parallel (status: in_progress)
+3. `executeAnalysis()` → Launches analyzer agent (status: analyzing)
+4. `completeCampaign()` → Finalizes campaign (status: completed)
 
 ## Review Dimensions
 
@@ -106,9 +113,63 @@ Every review scores content on four dimensions (1-10):
 - Links to campaign
 - Markdown output path
 
+## Implementation Status
+
+**✅ Phase 1-3 Complete:**
+- Database schema and clients
+- Content snapshotting with hash validation
+- Review and analysis schemas (Zod)
+- Prompt generators (reviewer and analyzer)
+- Markdown writers
+- CLI command interface
+
+**✅ Phase 4 Complete:**
+- ReviewOrchestrator class with full lifecycle management
+- Campaign initialization with content snapshotting
+- Review execution structure (agent execution pending)
+- Analysis execution structure (agent execution pending)
+- Campaign completion with summary
+
+**⏳ Pending Implementation:**
+- Actual agent launching via Claude Code Task tool (requires human approval)
+- File verification (ensure agents write files)
+- Error handling and retry logic
+- Real agent-generated reviews (currently uses placeholder logging)
+
+## Programmatic Usage
+
+```typescript
+import { ReviewOrchestrator } from '@razorweave/tooling/reviews';
+import { getDatabase } from '@razorweave/tooling/database';
+import { CampaignClient } from '@razorweave/tooling/reviews';
+
+const db = getDatabase();
+const campaignClient = new CampaignClient(db.raw);
+const orchestrator = new ReviewOrchestrator(db.raw, campaignClient);
+
+// Create campaign
+const campaignId = orchestrator.initializeCampaign({
+  campaignName: 'My Review',
+  contentType: 'book',
+  contentPath: 'path/to/book.html',
+  personaSelectionStrategy: 'all_core',
+});
+
+// Execute reviews (placeholder - agents not yet implemented)
+orchestrator.executeReviews(campaignId);
+
+// Execute analysis (placeholder - agents not yet implemented)
+orchestrator.executeAnalysis(campaignId);
+
+// Complete campaign
+orchestrator.completeCampaign(campaignId);
+```
+
 ## Future Features
 
+- Agent execution via Claude Code Task tool
 - Smart persona sampling based on content type
 - Version comparison and regression detection
 - Review retry for failed personas
+- Error recovery and partial completion
 - Interactive analysis dashboard
