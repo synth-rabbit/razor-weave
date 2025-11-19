@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Active section highlighting
-  const tocLinks = document.querySelectorAll('.toc-list a');
+  const tocLinks = document.querySelectorAll('.toc-root a, .toc-list a');
   const sections = document.querySelectorAll('.reader-content section[id], .reader-content h2[id], .reader-content h3[id]');
 
   function updateActiveSection() {
