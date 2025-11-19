@@ -277,6 +277,12 @@
         font-size: 0.85rem;
       }
 
+      /* Ensure Electric Blue headers persist on mobile */
+      thead th {
+        background: var(--color-electric-blue);
+        color: var(--color-white);
+      }
+
       /* Better spacing for blocks */
       .example, .gm {
         padding: 0.6rem 0.8rem;
@@ -491,25 +497,34 @@
     /* Focus Indicators - Clear visual feedback for keyboard navigation */
     a:focus,
     button:focus,
+    input:focus,
+    select:focus,
+    textarea:focus,
     summary:focus,
     [tabindex]:focus {
-      outline: 2px solid #004b8d;
+      outline: 3px solid var(--color-electric-blue);
       outline-offset: 2px;
     }
 
     /* Enhanced focus for keyboard-only users (not mouse clicks) */
     a:focus-visible,
     button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
     summary:focus-visible,
     [tabindex]:focus-visible {
-      outline: 3px solid #004b8d;
-      outline-offset: 3px;
+      outline: 3px solid var(--color-electric-blue);
+      outline-offset: 2px;
       border-radius: 2px;
     }
 
     /* Remove outline for mouse users while keeping keyboard focus */
     a:focus:not(:focus-visible),
     button:focus:not(:focus-visible),
+    input:focus:not(:focus-visible),
+    select:focus:not(:focus-visible),
+    textarea:focus:not(:focus-visible),
     summary:focus:not(:focus-visible),
     [tabindex]:focus:not(:focus-visible) {
       outline: none;
@@ -528,29 +543,40 @@
       border: 0;
     }
 
-    /* Focus within navigation */
+    /* Focus within navigation - Enhanced visibility */
     nav a:focus {
-      background: #e8f4ff;
+      outline: 3px solid var(--color-electric-blue);
+      outline-offset: 2px;
+      background: var(--color-light-blue);
       border-radius: 3px;
-      padding: 2px 6px;
-      margin: -2px -6px;
+      padding: 4px 8px;
+      margin: -4px -8px;
+    }
+
+    /* Hot Pink focus variant for GM sections */
+    .gm a:focus,
+    .gm button:focus {
+      outline-color: var(--color-hot-pink);
     }
 
     /* Accessibility: Reduced motion preference */
     @media (prefers-reduced-motion: reduce) {
-      * {
+      *,
+      *::before,
+      *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
       }
 
       nav {
-        transition: none;
+        transition: none !important;
       }
 
       /* Disable focus animations for reduced motion */
       .skip-link {
-        transition: none;
+        transition: none !important;
       }
     }
 
