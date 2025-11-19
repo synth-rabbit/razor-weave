@@ -6,123 +6,281 @@
   <meta charset="UTF-8">
   <title>Razorweave Core Rulebook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    /* ===================================
+       SYNTHWAVE COLOR SYSTEM
+       =================================== */
+    :root {
+      /* Core Synthwave Colors */
+      --color-electric-blue: #00D9FF;
+      --color-hot-pink: #FF006E;
+      --color-deep-purple: #7B2CBF;
+
+      /* Neutrals */
+      --color-ink-black: #1A1A1A;
+      --color-medium-gray: #6B6B6B;
+      --color-border-gray: #E0E0E0;
+      --color-light-gray: #F5F5F5;
+      --color-white: #FFFFFF;
+
+      /* Tinted Backgrounds */
+      --color-light-blue: #E5FAFF;
+      --color-light-pink: #FFE5F3;
+      --color-light-purple: #F3E5FF;
+
+      /* Semantic Colors */
+      --color-success: #2D7A4F;
+      --color-caution: #B88A2E;
+
+      /* Layout */
+      --sidebar-width: 280px;
+    }
+
+    /* ===================================
+       BASE STYLES
+       =================================== */
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #ffffff;
-      color: #222222;
-      margin: 0;
-      padding: 0;/
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      font-size: 1.125rem;
+      background: var(--color-white);
+      color: var(--color-ink-black);
+      margin-left: var(--sidebar-width);
+      padding: 2rem 3rem;
+
+      /* Subtle paper texture */
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23noise)" opacity="0.05"/></svg>');
+      background-repeat: repeat;
     }
     main {
       max-width: 960px;
       margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
-      line-height: 1.6;
+      padding: 3rem 2rem 4rem;
+      line-height: 1.7;
     }
     header, section, article {
       margin-bottom: 3rem;
     }
     h1, h2, h3, h4 {
-      font-family: "Georgia", "Times New Roman", serif;
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
       line-height: 1.2;
+      color: var(--color-ink-black);
     }
     h1 {
-      font-size: 2.4rem;
-      margin-bottom: 0.75rem;
+      font-size: 2.75rem;
+      font-weight: 700;
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      color: var(--color-electric-blue);
     }
     h2 {
       font-size: 2rem;
+      font-weight: 600;
       margin-top: 2.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      color: var(--color-electric-blue);
     }
     h3 {
-      font-size: 1.3rem;
-      margin-top: 1.75rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+      color: var(--color-hot-pink);
     }
     h4 {
       font-size: 1.1rem;
+      font-weight: 500;
       margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+      color: var(--color-hot-pink);
     }
-    nav {
-      position: sticky;
+    hr {
+      border: none;
+      border-top: 2px solid var(--color-hot-pink);
+      margin: 3rem 0;
+      opacity: 0.6;
+    }
+    .section-divider {
+      border-top: 3px solid var(--color-hot-pink);
+      margin: 4rem 0;
+    }
+    code, pre, .monospace {
+      font-family: "JetBrains Mono", "SF Mono", Monaco, Consolas, monospace;
+    }
+    #table-of-contents {
+      position: fixed;
+      left: 0;
       top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--color-light-blue);
+      border-right: 3px solid var(--color-electric-blue);
+      padding: 1.5rem;
+      overflow-y: auto;
       z-index: 100;
-      background: #f5f5f5;
-      border-bottom: 1px solid #dddddd;
-      padding: 1rem 1.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease;
+      box-shadow: 2px 0 8px rgba(0, 217, 255, 0.15);
     }
-    nav .toc-root {
+
+    #table-of-contents h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: var(--color-electric-blue);
+      font-weight: 700;
+    }
+
+    #table-of-contents ul {
       list-style: none;
+      padding: 0;
       margin: 0;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem 1.5rem;
-      font-size: 0.95rem;
     }
-    nav .toc-root > li {
-      margin-right: 1.5rem;
+
+    #table-of-contents li {
+      margin: 0.5rem 0;
     }
-    nav .toc-root > li > a {
-      font-weight: 600;
-    }
-    nav .toc-root > li > ul {
-      list-style: none;
-      margin: 0.4rem 0 0;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem 1rem;
-      font-weight: 400;
-    }
-    nav a {
-      color: #004b8d;
+
+    #table-of-contents a {
+      color: var(--color-ink-black);
       text-decoration: none;
+      display: block;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      font-weight: 500;
     }
-    nav a:hover {
-      text-decoration: underline;
+
+    #table-of-contents a:hover {
+      color: var(--color-white);
+      background: var(--color-electric-blue);
+    }
+
+    #table-of-contents a:active,
+    #table-of-contents a.active {
+      color: var(--color-white);
+      background: var(--color-hot-pink);
+    }
+
+    /* Nested navigation */
+    #table-of-contents ul ul {
+      margin-left: 1rem;
+      font-size: 0.95rem;
     }
     .example, .gm {
-      border-left: 4px solid #004b8d;
-      background: #f7fbff;
-      padding: 0.75rem 1rem;
-      margin: 1rem 0;
+      padding: 1.25rem;
+      margin: 2rem 0;
       font-size: 0.95rem;
     }
+    .example {
+      border-left: 4px solid var(--color-electric-blue);
+      background: var(--color-light-blue);
+      border-radius: 2px;
+
+      /* Rough torn-paper edges */
+      clip-path: polygon(
+        0% 1%, 2% 0%, 5% 0.5%, 8% 0%, 12% 1%, 15% 0.5%, 20% 0%, 25% 1%,
+        30% 0.5%, 35% 0%, 40% 1%, 45% 0.5%, 50% 0%, 55% 1%, 60% 0.5%,
+        65% 0%, 70% 1%, 75% 0.5%, 80% 0%, 85% 1%, 90% 0.5%, 95% 0%, 98% 1%, 100% 0.5%,
+        100% 99%, 98% 100%, 95% 99.5%, 90% 100%, 85% 99%, 80% 99.5%, 75% 100%, 70% 99%,
+        65% 99.5%, 60% 100%, 55% 99%, 50% 99.5%, 45% 100%, 40% 99%, 35% 99.5%, 30% 100%,
+        25% 99%, 20% 99.5%, 15% 100%, 12% 99%, 8% 99.5%, 5% 100%, 2% 99%, 0% 99.5%
+      );
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
     .gm {
-      border-left-color: #8b3c00;
-      background: #fff8f2;
+      border-left: 4px solid var(--color-hot-pink);
+      background: var(--color-light-pink);
+      border-radius: 2px;
+
+      /* Rough torn-paper edges (asymmetric variation) */
+      clip-path: polygon(
+        0% 0.5%, 3% 0%, 7% 1%, 10% 0.5%, 15% 0%, 20% 1%, 25% 0.5%, 30% 0%,
+        35% 1%, 40% 0.5%, 45% 0%, 50% 1%, 55% 0.5%, 60% 0%, 65% 1%, 70% 0.5%,
+        75% 0%, 80% 1%, 85% 0.5%, 90% 0%, 93% 1%, 97% 0.5%, 100% 0%,
+        100% 99.5%, 97% 100%, 93% 99%, 90% 99.5%, 85% 100%, 80% 99%, 75% 99.5%,
+        70% 100%, 65% 99%, 60% 99.5%, 55% 100%, 50% 99%, 45% 99.5%, 40% 100%,
+        35% 99%, 30% 99.5%, 25% 100%, 20% 99%, 15% 99.5%, 10% 100%, 7% 99%, 3% 99.5%, 0% 100%
+      );
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .sheet-block {
-      border: 1px solid #cccccc;
-      padding: 1rem 1.25rem;
-      margin: 1.5rem 0;
-      background: #ffffff;
+      border-left: 4px solid var(--color-electric-blue);
+      border-radius: 4px;
+      padding: 1.5rem 1.25rem;
+      margin: 2rem 0;
+      background: var(--color-white);
+      page-break-inside: avoid;
+
+      /* Rough torn-paper edges (third variation) */
+      clip-path: polygon(
+        0% 1%, 4% 0%, 8% 0.5%, 12% 0%, 16% 1%, 20% 0.5%, 24% 0%, 28% 1%,
+        32% 0.5%, 36% 0%, 40% 1%, 44% 0.5%, 48% 0%, 52% 1%, 56% 0.5%, 60% 0%,
+        64% 1%, 68% 0.5%, 72% 0%, 76% 1%, 80% 0.5%, 84% 0%, 88% 1%, 92% 0.5%, 96% 0%, 100% 1%,
+        100% 99%, 96% 100%, 92% 99.5%, 88% 100%, 84% 99%, 80% 99.5%, 76% 100%, 72% 99%,
+        68% 99.5%, 64% 100%, 60% 99%, 56% 99.5%, 52% 100%, 48% 99%, 44% 99.5%, 40% 100%,
+        36% 99%, 32% 99.5%, 28% 100%, 24% 99%, 20% 99.5%, 16% 100%, 12% 99%, 8% 99.5%, 4% 100%, 0% 99%
+      );
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
     }
     table {
       border-collapse: collapse;
       width: 100%;
-      margin: 1.5rem 0;
+      margin: 2rem 0;
       font-size: 0.95rem;
+      page-break-inside: avoid;
     }
     th, td {
-      border: 1px solid #cccccc;
-      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--color-border-gray);
+      padding: 0.5rem 0.8rem;
       text-align: left;
     }
     thead th {
-      background: #f0f0f0;
+      background: var(--color-electric-blue);
+      color: var(--color-white);
+      font-weight: 600;
     }
     tbody tr:nth-child(even) {
-      background: #fafafa;
+      background: var(--color-light-blue);
+    }
+    tbody tr:nth-child(odd) {
+      background: var(--color-white);
+    }
+    tbody tr:hover {
+      background: var(--color-light-blue);
+      filter: brightness(0.98);
+    }
+    /* Hot Pink table variant */
+    table.variant-pink thead th {
+      background: var(--color-hot-pink);
+      color: var(--color-white);
+    }
+    table.variant-pink tbody tr:nth-child(even) {
+      background: var(--color-light-pink);
+    }
+    /* Alternate table headers with Hot Pink */
+    table:nth-of-type(2n) thead th {
+      background: var(--color-hot-pink);
+    }
+    table:nth-of-type(2n) tbody tr:nth-child(even) {
+      background: var(--color-light-pink);
     }
     caption {
       font-weight: 600;
       margin-bottom: 0.5rem;
       text-align: left;
+      color: var(--color-ink-black);
+    }
+    /* General Links */
+    a {
+      color: var(--color-electric-blue);
+    }
+    a:hover {
+      color: var(--color-hot-pink);
     }
     /* ===================================
        RESPONSIVE LAYOUT - MOBILE FIRST
@@ -201,6 +359,12 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         font-size: 0.85rem;
+      }
+
+      /* Ensure Electric Blue headers persist on mobile */
+      thead th {
+        background: var(--color-electric-blue);
+        color: var(--color-white);
       }
 
       /* Better spacing for blocks */
@@ -310,11 +474,11 @@
       /* Enhanced hover states */
       nav a:hover {
         text-decoration: underline;
-        color: #003366;
+        color: var(--color-hot-pink);
       }
 
       a:hover {
-        color: #003366;
+        color: var(--color-hot-pink);
       }
 
       /* Enhanced spacing */
@@ -399,8 +563,8 @@
       position: absolute;
       top: -40px;
       left: 0;
-      background: #004b8d;
-      color: #ffffff;
+      background: var(--color-electric-blue);
+      color: var(--color-white);
       padding: 0.75rem 1rem;
       text-decoration: none;
       z-index: 1000;
@@ -410,32 +574,41 @@
 
     .skip-link:focus {
       top: 0;
-      outline: 3px solid #ffffff;
+      outline: 3px solid var(--color-white);
       outline-offset: 2px;
     }
 
     /* Focus Indicators - Clear visual feedback for keyboard navigation */
     a:focus,
     button:focus,
+    input:focus,
+    select:focus,
+    textarea:focus,
     summary:focus,
     [tabindex]:focus {
-      outline: 2px solid #004b8d;
+      outline: 3px solid var(--color-electric-blue);
       outline-offset: 2px;
     }
 
     /* Enhanced focus for keyboard-only users (not mouse clicks) */
     a:focus-visible,
     button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
     summary:focus-visible,
     [tabindex]:focus-visible {
-      outline: 3px solid #004b8d;
-      outline-offset: 3px;
+      outline: 3px solid var(--color-electric-blue);
+      outline-offset: 2px;
       border-radius: 2px;
     }
 
     /* Remove outline for mouse users while keeping keyboard focus */
     a:focus:not(:focus-visible),
     button:focus:not(:focus-visible),
+    input:focus:not(:focus-visible),
+    select:focus:not(:focus-visible),
+    textarea:focus:not(:focus-visible),
     summary:focus:not(:focus-visible),
     [tabindex]:focus:not(:focus-visible) {
       outline: none;
@@ -454,29 +627,40 @@
       border: 0;
     }
 
-    /* Focus within navigation */
+    /* Focus within navigation - Enhanced visibility */
     nav a:focus {
-      background: #e8f4ff;
+      outline: 3px solid var(--color-electric-blue);
+      outline-offset: 2px;
+      background: var(--color-light-blue);
       border-radius: 3px;
-      padding: 2px 6px;
-      margin: -2px -6px;
+      padding: 4px 8px;
+      margin: -4px -8px;
+    }
+
+    /* Hot Pink focus variant for GM sections */
+    .gm a:focus,
+    .gm button:focus {
+      outline-color: var(--color-hot-pink);
     }
 
     /* Accessibility: Reduced motion preference */
     @media (prefers-reduced-motion: reduce) {
-      * {
+      *,
+      *::before,
+      *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
       }
 
       nav {
-        transition: none;
+        transition: none !important;
       }
 
       /* Disable focus animations for reduced motion */
       .skip-link {
-        transition: none;
+        transition: none !important;
       }
     }
 
@@ -484,18 +668,31 @@
        PRINT STYLESHEET
        =================================== */
     @media print {
-      /* Page Setup */
+      /* ===================================
+         PAGE SETUP
+         =================================== */
       @page {
-        margin: 2cm;
+        margin: 0.75in 0.5in;
         size: letter;
       }
 
-      /* Base Typography - Optimized for Print */
+      /* Hide navigation and restore content width */
+      #table-of-contents {
+        display: none !important;
+      }
+
+      .skip-link {
+        display: none !important;
+      }
+
       body {
-        font-family: "Georgia", "Times New Roman", serif;
+        margin-left: 0 !important;
+        padding: 0 !important;
+        background-image: none !important;
+        background: white !important;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
         font-size: 11pt;
         line-height: 1.5;
-        background: white;
         color: black;
       }
 
@@ -505,11 +702,111 @@
         padding: 0;
       }
 
-      /* Headings - Clear Hierarchy */
+      /* ===================================
+         CRITICAL: Remove ALL borders and decorative elements
+         =================================== */
+      .example,
+      .gm,
+      .sheet-block,
+      table,
+      .character-sheet,
+      .reference-sheet {
+        border: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+        border-bottom: none !important;
+        clip-path: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Remove all visual effects */
+      * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        clip-path: none !important;
+        transition: none !important;
+        animation: none !important;
+        background-image: none !important;
+      }
+
+      /* Maintain structure with generous padding and spacing */
+      .example,
+      .gm,
+      .sheet-block {
+        padding: 1.5rem 2rem;
+        margin: 1.5rem 0;
+      }
+
+      /* Preserve backgrounds for visual organization */
+      .example {
+        background: var(--color-light-blue);
+      }
+
+      .gm {
+        background: var(--color-light-pink);
+      }
+
+      /* Color preservation */
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* ===================================
+         CRITICAL PAGE-BREAK STRATEGY
+         =================================== */
+
+      /* Character sheets and sheet blocks: Force single-page */
+      .sheet-block {
+        page-break-before: always;
+        page-break-after: always;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Legacy selectors for compatibility */
+      .character-sheet,
+      .reference-sheet,
+      .sheet-block.full-page {
+        page-break-before: always;
+        page-break-after: always;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Example and GM boxes: Prefer keeping together */
+      .example,
+      .gm {
+        page-break-inside: avoid;
+        orphans: 3;
+        widows: 3;
+      }
+
+      /* Tables: Keep small tables together, allow large tables to break */
+      table {
+        page-break-inside: auto;
+      }
+
+      thead {
+        display: table-header-group;
+      }
+
+      tbody tr {
+        page-break-inside: avoid;
+      }
+
+      /* Chapters: Always start on new page */
+      [id^="ch-"] {
+        page-break-before: always;
+      }
+
+      /* Headings: Prevent orphan headings */
       h1, h2, h3, h4, h5, h6 {
-        font-family: "Georgia", "Times New Roman", serif;
-        color: black;
         page-break-after: avoid;
+        orphans: 3;
+        widows: 3;
+        font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
         page-break-inside: avoid;
       }
 
@@ -517,19 +814,21 @@
         font-size: 20pt;
         margin-top: 0;
         margin-bottom: 12pt;
+        color: var(--color-electric-blue) !important;
       }
 
       h2 {
         font-size: 16pt;
         margin-top: 18pt;
         margin-bottom: 10pt;
-        page-break-before: always;
+        color: var(--color-electric-blue) !important;
       }
 
       h3 {
         font-size: 13pt;
         margin-top: 14pt;
         margin-bottom: 8pt;
+        color: var(--color-hot-pink) !important;
       }
 
       h4 {
@@ -537,25 +836,17 @@
         margin-top: 12pt;
         margin-bottom: 6pt;
         font-weight: bold;
+        color: var(--color-hot-pink) !important;
       }
 
-      /* Remove Interactive Elements */
-      nav {
-        display: none !important;
-      }
+      /* ===================================
+         PRESERVE COLORS AND TYPOGRAPHY IN PRINT
+         =================================== */
 
-      /* Remove Visual Effects */
-      * {
-        box-shadow: none !important;
-        text-shadow: none !important;
-        transition: none !important;
-        animation: none !important;
-      }
-
-      /* Links - Show URLs for External Links */
+      /* Preserve link colors */
       a {
-        color: black;
-        text-decoration: none;
+        color: var(--color-electric-blue);
+        text-decoration: underline;
       }
 
       a[href^="http"]:after {
@@ -574,39 +865,7 @@
         content: "";
       }
 
-      /* Page Break Controls */
-      header, section, article {
-        page-break-inside: avoid;
-        margin-bottom: 18pt;
-      }
-
-      .part-intro {
-        page-break-after: always;
-      }
-
-      /* Prevent Orphans and Widows */
-      p, li {
-        orphans: 3;
-        widows: 3;
-      }
-
-      p {
-        margin: 0 0 8pt 0;
-      }
-
-      /* Examples and GM Guidance - Print Friendly */
-      .example, .gm {
-        border-left: 3pt solid black;
-        background: white;
-        padding: 8pt 10pt;
-        margin: 10pt 0;
-        page-break-inside: avoid;
-      }
-
-      .gm {
-        border-left-color: #333;
-      }
-
+      /* Examples and GM Guidance - Labels */
       .example:before {
         content: "Example: ";
         font-weight: bold;
@@ -621,46 +880,67 @@
         margin-bottom: 4pt;
       }
 
-      /* Sheet Blocks */
-      .sheet-block {
-        border: 2pt solid black;
-        padding: 10pt 12pt;
-        margin: 12pt 0;
-        background: white;
-        page-break-inside: avoid;
+      /* Prevent Orphans and Widows */
+      p, li {
+        orphans: 3;
+        widows: 3;
       }
 
-      /* Tables - Optimized for Print */
+      p {
+        margin: 0 0 8pt 0;
+      }
+
+      /* Allow natural breaks for sections */
+      header, section, article {
+        page-break-inside: auto;
+        margin-bottom: 18pt;
+      }
+
+      .part-intro {
+        page-break-after: always;
+      }
+
+      /* ===================================
+         TABLE STYLING (NO BORDERS)
+         =================================== */
       table {
         border-collapse: collapse;
         width: 100%;
         margin: 12pt 0;
         font-size: 9pt;
-        page-break-inside: avoid;
-      }
-
-      /* Table Headers Repeat on Each Page */
-      thead {
-        display: table-header-group;
       }
 
       tfoot {
         display: table-footer-group;
       }
 
+      /* NO borders on table cells */
       th, td {
-        border: 1pt solid black;
-        padding: 4pt 6pt;
+        border: none !important;
+        padding: 0.75rem 1rem;
         text-align: left;
       }
 
       thead th {
-        background: #e0e0e0;
-        font-weight: bold;
+        background: var(--color-electric-blue);
+        color: var(--color-white);
+        font-weight: 600;
+      }
+
+      tbody td {
+        padding: 0.5rem 1rem;
       }
 
       tbody tr:nth-child(even) {
-        background: #f5f5f5;
+        background: var(--color-light-blue);
+      }
+
+      table:nth-of-type(2n) thead th {
+        background: var(--color-hot-pink);
+      }
+
+      table:nth-of-type(2n) tbody tr:nth-child(even) {
+        background: var(--color-light-pink);
       }
 
       caption {
@@ -680,14 +960,9 @@
         margin-bottom: 4pt;
       }
 
-      /* Remove Background Colors and Images */
+      /* Remove Background Images (but keep background colors) */
       * {
         background-image: none !important;
-      }
-
-      .example, .gm, tbody tr:nth-child(even), thead th {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
       }
 
       /* Ensure High Contrast */
@@ -705,14 +980,15 @@
       code, pre {
         font-family: "Courier New", monospace;
         font-size: 9pt;
-        background: white;
-        border: 1pt solid black;
+        background: var(--color-light-gray);
+        border: none !important;
         padding: 2pt 4pt;
       }
 
       pre {
         white-space: pre-wrap;
         page-break-inside: avoid;
+        padding: 8pt;
       }
 
       /* Glossary Section - Two Column Layout */
@@ -783,9 +1059,217 @@
         overflow: visible !important;
       }
     }
+
+    /* ===================================
+       COVER PAGE STYLES
+       =================================== */
+    .cover-page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      margin-left: calc(-1 * var(--sidebar-width));
+      margin-top: -2rem;
+      margin-right: -3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg,
+        #0a0a0a 0%,
+        #1a1a2e 25%,
+        #16213e 50%,
+        #0f3460 75%,
+        #1a1a2e 100%
+      );
+      overflow: hidden;
+      page-break-after: always;
+    }
+
+    /* Geometric background decorations */
+    .cover-page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(0deg, transparent 24%, rgba(0, 217, 255, 0.05) 25%, rgba(0, 217, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.05) 75%, rgba(0, 217, 255, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(0, 217, 255, 0.05) 25%, rgba(0, 217, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.05) 75%, rgba(0, 217, 255, 0.05) 76%, transparent 77%, transparent);
+      background-size: 50px 50px;
+      opacity: 0.4;
+      z-index: 1;
+    }
+
+    /* Electric circles decoration */
+    .cover-page::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      border: 2px solid var(--color-electric-blue);
+      border-radius: 50%;
+      opacity: 0.15;
+      z-index: 1;
+      box-shadow:
+        0 0 100px rgba(0, 217, 255, 0.3),
+        inset 0 0 100px rgba(0, 217, 255, 0.1);
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 4rem;
+    }
+
+    .cover-title {
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      font-size: 6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin: 0;
+      background: linear-gradient(135deg,
+        var(--color-electric-blue) 0%,
+        var(--color-hot-pink) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow:
+        0 0 80px rgba(0, 217, 255, 0.5),
+        0 0 120px rgba(255, 0, 110, 0.3);
+      filter: drop-shadow(0 0 40px rgba(0, 217, 255, 0.4));
+      margin-bottom: 1rem;
+    }
+
+    .cover-subtitle {
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      font-size: 2rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      color: var(--color-electric-blue);
+      margin: 0 0 4rem 0;
+      text-transform: uppercase;
+      text-shadow: 0 0 30px rgba(0, 217, 255, 0.6);
+    }
+
+    .cover-author {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--color-white);
+      margin: 0;
+      padding-top: 3rem;
+      border-top: 2px solid var(--color-hot-pink);
+      display: inline-block;
+      letter-spacing: 0.05em;
+    }
+
+    /* Decorative corner elements */
+    .corner-decor {
+      position: absolute;
+      z-index: 2;
+    }
+
+    .corner-decor.top-left {
+      top: 3rem;
+      left: 3rem;
+      width: 150px;
+      height: 150px;
+      border-top: 3px solid var(--color-electric-blue);
+      border-left: 3px solid var(--color-electric-blue);
+    }
+
+    .corner-decor.top-right {
+      top: 3rem;
+      right: 3rem;
+      width: 150px;
+      height: 150px;
+      border-top: 3px solid var(--color-hot-pink);
+      border-right: 3px solid var(--color-hot-pink);
+    }
+
+    .corner-decor.bottom-left {
+      bottom: 3rem;
+      left: 3rem;
+      width: 150px;
+      height: 150px;
+      border-bottom: 3px solid var(--color-hot-pink);
+      border-left: 3px solid var(--color-hot-pink);
+    }
+
+    .corner-decor.bottom-right {
+      bottom: 3rem;
+      right: 3rem;
+      width: 150px;
+      height: 150px;
+      border-bottom: 3px solid var(--color-electric-blue);
+      border-right: 3px solid var(--color-electric-blue);
+    }
+
+    /* Print styles for cover */
+    @media print {
+      .cover-page {
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-after: always;
+        height: 100vh;
+        width: 100%;
+        overflow: visible;
+      }
+
+      .cover-content {
+        padding: 2rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .cover-title {
+        color: var(--color-electric-blue);
+        -webkit-text-fill-color: var(--color-electric-blue);
+        text-shadow: none;
+        filter: none;
+        font-size: 5rem;
+        letter-spacing: 0.1em;
+      }
+
+      .cover-subtitle {
+        text-shadow: none;
+        font-size: 1.75rem;
+        letter-spacing: 0.2em;
+      }
+
+      .cover-author {
+        color: var(--color-ink-black);
+        font-size: 1.25rem;
+        border-top-color: var(--color-hot-pink);
+      }
+
+      .corner-decor {
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Cover Page -->
+  <div class="cover-page">
+    <div class="corner-decor top-left"></div>
+    <div class="corner-decor top-right"></div>
+    <div class="corner-decor bottom-left"></div>
+    <div class="corner-decor bottom-right"></div>
+
+    <div class="cover-content">
+      <h1 class="cover-title">RAZORWEAVE</h1>
+      <p class="cover-subtitle">Core Rulebook</p>
+      <p class="cover-author">By Panda Edwards</p>
+    </div>
+  </div>
+
   <!-- Skip Links for Keyboard Navigation -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <a href="#table-of-contents" class="skip-link">Skip to table of contents</a>
@@ -7642,6 +8126,7 @@
         • _______________________________<br />
         • _______________________________
       </p>
+      </div>
 
       <hr />
 

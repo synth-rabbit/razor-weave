@@ -1,5 +1,5 @@
 <!-- Razorweave Core Rulebook - Web Version -->
-<!-- Static HTML version for browser viewing -->
+<!-- Interactive features with JavaScript for browser viewing -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,56 +7,19 @@
   <title>Razorweave Core Rulebook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Spectral+SC:wght@400;500&display=swap');
-
-    :root {
-      --color-parchment-light: #f8f2e5;
-      --color-parchment-dark: #e6dac1;
-      --color-parchment-edge: rgba(161, 135, 98, 0.45);
-      --color-ink: #221a11;
-      --color-soft-ink: rgba(34, 26, 17, 0.85);
-      --color-ember: #b7482b;
-      --color-sapphire: #0d4f8b;
-      --color-amethyst: #6a3fb5;
-      --color-gold: #c9a75f;
-      --color-cream: #f4ede1;
-      --color-charcoal: #151014;
-      --shadow-card: 0 25px 55px rgba(21, 16, 20, 0.2);
-      --shadow-edge: inset 0 0 35px rgba(0, 0, 0, 0.18);
-      --font-display: "Spectral SC", "Cormorant Garamond", serif;
-      --font-body: "Source Serif 4", "Georgia", serif;
-      --font-ui: "Inter", "Source Sans 3", sans-serif;
-      --space-1: 0.25rem;
-      --space-2: 0.5rem;
-      --space-3: 0.75rem;
-      --space-4: 1rem;
-      --space-5: 1.5rem;
-      --space-6: 2rem;
-      --space-7: 3rem;
-      --radius-panel: 26px;
-      --radius-card: 18px;
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: var(--font-body);
-      background: radial-gradient(circle at top, rgba(13, 79, 139, 0.2) 0%, rgba(21, 16, 20, 0.9) 55%, #0a090c 100%);
-      color: var(--color-ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1.125rem; /* 18px base */
+      background: #ffffff;
+      color: #222222;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
-      line-height: 1.65;
     }
     main {
       max-width: 960px;
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem;
-      line-height: 1.6;
+      line-height: 1.7; /* Changed from 1.6 */
     }
     header, section, article {
       margin-bottom: 3rem;
@@ -66,21 +29,32 @@
       line-height: 1.2;
     }
     h1 {
-      font-size: 2.4rem;
-      margin-bottom: 0.75rem;
+      font-size: 2.75rem; /* Increased from 2.4rem */
+      font-weight: 700;
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
     }
     h2 {
-      font-size: 2rem;
+      font-size: 2rem; /* Same */
+      font-weight: 600;
       margin-top: 2.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.2;
     }
     h3 {
-      font-size: 1.3rem;
-      margin-top: 1.75rem;
+      font-size: 1.4rem; /* Increased from 1.3rem */
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
     }
     h4 {
-      font-size: 1.1rem;
+      font-size: 1.1rem; /* Same */
+      font-weight: 500;
       margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
     }
     nav {
       position: sticky;
@@ -147,6 +121,12 @@
       border-left-color: #8b3c00;
       background: #fff8f2;
     }
+    .sheet-block {
+      border: 1px solid #cccccc;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      background: #ffffff;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
@@ -169,1170 +149,269 @@
       margin-bottom: 0.5rem;
       text-align: left;
     }
-
-    /* ==========================
-       RAZORWEAVE CODEX BASE THEME
-       ========================== */
-
-    main {
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-size: 17px;
-      color: var(--color-soft-ink);
-    }
-
-    a {
-      color: var(--color-sapphire);
-      text-decoration: none;
-      transition: color 200ms ease, text-shadow 200ms ease;
-    }
-
-    a:hover,
-    a:focus-visible {
-      color: var(--color-ember);
-      text-shadow: 0 0 8px rgba(13, 79, 139, 0.35);
-    }
-
-    .codex-shell {
-      position: relative;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: clamp(1.5rem, 4vw, 4rem);
-      display: grid;
-      grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
-      gap: clamp(1rem, 3vw, 4rem);
-      isolation: isolate;
-    }
-
-    .codex-shell.toc-floating {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 20% 10%, rgba(183, 72, 43, 0.25), transparent 45%), radial-gradient(circle at 80% 0%, rgba(13, 79, 139, 0.35), transparent 55%), radial-gradient(circle at 50% 90%, rgba(106, 63, 181, 0.18), transparent 50%);
-      opacity: 0.65;
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    .codex-content {
-      position: relative;
-      background: linear-gradient(180deg, var(--color-parchment-light) 0%, var(--color-parchment-dark) 100%);
-      border-radius: var(--radius-panel);
-      padding: clamp(2rem, 4vw, 4rem);
-      box-shadow: var(--shadow-card);
-      border: 1px solid rgba(201, 167, 95, 0.35);
-      overflow: hidden;
-    }
-
-    .codex-content::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(rgba(255, 255, 255, 0.45) 0.5px, transparent 0.6px),
-        radial-gradient(rgba(34, 26, 17, 0.05) 0.7px, transparent 0.8px),
-        linear-gradient(120deg, rgba(201, 167, 95, 0.12), transparent 55%);
-      background-size: 3px 3px, 7px 7px, 100% 100%;
-      opacity: 0.75;
-      mix-blend-mode: multiply;
-      pointer-events: none;
-    }
-
-    .codex-content > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    header,
-    section,
-    article {
-      margin-bottom: clamp(2rem, 4vw, 3rem);
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      font-family: var(--font-display);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--color-charcoal);
-      margin-top: clamp(2rem, 4vw, 3rem);
-      margin-bottom: clamp(0.4rem, 1vw, 0.85rem);
-      line-height: 1.15;
-    }
-
-    h1 {
-      font-size: clamp(2.6rem, 4vw, 3.6rem);
-    }
-
-    h2 {
-      font-size: clamp(2rem, 3vw, 2.6rem);
-      border-top: 1px solid rgba(34, 26, 17, 0.1);
-      padding-top: var(--space-3);
-    }
-
-    h3 {
-      font-size: clamp(1.4rem, 2vw, 1.8rem);
-      font-weight: 500;
-      text-transform: none;
-      letter-spacing: 0.02em;
-      font-family: var(--font-body);
-      color: var(--color-ink);
-    }
-
-    h4,
-    h5,
-    h6 {
-      font-size: clamp(1.1rem, 1.6vw, 1.4rem);
-      font-family: var(--font-ui);
-      letter-spacing: 0.12em;
-      font-weight: 600;
-    }
-
-    p,
-    li {
-      font-family: var(--font-body);
-      font-size: 1rem;
-      color: var(--color-soft-ink);
-      margin-bottom: var(--space-4);
-    }
-
-    blockquote {
-      font-style: italic;
-      position: relative;
-      padding-left: var(--space-5);
-      color: rgba(34, 26, 17, 0.8);
-    }
-
-    blockquote::before {
-      content: "“";
-      position: absolute;
-      left: 0;
-      top: -0.5rem;
-      font-size: 3rem;
-      color: rgba(183, 72, 43, 0.35);
-    }
-
-    .codex-surface-shadow {
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-panel);
-      box-shadow: var(--shadow-edge);
-      pointer-events: none;
-    }
-
-    .site-hero {
-      position: relative;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: clamp(1.5rem, 3vw, 3.5rem);
-      padding: clamp(2rem, 4vw, 3.75rem);
-      margin-bottom: clamp(2.5rem, 4vw, 4rem);
-      border-radius: var(--radius-panel);
-      background: linear-gradient(135deg, rgba(13, 79, 139, 0.85), rgba(106, 63, 181, 0.8));
-      color: #fff;
-      overflow: hidden;
-    }
-
-    .site-hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: url('data:image/svg+xml,%3Csvg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23ffffff" fill-opacity="0.04"%3E%3Cpath d="M0 100h200v1H0z"/%3E%3Cpath d="M100 0v200h1V0z"/%3E%3C/g%3E%3C/svg%3E');
-      mix-blend-mode: screen;
-      opacity: 0.5;
-    }
-
-    .site-hero > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-sigil {
-      width: clamp(88px, 10vw, 120px);
-      height: clamp(88px, 10vw, 120px);
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      letter-spacing: 0.2em;
-    }
-
-    .hero-text {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-    }
-
-    .hero-kicker {
-      font-family: var(--font-ui);
-      text-transform: uppercase;
-      letter-spacing: 0.25em;
-      font-size: 0.85rem;
-    }
-
-    .hero-title {
-      font-size: clamp(2rem, 4vw, 3rem);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin: 0;
-    }
-
-    .hero-lede {
-      font-size: 1.1rem;
-      max-width: 70ch;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-      margin-top: var(--space-3);
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.65rem 1.4rem;
-      border-radius: 999px;
-      font-family: var(--font-ui);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 0.8rem;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      color: #fff;
-      background: transparent;
-    }
-
-    .hero-cta.primary {
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
-    }
-
-    .hero-cta svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    .chapter-hero {
-      position: relative;
-      border: 1px solid rgba(34, 26, 17, 0.12);
-      border-radius: var(--radius-panel);
-      padding: clamp(1.75rem, 4vw, 3rem);
-      background: linear-gradient(120deg, rgba(244, 237, 225, 0.85), rgba(230, 206, 166, 0.85));
-      overflow: hidden;
-      display: grid;
-      gap: var(--space-5);
-    }
-
-    .chapter-hero::before {
-      content: "";
-      position: absolute;
-      inset: -20%;
-      background: radial-gradient(circle at 20% 20%, rgba(13, 79, 139, 0.15), transparent 55%), radial-gradient(circle at 80% 0%, rgba(183, 72, 43, 0.18), transparent 60%);
-      opacity: 0.9;
-    }
-
-    .chapter-hero > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .chapter-meta {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-    }
-
-    .chapter-number {
-      font-size: 1.2rem;
-      letter-spacing: 0.45em;
-      text-transform: uppercase;
-      color: rgba(34, 26, 17, 0.6);
-      font-family: var(--font-ui);
-    }
-
-    .chapter-label {
-      font-family: var(--font-ui);
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      font-size: 0.8rem;
-      color: rgba(34, 26, 17, 0.65);
-    }
-
-    .chapter-lede {
-      font-size: 1.05rem;
-      margin-bottom: 0;
-    }
-
-    .chapter-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-    }
-
-    .chapter-spotlight {
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: var(--radius-card);
-      padding: var(--space-4);
-      border: 1px solid rgba(34, 26, 17, 0.1);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-    }
-
-    .chapter-spotlight ul {
-      margin: var(--space-3) 0 0 1.2rem;
-      padding: 0;
-    }
-
-    .chapter-spotlight li {
-      font-size: 0.95rem;
-      color: rgba(34, 26, 17, 0.85);
-    }
-
-    .section-label {
-      font-family: var(--font-ui);
-      text-transform: uppercase;
-      letter-spacing: 0.35em;
-      font-size: 0.78rem;
-      color: rgba(34, 26, 17, 0.45);
-      margin-bottom: var(--space-2);
-      display: inline-block;
-    }
-
-    .dropcap:first-letter {
-      float: left;
-      font-size: 4.2rem;
-      line-height: 0.85;
-      padding-right: var(--space-3);
-      font-family: var(--font-display);
-      color: var(--color-ember);
-      text-transform: uppercase;
-    }
-
-    .callout,
-    .ledger,
-    .quick-ref-grid,
-    .index-letter-group {
-      border-radius: var(--radius-card);
-      padding: var(--space-4);
-      margin: var(--space-5) 0;
-      position: relative;
-      border: 1px solid rgba(34, 26, 17, 0.08);
-      background: rgba(255, 255, 255, 0.8);
-      box-shadow: 0 20px 40px rgba(21, 16, 20, 0.12);
-    }
-
-    .callout h4 {
-      margin-top: 0;
-      font-family: var(--font-ui);
-      letter-spacing: 0.15em;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-    }
-
-    .callout::before,
-    .ledger::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-card);
-      opacity: 0.35;
-      pointer-events: none;
-      mix-blend-mode: color;
-    }
-
-    .callout-rule::before,
-    .ledger-rule::before {
-      background: linear-gradient(120deg, rgba(13, 79, 139, 0.4), rgba(12, 18, 31, 0.1));
-    }
-
-    .callout-example::before,
-    .ledger-example::before {
-      background: linear-gradient(120deg, rgba(106, 63, 181, 0.35), rgba(34, 26, 17, 0.1));
-    }
-
-    .callout-gm::before,
-    .ledger-gm::before {
-      background: linear-gradient(120deg, rgba(183, 72, 43, 0.35), rgba(201, 167, 95, 0.15));
-    }
-
-    .callout footer {
-      font-size: 0.85rem;
-      font-family: var(--font-ui);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: rgba(34, 26, 17, 0.45);
-      margin-top: var(--space-3);
-    }
-
-    .glossary-link {
-      position: relative;
-      border-bottom: 1px dotted rgba(13, 79, 139, 0.5);
-      color: var(--color-sapphire);
-      cursor: pointer;
-    }
-
-    .glossary-link:focus-visible {
-      outline-offset: 0.2rem;
-    }
-
-    .glossary-tooltip {
-      position: fixed;
-      max-width: 280px;
-      padding: var(--space-3);
-      background: #0f1521;
-      color: #fff;
-      border-radius: var(--radius-card);
-      font-family: var(--font-ui);
-      font-size: 0.85rem;
-      line-height: 1.4;
-      z-index: 1200;
-      pointer-events: none;
-      transform: translate(-50%, calc(-100% - 12px));
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
-      opacity: 0;
-      transition: opacity 120ms ease;
-    }
-
-    .glossary-tooltip::after {
-      content: "";
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 6px;
-      border-style: solid;
-      border-color: #0f1521 transparent transparent transparent;
-    }
-
-    .glossary-tooltip.is-visible {
-      opacity: 1;
-    }
-
-    .ledger {
-      position: relative;
-      padding: clamp(1.5rem, 3vw, 2.5rem);
-      background: rgba(255, 255, 255, 0.85);
-    }
-
-    .ledger header {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-      align-items: baseline;
-      margin-bottom: var(--space-4);
-    }
-
-    .ledger h2 {
-      margin: 0;
-      padding-top: 0;
-      border-top: none;
-    }
-
-    .ledger-filters {
-      display: flex;
-      gap: var(--space-2);
-      flex-wrap: wrap;
-    }
-
-    .chip {
-      border: 1px solid rgba(34, 26, 17, 0.2);
-      border-radius: 999px;
-      padding: 0.35rem 0.9rem;
-      font-family: var(--font-ui);
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: rgba(255, 255, 255, 0.6);
-      cursor: pointer;
-    }
-
-    .chip.active {
-      background: rgba(13, 79, 139, 0.12);
-      border-color: rgba(13, 79, 139, 0.4);
-      color: var(--color-sapphire);
-    }
-
-    .ledger-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: var(--space-3);
-    }
-
-    .ledger-entry {
-      padding: var(--space-3);
-      border-radius: var(--radius-card);
-      border: 1px solid rgba(34, 26, 17, 0.12);
-      background: rgba(255, 255, 255, 0.9);
-      min-height: 120px;
-    }
-
-    .ledger-entry h3 {
-      margin: 0 0 var(--space-2);
-      font-size: 1rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .ledger-entry p {
-      margin-bottom: var(--space-2);
-    }
-
-    .index-nav ul {
-      display: inline-flex;
-      gap: var(--space-3);
-      list-style: none;
-      padding: 0;
-      margin: var(--space-4) 0;
-      flex-wrap: wrap;
-    }
-
-    .index-nav a {
-      font-family: var(--font-ui);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-      color: rgba(34, 26, 17, 0.65);
-    }
-
-    .quick-ref-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: var(--space-4);
-    }
-
-    .quick-ref-card table {
-      font-size: 0.9rem;
-    }
-
-    .alphabetical-index {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: var(--space-4);
-    }
-
-    .alphabetical-index h3 {
-      font-family: var(--font-display);
-      letter-spacing: 0.2em;
-      margin-top: 0;
-    }
-
-    .quick-ref-card h3 {
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.95rem;
-    }
-
-    .quick-ref-card {
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: var(--radius-card);
-      padding: var(--space-3);
-      border: 1px solid rgba(34, 26, 17, 0.12);
-      box-shadow: 0 18px 30px rgba(12, 18, 31, 0.08);
-    }
-
-    .quick-ref-card .ref-link {
-      font-family: var(--font-ui);
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(34, 26, 17, 0.5);
-      margin-top: var(--space-2);
-    }
-
-    .alphabetical-index dl {
-      margin: 0;
-    }
-
-
-    .toc-panel {
-      align-self: flex-start;
-      position: sticky;
-      top: clamp(1rem, 3vw, 3rem);
-      background: rgba(244, 237, 225, 0.7);
-      border-radius: var(--radius-panel);
-      padding: var(--space-4);
-      border: 1px solid rgba(201, 167, 95, 0.45);
-      box-shadow: var(--shadow-card);
-      overflow: hidden;
-      min-height: 60vh;
-      transition: transform 350ms ease, box-shadow 200ms ease;
-    }
-
-    .toc-panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(250, 247, 240, 0.9) 0%, rgba(232, 214, 183, 0.85) 100%);
-      mix-blend-mode: multiply;
-      z-index: 0;
-    }
-
-    .toc-panel > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .toc-panel nav {
-      position: static;
-      background: transparent;
-      border: 0;
-      padding: 0;
-      box-shadow: none;
-    }
-
-    .codex-shell.toc-floating .toc-panel {
-      position: fixed;
-      top: clamp(1rem, 4vw, 3rem);
-      left: clamp(1rem, 4vw, 3rem);
-      width: min(320px, calc(100% - 2rem));
-      max-height: calc(100vh - clamp(2rem, 10vw, 6rem));
-      transform: translateX(calc(-100% + 58px));
-      transition: transform 350ms ease, box-shadow 250ms ease, opacity 250ms ease;
-      box-shadow: 0 35px 55px rgba(7, 6, 12, 0.45), var(--shadow-card);
-      z-index: 950;
-    }
-
-    .codex-shell.toc-floating .toc-panel:not(.toc-visible) .toc-scroll {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .codex-shell.toc-floating .toc-panel.toc-visible {
-      transform: translateX(0);
-    }
-
-    .toc-scrim {
-      position: fixed;
-      inset: 0;
-      background: rgba(9, 8, 12, 0.55);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 250ms ease;
-      z-index: 900;
-    }
-
-    .codex-shell.toc-overlay-active .toc-scrim {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .toc-toggle {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid rgba(13, 79, 139, 0.4);
-      background: rgba(255, 255, 255, 0.4);
-      color: var(--color-sapphire);
-      font-family: var(--font-ui);
-      font-weight: 600;
-      cursor: pointer;
-      margin-bottom: var(--space-4);
-      box-shadow: inset 0 0 12px rgba(201, 167, 95, 0.4);
-    }
-
-    .toc-toggle-label {
-      font-family: var(--font-ui);
-      font-size: 0.85rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-    }
-
-    .codex-shell.toc-floating .toc-toggle {
-      position: absolute;
-      top: 50%;
-      right: -2rem;
-      transform: rotate(-90deg) translateY(50%);
-      transform-origin: center;
-      width: auto;
-      height: auto;
-      padding: 0.3rem 0.7rem;
-      border-radius: var(--radius-card);
-      letter-spacing: 0.35em;
-      background: rgba(13, 79, 139, 0.85);
-      color: rgba(255, 255, 255, 0.9);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .toc-scroll {
-      max-height: calc(100vh - 7rem);
-      overflow-y: auto;
-      padding-right: var(--space-2);
-      transition: opacity 200ms ease;
-    }
-
-    .toc-root {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      font-family: var(--font-ui);
-    }
-
-    .toc-root > li > a {
-      display: block;
-      font-weight: 600;
-      color: var(--color-charcoal);
-      letter-spacing: 0.08em;
-      margin-bottom: var(--space-2);
-    }
-
-    .toc-root ul {
-      list-style: none;
-      padding-left: var(--space-4);
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-
-    .toc-root ul a {
-      font-weight: 400;
-      font-size: 0.92rem;
-      color: rgba(34, 26, 17, 0.85);
-    }
-
-    .toc-root a:hover {
-      color: var(--color-ember);
-    }
-
-    .toc-pin {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-family: var(--font-ui);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.75rem;
-      border-radius: 999px;
-      border: 1px solid rgba(13, 79, 139, 0.3);
-      padding: 0.4rem 0.9rem;
-      background: rgba(255, 255, 255, 0.6);
-      color: var(--color-sapphire);
-      margin-bottom: var(--space-3);
-      cursor: pointer;
-    }
-
-    .toc-pin[aria-pressed="false"] {
-      background: rgba(13, 79, 139, 0.08);
-      color: var(--color-ember);
-    }
-
-    .example,
-    .gm {
-      border-left: 5px solid var(--color-sapphire);
-      background: linear-gradient(120deg, rgba(13, 79, 139, 0.12), rgba(244, 237, 225, 0.5));
-      padding: var(--space-4);
-      margin: var(--space-5) 0;
-      border-radius: var(--radius-card);
-      box-shadow: 0 8px 22px rgba(13, 79, 139, 0.15);
-    }
-
-    .gm {
-      border-left-color: var(--color-ember);
-      background: linear-gradient(120deg, rgba(183, 72, 43, 0.12), rgba(244, 237, 225, 0.65));
-    }
-
-    .sheet-set {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-6);
-    }
-
-    .sheet {
-      position: relative;
-      border-radius: var(--radius-panel);
-      padding: clamp(2rem, 4vw, 3rem);
-      border: 1px solid rgba(34, 26, 17, 0.2);
-      background: linear-gradient(145deg, rgba(244, 237, 225, 0.92), rgba(230, 206, 166, 0.82));
-      box-shadow: 0 30px 55px rgba(12, 18, 31, 0.18);
-      overflow: hidden;
-    }
-
-    .sheet::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(0deg, rgba(34, 26, 17, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 26, 17, 0.04) 1px, transparent 1px);
-      background-size: 32px 32px;
-      opacity: 0.6;
-      pointer-events: none;
-    }
-
-    .sheet::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.5), transparent 60%);
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    .sheet header {
-      display: flex;
-      justify-content: space-between;
-      gap: var(--space-4);
-      flex-wrap: wrap;
-      margin-bottom: var(--space-4);
-      position: relative;
-      z-index: 1;
-    }
-
-    .sheet-title {
-      margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      font-size: 1rem;
-    }
-
-    .sheet-subtitle {
-      margin: var(--space-1) 0 0;
-      font-size: 0.95rem;
-      color: rgba(34, 26, 17, 0.75);
-    }
-
-    .sheet-tools {
-      display: inline-flex;
-      gap: var(--space-2);
-      align-items: center;
-    }
-
-    .sheet-tools button {
-      border: 1px solid rgba(34, 26, 17, 0.2);
-      border-radius: 999px;
-      padding: 0.35rem 0.9rem;
-      background: rgba(255, 255, 255, 0.7);
-      font-family: var(--font-ui);
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    .sheet-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: var(--space-3);
-    }
-
-    .sheet-section {
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid rgba(34, 26, 17, 0.12);
-      border-radius: var(--radius-card);
-      padding: var(--space-3);
-      min-height: 120px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .sheet-section h4 {
-      margin-top: 0;
-      margin-bottom: var(--space-2);
-      font-size: 0.92rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .sheet-section .section-label {
-      margin-bottom: var(--space-1);
-    }
-
-    .span-12 { grid-column: span 12; }
-    .span-9 { grid-column: span 9; }
-    .span-8 { grid-column: span 8; }
-    .span-6 { grid-column: span 6; }
-    .span-4 { grid-column: span 4; }
-    .span-3 { grid-column: span 3; }
-
-    .sheet-field {
-      margin-bottom: var(--space-2);
-    }
-
-    .sheet-field label {
-      display: block;
-      font-family: var(--font-ui);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.25em;
-      color: rgba(34, 26, 17, 0.6);
-      margin-bottom: 0.25rem;
-    }
-
-    .field-blank {
-      border-bottom: 1px solid rgba(34, 26, 17, 0.35);
-      min-height: 1.6rem;
-    }
-
-    .field-blank.tall {
-      min-height: 2.8rem;
-    }
-
-    .field-blank.short {
-      width: 60%;
-    }
-
-    .sheet-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    .sheet-list li {
-      padding: 0.2rem 0;
-      border-bottom: 1px dotted rgba(34, 26, 17, 0.2);
-    }
-
-    .sheet-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .sheet-tag {
-      border: 1px solid rgba(34, 26, 17, 0.2);
-      border-radius: 6px;
-      padding: 0.15rem 0.6rem;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .sheet-trackers {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .sheet-tracker {
-      flex: 1;
-      min-width: 120px;
-    }
-
-    .sheet-tracker label {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 0.15rem;
-    }
-
-    .tracker-pips {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 0.25rem;
-    }
-
-    .tracker-pip {
-      border: 1px solid rgba(34, 26, 17, 0.35);
-      height: 1.2rem;
-      border-radius: 3px;
-    }
-
-    .sheet-meter {
-      margin-top: var(--space-2);
-    }
-
-    .sheet-meter label {
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: rgba(34, 26, 17, 0.6);
-      display: block;
-      margin-bottom: 0.2rem;
-    }
-
-    .meter-bar {
-      width: 100%;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(34, 26, 17, 0.12);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .meter-bar::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(13, 79, 139, 0.6), rgba(106, 63, 181, 0.6));
-      width: 50%;
-    }
-
-    .sheet-notes {
-      font-size: 0.85rem;
-      color: rgba(34, 26, 17, 0.75);
-      margin-top: var(--space-2);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: var(--space-5) 0;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: var(--radius-card);
-      overflow: hidden;
-    }
-
-    th {
-      background: rgba(13, 79, 139, 0.08);
-      color: var(--color-charcoal);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.85rem;
-    }
-
-    th,
-    td {
-      border: 1px solid rgba(34, 26, 17, 0.1);
-      padding: var(--space-3);
-      text-align: left;
-    }
-
-    tbody tr:nth-child(even) {
-      background: rgba(244, 237, 225, 0.35);
-    }
-    @media (min-width: 1024px) {
-      .chapter-hero {
-        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-        align-items: start;
-      }
-    }
-
     /* ===================================
-       RESPONSIVE LAYOUT
+       RESPONSIVE LAYOUT - MOBILE FIRST
        =================================== */
 
-    @media (max-width: 1280px) {
-      .codex-shell {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    /* Base styles (Mobile < 640px) */
+    /* Mobile-first approach - base styles already optimized for mobile */
 
-      .toc-panel {
-        position: static;
-        order: -1;
-        margin-bottom: var(--space-5);
-      }
-    }
-
-    @media (max-width: 960px) {
+    /* Mobile specific overrides */
+    @media (max-width: 640px) {
+      /* Typography scaling for mobile */
       body {
         font-size: 16px;
       }
 
-      .codex-shell {
-        padding: var(--space-5) var(--space-4);
-      }
-
-      .codex-content {
-        padding: var(--space-5) var(--space-4);
-      }
-
-      .toc-panel {
-        padding: var(--space-4);
-      }
-
       h1 {
-        font-size: clamp(2.2rem, 7vw, 2.8rem);
+        font-size: 1.75rem;
       }
 
       h2 {
-        font-size: clamp(1.8rem, 5vw, 2.2rem);
+        font-size: 1.6rem;
       }
 
-      .site-hero {
-        grid-template-columns: 1fr;
+      h3 {
+        font-size: 1.2rem;
       }
 
-      .hero-sigil {
-        margin-bottom: var(--space-3);
+      h4 {
+        font-size: 1.05rem;
       }
 
-      .sheet-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+      /* Compressed layout */
+      main {
+        padding: 1.5rem 1rem 3rem;
+        max-width: 100%;
       }
 
-      .span-9,
-      .span-8,
-      .span-6 {
-        grid-column: span 6;
+      /* Compressed sticky header */
+      nav {
+        padding: 0.75rem 1rem;
       }
 
-      .span-4,
-      .span-3 {
-        grid-column: span 3;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        font-size: 15.5px;
+      nav .toc-root {
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.9rem;
       }
 
-      .codex-shell {
-        padding: var(--space-4) var(--space-3);
+      nav .toc-root > li {
+        margin-right: 0;
+        width: 100%;
       }
 
-      .codex-content {
-        padding: var(--space-4) var(--space-3);
+      nav .toc-root > li > ul {
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-left: 0.5rem;
       }
 
-      .toc-panel {
-        padding: var(--space-3);
+      /* Touch-friendly link targets (minimum 44px) */
+      nav a {
+        display: inline-block;
+        min-height: 44px;
+        line-height: 44px;
+        padding: 0 0.5rem;
       }
 
-      .toc-root ul {
-        padding-left: var(--space-3);
+      /* Vertical stacking */
+      header, section, article {
+        margin-bottom: 2rem;
       }
 
+      /* Responsive tables - horizontal scroll */
       table {
         display: block;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.85rem;
       }
 
-      .hero-actions {
-        flex-direction: column;
-        align-items: flex-start;
+      /* Better spacing for blocks */
+      .example, .gm {
+        padding: 0.6rem 0.8rem;
+        margin: 0.75rem 0;
+        font-size: 0.9rem;
       }
 
-      .chapter-hero {
-        padding: var(--space-4);
+      .sheet-block {
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+      }
+    }
+
+    /* Tablet (640px - 1024px) */
+    @media (min-width: 640px) and (max-width: 1023px) {
+      /* Typography scaling for tablet */
+      body {
+        font-size: 17px;
       }
 
-      .sheet-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      h1 {
+        font-size: 2rem;
       }
 
-      .span-9,
-      .span-8,
-      .span-6,
-      .span-4,
-      .span-3 {
-        grid-column: span 2;
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+      }
+
+      h4 {
+        font-size: 1.08rem;
+      }
+
+      /* Two-column optimized layout */
+      main {
+        max-width: 100%;
+        padding: 2rem 2rem 4rem;
+      }
+
+      /* Navigation - horizontal but wrapped */
+      nav {
+        padding: 0.9rem 2rem;
+      }
+
+      nav .toc-root {
+        font-size: 0.93rem;
+      }
+
+      /* Better horizontal space usage */
+      header, section, article {
+        margin-bottom: 2.5rem;
+      }
+
+      /* Tables - better spacing */
+      table {
+        font-size: 0.92rem;
+      }
+
+      th, td {
+        padding: 0.5rem 0.75rem;
+      }
+    }
+
+    /* Desktop (>= 1024px) */
+    @media (min-width: 1024px) {
+      /* Typography scaling for desktop */
+      body {
+        font-size: 18px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+      }
+
+      h4 {
+        font-size: 1.1rem;
+      }
+
+      /* Full horizontal layout with enhanced whitespace */
+      main {
+        max-width: 960px;
+        padding: 2.5rem 2rem 5rem;
+      }
+
+      /* Full navigation visibility */
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      nav .toc-root {
+        font-size: 0.95rem;
+      }
+
+      /* Enhanced hover states */
+      nav a:hover {
+        text-decoration: underline;
+        color: #003366;
+      }
+
+      a:hover {
+        color: #003366;
+      }
+
+      /* Enhanced spacing */
+      header, section, article {
+        margin-bottom: 3rem;
+      }
+
+      /* Better table presentation */
+      table {
+        font-size: 0.95rem;
+      }
+
+      th, td {
+        padding: 0.5rem 0.8rem;
+      }
+
+      /* Enhanced blocks with better whitespace */
+      .example, .gm {
+        padding: 0.875rem 1.25rem;
+        margin: 1.25rem 0;
+      }
+
+      .sheet-block {
+        padding: 1.25rem 1.5rem;
+        margin: 1.75rem 0;
+      }
+    }
+
+    /* Large Desktop (>= 1440px) - Extra breathing room */
+    @media (min-width: 1440px) {
+      main {
+        max-width: 1080px;
+        padding: 3rem 2.5rem 6rem;
+      }
+
+      h1 {
+        font-size: 2.75rem;
+      }
+
+      h2 {
+        font-size: 2.2rem;
+      }
+    }
+
+    /* Small Mobile (320px) - Extra compact */
+    @media (max-width: 320px) {
+      body {
+        font-size: 15px;
+      }
+
+      main {
+        padding: 1rem 0.75rem 2.5rem;
+      }
+
+      nav {
+        padding: 0.5rem 0.75rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      table {
+        font-size: 0.8rem;
+      }
+
+      th, td {
+        padding: 0.3rem 0.4rem;
       }
     }
 
@@ -1567,27 +646,13 @@
         margin-bottom: 4pt;
       }
 
-      /* Sheets */
-      .sheet {
+      /* Sheet Blocks */
+      .sheet-block {
         border: 2pt solid black;
-        padding: 12pt;
+        padding: 10pt 12pt;
         margin: 12pt 0;
         background: white;
         page-break-inside: avoid;
-      }
-
-      .sheet::before,
-      .sheet::after {
-        display: none;
-      }
-
-      .sheet-section {
-        border: 1pt solid black !important;
-        background: white !important;
-      }
-
-      .sheet-tools {
-        display: none;
       }
 
       /* Tables - Optimized for Print */
@@ -1843,119 +908,81 @@
 <body>
   <!-- Skip Links for Keyboard Navigation -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#table-of-contents" class="skip-link" accesskey="t">Skip to table of contents</a>
 
-  <div class="codex-shell">
-    <aside class="toc-panel" id="toc-panel" aria-label="Table of Contents">
-      <button class="toc-toggle" type="button" aria-expanded="true">
-        <span class="toc-toggle-label" aria-hidden="true">TOC</span>
-        <span class="sr-only">Toggle Table of Contents</span>
-      </button>
-      <div class="toc-scroll">
-        <button class="toc-pin" type="button" aria-pressed="true">Float as drawer</button>
-        <nav id="table-of-contents" aria-label="Table of Contents" role="navigation">
-          <h2 class="sr-only">Table of Contents</h2>
-          <ul class="toc-root">
-            <li>
-              <a href="#part-i-foundations" accesskey="1">Part I: Foundations</a>
-              <ul>
-                <li><a href="#ch-01-welcome-to-the-game">1. Welcome to the Game</a></li>
-                <li><a href="#ch-02-core-concepts">2. Core Concepts at a Glance</a></li>
-                <li><a href="#ch-03-how-to-use-this-rulebook">3. How to Use This Rulebook</a></li>
-                <li><a href="#ch-04-core-principles-of-play">4. Core Principles of Play</a></li>
-                <li><a href="#ch-05-ways-to-play">5. Ways to Play the Game</a></li>
-                <li><a href="#ch-06-character-creation">6. Character Creation</a></li>
-                <li><a href="#ch-07-characters-and-attributes">7. Characters and Attributes</a></li>
-                <li><a href="#ch-08-actions-checks-outcomes">8. Actions, Checks, and Outcomes</a></li>
-                <li><a href="#ch-09-tags-conditions-clocks">9. Tags, Conditions, and Clocks</a></li>
-                <li><a href="#ch-10-combat-basics">10. Combat Basics</a></li>
-                <li><a href="#ch-11-exploration-social-play">11. Exploration and Social Play</a></li>
-                <li><a href="#ch-12-downtime-recovery-advancement-overview">12. Downtime, Recovery, and Advancement Overview</a></li>
-                <li><a href="#ch-13-roleplaying-guidance-working-with-gm">13. Roleplaying Guidance and Working with the GM</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#part-ii-skills-proficiencies" accesskey="2">Part II: Skills, Proficiencies, and Mechanical Reference</a>
-              <ul>
-                <li><a href="#ch-14-skills-system-overview">14. Skills System Overview</a></li>
-                <li><a href="#ch-15-skills-reference-by-attribute">15. Skills Reference</a></li>
-                <li><a href="#ch-16-proficiencies-system-overview">16. Proficiencies System Overview</a></li>
-                <li><a href="#ch-17-proficiencies-reference-by-domain">17. Proficiencies Reference</a></li>
-                <li><a href="#ch-18-extended-tags-conditions-reference">18. Extended Tags and Conditions Reference</a></li>
-                <li><a href="#ch-19-advancement-long-term-growth">19. Advancement and Long Term Growth</a></li>
-                <li><a href="#ch-20-optional-variant-rules">20. Optional and Variant Rules</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#part-iii-reference-and-gm" accesskey="3">Part III: Game Master Section</a>
-              <ul>
-                <li><a href="#ch-21-running-sessions">21. Running Sessions</a></li>
-                <li><a href="#ch-22-running-campaigns">22. Running Campaigns</a></li>
-                <li><a href="#ch-23-designing-scenarios-one-shots">23. Designing Scenarios and One Shots</a></li>
-                <li><a href="#ch-24-npcs-vpcs-enemies">24. NPCs, VPCs, and Enemies</a></li>
-                <li><a href="#ch-25-factions-fronts-world-pressure">25. Factions, Fronts, and World Pressure</a></li>
-                <li><a href="#ch-26-alternative-play">26. Alternative Play</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#part-iv-glossary-index" accesskey="4">Part IV: Reference Sheets, Glossary, and Index</a>
-              <ul>
-                <li><a href="#ch-27-sheets-and-play-aids">27. Sheets and Play Aids</a></li>
-                <li><a href="#ch-28-glossary" accesskey="g">28. Glossary</a></li>
-                <li><a href="#ch-29-index" accesskey="i">29. Index</a></li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </aside>
+  <nav id="table-of-contents" aria-label="Table of Contents" role="navigation">
+    <h2 class="sr-only">Table of Contents</h2>
+    <ul class="toc-root">
+      <li>
+        <a href="#part-i-foundations" accesskey="1">Part I: Foundations</a>
+        <ul>
+          <li><a href="#ch-01-welcome-to-the-game">1. Welcome to the Game</a></li>
+          <li><a href="#ch-02-core-concepts">2. Core Concepts at a Glance</a></li>
+          <li><a href="#ch-03-how-to-use-this-rulebook">3. How to Use This Rulebook</a></li>
+          <li><a href="#ch-04-core-principles-of-play">4. Core Principles of Play</a></li>
+          <li><a href="#ch-05-ways-to-play">5. Ways to Play the Game</a></li>
+          <li><a href="#ch-06-character-creation">6. Character Creation</a></li>
+          <li><a href="#ch-07-characters-and-attributes">7. Characters and Attributes</a></li>
+          <li><a href="#ch-08-actions-checks-outcomes">8. Actions, Checks, and Outcomes</a></li>
+          <li><a href="#ch-09-tags-conditions-clocks">9. Tags, Conditions, and Clocks</a></li>
+          <li><a href="#ch-10-combat-basics">10. Combat Basics</a></li>
+          <li><a href="#ch-11-exploration-social-play">11. Exploration and Social Play</a></li>
+          <li><a href="#ch-12-downtime-recovery-advancement-overview">12. Downtime, Recovery, and Advancement Overview</a></li>
+          <li><a href="#ch-13-roleplaying-guidance-working-with-gm">13. Roleplaying Guidance and Working with the GM</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#part-ii-skills-proficiencies" accesskey="2">Part II: Skills, Proficiencies, and Mechanical Reference</a>
+        <ul>
+          <li><a href="#ch-14-skills-system-overview">14. Skills System Overview</a></li>
+          <li><a href="#ch-15-skills-reference-by-attribute">15. Skills Reference</a></li>
+          <li><a href="#ch-16-proficiencies-system-overview">16. Proficiencies System Overview</a></li>
+          <li><a href="#ch-17-proficiencies-reference-by-domain">17. Proficiencies Reference</a></li>
+          <li><a href="#ch-18-extended-tags-conditions-reference">18. Extended Tags and Conditions Reference</a></li>
+          <li><a href="#ch-19-advancement-long-term-growth">19. Advancement and Long Term Growth</a></li>
+          <li><a href="#ch-20-optional-variant-rules">20. Optional and Variant Rules</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#part-iii-reference-and-gm" accesskey="3">Part III: Game Master Section</a>
+        <ul>
+          <li><a href="#ch-21-running-sessions">21. Running Sessions</a></li>
+          <li><a href="#ch-22-running-campaigns">22. Running Campaigns</a></li>
+          <li><a href="#ch-23-designing-scenarios-one-shots">23. Designing Scenarios and One Shots</a></li>
+          <li><a href="#ch-24-npcs-vpcs-enemies">24. NPCs, VPCs, and Enemies</a></li>
+          <li><a href="#ch-25-factions-fronts-world-pressure">25. Factions, Fronts, and World Pressure</a></li>
+          <li><a href="#ch-26-alternative-play">26. Alternative Play</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#part-iv-glossary-index" accesskey="4">Part IV: Reference Sheets, Glossary, and Index</a>
+        <ul>
+          <li><a href="#ch-27-sheets-and-play-aids">27. Sheets and Play Aids</a></li>
+          <li><a href="#ch-28-glossary" accesskey="g">28. Glossary</a></li>
+          <li><a href="#ch-29-index" accesskey="i">29. Index</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
 
-    <main id="main-content" class="codex-content" role="main" aria-label="Core Rulebook Content">
-      <span class="codex-surface-shadow" aria-hidden="true"></span>
-
-      <header class="site-hero" aria-label="Razorweave overview">
-        <div class="hero-sigil" aria-hidden="true">RW</div>
-        <div class="hero-text">
-          <p class="hero-kicker">Multigenre narrative engine</p>
-          <h1 class="hero-title">Razorweave Core Rulebook</h1>
-          <p class="hero-lede">
-            A luminous codex for campaign storytellers, one-shot improvisers, solo explorers, and every table weaving stories across genres. Designed as a living document that marries book-like warmth with interface-grade clarity.
-          </p>
-          <div class="hero-actions">
-            <a class="hero-cta primary" href="#ch-01-welcome-to-the-game">Begin Reading →</a>
-            <a class="hero-cta" href="#ch-27-sheets-and-play-aids">Jump to Sheets →</a>
-          </div>
-        </div>
-      </header>
-
-      <!-- Part I: Foundations -->
-      <section id="part-i-foundations" class="part-intro chapter-hero" aria-labelledby="part-i-heading">
-        <div class="chapter-meta">
-          <span class="chapter-number">Part I</span>
-          <span class="chapter-label">Foundations</span>
-          <h2 id="part-i-heading">Part I: Foundations</h2>
-          <p class="chapter-lede">
-            Part I introduces the core ideas of the game: what it is about, how to read and use this rulebook, and how to build characters who feel grounded in the world.
-          </p>
-          <div class="chapter-actions">
-            <a class="hero-cta primary" href="#ch-01-welcome-to-the-game">Start Part I →</a>
-            <a class="hero-cta" href="#ch-06-character-creation">Skip to Characters →</a>
-          </div>
-        </div>
-        <div class="chapter-spotlight">
-          <p>
-            These chapters clarify Attributes, Actions, Checks, Tags, Conditions, Clocks, and the overall flow of play. By the end of Part I, you'll be ready to facilitate a session with confidence.
-          </p>
-          <ul>
-            <li>Table principles and collaboration cues</li>
-            <li>Story-first rules interpretation</li>
-            <li>Character creation walkthroughs</li>
-            <li>Action, exploration, and social play loops</li>
-          </ul>
-        </div>
-      </section>
+  <main id="main-content" role="main" aria-label="Core Rulebook Content">
+    <!-- Part I: Foundations -->
+    <section id="part-i-foundations" class="part-intro" aria-labelledby="part-i-heading">
+      <h1 id="part-i-heading">Part I: Foundations</h1>
+      <p>
+        Part I introduces the core ideas of the game: what it is about, how to read and use this rulebook, and
+        how to build characters who feel grounded in the world. These chapters define Attributes, Actions,
+        Checks, Tags, Conditions, Clocks, and the overall flow of play.
+      </p>
+      <p>
+        By the end of Part I, you should understand how to create a character, how to resolve uncertainty at the
+        table, how combat, exploration, and social scenes work, and how to collaborate with your group and GM to
+        tell stories together.
+      </p>
+    </section>
     <header id="ch-01-welcome-to-the-game">
       <h1 id="welcome-to-the-game">1. Welcome to the Game</h1>
-      <p class="dropcap">
+      <p>
         This Core Rulebook is the single source of truth for the system. It explains how to create characters,
         how to resolve uncertain moments, and how to build stories together across many different genres. You do
         not need to memorize the entire book before you play. You only need to know where to look when questions
@@ -1968,7 +995,7 @@
       </p>
       <p>
         This game is built for cooperative play. The table is a creative team. Players bring characters to life.
-        The <a href="#gm" class="glossary-link" data-term="Game Master" data-definition="The facilitator who frames scenes, portrays the world, and adjudicates rules in service of the story."><strong id="gm-definition">Game Master</strong></a> presents the world, its challenges, and its opportunities. The rules help everyone answer
+        The <a href="#gm" class="glossary-link"><strong id="gm-definition">Game Master</strong></a> presents the world, its challenges, and its opportunities. The rules help everyone answer
         a single question together: what happens next?
       </p>
       <p>
@@ -1979,22 +1006,12 @@
     </header>
 
     <section id="ch-02-core-concepts">
-      <p class="section-label">Core Tenets</p>
       <h2 id="core-concepts-at-a-glance-heading">2. Core Concepts at a Glance</h2>
       <p>
         This chapter introduces the most important ideas in the system in a compact form. Later chapters expand
         and refine them, but everything begins here. You can return to these concepts whenever you need to realign
         on how the game is meant to feel at the table.
       </p>
-      <aside class="callout callout-rule" id="fiction-first-callout">
-        <h4>Rule Focus · Fiction First</h4>
-        <p>
-          Always describe what the characters attempt before you touch a die or consult a table. Mechanics are a lens
-          for adjudicating uncertainty, not a substitute for imagination. If the fiction already resolves the action,
-          narrate the result and move forward.
-        </p>
-        <footer>Ask “What happens in the story?” before rules</footer>
-      </aside>
       <h3 id="core-concepts-fiction-first">Fiction First</h3>
       <p>
         The story is always the starting point. You begin by understanding the situation, describing what the
@@ -2015,15 +1032,6 @@
         outcome tier, which becomes the next beat in the story. Success, partial success, and failure are all
         ways for the story to move forward.
       </p>
-      <aside class="callout callout-example" aria-label="Outcome Example">
-        <h4>Example · Clock Tower Heist</h4>
-        <p>
-          Vela scales the cathedral (AGI + Streetwise). On a success she reaches the belfry unnoticed.
-          A partial success means she arrives but the clockwork springs loose—start a 4-step “Guard Alerted”
-          clock. On a failure, she slips, marking the “Bruised” condition and forcing the team to improvise.
-        </p>
-        <footer>Every outcome advances the fiction</footer>
-      </aside>
       <h3 id="core-concepts-tags-conditions-clocks">Tags, Conditions, and Clocks</h3>
       <p>
         Tags and Conditions are short descriptors that shape how the world and characters behave. Tags are applied
@@ -2037,15 +1045,6 @@
         honestly. Players act through their characters with clear intent and approach. The rules help resolve
         what happens when those actions encounter uncertainty or resistance.
       </p>
-      <aside class="callout callout-gm">
-        <h4>GM Lens · Share the Spotlight</h4>
-        <p>
-          Track who has made the last few consequential decisions. When one voice dominates, redirect the next
-          question to another character or ask a quiet player to add a sensory detail. This habit keeps energy
-          distributed while reinforcing that everyone’s perspective matters.
-        </p>
-        <footer>Rebalance attention at scene breaks</footer>
-      </aside>
       <p>
         You can begin play after reading Chapters 1 through 6. The rest of the book deepens and extends the core
         ideas as your table needs them.
@@ -9022,56 +8021,6 @@
         </ul>
       </nav>
 
-      <div class="ledger ledger-rule" id="glossary-overview">
-        <header>
-          <div>
-            <p class="section-label">Glossary staging</p>
-            <h2>Quick Definitions</h2>
-            <p>
-              Use these filter chips to focus on the most referenced mechanical, trait, or guidance entries before diving into the full glossary sections.
-            </p>
-          </div>
-          <div class="ledger-filters" role="toolbar" aria-label="Glossary filters">
-            <button class="chip active" data-glossary-filter="all">All terms</button>
-            <button class="chip" data-glossary-filter="mechanics">Mechanics</button>
-            <button class="chip" data-glossary-filter="traits">Traits</button>
-            <button class="chip" data-glossary-filter="guidance">Guidance</button>
-          </div>
-        </header>
-        <div class="ledger-grid glossary-grid">
-          <article class="ledger-entry" data-glossary-tag="mechanics">
-            <h3>Action</h3>
-            <p>Any declared intent that might fail or introduce risk. Leads to narration or a Check depending on stakes.</p>
-            <p class="ref-link">See Ch 8</p>
-          </article>
-          <article class="ledger-entry" data-glossary-tag="mechanics">
-            <h3>Clock</h3>
-            <p>Segmented tracker representing looming change. Tick when pressure mounts, opportunity grows, or prep advances.</p>
-            <p class="ref-link">See Ch 9</p>
-          </article>
-          <article class="ledger-entry" data-glossary-tag="mechanics">
-            <h3>DC Ladder</h3>
-            <p>Difficulty scale from DC 12 (Routine) to DC 22 (Legendary). Establishes expectations for outcome tiers.</p>
-            <p class="ref-link">See Ch 8</p>
-          </article>
-          <article class="ledger-entry" data-glossary-tag="traits">
-            <h3>Tag</h3>
-            <p>Descriptor that colors how a location, scene, or entity behaves (e.g., Smoke-Choked, Sacred Ground).</p>
-            <p class="ref-link">See Ch 9</p>
-          </article>
-          <article class="ledger-entry" data-glossary-tag="traits">
-            <h3>Condition</h3>
-            <p>Status anchored to a character, imposing limits or modifiers (Bruised, Inspired, Exhausted).</p>
-            <p class="ref-link">See Ch 9</p>
-          </article>
-          <article class="ledger-entry" data-glossary-tag="guidance">
-            <h3>Fiction First</h3>
-            <p>Principle that narrative intent and effect drive every rules conversation; mechanics follow the fiction.</p>
-            <p class="ref-link">See Ch 2</p>
-          </article>
-        </div>
-      </div>
-
       <section id="glossary-core-mechanics" class="glossary-section" aria-labelledby="glossary-core-mechanics-heading">
         <h2 id="glossary-core-mechanics-heading">Core Mechanics</h2>
 
@@ -9498,7 +8447,7 @@
         </ul>
       </nav>
 
-      <section id="index-quick-reference" class="index-section quick-ref ledger ledger-rule" aria-labelledby="index-quick-reference-heading">
+      <section id="index-quick-reference" class="index-section quick-ref" aria-labelledby="index-quick-reference-heading">
         <h2 id="index-quick-reference-heading">Quick Reference</h2>
         <p class="section-intro">The most commonly referenced rules during play.</p>
 
@@ -9667,7 +8616,7 @@
         </div>
       </section>
 
-      <section id="index-topical" class="index-section ledger ledger-example" aria-labelledby="index-topical-heading">
+      <section id="index-topical" class="index-section" aria-labelledby="index-topical-heading">
         <h2 id="index-topical-heading">Topical Index</h2>
         <p class="section-intro">Major topics grouped by category.</p>
 
@@ -10105,14 +9054,150 @@
           </div>
         </div>
       </section>
+
     </section>
   </main>
-    <div class="toc-scrim" aria-hidden="true"></div>
-  </div>
 
   <!-- Back to Top Button -->
   <button id="back-to-top" aria-label="Back to top" title="Back to top">
     ↑
   </button>
+
+  <!-- Back to Top Button JavaScript -->
+  <script>
+  (function() {
+    'use strict';
+
+    const backToTopButton = document.getElementById('back-to-top');
+    const scrollThreshold = 300; // Show after scrolling 300px
+
+    // Show/hide button based on scroll position
+    function handleScroll() {
+      if (window.scrollY > scrollThreshold) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
+    }
+
+    // Smooth scroll to top
+    function scrollToTop(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Event listeners
+    window.addEventListener('scroll', handleScroll);
+    backToTopButton.addEventListener('click', scrollToTop);
+
+    // Initial check in case page is loaded scrolled
+    handleScroll();
+  })();
+  </script>
+
+  <!-- Scroll-Spy Navigation Highlighting -->
+  <script>
+  (function() {
+    'use strict';
+
+    const sections = document.querySelectorAll('section[id], article[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    // Create a map of section IDs to nav links
+    const linkMap = new Map();
+    navLinks.forEach(link => {
+      const targetId = link.getAttribute('href').substring(1);
+      if (targetId) {
+        linkMap.set(targetId, link);
+      }
+    });
+
+    // Intersection Observer for efficient scroll detection
+    const observerOptions = {
+      rootMargin: '-100px 0px -66%',
+      threshold: [0, 0.25, 0.5, 0.75, 1]
+    };
+
+    let currentActive = null;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const link = linkMap.get(id);
+
+          if (link && link !== currentActive) {
+            // Remove previous active
+            if (currentActive) {
+              currentActive.classList.remove('active');
+            }
+
+            // Set new active
+            link.classList.add('active');
+            currentActive = link;
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    sections.forEach(section => {
+      if (section.id) {
+        observer.observe(section);
+      }
+    });
+  })();
+  </script>
+
+  <!-- Keyboard Navigation Shortcuts -->
+  <script>
+  (function() {
+    'use strict';
+
+    // Keyboard shortcuts mapping
+    const shortcuts = {
+      '1': '#part-i-foundations',
+      '2': '#part-ii-skills-proficiencies',
+      '3': '#part-iii-reference-and-gm',
+      '4': '#part-iv-glossary-index',
+      'g': '#ch-28-glossary',
+      'i': '#ch-29-index',
+      't': '#table-of-contents'
+    };
+
+    document.addEventListener('keydown', function(e) {
+      // Only trigger if Alt key is pressed (Windows/Linux)
+      // Or Ctrl key (Mac - accesskey uses Ctrl on Mac)
+      if (!e.altKey && !e.ctrlKey) return;
+
+      // Ignore if user is typing in an input/textarea
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+      const targetId = shortcuts[key];
+
+      if (targetId) {
+        e.preventDefault();
+        const element = document.querySelector(targetId);
+        if (element) {
+          // Smooth scroll to element
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+          // Set focus for screen readers
+          // Only add tabindex if element doesn't already have one
+          if (!element.hasAttribute('tabindex')) {
+            element.setAttribute('tabindex', '-1');
+          }
+          element.focus();
+        }
+      }
+    });
+  })();
+  </script>
 </body>
 </html>
