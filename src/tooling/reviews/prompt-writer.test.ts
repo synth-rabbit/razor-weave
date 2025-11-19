@@ -167,4 +167,86 @@ describe('Prompt Writer', () => {
       writeAnalyzerPromptFile(db, 'campaign-nonexistent');
     }).toThrow('Campaign not found');
   });
+
+  it('throws error if campaign has no personas configured', () => {
+    const contentId = snapshotBook(db, {
+      bookPath: testBookPath,
+      version: 'v1.0-test',
+      source: 'claude',
+    });
+
+    const campaignId = campaignClient.createCampaign({
+      campaignName: 'Empty Campaign',
+      contentType: 'book',
+      contentId,
+      personaSelectionStrategy: 'manual',
+      personaIds: [], // Empty!
+    });
+
+    expect(() => {
+      writePromptFiles(db, campaignId);
+    }).toThrow('No personas configured');
+  });
+
+  it('sanitizes campaign ID to prevent path traversal', () => {
+    const contentId = snapshotBook(db, {
+      bookPath: testBookPath,
+      version: 'v1.0-test',
+      source: 'claude',
+    });
+
+    // Create campaign with malicious ID
+    const maliciousCampaignId = 'campaign-test/../../../etc/passwd';
+    const stmt = db.prepare(`
+      INSERT INTO review_campaigns (
+        id, campaign_name, content_type, content_id,
+        persona_selection_strategy, persona_ids, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `);
+    stmt.run(
+      maliciousCampaignId,
+      'Malicious Campaign',
+      'book',
+      contentId,
+      'manual',
+      JSON.stringify(['test-sarah']),
+      'pending'
+    );
+
+    const writtenFiles = writePromptFiles(db, maliciousCampaignId);
+
+    // Should sanitize to just the basename, not allow path traversal
+    expect(writtenFiles[0]).toMatch(/^data\/reviews\/prompts\/passwd\//);
+    expect(writtenFiles[0]).not.toContain('..');
+  });
+
+  it('overwrites existing prompt files when run multiple times', () => {
+    const contentId = snapshotBook(db, {
+      bookPath: testBookPath,
+      version: 'v1.0-test',
+      source: 'claude',
+    });
+
+    const campaignId = campaignClient.createCampaign({
+      campaignName: 'Test Campaign',
+      contentType: 'book',
+      contentId,
+      personaSelectionStrategy: 'manual',
+      personaIds: ['test-sarah'],
+    });
+
+    // Write prompts first time
+    const files1 = writePromptFiles(db, campaignId);
+    expect(files1).toHaveLength(1);
+    expect(existsSync(files1[0])).toBe(true);
+
+    // Write prompts second time (should overwrite)
+    const files2 = writePromptFiles(db, campaignId);
+    expect(files2).toEqual(files1);
+    expect(existsSync(files2[0])).toBe(true);
+
+    // Verify file still contains valid prompt
+    const promptContent = readFileSync(files2[0], 'utf-8');
+    expect(promptContent).toContain('You are conducting a review');
+  });
 });
