@@ -115,26 +115,201 @@ Every review scores content on four dimensions (1-10):
 
 ## Implementation Status
 
-**✅ Phase 1-3 Complete:**
+**✅ Phase 1-4 Complete:**
 - Database schema and clients
 - Content snapshotting with hash validation
 - Review and analysis schemas (Zod)
 - Prompt generators (reviewer and analyzer)
 - Markdown writers
 - CLI command interface
-
-**✅ Phase 4 Complete:**
 - ReviewOrchestrator class with full lifecycle management
-- Campaign initialization with content snapshotting
-- Review execution structure (agent execution pending)
-- Analysis execution structure (agent execution pending)
-- Campaign completion with summary
 
-**⏳ Pending Implementation:**
-- Actual agent launching via Claude Code Task tool (requires human approval)
-- File verification (ensure agents write files)
-- Error handling and retry logic
-- Real agent-generated reviews (currently uses placeholder logging)
+**✅ Phase 5 Complete:**
+- Prompt file generation (writePromptFiles, writeAnalyzerPromptFile)
+- Human-guided agent execution workflow
+- Status checking CLI command (pnpm review status)
+- Complete integration of all components
+
+**System Status:** Fully Functional
+
+The Review System is now complete and ready for use. Users can create campaigns, execute reviewer and analyzer agents via Claude Code, and check status at any point in the workflow.
+
+## Phase 5: Human-Guided Agent Execution
+
+### Workflow Overview
+
+Phase 5 implements a human-guided approach where the CLI prepares everything and the user instructs Claude Code to execute agents in the same session.
+
+### Complete Workflow Example
+
+**Step 1: Create Campaign and Generate Prompts**
+
+```bash
+pnpm review book src/site/core_rulebook_web.html
+```
+
+CLI Output:
+```
+✅ Campaign created: campaign-20251119-143025-abc123
+✅ Generated 10 review prompts
+
+📁 Prompts directory: data/reviews/prompts/campaign-20251119-143025-abc123/
+
+Next: Tell Claude Code to execute reviews
+
+────────────────────────────────────────────────────────
+Read prompts from data/reviews/prompts/campaign-20251119-143025-abc123/
+and execute reviewer agents in batches of 5
+────────────────────────────────────────────────────────
+
+After agents complete, check status with:
+  pnpm review status campaign-20251119-143025-abc123
+```
+
+**Step 2: Execute Reviewer Agents in Claude Code**
+
+Copy the instruction from Step 1 and tell Claude Code:
+> Read prompts from data/reviews/prompts/campaign-20251119-143025-abc123/ and execute reviewer agents in batches of 5
+
+Claude Code will:
+1. Read all .txt files from the prompts directory
+2. Execute 5 agents in parallel (Batch 1)
+3. Wait for Batch 1 to complete
+4. Execute next 5 agents in parallel (Batch 2)
+5. Report completion when all agents finish
+
+**Step 3: Check Campaign Status**
+
+```bash
+pnpm review status campaign-20251119-143025-abc123
+```
+
+Output:
+```
+Campaign: campaign-20251119-143025-abc123
+Status: in_progress
+Expected reviews: 10
+Completed reviews: 10
+Missing reviews: (none)
+
+✅ All reviews complete! Ready for analysis.
+
+Next: Tell Claude Code to run analysis
+
+────────────────────────────────────────────────────────
+Read analyzer prompt from data/reviews/prompts/campaign-20251119-143025-abc123/analyzer.txt
+and execute analyzer agent
+────────────────────────────────────────────────────────
+```
+
+**Step 4: Execute Analyzer Agent in Claude Code**
+
+Tell Claude Code:
+> Read analyzer prompt from data/reviews/prompts/campaign-20251119-143025-abc123/analyzer.txt and execute analyzer agent
+
+Claude Code will execute the analyzer agent to aggregate all reviews.
+
+**Step 5: Verify Completion**
+
+```bash
+pnpm review status campaign-20251119-143025-abc123
+```
+
+Output:
+```
+Campaign: campaign-20251119-143025-abc123
+Status: completed
+Reviews: 10/10
+Analysis: Generated
+
+📁 Outputs:
+  Reviews: data/reviews/raw/campaign-20251119-143025-abc123/
+  Analysis: data/reviews/analysis/campaign-20251119-143025-abc123.md
+```
+
+### Prompt File Structure
+
+Prompts are written to `data/reviews/prompts/{campaignId}/`:
+
+```
+data/reviews/prompts/campaign-20251119-143025-abc123/
+├── core-sarah.txt       (Reviewer prompt for Sarah persona)
+├── core-alex.txt        (Reviewer prompt for Alex persona)
+├── core-marcus.txt      (Reviewer prompt for Marcus persona)
+├── ...                  (One file per persona)
+└── analyzer.txt         (Analyzer prompt, generated after reviews)
+```
+
+Each reviewer prompt contains:
+- Complete persona profile (archetype, experience, traits)
+- Content reference (database ID and SQL to retrieve)
+- Task description (review dimensions, output format)
+- Executable TypeScript code snippets for database writes
+- Schema validation requirements
+
+The analyzer prompt contains:
+- Campaign overview
+- All completed reviews (aggregated from database)
+- Analysis instructions (priority rankings, dimension summaries)
+- Executable TypeScript code for writing analysis
+
+### Batching Strategy
+
+User controls batch size when instructing Claude Code:
+
+- `batches of 1` → Sequential execution (no parallelism)
+- `batches of 5` → 5 parallel agents per batch (recommended)
+- `batches of 10` → All at once (may slow system)
+
+Recommended: **batches of 5** balances performance and system load.
+
+## CLI Commands Reference
+
+### Create Campaign and Generate Prompts
+
+```bash
+# Review book with all core personas
+pnpm review book <path-to-book.html>
+
+# Review with specific personas
+pnpm review book <path> --personas=core-sarah,core-alex
+
+# Review chapter
+pnpm review chapter <path-to-chapter.md> --personas=all_core
+```
+
+### Check Campaign Status
+
+```bash
+pnpm review status <campaign-id>
+```
+
+Shows:
+- Campaign status (pending, in_progress, analyzing, completed)
+- Expected vs completed review counts
+- Missing persona reviews (if any)
+- Next step instructions
+
+### List Campaigns
+
+```bash
+# All campaigns
+pnpm review list
+
+# Filter by status
+pnpm review list --status=completed
+
+# Filter by type
+pnpm review list --content-type=book
+```
+
+### View Campaign Details
+
+```bash
+pnpm review view <campaign-id>
+```
+
+Shows full campaign metadata, reviews, and analysis.
 
 ## Programmatic Usage
 
@@ -167,9 +342,9 @@ orchestrator.completeCampaign(campaignId);
 
 ## Future Features
 
-- Agent execution via Claude Code Task tool
 - Smart persona sampling based on content type
 - Version comparison and regression detection
-- Review retry for failed personas
-- Error recovery and partial completion
+- Review retry for failed personas (currently manual)
+- Automated batch size optimization
 - Interactive analysis dashboard
+- Export campaign results to various formats
