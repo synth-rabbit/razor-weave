@@ -9,6 +9,13 @@
  */
 
 import { hydrateCore, generate, stats } from './personas.js';
+import {
+  reviewBook,
+  reviewChapter,
+  listCampaigns,
+  viewCampaign,
+  type ListCampaignsFilters,
+} from './review.js';
 
 async function main() {
   const args = process.argv.slice(2);
@@ -38,12 +45,86 @@ async function main() {
       await generate(count, options);
     } else if (command === 'stats') {
       await stats();
+    } else if (command === 'review') {
+      const subcommand = args[1];
+
+      if (subcommand === 'book') {
+        const bookPath = args[2];
+        if (!bookPath) {
+          console.error('Error: Please provide a book path');
+          console.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review book <path> [--personas=all_core|id1,id2]');
+          process.exit(1);
+        }
+
+        const options: { personas?: string } = {};
+        for (let i = 3; i < args.length; i++) {
+          if (args[i].startsWith('--personas=')) {
+            options.personas = args[i].split('=')[1];
+          }
+        }
+
+        await reviewBook(bookPath, options);
+      } else if (subcommand === 'chapter') {
+        const chapterPath = args[2];
+        if (!chapterPath) {
+          console.error('Error: Please provide a chapter path');
+          console.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review chapter <path> [--personas=all_core|id1,id2]');
+          process.exit(1);
+        }
+
+        const options: { personas?: string } = {};
+        for (let i = 3; i < args.length; i++) {
+          if (args[i].startsWith('--personas=')) {
+            options.personas = args[i].split('=')[1];
+          }
+        }
+
+        await reviewChapter(chapterPath, options);
+      } else if (subcommand === 'list') {
+        const filters: Partial<ListCampaignsFilters> = {};
+        for (let i = 2; i < args.length; i++) {
+          if (args[i].startsWith('--status=')) {
+            filters.status = args[i].split('=')[1] as ListCampaignsFilters['status'];
+          } else if (args[i].startsWith('--content-type=')) {
+            filters.contentType = args[i].split('=')[1] as ListCampaignsFilters['contentType'];
+          }
+        }
+
+        await listCampaigns(filters);
+      } else if (subcommand === 'view') {
+        const campaignId = args[2];
+        if (!campaignId) {
+          console.error('Error: Please provide a campaign ID');
+          console.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review view <campaign-id> [--format=text|json]');
+          process.exit(1);
+        }
+
+        const options: { format?: 'text' | 'json' } = {};
+        for (let i = 3; i < args.length; i++) {
+          if (args[i].startsWith('--format=')) {
+            const format = args[i].split('=')[1];
+            if (format === 'text' || format === 'json') {
+              options.format = format;
+            }
+          }
+        }
+
+        await viewCampaign(campaignId, options);
+      } else {
+        console.error('Unknown review subcommand:', subcommand);
+        console.error('Available subcommands: book, chapter, list, view');
+        process.exit(1);
+      }
     } else {
       console.error('Unknown command:', command);
       console.error('Available commands:');
       console.error('  hydrate-core                             - Load all core personas');
       console.error('  generate <count> [--seed=N]              - Generate N personas');
       console.error('  stats                                     - Show persona statistics');
+      console.error('  review book <path> [--personas=...]       - Review an HTML book');
+      console.error('  review chapter <path> [--personas=...]    - Review a markdown chapter');
+      console.error('  review list [--status=...] [--content-type=...] - List campaigns');
+      console.error('  review view <id> [--format=text|json]    - View campaign details');
       process.exit(1);
     }
   } catch (error) {
