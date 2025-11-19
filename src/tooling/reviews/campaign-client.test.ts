@@ -71,4 +71,43 @@ describe('CampaignClient', () => {
       expect(saved).toBeTruthy();
     });
   });
+
+  describe('updateStatus', () => {
+    it('should update campaign status', () => {
+      // Create a campaign
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 1,
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah']
+      });
+
+      // Update to in_progress
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      client.updateStatus(campaignId, 'in_progress');
+
+      // Verify status updated
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const campaign = client.getCampaign(campaignId);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(campaign?.status).toBe('in_progress');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(campaign?.completed_at).toBeNull();
+
+      // Update to completed with timestamp
+      const completedAt = new Date();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      client.updateStatus(campaignId, 'completed', completedAt);
+
+      // Verify final status
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const completedCampaign = client.getCampaign(campaignId);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(completedCampaign?.status).toBe('completed');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(completedCampaign?.completed_at).toBeTruthy();
+    });
+  });
 });
