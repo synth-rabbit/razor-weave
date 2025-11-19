@@ -73,6 +73,8 @@
   border-left: 3px solid var(--color-hot-pink);
   transform: translateX(2px);
   box-shadow: 0 2px 8px rgba(0, 217, 255, 0.3);
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-left: var(--spacing-md);
 }
 
 /* Content Typography */
