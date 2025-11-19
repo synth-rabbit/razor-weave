@@ -203,4 +203,31 @@ export class CampaignClient {
     const rows = stmt.all(campaignId);
     return rows as PersonaReview[];
   }
+
+  createCampaignAnalysis(data: CampaignAnalysisData): number {
+    const analysisDataJson = JSON.stringify(data.analysisData);
+
+    const stmt = this.db.prepare(`
+      INSERT INTO campaign_analyses (
+        campaign_id, analysis_data, markdown_path
+      ) VALUES (?, ?, ?)
+    `);
+
+    const result = stmt.run(
+      data.campaignId,
+      analysisDataJson,
+      data.markdownPath
+    );
+
+    return result.lastInsertRowid as number;
+  }
+
+  getCampaignAnalysis(campaignId: string): CampaignAnalysis | null {
+    const stmt = this.db.prepare(`
+      SELECT * FROM campaign_analyses WHERE campaign_id = ?
+    `);
+
+    const row = stmt.get(campaignId);
+    return row ? (row as CampaignAnalysis) : null;
+  }
 }
