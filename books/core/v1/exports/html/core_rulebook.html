@@ -1059,9 +1059,195 @@
         overflow: visible !important;
       }
     }
+
+    /* ===================================
+       COVER PAGE STYLES
+       =================================== */
+    .cover-page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      margin-left: calc(-1 * var(--sidebar-width));
+      margin-top: -2rem;
+      margin-right: -3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg,
+        #0a0a0a 0%,
+        #1a1a2e 25%,
+        #16213e 50%,
+        #0f3460 75%,
+        #1a1a2e 100%
+      );
+      overflow: hidden;
+      page-break-after: always;
+    }
+
+    /* Geometric background decorations */
+    .cover-page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(0deg, transparent 24%, rgba(0, 217, 255, 0.05) 25%, rgba(0, 217, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.05) 75%, rgba(0, 217, 255, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(0, 217, 255, 0.05) 25%, rgba(0, 217, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.05) 75%, rgba(0, 217, 255, 0.05) 76%, transparent 77%, transparent);
+      background-size: 50px 50px;
+      opacity: 0.4;
+      z-index: 1;
+    }
+
+    /* Electric circles decoration */
+    .cover-page::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      border: 2px solid var(--color-electric-blue);
+      border-radius: 50%;
+      opacity: 0.15;
+      z-index: 1;
+      box-shadow:
+        0 0 100px rgba(0, 217, 255, 0.3),
+        inset 0 0 100px rgba(0, 217, 255, 0.1);
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 4rem;
+    }
+
+    .cover-title {
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      font-size: 6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin: 0;
+      background: linear-gradient(135deg,
+        var(--color-electric-blue) 0%,
+        var(--color-hot-pink) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow:
+        0 0 80px rgba(0, 217, 255, 0.5),
+        0 0 120px rgba(255, 0, 110, 0.3);
+      filter: drop-shadow(0 0 40px rgba(0, 217, 255, 0.4));
+      margin-bottom: 1rem;
+    }
+
+    .cover-subtitle {
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      font-size: 2rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      color: var(--color-electric-blue);
+      margin: 0 0 4rem 0;
+      text-transform: uppercase;
+      text-shadow: 0 0 30px rgba(0, 217, 255, 0.6);
+    }
+
+    .cover-author {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--color-white);
+      margin: 0;
+      padding-top: 3rem;
+      border-top: 2px solid var(--color-hot-pink);
+      display: inline-block;
+      letter-spacing: 0.05em;
+    }
+
+    /* Decorative corner elements */
+    .corner-decor {
+      position: absolute;
+      z-index: 2;
+    }
+
+    .corner-decor.top-left {
+      top: 3rem;
+      left: 3rem;
+      width: 150px;
+      height: 150px;
+      border-top: 3px solid var(--color-electric-blue);
+      border-left: 3px solid var(--color-electric-blue);
+    }
+
+    .corner-decor.top-right {
+      top: 3rem;
+      right: 3rem;
+      width: 150px;
+      height: 150px;
+      border-top: 3px solid var(--color-hot-pink);
+      border-right: 3px solid var(--color-hot-pink);
+    }
+
+    .corner-decor.bottom-left {
+      bottom: 3rem;
+      left: 3rem;
+      width: 150px;
+      height: 150px;
+      border-bottom: 3px solid var(--color-hot-pink);
+      border-left: 3px solid var(--color-hot-pink);
+    }
+
+    .corner-decor.bottom-right {
+      bottom: 3rem;
+      right: 3rem;
+      width: 150px;
+      height: 150px;
+      border-bottom: 3px solid var(--color-electric-blue);
+      border-right: 3px solid var(--color-electric-blue);
+    }
+
+    /* Print styles for cover */
+    @media print {
+      .cover-page {
+        margin: 0;
+        padding: 0;
+        page-break-after: always;
+        height: 100vh;
+      }
+
+      .cover-title {
+        color: var(--color-electric-blue);
+        -webkit-text-fill-color: var(--color-electric-blue);
+        text-shadow: none;
+        filter: none;
+      }
+
+      .cover-subtitle {
+        text-shadow: none;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Cover Page -->
+  <div class="cover-page">
+    <div class="corner-decor top-left"></div>
+    <div class="corner-decor top-right"></div>
+    <div class="corner-decor bottom-left"></div>
+    <div class="corner-decor bottom-right"></div>
+
+    <div class="cover-content">
+      <h1 class="cover-title">RAZORWEAVE</h1>
+      <p class="cover-subtitle">Core Rulebook</p>
+      <p class="cover-author">By Panda Edwards</p>
+    </div>
+  </div>
+
   <!-- Skip Links for Keyboard Navigation -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <a href="#table-of-contents" class="skip-link">Skip to table of contents</a>
