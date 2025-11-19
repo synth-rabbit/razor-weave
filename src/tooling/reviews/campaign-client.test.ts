@@ -113,6 +113,25 @@ describe('CampaignClient', () => {
 
   describe('createPersonaReview', () => {
     it('creates a persona review record', () => {
+      // Create test persona first (required for foreign key constraint)
+      db.prepare(`
+        INSERT INTO personas (id, name, type, archetype, experience_level,
+          fiction_first_alignment, narrative_mechanics_comfort, gm_philosophy,
+          genre_flexibility, primary_cognitive_style)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        'core-sarah',
+        'Sarah',
+        'core',
+        'storyteller',
+        'experienced',
+        'high',
+        'high',
+        'collaborative',
+        'high',
+        'narrative'
+      );
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',

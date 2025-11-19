@@ -170,4 +170,31 @@ export class CampaignClient {
 
     stmt.run(status, completedAtStr, campaignId);
   }
+
+  createPersonaReview(data: PersonaReviewData): number {
+    const reviewDataJson = JSON.stringify(data.reviewData);
+
+    const stmt = this.db.prepare(`
+      INSERT INTO persona_reviews (
+        campaign_id, persona_id, review_data,
+        agent_execution_time, status
+      ) VALUES (?, ?, ?, ?, ?)
+    `);
+
+    const result = stmt.run(
+      data.campaignId,
+      data.personaId,
+      reviewDataJson,
+      data.agentExecutionTime ?? null,
+      'completed'
+    );
+
+    return result.lastInsertRowid as number;
+  }
+
+  getPersonaReview(id: number): PersonaReview | null {
+    const stmt = this.db.prepare('SELECT * FROM persona_reviews WHERE id = ?');
+    const row = stmt.get(id);
+    return row ? (row as PersonaReview) : null;
+  }
 }
