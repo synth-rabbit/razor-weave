@@ -115,7 +115,7 @@ export class CampaignClient {
     // Generate campaign ID in format: campaign-YYYYMMDD-HHMMSS-randomString
     const now = new Date();
     const datePart = now.toISOString().slice(0, 10).replace(/-/g, '');
-    const timePart = now.toTimeString().slice(0, 8).replace(/:/g, '');
+    const timePart = now.toISOString().slice(11, 19).replace(/:/g, '');
     const randomPart = Math.random().toString(36).substring(2, 10);
     const id = `campaign-${datePart}-${timePart}-${randomPart}`;
 
@@ -141,9 +141,9 @@ export class CampaignClient {
     return id;
   }
 
-  getCampaign(id: string): Campaign | undefined {
+  getCampaign(id: string): Campaign | null {
     const stmt = this.db.prepare('SELECT * FROM review_campaigns WHERE id = ?');
-    const row = stmt.get(id) as Campaign | undefined;
-    return row;
+    const row = stmt.get(id);
+    return row ? (row as Campaign) : null;
   }
 }
