@@ -14,6 +14,7 @@ export interface SnapshotBookData {
 export interface SnapshotChapterData {
   bookPath: string;
   chapterPath: string;
+  chapterName: string;
   version: string;
   source: 'git' | 'claude';
   commitSha?: string;
@@ -38,6 +39,7 @@ export interface ChapterSnapshot {
   id: number;
   book_path: string;
   chapter_path: string;
+  chapter_name: string;
   version: string;
   content: string;
   metadata: string | null;
@@ -91,6 +93,52 @@ export function getBookSnapshot(
 
   const row = stmt.get(id);
   return row ? (row as BookSnapshot) : null;
+}
+
+export function snapshotChapter(
+  db: Database.Database,
+  data: SnapshotChapterData
+): number {
+  if (!existsSync(data.chapterPath)) {
+    throw new Error(`File not found: ${data.chapterPath}`);
+  }
+
+  const content = readFileSync(data.chapterPath, 'utf-8');
+  const fileHash = calculateHash(content);
+  const metadataJson = data.metadata ? JSON.stringify(data.metadata) : null;
+
+  const stmt = db.prepare(`
+    INSERT INTO chapter_versions (
+      book_path, chapter_path, chapter_name, version,
+      content, metadata, file_hash, source, commit_sha
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  const result = stmt.run(
+    data.bookPath,
+    data.chapterPath,
+    data.chapterName,
+    data.version,
+    content,
+    metadataJson,
+    fileHash,
+    data.source,
+    data.commitSha || null
+  );
+
+  return result.lastInsertRowid as number;
+}
+
+export function getChapterSnapshot(
+  db: Database.Database,
+  id: number
+): ChapterSnapshot | null {
+  const stmt = db.prepare(`
+    SELECT * FROM chapter_versions WHERE id = ?
+  `);
+
+  const row = stmt.get(id);
+  return row ? (row as ChapterSnapshot) : null;
 }
 
 function calculateHash(content: string): string {

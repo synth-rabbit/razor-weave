@@ -69,6 +69,7 @@ describe('Content Snapshot', () => {
       const id = snapshotChapter(db, {
         bookPath: 'core/v1',
         chapterPath: testChapterPath,
+        chapterName: 'Chapter 1',
         version: 'v1.2',
         source: 'git',
         commitSha: 'abc123',
@@ -79,6 +80,7 @@ describe('Content Snapshot', () => {
       const snapshot = getChapterSnapshot(db, id);
       expect(snapshot).toBeDefined();
       expect(snapshot?.chapter_path).toBe(testChapterPath);
+      expect(snapshot?.chapter_name).toBe('Chapter 1');
       expect(snapshot?.file_hash).toMatch(/^[a-f0-9]{64}$/);
       expect(snapshot?.content).toContain('Chapter 1');
     });
@@ -88,6 +90,7 @@ describe('Content Snapshot', () => {
         snapshotChapter(db, {
           bookPath: 'core/v1',
           chapterPath: 'nonexistent.md',
+          chapterName: 'Nonexistent',
           version: 'v1.0',
           source: 'git',
         })
