@@ -97,4 +97,46 @@ describe('Content Snapshot', () => {
       ).toThrow('File not found');
     });
   });
+
+  describe('hash consistency', () => {
+    it('generates same hash for identical content', () => {
+      const id1 = snapshotBook(db, {
+        bookPath: testBookPath,
+        version: 'v1.0',
+        source: 'git',
+      });
+
+      const id2 = snapshotBook(db, {
+        bookPath: testBookPath,
+        version: 'v1.1',
+        source: 'git',
+      });
+
+      const snapshot1 = getBookSnapshot(db, id1);
+      const snapshot2 = getBookSnapshot(db, id2);
+
+      expect(snapshot1?.file_hash).toBe(snapshot2?.file_hash);
+    });
+
+    it('generates different hash for different content', () => {
+      const id1 = snapshotBook(db, {
+        bookPath: testBookPath,
+        version: 'v1.0',
+        source: 'git',
+      });
+
+      writeFileSync(testBookPath, '<html><body><h1>Modified</h1></body></html>');
+
+      const id2 = snapshotBook(db, {
+        bookPath: testBookPath,
+        version: 'v1.1',
+        source: 'git',
+      });
+
+      const snapshot1 = getBookSnapshot(db, id1);
+      const snapshot2 = getBookSnapshot(db, id2);
+
+      expect(snapshot1?.file_hash).not.toBe(snapshot2?.file_hash);
+    });
+  });
 });
