@@ -51,19 +51,42 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    let activeLink = null;
     tocLinks.forEach(link => {
       link.classList.remove('active');
       if (link.getAttribute('href') === '#' + current) {
         link.classList.add('active');
+        activeLink = link;
       }
     });
+
+    // Auto-scroll TOC to keep active link visible
+    if (activeLink) {
+      const tocContainer = document.querySelector('.reader-toc');
+      if (tocContainer && !tocContainer.classList.contains('open')) {
+        // Only auto-scroll if not in mobile drawer mode
+        const linkTop = activeLink.offsetTop;
+        const linkHeight = activeLink.offsetHeight;
+        const containerHeight = tocContainer.clientHeight;
+        const containerScroll = tocContainer.scrollTop;
+
+        // Check if link is out of view
+        if (linkTop < containerScroll || linkTop + linkHeight > containerScroll + containerHeight) {
+          // Scroll to center the active link
+          tocContainer.scrollTo({
+            top: linkTop - (containerHeight / 2) + (linkHeight / 2),
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
 
     // Update breadcrumb
     const breadcrumbCurrent = document.getElementById('breadcrumb-current');
     if (breadcrumbCurrent && current) {
-      const activeLink = document.querySelector(`.toc-list a[href="#${current}"], .toc-root a[href="#${current}"]`);
-      if (activeLink) {
-        breadcrumbCurrent.textContent = activeLink.textContent;
+      const breadcrumbLink = document.querySelector(`.toc-list a[href="#${current}"], .toc-root a[href="#${current}"]`);
+      if (breadcrumbLink) {
+        breadcrumbCurrent.textContent = breadcrumbLink.textContent;
       }
     }
   }
