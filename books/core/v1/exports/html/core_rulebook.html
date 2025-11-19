@@ -95,6 +95,17 @@
       margin-top: 1.5rem;
       margin-bottom: 0.5rem;
       line-height: 1.2;
+      color: var(--color-hot-pink);
+    }
+    hr {
+      border: none;
+      border-top: 2px solid var(--color-hot-pink);
+      margin: 3rem 0;
+      opacity: 0.6;
+    }
+    .section-divider {
+      border-top: 3px solid var(--color-hot-pink);
+      margin: 4rem 0;
     }
     code, pre, .monospace {
       font-family: "JetBrains Mono", "SF Mono", Monaco, Consolas, monospace;
@@ -201,6 +212,21 @@
     tbody tr:hover {
       background: var(--color-light-blue);
       filter: brightness(0.98);
+    }
+    /* Hot Pink table variant */
+    table.variant-pink thead th {
+      background: var(--color-hot-pink);
+      color: var(--color-white);
+    }
+    table.variant-pink tbody tr:nth-child(even) {
+      background: var(--color-light-pink);
+    }
+    /* Alternate table headers with Hot Pink */
+    table:nth-of-type(2n) thead th {
+      background: var(--color-hot-pink);
+    }
+    table:nth-of-type(2n) tbody tr:nth-child(even) {
+      background: var(--color-light-pink);
     }
     caption {
       font-weight: 600;
@@ -653,6 +679,7 @@
         font-size: 13pt;
         margin-top: 14pt;
         margin-bottom: 8pt;
+        color: #FF006E; /* Hot Pink for print */
       }
 
       h4 {
@@ -660,6 +687,7 @@
         margin-top: 12pt;
         margin-bottom: 6pt;
         font-weight: bold;
+        color: #FF006E; /* Hot Pink for print */
       }
 
       /* ===================================
@@ -847,6 +875,19 @@
 
       tbody tr:nth-child(even) {
         background: #E5FAFF; /* Keep light blue rows */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Hot Pink alternating tables */
+      table:nth-of-type(2n) thead th {
+        background: #FF006E; /* Hot Pink header */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      table:nth-of-type(2n) tbody tr:nth-child(even) {
+        background: #FFE5F3; /* Light pink rows */
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
