@@ -1,4 +1,4 @@
-import { loadSchema, type CombinationRules } from './schema.js';
+import { loadSchema } from './schema.js';
 
 export interface PersonaDimensions {
   archetypes: string;
