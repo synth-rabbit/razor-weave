@@ -279,6 +279,32 @@
   transform: scale(0.98);
 }
 
+.breadcrumb-feedback-link {
+  background: none;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  color: var(--color-hot-pink);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.breadcrumb-feedback-link:hover {
+  background: var(--color-light-pink);
+  color: var(--color-deep-purple);
+}
+
+.breadcrumb-feedback-link:active {
+  transform: scale(0.98);
+}
+
 /* Breadcrumb corner decorations - bottom corners */
 .breadcrumb::before {
   content: '';
