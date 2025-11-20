@@ -237,7 +237,6 @@
 .breadcrumb {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-md) var(--spacing-lg);
   padding-top: calc(var(--spacing-md) + 4px);
@@ -303,31 +302,6 @@
 }
 
 .breadcrumb-feedback-link:active {
-  transform: scale(0.98);
-}
-
-.breadcrumb-icon-btn {
-  background: none;
-  border: none;
-  padding: 0.3rem 0.6rem;
-  cursor: pointer;
-  color: var(--color-electric-blue);
-  border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-shrink: 0;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.breadcrumb-icon-btn:hover {
-  background: var(--color-light-blue);
-  color: var(--color-deep-purple);
-}
-
-.breadcrumb-icon-btn:active {
   transform: scale(0.98);
 }
 
@@ -702,7 +676,22 @@ html {
 }
 
 .bookmarks-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-ink-black);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
   position: relative;
+}
+
+.bookmarks-toggle:hover {
+  background: var(--color-light-blue);
+  color: var(--color-electric-blue);
 }
 
 .bookmarks-count {
@@ -893,39 +882,6 @@ body.reader-mode .reader-mode-toggle:hover {
   opacity: 1;
 }
 
-/* Reader mode close button */
-.reader-mode-close {
-  display: none; /* Hidden by default */
-  position: fixed;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
-  z-index: 1001; /* Above reader-mode-toggle */
-  background: var(--color-white);
-  border: 2px solid var(--color-primary);
-  border-radius: var(--radius-md);
-  padding: 0.75rem;
-  cursor: pointer;
-  box-shadow: var(--shadow-xl);
-  transition: all var(--transition-fast);
-  color: var(--color-primary);
-}
-
-body.reader-mode .reader-mode-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.reader-mode-close:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
-  transform: scale(1.1);
-}
-
-.reader-mode-close:active {
-  transform: scale(0.95);
-}
-
 /* ============================================================================
    PRINT OPTIMIZATION
    ============================================================================ */
@@ -934,90 +890,6 @@ body.reader-mode .reader-mode-close {
   /* Hide texture overlay that blocks content */
   body::after {
     display: none !important;
-  }
-
-  /* Page breaks - Tier 1: Part sections only */
-  .reader-content .part-intro {
-    page-break-before: always;
-    page-break-after: avoid;
-  }
-
-  /* Exception: Don't force blank first page */
-  .reader-content .part-intro:first-of-type {
-    page-break-before: auto;
-  }
-
-  /* All H1s: no forced breaks (let content flow naturally) */
-  .reader-content h1 {
-    page-break-before: auto;
-    page-break-after: avoid;
-  }
-
-  /* Character sheets: Start on new page, but allow natural breaks */
-  .reader-content .sheet-block {
-    page-break-before: always;
-    page-break-after: auto; /* Changed from always - removes blank pages */
-  }
-
-  /* Page breaks - Tier 2: Strongly avoid breaks in content blocks */
-  /* Firefox-compatible: use only page-break-* properties, not break-* */
-  .reader-content table,
-  .reader-content .example,
-  .reader-content .gm,
-  .reader-content ul,
-  .reader-content ol {
-    page-break-inside: avoid;
-  }
-
-  /* Allow sheets to break naturally (they're large) */
-  .reader-content .sheet-block {
-    page-break-inside: auto;
-  }
-
-  /* For glossary/index: allow breaks but keep dt+dd together */
-  .reader-content dl {
-    page-break-inside: auto;
-  }
-
-  .reader-content dt,
-  .reader-content dd {
-    page-break-inside: avoid;
-  }
-
-  /* Keep dt with its dd */
-  .reader-content dt {
-    page-break-after: avoid;
-  }
-
-  /* Table handling - simplified for Firefox compatibility */
-  .reader-content table {
-    page-break-inside: auto; /* Allow tables to break if needed */
-  }
-
-  .reader-content tr {
-    page-break-inside: avoid;
-  }
-
-  /* Table headers repeat - Firefox needs thead display */
-  .reader-content thead {
-    display: table-header-group;
-  }
-
-  /* Prevent orphaned table cells */
-  .reader-content td,
-  .reader-content th {
-    page-break-inside: avoid;
-  }
-
-  /* Page breaks - Tier 3: Soft guidance for headings */
-  .reader-content h2 {
-    page-break-after: avoid; /* Keep with following content */
-    page-break-before: auto; /* Allow natural breaks if needed */
-  }
-
-  .reader-content h3,
-  .reader-content h4 {
-    page-break-after: avoid; /* Keep with following content */
   }
 
   /* Hide navigation and interactive elements */
@@ -1030,14 +902,7 @@ body.reader-mode .reader-mode-close {
   .bookmark-btn,
   .bookmarks-dropdown,
   .reader-mode-toggle,
-  .reader-mode-close,
   .reading-progress {
-    display: none;
-  }
-
-  /* Hide web-only content */
-  #keyboard-shortcuts,
-  .web-only {
     display: none;
   }
 
@@ -1052,72 +917,25 @@ body.reader-mode .reader-mode-close {
     max-width: 100%;
   }
 
-  /* Typography with spacing */
+  /* Basic typography */
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
   .reader-content h1 {
     font-size: 20pt;
-    margin-top: 0; /* Starts new page */
-    margin-bottom: 2rem;
   }
 
   .reader-content h2 {
     font-size: 16pt;
-    margin-top: 1.5rem;
-    border-bottom: 2pt solid #000; /* Visual divider */
-    padding-bottom: 0.5rem;
   }
 
   .reader-content h3 {
     font-size: 13pt;
-    margin-top: 1rem;
   }
 
   .reader-content h4 {
     font-size: 12pt;
-    margin-top: 0.75rem;
-  }
-
-  /* Visual distinction for special content */
-  .reader-content .example {
-    border-left: 4pt solid #0099cc;
-    padding: 1rem;
-    margin: 1rem 0;
-    background: rgba(0, 217, 255, 0.1) !important;
-  }
-
-  .reader-content .gm {
-    border-left: 4pt solid #7B2CBF;
-    padding: 1rem;
-    margin: 1rem 0;
-    background: rgba(123, 44, 191, 0.1) !important;
-  }
-
-  .reader-content .sheet-block {
-    border: 3pt solid #000;
-    padding: 1.5rem;
-    background: #fff !important;
-    box-decoration-break: clone; /* Prevent border splitting across pages */
-    -webkit-box-decoration-break: clone;
-  }
-
-  /* Prevent orphaned borders on headings */
-  .reader-content h2 {
-    overflow: visible; /* Ensure border doesn't orphan */
-  }
-
-  /* Table spacing */
-  .reader-content table {
-    margin: 1rem 0;
-  }
-
-  /* Improved readability */
-  body {
-    line-height: 1.6;
-  }
-
-  /* Orphans and widows */
-  .reader-content p,
-  .reader-content li {
-    orphans: 3;
-    widows: 3;
   }
 }
