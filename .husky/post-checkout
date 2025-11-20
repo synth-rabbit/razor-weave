@@ -1,2 +1,0 @@
-#!/bin/sh
-pnpm --filter @razorweave/tooling exec tsx hooks/git/post-checkout.ts
