@@ -36,22 +36,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Active section highlighting
   const tocLinks = document.querySelectorAll('.toc-root a, .toc-list a');
-  const sections = document.querySelectorAll('.reader-content section[id], .reader-content h2[id], .reader-content h3[id]');
+  // Only track section/header elements that match TOC links (ch-XX- pattern)
+  const sections = document.querySelectorAll('.reader-content section[id^="ch-"], .reader-content section[id^="part-"], .reader-content header[id^="ch-"]');
 
   let previousActiveId = '';
+  let previousActiveLink = null;
 
   function updateActiveSection() {
+    const scrollPosition = window.scrollY + 150;
     let current = '';
-    const scrollPosition = window.scrollY + 100;
+    let closestDistance = Infinity;
 
+    // Find the section closest to the top of the viewport
     sections.forEach(section => {
       const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
+      const distance = Math.abs(scrollPosition - sectionTop);
 
-      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+      if (scrollPosition >= sectionTop && distance < closestDistance) {
+        closestDistance = distance;
         current = section.getAttribute('id');
       }
     });
+
+    // Fallback to first section if nothing found
+    if (!current && sections.length > 0) {
+      current = sections[0].getAttribute('id');
+    }
 
     // Only update if the active section has actually changed
     if (current === previousActiveId) {
@@ -60,22 +70,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previousActiveId = current;
 
-    let activeLink = null;
-    tocLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === '#' + current) {
-        link.classList.add('active');
-        activeLink = link;
-      }
-    });
+    // Find new active link
+    const newActiveLink = document.querySelector(`.toc-list a[href="#${current}"], .toc-root a[href="#${current}"]`);
 
-    // Auto-scroll TOC to keep active link visible
-    if (activeLink) {
+    // Only touch the 2 links that changed, not all 100+
+    if (previousActiveLink) {
+      previousActiveLink.classList.remove('active');
+    }
+    if (newActiveLink) {
+      newActiveLink.classList.add('active');
+      previousActiveLink = newActiveLink;
+
+      // Auto-scroll TOC to keep active link visible
       const tocContainer = document.querySelector('.reader-toc');
       if (tocContainer && !tocContainer.classList.contains('open')) {
         // Only auto-scroll if not in mobile drawer mode
-        const linkTop = activeLink.offsetTop;
-        const linkHeight = activeLink.offsetHeight;
+        const linkTop = newActiveLink.offsetTop;
+        const linkHeight = newActiveLink.offsetHeight;
         const containerHeight = tocContainer.clientHeight;
         const containerScroll = tocContainer.scrollTop;
 
@@ -100,11 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  if (sections.length > 0) {
-    window.addEventListener('scroll', updateActiveSection);
-    updateActiveSection(); // Initial call
-  }
-
   // Reading Progress Bar
   const progressBar = document.querySelector('.reading-progress-bar');
 
@@ -122,10 +128,29 @@ document.addEventListener('DOMContentLoaded', () => {
     progressBar.style.width = Math.min(scrollPercent, 100) + '%';
   }
 
-  if (progressBar) {
-    window.addEventListener('scroll', updateReadingProgress);
-    window.addEventListener('resize', updateReadingProgress);
+  // Throttled scroll handler using requestAnimationFrame
+  // Combines both TOC highlighting and progress bar updates
+  let rafScheduled = false;
+
+  function handleScroll() {
+    if (rafScheduled) return;
+    rafScheduled = true;
+
+    requestAnimationFrame(() => {
+      updateActiveSection();
+      updateReadingProgress();
+      rafScheduled = false;
+    });
+  }
+
+  if (sections.length > 0 || progressBar) {
+    window.addEventListener('scroll', handleScroll);
+    updateActiveSection(); // Initial call
     updateReadingProgress(); // Initial call
+  }
+
+  if (progressBar) {
+    window.addEventListener('resize', updateReadingProgress);
   }
 
   // Smooth scroll polyfill for older browsers
@@ -223,32 +248,76 @@ document.addEventListener('DOMContentLoaded', () => {
   const quickJumpModal = document.getElementById('quickJumpModal');
   const quickJumpSearch = document.getElementById('quickJumpSearch');
   const quickJumpResults = document.getElementById('quickJumpResults');
+  const breadcrumbSearchBtn = document.getElementById('breadcrumbSearchBtn');
 
   if (quickJumpModal && quickJumpSearch && quickJumpResults) {
-    // Build search index from TOC
+    // Build comprehensive search index from page content
     const searchIndex = [];
-    const tocLinks = document.querySelectorAll('.toc-root a, .toc-list a');
+    const readerContent = document.querySelector('.reader-content');
 
-    tocLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      const text = link.textContent.trim();
+    // Get all sections and headings with IDs
+    const sections = readerContent.querySelectorAll('section[id], header[id], h1[id], h2[id], h3[id], h4[id]');
 
-      // Build path (parent sections)
+    sections.forEach(section => {
+      const id = section.getAttribute('id');
+      if (!id) return;
+
+      const href = '#' + id;
+
+      // Get the heading text
+      let title = '';
+      if (section.tagName.match(/^H[1-6]$/)) {
+        title = section.textContent.trim();
+      } else {
+        const heading = section.querySelector('h1, h2, h3, h4, h5, h6');
+        title = heading ? heading.textContent.trim() : id.replace(/-/g, ' ');
+      }
+
+      // Extract text content from this section (limit to avoid huge strings)
+      let content = '';
+      if (section.tagName === 'SECTION') {
+        // Get first few paragraphs of content
+        const paragraphs = Array.from(section.querySelectorAll('p, li'))
+          .slice(0, 5)
+          .map(p => p.textContent.trim())
+          .join(' ');
+        content = paragraphs.substring(0, 300); // Limit to 300 chars
+      }
+
+      // Find parent section for path
       let path = [];
-      let parent = link.closest('li')?.parentElement?.closest('li');
-      while (parent) {
-        const parentLink = parent.querySelector(':scope > a');
-        if (parentLink) {
-          path.unshift(parentLink.textContent.trim());
+      const tocLink = document.querySelector(`.toc-root a[href="#${id}"], .toc-list a[href="#${id}"]`);
+      if (tocLink) {
+        let parent = tocLink.closest('li')?.parentElement?.closest('li');
+        while (parent) {
+          const parentLink = parent.querySelector(':scope > a');
+          if (parentLink) {
+            path.unshift(parentLink.textContent.trim());
+          }
+          parent = parent.parentElement?.closest('li');
         }
-        parent = parent.parentElement?.closest('li');
       }
 
       searchIndex.push({
-        title: text,
+        title: title,
         path: path.join(' › '),
+        content: content,
         href: href
       });
+    });
+
+    // Initialize Fuse.js with fuzzy search configuration
+    const fuse = new Fuse(searchIndex, {
+      keys: [
+        { name: 'title', weight: 2 },      // Title is most important
+        { name: 'path', weight: 1 },       // Path is secondary
+        { name: 'content', weight: 0.5 }   // Content is tertiary
+      ],
+      threshold: 0.4, // 0 = exact match, 1 = match anything
+      distance: 100,
+      minMatchCharLength: 2,
+      includeScore: true,
+      ignoreLocation: true  // Search entire string, not just beginning
     });
 
     let selectedIndex = 0;
@@ -274,6 +343,11 @@ document.addEventListener('DOMContentLoaded', () => {
       renderResults(searchIndex);
     }
 
+    // Add click handler for breadcrumb search button
+    if (breadcrumbSearchBtn) {
+      breadcrumbSearchBtn.addEventListener('click', openQuickJump);
+    }
+
     function closeQuickJump() {
       quickJumpModal.classList.remove('open');
       quickJumpSearch.blur();
@@ -286,18 +360,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Search input
+    // Search input with fuzzy search
     quickJumpSearch.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
+      const query = e.target.value.trim();
       selectedIndex = 0;
 
       if (query === '') {
         renderResults(searchIndex);
       } else {
-        const filtered = searchIndex.filter(item => {
-          return item.title.toLowerCase().includes(query) ||
-                 item.path.toLowerCase().includes(query);
-        });
+        // Use Fuse.js for fuzzy search
+        const results = fuse.search(query);
+        const filtered = results.map(result => result.item);
         renderResults(filtered);
       }
     });
