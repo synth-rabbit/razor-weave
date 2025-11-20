@@ -23,7 +23,7 @@ Proficiencies often answer the question “Who gets to try this in the first pla
 Attributes, Skills, and Proficiencies work together. Attributes describe raw tendencies; Skills describe
         trained competencies; Proficiencies describe domains where that training has been applied over time. When
         you roll 4d6 for a Check, you typically choose an Attribute and a relevant Skill. A Proficiency then
-        shapes the fiction around that roll: it might justify Advantage, lower the DC, or remove uncertainty for
+        shapes the fiction around that roll: it might justify Edge, lower the DC, or remove uncertainty for
         basic tasks entirely.
 
 For example, two characters might both have the Systems & Diagnostics Skill. The one who is proficient
@@ -33,7 +33,7 @@ For example, two characters might both have the Systems & Diagnostics Skill. The
 
 Not every Check involving a Proficiency grants a numeric bonus. Sometimes the benefit is access, reduced
         time, or the ability to attempt actions at all. Let the fiction and the stakes guide whether a
-        Proficiency grants Advantage, adjusts DCs, or simply removes the need to roll for standard situations.
+        Proficiency grants Edge, adjusts DCs, or simply removes the need to roll for standard situations.
 
 ### Types of Proficiencies
 
@@ -59,7 +59,7 @@ When the outcome is uncertain and meaningful, Proficiencies shape the Check rath
         A Proficiency might:
 
 - Lower an otherwise tough DC by one or two steps on the ladder (for example from 18 Hard to 14 Routine).
-- Justify Advantage on the 4d6 roll when the task is firmly inside the character’s field.
+- Justify Edge on the 4d6 roll when the task is firmly inside the character’s field.
 - Reduce the time required to attempt something, ticking progress Clocks more quickly.
 - Unlock options that would otherwise be off‑limits, such as restricted procedures or specialized tools.
 
@@ -83,7 +83,7 @@ Proficiency entries in the reference chapters mirror the structure of Skill entr
 - **Name and type**– The Proficiency’s name and whether it is a domain, tool, organization, or role.
 - **Description**– What this expertise looks like in the fiction and how it shapes the character’s daily life.
 - **Scope and examples**– Typical situations where the Proficiency obviously applies, plus a few edge cases.
-- **Default benefits**– Ways it commonly affects Checks: reduced DCs, Advantage in certain circumstances, or automatic success for routine tasks.
+- **Default benefits**– Ways it commonly affects Checks: reduced DCs, Edge in certain circumstances, or automatic success for routine tasks.
 - **Opportunities and risks**– Story hooks the GM can use when this expertise is present in a scene.
 - **GM usage notes**– Guidance on when to ask for rolls, when to simply grant success, and how to model outcome tiers.
 - **Example**– A short scenario showing the Proficiency in action, from Trigger to Consequence.
@@ -136,7 +136,7 @@ Over time, you can gain new Proficiencies or deepen existing ones. Chapter 19: A
 When you broaden a Proficiency, its scope in the fiction grows: your guild credentials might expand from
         a single district to the entire region, or your “Field Medicine” experience might become full medical
         training with access to formal facilities. When you deepen a Proficiency, its impact on Checks may shift:
-        the GM might grant Advantage more often, treat certain tasks as automatically successful, or allow you to
+        the GM might grant Edge more often, treat certain tasks as automatically successful, or allow you to
         teach others more efficiently.
 
 Proficiencies rarely stack into flat numeric bonuses. Instead, use them to decide who has access, whose
@@ -169,6 +169,6 @@ You do not need to memorize long lists to play. Instead, treat these genre examp
 A PC with the “Harbor Operations” Proficiency and the Systems & Diagnostics Skill investigates a
 >         gridlocked port. The GM rules that routine scheduling tasks are automatic successes—no roll required—because
 >         the character knows the procedures. When they try to reroute traffic under pressure to prevent a collision,
->         the GM calls for a PRE + Systems & Diagnostics Check at DC 16. Their Proficiency justifies Advantage
+>         the GM calls for a PRE + Systems & Diagnostics Check at DC 16. Their Proficiency justifies Edge
 >         on the 4d6 roll and reduces the time required, ticking a “Clear the Harbor” Clock twice on a Full Success
 >         and once on a Partial.

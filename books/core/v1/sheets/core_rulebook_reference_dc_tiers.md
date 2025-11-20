@@ -34,14 +34,14 @@ Margin = (Roll Total – DC)
 | ≤ -3         | Failure           | No success; situation changes or worsens   |
 | ≤ -7 or all 1s | Critical Failure| Worst plausible result, big complications  |
 
-## Advantage and Disadvantage
+## Edge and Burden
 
-- **Advantage (+1 step)**: Roll 5d6, keep the best 4.
-- **Advantage (+2 steps)**: Roll 6d6, keep the best 4.
-- **Disadvantage (–1 step)**: Roll 5d6, keep the worst 4.
-- **Disadvantage (–2 steps)**: Roll 6d6, keep the worst 4.
+- **Edge (+1 step)**: Roll 5d6, keep the best 4.
+- **Edge (+2 steps)**: Roll 6d6, keep the best 4.
+- **Burden (–1 step)**: Roll 5d6, keep the worst 4.
+- **Burden (–2 steps)**: Roll 6d6, keep the worst 4.
 
-Use Advantage/Disadvantage when Tags, Conditions, Proficiencies, or preparation meaningfully shift the odds.
+Use Edge/Burden when Tags, Conditions, Proficiencies, or preparation meaningfully shift the odds.
 
 Sheet version: 1.0.0.
 

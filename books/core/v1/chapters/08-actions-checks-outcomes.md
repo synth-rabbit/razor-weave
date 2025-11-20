@@ -36,7 +36,7 @@ Every Check follows the same basic loop:
 1. The player declares intent and approach.
 1. The GM decides whether a Check is needed.
 1. If needed, the GM selects an Attribute and relevant Skill, sets a DC, and notes any Tags,
-          Conditions, or Proficiencies that might grant Advantage or Disadvantage.
+          Conditions, or Proficiencies that might grant Edge or Burden.
 1. The player rolls**4d6**, applies modifiers, and compares the total to the DC.
 1. The table interprets the outcome tier (critical success, full success, partial success, failure,
           critical failure) and updates the fiction accordingly.
@@ -77,30 +77,30 @@ Start by imagining what success would look like in the scene and how far it is f
         higher DCs when time is short, the environment is hostile, or the task is at the edge of what is
         possible in the setting.
 
-### Advantage, Disadvantage, Tags, and Conditions
+### Edge, Burden, Tags, and Conditions
 
 Rather than constantly adjusting the DC, the game often represents favorable or unfavorable circumstances
-        through**Advantage**and**Disadvantage**.
+        through**Edge**and**Burden**.
 
-- **+1 Advantage**: Roll 5d6, keep the best 4.
-- **+2 Advantage**: Roll 6d6, keep the best 4.
-- **-1 Disadvantage**: Roll 5d6, keep the worst 4.
-- **-2 Disadvantage**: Roll 6d6, keep the worst 4.
+- **+1 Edge**: Roll 5d6, keep the best 4.
+- **+2 Edge**: Roll 6d6, keep the best 4.
+- **-1 Burden**: Roll 5d6, keep the worst 4.
+- **-2 Burden**: Roll 6d6, keep the worst 4.
 
-Advantage and Disadvantage usually come from Tags, Conditions, environment, tools, Proficiencies, or
+Edge and Burden usually come from Tags, Conditions, environment, tools, Proficiencies, or
         prior setup actions. They represent the table’s shared sense that the character is favored or hindered in
-        this moment. Multiple sources combine into a single level of Advantage or Disadvantage and are capped at
-        ±2—several small edges do not create infinite Advantage, and multiple problems do not push you below −2.
-        If a character would have both Advantage and Disadvantage, reduce them against each other (for example,
+        this moment. Multiple sources combine into a single level of Edge or Burden and are capped at
+        ±2—several small edges do not create infinite Edge, and multiple problems do not push you below −2.
+        If a character would have both Edge and Burden, reduce them against each other (for example,
         +2 and −1 becomes +1) until only one side remains, then apply the final level.
 
-Tags and Conditions described in earlier chapters provide a shared vocabulary for these modifiers:*Dim Light*,*Slick*, or*Exposed*might impose Disadvantage;*Solid Cover*or*Marked*might grant Advantage in specific contexts or to specific parties.
+Tags and Conditions described in earlier chapters provide a shared vocabulary for these modifiers:*Dim Light*,*Slick*, or*Exposed*might impose Burden;*Solid Cover*or*Marked*might grant Edge in specific contexts or to specific parties.
 
 ### Rolling 4d6 and Calculating Margin
 
 When a Check is called for, follow this procedure:
 
-1. Roll**4d6**, adjusting the number of dice kept if Advantage or Disadvantage applies.
+1. Roll**4d6**, adjusting the number of dice kept if Edge or Burden applies.
 1. Add the relevant Attribute rating and any bonuses from Skills or temporary effects.
 1. Compare the total to the DC to find the**margin**(Roll − DC).
 
@@ -133,7 +133,7 @@ Every outcome tier should change the situation. The GM and players work together
 *Trigger:*In a cozy town, a character tries to calm a panicked neighbor during a storm. In a
 >         sci‑fi station, a character tries to reassure a frightened technician during a systems failure.
 *Roll:*Both are PRE‑based Checks against DC 14 (Routine) with an appropriate social Skill. The
->         cozy scene might grant Advantage if the characters have a strong existing relationship.
+>         cozy scene might grant Edge if the characters have a strong existing relationship.
 *Consequence:*Full success calms the NPC and stabilizes the scene. Partial success calms them but
 >         attaches a new obligation or rumor. Failure escalates the panic, spreading fear or misinformation.
 
@@ -143,7 +143,7 @@ Many actions involve more than one character. Rather than rolling for everyone s
         GM can use:
 
 - **Assistance**: One character leads the action, another assists. If the assistance is
-          credible in the fiction, the leader gains Advantage or a small bonus.
+          credible in the fiction, the leader gains Edge or a small bonus.
 - **Representative Checks**: One Check stands in for a coordinated group effort. The
           outcome tier describes how the whole group fares.
 - **Split Risks**: Two or more characters each roll, and the GM focuses on the most

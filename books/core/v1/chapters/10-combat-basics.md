@@ -113,7 +113,7 @@ Combat does not introduce a separate rule set. It highlights a small group of co
 
 - **Strike**– Directly attack a target.
 - **Maneuver**– Change position, create openings, or control space.
-- **Set Up**– Create Advantage or helpful Tags for yourself or allies.
+- **Set Up**– Create Edge or helpful Tags for yourself or allies.
 - **Defend / Withdraw**– Protect yourself or break contact to recover.
 
 #### Strike
@@ -150,15 +150,15 @@ Maneuvers are where you see genre shine. In cozy scenes, a Maneuver might be fli
 
 Set Up sacrifices immediate impact to create better opportunities: laying down suppressing fire, feinting
         to draw attention, calling out weak points, or coordinating a flanking position. On a Full Success, you
-        grant Advantage or establish a helpful Tag for yourself or allies; on a Partial, you still create the
+        grant Edge or establish a helpful Tag for yourself or allies; on a Partial, you still create the
         opening but at some cost.
 
 Good use of Set Up can turn a desperate fight into a manageable one. It shines when your own Strike
-        chances are low or when an ally can capitalize more effectively on the Advantage you create.
+        chances are low or when an ally can capitalize more effectively on the Edge you create.
 
 As a rule of thumb, if the group is facing a higher‑tier threat (a dangerous VPC or major enemy), expect
         the first rounds to involve more Set Ups and Maneuvers than Strikes. Once the table has created better
-        positions, cover, and Advantage, Strikes become dramatically more effective.
+        positions, cover, and Edge, Strikes become dramatically more effective.
 
 #### Defend / Withdraw
 
@@ -184,7 +184,7 @@ Tags play a major role in combat.*Dim Light*,*Cramped*,*Elevated*,*Fragile Cover
 > **Example – Using the Battlefield**
 In a rooftop fight marked as*Elevated*with scattered*Fragile Cover*, one character uses
 >         Maneuver to shove a foe toward the edge, threatening a fall. Another uses Set Up to flank, granting
->         Advantage on subsequent Strikes. The GM treats*Elevated*as granting Advantage on ranged attacks
+>         Edge on subsequent Strikes. The GM treats*Elevated*as granting Edge on ranged attacks
 >         from high ground and adds extra risk to any failed Checks near the edge.
 
 ### Conditions in Combat
@@ -195,7 +195,7 @@ Many combat consequences are expressed as Conditions: being*Stunned*by a concuss
 Whenever a Condition is applied in combat, the GM should state how long it lasts and how it can be
         cleared. For example,*Stunned*might end after you lose your next action, while*Exhausted*may persist until you rest between scenes.
 
-Multiple Conditions can stack in dangerous ways. A character who is both*Bleeding*and*Exhausted*is under pressure each round and rolling with Disadvantage on many actions. Scenes
+Multiple Conditions can stack in dangerous ways. A character who is both*Bleeding*and*Exhausted*is under pressure each round and rolling with Burden on many actions. Scenes
         like this are signals to change tactics—seek cover, call for help, or end the fight on your own terms.
 
 ### Putting It Together
@@ -204,12 +204,12 @@ A typical combat turn might look like this:
 
 1. The GM describes the scene, including relevant Tags and visible threats.
 1. You state intent and approach, choosing a core combat action.
-1. The GM sets DC, notes any Advantage/Disadvantage, and clarifies stakes.
+1. The GM sets DC, notes any Edge/Burden, and clarifies stakes.
 1. You roll**4d6**, apply modifiers, and compare to DC.
 1. The group interprets the outcome tier, ticking Clocks and applying Tags or Conditions as needed.
 
 Across several rounds, you will see patterns emerge: early positioning and Set Ups, decisive Strikes when
-        Advantage and Tags line up, Conditions and Clocks signaling rising danger, and Defend/Withdraw actions
+        Edge and Tags line up, Conditions and Clocks signaling rising danger, and Defend/Withdraw actions
         when the tide turns. Treat each fight as a story with a beginning, middle, and end rather than as a
         series of disconnected attacks.
 

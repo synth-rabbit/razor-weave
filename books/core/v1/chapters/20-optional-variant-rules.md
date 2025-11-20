@@ -28,7 +28,7 @@ Difficulty and Pacing Dials************************
 | Gentle Pacing       | Use more DC 12–14 tasks; reserve DC 18+ for boss moments. Pressure Clocks fill more slowly.                                                                                   | You want relaxed, character‑focused play where failure still matters but is less punishing.      |
 | High‑Tension Pacing | Default to DC 14–16 for meaningful challenges; pressure Clocks advance on more Partial Successes.                                                                             | You want sessions to feel urgent, with frequent tough choices and visible pressure.              |
 | Heroic Baseline     | Characters begin with one “edge” Condition (such as                                                                                                                           | Inspired                                                                                         | or | Bolstered | ) each
-                session that they can cash in for Advantage on a pivotal Check. | You want characters to feel competent and lucky, especially in climactic scenes. |
+                session that they can cash in for Edge on a pivotal Check. | You want characters to feel competent and lucky, especially in climactic scenes. |
 | Gritty Consequences | Partial Successes in combat or hazardous zones more often inflict Conditions and advance threat
                 Clocks, even when the immediate goal is achieved.             | You want danger to leave lasting marks and for recovery scenes to matter.                        |
 | Montage Resolution  | For some sequences (travel, research, prep), resolve a series of Checks as a single montage, ticking

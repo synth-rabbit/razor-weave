@@ -31,18 +31,18 @@ SeeChapter 8: Setting DCs
 
 SeeChapter 8: Interpreting Outcomes
 
-### Advantage & Disadvantage
+### Edge & Burden
 
 | Type         | Level                  | Roll                   |
 | ------------ | ---------------------- | ---------------------- |
-| Advantage    | +1                     | Roll 5d6, keep best 4  |
+| Edge    | +1                     | Roll 5d6, keep best 4  |
 | +2           | Roll 6d6, keep best 4  |
-| Disadvantage | -1                     | Roll 5d6, keep worst 4 |
+| Burden | -1                     | Roll 5d6, keep worst 4 |
 | -2           | Roll 6d6, keep worst 4 |
 
-**Note:**Multiple sources combine but cap at ±2. Advantage and Disadvantage cancel each other out.
+**Note:**Multiple sources combine but cap at ±2. Edge and Burden cancel each other out.
 
-SeeChapter 8: Advantage & Disadvantage
+SeeChapter 8: Edge & Burden
 
 ### Range Bands
 
@@ -62,7 +62,7 @@ Major topics grouped by category.
 ### Core Mechanics
 
 - 4d6 Resolution(Ch 8)
-- Advantage & Disadvantage(Ch 8,Glossary)
+- Edge & Burden(Ch 8,Glossary)
 - Clocks(Ch 9, Ch 11)
 - Difficulty Class (DC)(Ch 8,Glossary)
 - Margin & Outcome Tiers(Ch 8,Glossary)

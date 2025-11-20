@@ -4,9 +4,9 @@ Comprehensive definitions of game terms and concepts
 
 ## Core Mechanics
 
-**Advantage**Roll extra dice and keep best 4. Comes in two levels: +1 Advantage (roll 5d6, keep best 4) or +2 Advantage (roll 6d6, keep best 4). Granted by favorable positioning, gear, assistance, or special abilities. Cannot stack beyond ±2 levels.
+**Edge**Roll extra dice and keep best 4. Comes in two levels: +1 Edge (roll 5d6, keep best 4) or +2 Edge (roll 6d6, keep best 4). Granted by favorable positioning, gear, assistance, or special abilities. Cannot stack beyond ±2 levels.
 
-Defined in:Chapter 8: Advantage and Disadvantage
+Defined in:Chapter 8: Edge and Burden
 
 **Clock**Progress tracker with segments. Tick forward on successes (Progress Clock) or escalate pressure (Pressure Clock).
 
@@ -28,9 +28,9 @@ Defined in:Chapter 8: Outcome Tiers
 
 Defined in:Chapter 8: Setting DCs
 
-**Disadvantage**Roll extra dice and keep worst 4. Comes in two levels: -1 Disadvantage (roll 5d6, keep worst 4) or -2 Disadvantage (roll 6d6, keep worst 4). Imposed by poor positioning, conditions, obstacles, or penalties. Cannot stack beyond ±2 levels.
+**Burden**Roll extra dice and keep worst 4. Comes in two levels: -1 Burden (roll 5d6, keep worst 4) or -2 Burden (roll 6d6, keep worst 4). Imposed by poor positioning, conditions, obstacles, or penalties. Cannot stack beyond ±2 levels.
 
-Defined in:Chapter 8: Advantage and Disadvantage
+Defined in:Chapter 8: Edge and Burden
 
 **Failure**Margin ≤-3. Goal not achieved; situation escalates or new complication emerges.
 
@@ -52,7 +52,7 @@ Defined in:Chapter 8: Outcome Tiers
 
 Defined in:Chapter 16: What Proficiencies Represent
 
-**Skill**Trained competency; grants Advantage or bonuses to relevant checks.
+**Skill**Trained competency; grants Edge or bonuses to relevant checks.
 
 Defined in:Chapter 14: What Skills Represent
 
@@ -102,27 +102,27 @@ Defined in:Chapter 24: NPCs and VPCs Defined
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Dazed**Disoriented; Disadvantage on perception and reaction. Cleared after one turn or aid. You're struggling to focus and process what's happening around you.
+**Dazed**Disoriented; Burden on perception and reaction. Cleared after one turn or aid. You're struggling to focus and process what's happening around you.
 
 Defined in:Chapter 9: Tags, Conditions, and Clocks
 
-**Exhausted**Reduce effectiveness until rest or aid. Disadvantage on physical actions. Deep fatigue from sustained effort, lack of rest, or stress. Disadvantage on demanding physical actions and Checks using MIG or AGI approaches; clears with meaningful rest or care.
+**Exhausted**Reduce effectiveness until rest or aid. Burden on physical actions. Deep fatigue from sustained effort, lack of rest, or stress. Burden on demanding physical actions and Checks using MIG or AGI approaches; clears with meaningful rest or care.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Exposed**Vulnerable; Disadvantage to defense. Clear by moving to cover or breaking line of sight. You're out in the open or otherwise vulnerable to attack.
+**Exposed**Vulnerable; Burden to defense. Clear by moving to cover or breaking line of sight. You're out in the open or otherwise vulnerable to attack.
 
 Defined in:Chapter 9: Tags, Conditions, and Clocks
 
-**Frightened**Disadvantage on actions while threat is visible. Clear by removing threat or rallying. Overwhelming fear tied to a specific threat or situation; clears by escaping, rallying, or confronting the cause.
+**Frightened**Burden on actions while threat is visible. Clear by removing threat or rallying. Overwhelming fear tied to a specific threat or situation; clears by escaping, rallying, or confronting the cause.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Marked**Tracked or targeted; opponent gains Advantage against you. Clear by breaking contact. Specifically targeted or tracked by a foe until the mark is removed (breaking line of sight, changing appearance, or defeating the threat).
+**Marked**Tracked or targeted; opponent gains Edge against you. Clear by breaking contact. Specifically targeted or tracked by a foe until the mark is removed (breaking line of sight, changing appearance, or defeating the threat).
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Poisoned**Ongoing damage or Disadvantage; duration varies. Clear via antidote or medical aid. Exposed to harmful substances that impair or injure; may inflict periodic damage or tick a "Toxin Spreads" Clock.
+**Poisoned**Ongoing damage or Burden; duration varies. Clear via antidote or medical aid. Exposed to harmful substances that impair or injure; may inflict periodic damage or tick a "Toxin Spreads" Clock.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
@@ -138,7 +138,7 @@ Defined in:Chapter 18: Extended Tags & Conditions Reference
 
 Defined in:Chapter 9: Tags, Conditions, and Clocks
 
-**Suppressed**Disadvantage on next action due to pressure or intimidation. Cleared after acting. Shaken confidence, intimidation, or social pressure; usually clears after one meaningful attempt or supportive roleplaying.
+**Suppressed**Burden on next action due to pressure or intimidation. Cleared after acting. Shaken confidence, intimidation, or social pressure; usually clears after one meaningful attempt or supportive roleplaying.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
@@ -148,19 +148,19 @@ Defined in:Chapter 18: Extended Tags & Conditions Reference
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Cramped**Hinders movement; increases fall risk; limits large weapons or sweeping actions. Tight corridors, low ceilings, or packed spaces. Disadvantage on actions that need space (large weapons, sweeping attacks); may grant Advantage when bracing or grappling.
+**Cramped**Hinders movement; increases fall risk; limits large weapons or sweeping actions. Tight corridors, low ceilings, or packed spaces. Burden on actions that need space (large weapons, sweeping attacks); may grant Edge when bracing or grappling.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Crowded**Advantage to blend in or lose pursuit; Disadvantage to chase or spot targets. Many people sharing a small space such as markets, rallies, or evacuation queues. Harder to move quickly or track a single person; easier to blend in or lose a tail.
+**Crowded**Edge to blend in or lose pursuit; Burden to chase or spot targets. Many people sharing a small space such as markets, rallies, or evacuation queues. Harder to move quickly or track a single person; easier to blend in or lose a tail.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Dim Light**Advantage to stealth; Disadvantage to ranged attacks and detailed observation. Shadows, poor lighting, or night conditions provide cover for sneaking but make it harder to see clearly or aim precisely.
+**Dim Light**Edge to stealth; Burden to ranged attacks and detailed observation. Shadows, poor lighting, or night conditions provide cover for sneaking but make it harder to see clearly or aim precisely.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Elevated**Advantage on ranged attacks; forces opponents to climb or find alternate routes. Higher ground, vantage points, or raised platforms provide tactical superiority. Movement to or from elevation may require Checks.
+**Elevated**Edge on ranged attacks; forces opponents to climb or find alternate routes. Higher ground, vantage points, or raised platforms provide tactical superiority. Movement to or from elevation may require Checks.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
@@ -168,7 +168,7 @@ Defined in:Chapter 18: Extended Tags & Conditions Reference
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Fragile Cover**Grants Advantage to defense but degrades on Partial Success or repeated use. Barriers that can be destroyed—thin walls, wooden crates, glass partitions. Advantage on defense until damaged; repeated hits may destroy cover and create new hazards.
+**Fragile Cover**Grants Edge to defense but degrades on Partial Success or repeated use. Barriers that can be destroyed—thin walls, wooden crates, glass partitions. Edge on defense until damaged; repeated hits may destroy cover and create new hazards.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
@@ -180,7 +180,7 @@ Defined in:Chapter 18: Extended Tags & Conditions Reference
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Obscured**Vision blocked (fog, smoke, darkness); Disadvantage to ranged attacks and navigation. Fog, smoke, heavy rain, or cluttered sightlines severely limit visibility. Disadvantage on sight-based Perception; may grant Advantage to ambushes and escapes.
+**Obscured**Vision blocked (fog, smoke, darkness); Burden to ranged attacks and navigation. Fog, smoke, heavy rain, or cluttered sightlines severely limit visibility. Burden on sight-based Perception; may grant Edge to ambushes and escapes.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
@@ -188,11 +188,11 @@ Defined in:Chapter 18: Extended Tags & Conditions Reference
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Slick**Disadvantage on movement and maneuvers requiring balance (ice, oil, wet stone). Wet stone, oil, ice, or unstable footing makes movement treacherous. Failures may inflict Conditions or create new Tags.
+**Slick**Burden on movement and maneuvers requiring balance (ice, oil, wet stone). Wet stone, oil, ice, or unstable footing makes movement treacherous. Failures may inflict Conditions or create new Tags.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 
-**Solid Cover**Reliable protection; grants Advantage to defense without degrading. Reliable barriers—stone walls, heavy crates, reinforced barricades. May block some attacks entirely unless flanked or bypassed.
+**Solid Cover**Reliable protection; grants Edge to defense without degrading. Reliable barriers—stone walls, heavy crates, reinforced barricades. May block some attacks entirely unless flanked or bypassed.
 
 Defined in:Chapter 18: Extended Tags & Conditions Reference
 

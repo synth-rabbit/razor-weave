@@ -26,7 +26,7 @@ Example MIG‑Facing Skills****************
 
 **Default actions:**Climbing rough surfaces, crossing gaps, sprinting through unstable ground, or swimming against a current. Routine efforts in good conditions might be DC 12–14; risky leaps in bad weather or climbs while encumbered may push DCs into the 16–20 range.
 
-**Synergies and counters:**Tags like*Cramped*or*Unstable*make movement riskier, while secure anchor points or safety gear can justify Advantage. Conditions such as*Exhausted*or*Injured*often impose Disadvantage or raise effective DCs.
+**Synergies and counters:**Tags like*Cramped*or*Unstable*make movement riskier, while secure anchor points or safety gear can justify Edge. Conditions such as*Exhausted*or*Injured*often impose Burden or raise effective DCs.
 
 **GM usage notes:**Use this Skill when movement itself is the source of tension. Partial successes are good places to introduce new Tags or tick environmental Clocks—reaching the ledge but dislodging debris, for example.
 
@@ -40,7 +40,7 @@ The group needs to cross between two rooftops before a patrol arrives. The gap i
 
 **Default actions:**Shifting debris, hauling injured allies, or relocating bulky equipment. Clearing a simple blockage with time and help might sit at DC 12–14; lifting or holding something that is actively collapsing, burning, or unstable often reaches DC 16–20.
 
-**Synergies and counters:**Tags like*Solid Cover*,*Stable*surfaces, or access to proper tools can justify Advantage or lower DCs.*Unstable*,*Hazardous*, or*Cramped*spaces increase risk and may impose Disadvantage, especially if characters are also*Exhausted*or*Injured*.
+**Synergies and counters:**Tags like*Solid Cover*,*Stable*surfaces, or access to proper tools can justify Edge or lower DCs.*Unstable*,*Hazardous*, or*Cramped*spaces increase risk and may impose Burden, especially if characters are also*Exhausted*or*Injured*.
 
 **GM usage notes:**Treat Heavy Lifting as a chance to spotlight physical heroism and teamwork. On a Partial Success, consider progress with escalating danger—weight shifts, Clocks tick on structural collapse, or someone takes a Condition in exchange for getting others clear.
 
@@ -54,7 +54,7 @@ A maintenance platform buckles, pinning a worker beneath a support beam. The are
 
 **Default actions:**Marching long distances, rowing for hours, or holding a barricade against repeated assaults. Routine but taxing efforts might be DC 12–14; extreme situations—days without proper sleep, brutal weather, or a siege—can push DCs to 18–22 and may call for repeated Checks over time.
 
-**Synergies and counters:**Access to rest, food, medical care, or supportive Tags like*Sheltered*lower DCs or justify Advantage. Stacking Conditions such as*Exhausted*,*Bleeding*, or*Frightened*makes continued effort much harder, often increasing DCs or turning Partial Successes into new Complications.
+**Synergies and counters:**Access to rest, food, medical care, or supportive Tags like*Sheltered*lower DCs or justify Edge. Stacking Conditions such as*Exhausted*,*Bleeding*, or*Frightened*makes continued effort much harder, often increasing DCs or turning Partial Successes into new Complications.
 
 **GM usage notes:**Use Grit & Endurance Checks to mark the passage of grueling time. On Partial Success, let progress continue but introduce new Conditions or tick Clocks that reflect mounting strain, rather than simply ending the attempt.
 
@@ -68,7 +68,7 @@ The party must hike through a wind‑scoured pass overnight to warn a nearby tow
 
 **Default actions:**Holding someone back, escaping a grab, or wrestling over a weapon. Routine scuffles against untrained opponents might sit at DC 12–14; trying to restrain a prepared foe or overpower a larger opponent, especially in*Cramped*or*Crowded*conditions, can push DCs to 16–20.
 
-**Synergies and counters:**Tags like*Crowded*or*Confined*may help a grappler who can pin foes against surfaces, while*Hazardous*terrain makes failed Checks more dangerous. Conditions such as*Restrained*or*Exposed*shape follow‑up actions, often granting Advantage to allies or to the opponent.
+**Synergies and counters:**Tags like*Crowded*or*Confined*may help a grappler who can pin foes against surfaces, while*Hazardous*terrain makes failed Checks more dangerous. Conditions such as*Restrained*or*Exposed*shape follow‑up actions, often granting Edge to allies or to the opponent.
 
 **GM usage notes:**Grapples are great moments to bring Tags and Conditions into focus. On Partial Success, trade control back and forth—perhaps the PC restrains their foe but ends up positioned dangerously close to an edge or hazard.
 
@@ -98,7 +98,7 @@ Example AGI‑Facing Skills****************
 
 **Default actions:**Crossing guarded spaces without being seen, hiding in cluttered environments, shadowing someone through a crowd, or breaking line of sight. DCs depend on alertness and environment: DC 12–14 for casual observation, 16–18 against active patrols or*Alert*Tags.
 
-**Synergies and counters:**Tags like*Dim Light*,*Crowded*, or*Obscured*often support this Skill, granting Advantage or lowering effective DCs.*Alert*,*Surveillance*, or noisy gear can impose Disadvantage or raise DCs.
+**Synergies and counters:**Tags like*Dim Light*,*Crowded*, or*Obscured*often support this Skill, granting Edge or lowering effective DCs.*Alert*,*Surveillance*, or noisy gear can impose Burden or raise DCs.
 
 **GM usage notes:**When a Stealth Check fails, think about how the story changes—guards might become suspicious rather than immediately sounding alarms, or a partial reveal might create a tense chase instead of a static fight.
 
@@ -115,7 +115,7 @@ A character tries to slip past a checkpoint in a foggy yard at night. The Tags*D
 
 **Default actions:**Bypassing simple locks, repairing small mechanisms, or re‑routing cables in confined housings. Straightforward tasks with time and tools may be DC 12–14; rushed repairs in*Hazardous*or*Slick*environments, or on unfamiliar devices, can reach DC 18–20.
 
-**Synergies and counters:**Good light, proper tools, and helpful Tags like*Stable*or*Secure*justify Advantage or lower DCs. Poor lighting, vibrations, alarms counting down, or the*Cramped*Tag make success harder and elevate the consequences of failure.
+**Synergies and counters:**Good light, proper tools, and helpful Tags like*Stable*or*Secure*justify Edge or lower DCs. Poor lighting, vibrations, alarms counting down, or the*Cramped*Tag make success harder and elevate the consequences of failure.
 
 **GM usage notes:**Use Fine Manipulation Checks when the details of a mechanism matter. On Partial Success, let the device function but introduce a side effect—extra noise, temporary instability, or a Clock that tracks hidden wear that will matter later.
 
@@ -143,7 +143,7 @@ During a market‑square clash, a character uses stalls and awnings as improvise
 
 **Default actions:**Taking aimed shots, lobbing grenades or alchemical vials, or tossing grappling hooks. Routine shots at known ranges might be DC 12–14; difficult shots through*Obscured*areas, at long range, or while threatened often land around DC 16–20.
 
-**Synergies and counters:**Tags like*Elevated*,*Stable*footing, or prepared sights can grant Advantage.*Obscured*environments,*Slick*footing, or Conditions like*Shaken*or*Dazed*impose Disadvantage or raise DCs.
+**Synergies and counters:**Tags like*Elevated*,*Stable*footing, or prepared sights can grant Edge.*Obscured*environments,*Slick*footing, or Conditions like*Shaken*or*Dazed*impose Burden or raise DCs.
 
 **GM usage notes:**Ranged Technique Checks are opportunities to show how the environment shapes combat. On Partial Success, consider outcomes like grazing hits that apply a Condition, or successful shots that also damage cover, adding new Tags to the battlefield.
 
@@ -172,7 +172,7 @@ Example PRE‑Facing Skills****************
 
 **Default actions:**Negotiating terms, calming frightened NPCs, or advocating for a course of action. Everyday requests might sit at DC 12–14; high‑stakes persuasion against resistant targets can reach DC 18–20.
 
-**Synergies and counters:**Positive standing with a faction, prior favors, or supportive Tags (such as*Friendly*atmosphere) can justify Advantage or lower DCs. Deep grudges, conflicting goals, or a*Tense*Tag make success harder.
+**Synergies and counters:**Positive standing with a faction, prior favors, or supportive Tags (such as*Friendly*atmosphere) can justify Edge or lower DCs. Deep grudges, conflicting goals, or a*Tense*Tag make success harder.
 
 **GM usage notes:**Use outcome tiers to adjust both content and tone of NPC responses. Partial successes might grant what the PCs want at a cost, such as obligations or strings attached.
 
@@ -188,7 +188,7 @@ The characters ask a guild leader to delay a crucial shipment. The guild’s sta
 
 **Default actions:**Organizing evacuations, coordinating tactics, or assigning roles during tense operations. Simple direction among willing allies might be DC 12–14; trying to coordinate panicked crowds or fractious factions can reach DC 18–20, especially when time is short.
 
-**Synergies and counters:**Existing trust, clear plans, and stabilizing Tags such as*Organized*or*Prepared*can reduce DCs or justify Advantage. Chaos, misinformation, or hostile Tags like*Panicked*or*Hostile Crowd*make success harder and magnify the cost of failure.
+**Synergies and counters:**Existing trust, clear plans, and stabilizing Tags such as*Organized*or*Prepared*can reduce DCs or justify Edge. Chaos, misinformation, or hostile Tags like*Panicked*or*Hostile Crowd*make success harder and magnify the cost of failure.
 
 **GM usage notes:**Use Command & Coordination Checks to decide how effectively groups move or act as a unit. On Partial Success, allow progress but with frayed edges—delays, miscommunications, or pockets of resistance that become hooks for future scenes.
 
@@ -202,7 +202,7 @@ A fire breaks out in a crowded depot. The GM tags the scene*Panic Rising*and cal
 
 **Default actions:**Passing as someone else, staging distractions, or concealing true intentions in conversation. Simple lies with low stakes might be DC 12–14; intricate impersonations, long‑term cons, or bold public performances under scrutiny can hit DC 18–22.
 
-**Synergies and counters:**Props, disguises, and supportive Tags like*Crowded*or*Festive*justify Advantage. Informed audiences, existing suspicions, or Tags such as*Alert*and*Tense*push DCs higher, especially if the PCs are already*Marked*or*Exposed*.
+**Synergies and counters:**Props, disguises, and supportive Tags like*Crowded*or*Festive*justify Edge. Informed audiences, existing suspicions, or Tags such as*Alert*and*Tense*push DCs higher, especially if the PCs are already*Marked*or*Exposed*.
 
 **GM usage notes:**Deception Checks are a great place to lean on outcome tiers. Partial Success might buy time or partial belief while seeding later complications—NPCs who are unconvinced but play along, or an audience that enjoys the show but asks probing questions afterward.
 
@@ -216,7 +216,7 @@ To infiltrate a private gala, a PC poses as a visiting dignitary. The GM notes t
 
 **Default actions:**Sensing when someone is lying by omission, recognizing when a negotiation is about pride instead of price, or spotting who in a group is closest to changing their mind. Everyday reads of open conversations may be DC 12–14; subtle deception, masked emotions, or cross‑cultural misunderstandings can push DCs toward 18–20.
 
-**Synergies and counters:**Time spent listening, shared experiences, and quiet spaces can justify Advantage. Distracting environments,*Tense*or*Hostile*Tags, or your own Conditions like*Frightened*or*Suppressed*make it harder to read others clearly.
+**Synergies and counters:**Time spent listening, shared experiences, and quiet spaces can justify Edge. Distracting environments,*Tense*or*Hostile*Tags, or your own Conditions like*Frightened*or*Suppressed*make it harder to read others clearly.
 
 **GM usage notes:**Insight Checks are ideal for revealing partial truths. On Partial Success, share honest but incomplete information or let the PC sense there is more beneath the surface, prompting further investigation or conversation.
 
@@ -245,7 +245,7 @@ Example RSN‑Facing Skills****************
 
 **Default actions:**Analyzing a crime scene, comparing records for inconsistencies, or tracing the path of a missing person. Straightforward inquiries might be DC 12–14; complex puzzles or well‑hidden schemes push toward DC 18–22.
 
-**Synergies and counters:**Access to records, helpful NPCs, or prior research can lower DCs or justify Advantage. Tags such as*Obscured*,*Hazardous*locations, or active Cover‑Up Clocks raise stakes and complicate interpretation.
+**Synergies and counters:**Access to records, helpful NPCs, or prior research can lower DCs or justify Edge. Tags such as*Obscured*,*Hazardous*locations, or active Cover‑Up Clocks raise stakes and complicate interpretation.
 
 **GM usage notes:**Treat Investigation Checks as steps in a process, not single all‑or‑nothing gates. Use Clocks to track progress toward understanding, and let partial results reveal some truths while leaving room for future discoveries—or mistakes.
 
@@ -262,7 +262,7 @@ The group examines a sabotaged relay hub. The GM sets a 6‑segment “Understan
 
 **Default actions:**Hearing approaching footsteps, spotting hidden compartments, or noticing tampered equipment. Routine observations in quiet spaces might be DC 12–14; catching faint clues in*Obscured*or*Crowded*environments, or under time pressure, often climbs to DC 16–20.
 
-**Synergies and counters:**Tags such as*Elevated*,*Well‑Lit*, or*Quiet*justify lower DCs or Advantage.*Dim Light*,*Obscured*,*Noisy*, or Conditions like*Dazed*or*Distracted*raise DCs and make Partial Success more likely.
+**Synergies and counters:**Tags such as*Elevated*,*Well‑Lit*, or*Quiet*justify lower DCs or Edge.*Dim Light*,*Obscured*,*Noisy*, or Conditions like*Dazed*or*Distracted*raise DCs and make Partial Success more likely.
 
 **GM usage notes:**Use Perception Checks to highlight how the world communicates with the PCs. On Partial Success, share useful but incomplete information—enough to prompt action, but not enough to eliminate all uncertainty.
 
@@ -276,7 +276,7 @@ The group passes through a cargo bay tagged*Crowded*and*Noisy*. The GM calls for
 
 **Default actions:**Tracing faults in relay networks, modeling faction responses, or identifying structural weak points. Simple troubles with clear symptoms might be DC 12–14; subtle glitches, layered conspiracies, or interlocking systems can push required DCs to 18–22 and may require multiple Checks over time.
 
-**Synergies and counters:**Access to logs, schematics, or expert testimony lowers DCs or grants Advantage. Tags like*Obscured*records,*Corrupted*data, or active sabotage Clocks raise stakes and may turn failure into cascading consequences.
+**Synergies and counters:**Access to logs, schematics, or expert testimony lowers DCs or grants Edge. Tags like*Obscured*records,*Corrupted*data, or active sabotage Clocks raise stakes and may turn failure into cascading consequences.
 
 **GM usage notes:**Systems Checks are natural moments to use Clocks that track understanding or system stability. On Partial Success, let PCs isolate some but not all issues, or solve one problem while planting the seeds of the next.
 

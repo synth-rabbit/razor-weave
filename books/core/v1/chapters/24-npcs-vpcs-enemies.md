@@ -73,7 +73,7 @@ Choose one or two**details**that make the NPC easy to remember: a gesture, a pat
         Over time, you can add more, but even a single consistent trait goes a long way.
 
 Finally, assign a few**Tags**that describe attitude, resources, or vulnerabilities:*Overworked*,*Soft‑Spoken*,*Connected to the Docks*,*Haunted by Loss*.
-        These Tags help you improvise DC shifts, Advantage or Disadvantage, and likely consequences. They also make
+        These Tags help you improvise DC shifts, Edge or Burden, and likely consequences. They also make
         it clear what might change if the PCs support or pressure this NPC over many sessions.
 
 > **Example**
@@ -92,10 +92,10 @@ When you create a VPC, write down two or three possible destinations for their a
         hardened enforcer who closes ranks against the PCs. You do not need to decide which outcome will occur in
         advance. Let Clocks, Tags, and play at the table reveal it.
 
-Treat important VPCs as candidates for**Advantage and Disadvantage anchors**. When they are
+Treat important VPCs as candidates for**Edge and Burden anchors**. When they are
         present in a scene, their Tags should influence DCs and dice pools. A VPC tagged*Respected in the
-        Union*might grant Advantage on negotiations with workers, while one tagged*Burned Too Many
-        Bridges*might impose Disadvantage in those same conversations. This mechanical weight signals their
+        Union*might grant Edge on negotiations with workers, while one tagged*Burned Too Many
+        Bridges*might impose Burden in those same conversations. This mechanical weight signals their
         importance without requiring complex stat blocks.
 
 ### Enemies and Opposition
@@ -128,10 +128,10 @@ A masked arsonist group operates in the industrial district. Tags:*Fanatical*,*M
 When NPCs and enemies act, use the same resolution structure as you do for characters. Checks, Tags,
         Conditions, and Clocks keep everyone on the same footing.
 
-Use**NPC Tags**to adjust DCs or apply Advantage and Disadvantage when they attempt actions.
+Use**NPC Tags**to adjust DCs or apply Edge and Burden when they attempt actions.
         A veteran duelist with Tags like*Calm Under Fire*and*Reads Footwork*should feel harder to
         deceive or disarm than a bored guard tagged*Distracted*. The same framework from Chapter 8 applies:
-        Tags describe position and effect, which in turn shape DCs and dice.
+        Tags describe risk and impact, which in turn shape DCs and dice.
 
 Use**Conditions**to mark injury, fear, leverage, or doubt instead of tracking detailed hit
         points or morale scores. An enemy who is*Wounded*,*Shaken*, or*Cornered*behaves

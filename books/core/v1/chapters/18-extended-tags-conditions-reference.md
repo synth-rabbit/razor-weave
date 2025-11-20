@@ -14,9 +14,9 @@ Tags are short descriptors applied to scenes, locations, objects, or situations.
 
 In this system, Tags most often:
 
-- Grant Advantage or Disadvantage on specific Checks.
+- Grant Edge or Burden on specific Checks.
 - Shift DCs up or down along the standard ladder (Easy 12 to Legendary 22).
-- Change position and effect—how exposed you are if something goes wrong, or how much impact success has.
+- Change risk and impact—how exposed you are if something goes wrong, or how much effect success has.
 
 A good Tag has three qualities:
 
@@ -34,13 +34,13 @@ Environmental Tags********************************
 
 | Tag           | What It Represents                                                          | Typical Effects                                                                                                           |
 | ------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Dim Light     | Shadows, poor lighting, or night conditions.                                | Advantage on Stealth and hiding; Disadvantage on detailed Perception and long‑range attacks.                              |
-| Obscured      | Fog, smoke, heavy rain, or cluttered sightlines.                            | Disadvantage on sight‑based Perception; may grant Advantage to ambushes and escapes.                                      |
-| Slick         | Wet stone, oil, ice, or unstable footing.                                   | Disadvantage on fast movement and risky maneuvers; Failures may inflict Conditions or new Tags.                           |
-| Cramped       | Tight corridors, low ceilings, or packed shelves.                           | Disadvantage on actions that need space (large weapons, sweeping attacks); may grant Advantage when bracing or grappling. |
-| Elevated      | Higher ground, vantage points, or raised platforms.                         | Advantage on many ranged attacks and observation Checks; movement to or from elevation may require Checks.                |
-| Solid Cover   | Reliable barriers—stone walls, heavy crates, reinforced barricades.         | Advantage on defense from certain angles; may block some attacks entirely unless flanked or bypassed.                     |
-| Fragile Cover | Barriers that can be destroyed—thin walls, wooden crates, glass partitions. | Advantage on defense until damaged; Partial Successes or repeated hits may destroy cover and create new hazards.          |
+| Dim Light     | Shadows, poor lighting, or night conditions.                                | Edge on Stealth and hiding; Burden on detailed Perception and long‑range attacks.                              |
+| Obscured      | Fog, smoke, heavy rain, or cluttered sightlines.                            | Burden on sight‑based Perception; may grant Edge to ambushes and escapes.                                      |
+| Slick         | Wet stone, oil, ice, or unstable footing.                                   | Burden on fast movement and risky maneuvers; Failures may inflict Conditions or new Tags.                           |
+| Cramped       | Tight corridors, low ceilings, or packed shelves.                           | Burden on actions that need space (large weapons, sweeping attacks); may grant Edge when bracing or grappling. |
+| Elevated      | Higher ground, vantage points, or raised platforms.                         | Edge on many ranged attacks and observation Checks; movement to or from elevation may require Checks.                |
+| Solid Cover   | Reliable barriers—stone walls, heavy crates, reinforced barricades.         | Edge on defense from certain angles; may block some attacks entirely unless flanked or bypassed.                     |
+| Fragile Cover | Barriers that can be destroyed—thin walls, wooden crates, glass partitions. | Edge on defense until damaged; Partial Successes or repeated hits may destroy cover and create new hazards.          |
 | Unstable      | Rattling catwalks, loose stones, precarious stacks.                         | Checks that move or add weight risk advancing Clocks or causing falls; Failures often make the environment worse.         |
 
 ### Situational and Atmospheric Tags
@@ -65,7 +65,7 @@ Situational & Atmospheric Tags********************************
 > **Example**
 > **Example – Combining Tags in a Scene**
 A street protest has the Tags*Crowded*,*Tense*, and*Surveillance*. A PC trying to
->         slip through without notice may gain Advantage on AGI + Stealth & Evasion thanks to*Crowded*,
+>         slip through without notice may gain Edge on AGI + Stealth & Evasion thanks to*Crowded*,
 >         but attempts to stage a covert meeting in the middle of the rally risk advancing a “Authorities Respond”
 >         Clock because of*Surveillance*. PRE‑based attempts to calm a brewing clash face higher DCs under*Tense*, while a carefully framed speech might clear that Tag if it succeeds.
 
@@ -90,7 +90,7 @@ Conditions are persistent states attached to characters. They represent injuries
 
 Most Conditions:
 
-- Impose Disadvantage on specific categories of Checks.
+- Impose Burden on specific categories of Checks.
 - Limit safe options (“you can’t sprint on that leg,” “you can’t act this turn”).
 - Threaten escalation if ignored, often via Clocks or worsening states.
 
@@ -106,11 +106,11 @@ Physical Conditions********************
 
 | Condition  | What It Represents                                           | Typical Effects & Clearing                                                                                                                                           |
 | ---------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Exhausted  | Deep fatigue from sustained effort, lack of rest, or stress. | Disadvantage on demanding physical actions and Checks using MIG or AGI approaches for many scenes; clears with meaningful rest or care.                              |
+| Exhausted  | Deep fatigue from sustained effort, lack of rest, or stress. | Burden on demanding physical actions and Checks using MIG or AGI approaches for many scenes; clears with meaningful rest or care.                              |
 | Bleeding   | An active wound that will worsen without treatment.          | Time pressure; certain actions may risk further harm. Usually paired with a short Clock such as “Stabilize Wound”; clears with field treatment or medical attention. |
 | Restrained | Held, tied, pinned, or otherwise unable to move freely.      | Cannot change position or perform many physical actions; Checks to break free or receive help can clear or downgrade this Condition.                                 |
-| Poisoned   | Exposed to harmful substances that impair or injure.         | Disadvantage on a range of actions; may inflict periodic damage or tick a “Toxin Spreads” Clock. Clears via antidotes, medical care, or time, depending on fiction.  |
-| Marked     | Specifically targeted or tracked by a foe.                   | Enemies gain Advantage on certain attacks or Checks against you until the mark is removed (breaking line of sight, changing appearance, or defeating the threat).    |
+| Poisoned   | Exposed to harmful substances that impair or injure.         | Burden on a range of actions; may inflict periodic damage or tick a “Toxin Spreads” Clock. Clears via antidotes, medical care, or time, depending on fiction.  |
+| Marked     | Specifically targeted or tracked by a foe.                   | Enemies gain Edge on certain attacks or Checks against you until the mark is removed (breaking line of sight, changing appearance, or defeating the threat).    |
 
 ### Mental and Social Conditions
 
@@ -121,11 +121,11 @@ Mental & Social Conditions********************
 
 | Condition              | What It Represents                                                 | Typical Effects & Clearing                                                                                                                                                      |
 | ---------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Frightened             | Overwhelming fear tied to a specific threat or situation.          | Disadvantage on actions taken while the source is present; clears by escaping, rallying, or confronting the cause.                                                              |
-| Suppressed             | Shaken confidence, intimidation, or social pressure.               | Disadvantage on the next bold or assertive action; usually clears after one meaningful attempt or supportive roleplaying.                                                       |
-| Distracted             | Split focus due to pain, competing demands, or intrusive thoughts. | Disadvantage on careful or complex tasks; clears when the distracting factor is addressed or set aside.                                                                         |
-| Compromised Reputation | A hit to standing in a community or group.                         | Higher DCs or Disadvantage on certain social Checks with that community; clears via reparative actions, public successes, or narrative milestones.                              |
-| Obsessed               | Fixated on a goal, person, or mystery.                             | Advantage on related research or pursuit; Disadvantage when asked to ignore or abandon the object of focus. Clears through resolution, intervention, or personal growth scenes. |
+| Frightened             | Overwhelming fear tied to a specific threat or situation.          | Burden on actions taken while the source is present; clears by escaping, rallying, or confronting the cause.                                                              |
+| Suppressed             | Shaken confidence, intimidation, or social pressure.               | Burden on the next bold or assertive action; usually clears after one meaningful attempt or supportive roleplaying.                                                       |
+| Distracted             | Split focus due to pain, competing demands, or intrusive thoughts. | Burden on careful or complex tasks; clears when the distracting factor is addressed or set aside.                                                                         |
+| Compromised Reputation | A hit to standing in a community or group.                         | Higher DCs or Burden on certain social Checks with that community; clears via reparative actions, public successes, or narrative milestones.                              |
+| Obsessed               | Fixated on a goal, person, or mystery.                             | Edge on related research or pursuit; Burden when asked to ignore or abandon the object of focus. Clears through resolution, intervention, or personal growth scenes. |
 
 > **Example**
 > **Example – Layered Conditions**
@@ -170,7 +170,7 @@ When you invent a new Condition, follow the same pattern as Tags:
 - Specify which kinds of Checks it helps or hinders (if any).
 - Decide how it escalates if ignored and how it can be cleared.
 
-Conditions do not need intricate, numeric rules to matter. If everyone understands what*Haunted*,*Homesick*, or*On Thin Ice With the Guild*means, the table can apply Disadvantage, DC
+Conditions do not need intricate, numeric rules to matter. If everyone understands what*Haunted*,*Homesick*, or*On Thin Ice With the Guild*means, the table can apply Burden, DC
         shifts, or narrative constraints consistently as situations arise.
 
 ### Beneficial Conditions and Edges
@@ -183,11 +183,11 @@ Beneficial Conditions********************
 
 | Condition           | What It Represents                                                | Typical Effects & Clearing                                                                                                                                                               |
 | ------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Inspired            | A burst of confidence or insight grounded in recent events.       | Advantage on one or a few Checks tied to the source of inspiration (a speech, a victory, a vow); clears once that benefit is used or the scene ends.                                     |
-| Sheltered           | Taking cover under protection—physical, social, or institutional. | Reduced effect or Disadvantage on attacks against you from certain angles or factions; clears when you leave protection or it is withdrawn.                                              |
-| Bolstered           | Reassurance, magical warding, or careful preparation.             | Advantage on Checks to resist a specific danger (fear, charm, fire, interrogation); often tied to a short Clock or a single scene.                                                       |
-| Focused             | Calm, centered attention on a task or goal.                       | Advantage on RSN‑heavy or precision actions related to the focus; may impose Disadvantage on unrelated impulsive choices; clears when you are interrupted or choose to break focus.      |
-| Backed by Authority | Acting with formal sanction, warrants, or clear mandate.          | Lower DCs or Advantage on social Checks with people who respect that authority; higher DCs when dealing with those who resent or fear it. Clears when the mandate expires or is revoked. |
+| Inspired            | A burst of confidence or insight grounded in recent events.       | Edge on one or a few Checks tied to the source of inspiration (a speech, a victory, a vow); clears once that benefit is used or the scene ends.                                     |
+| Sheltered           | Taking cover under protection—physical, social, or institutional. | Reduced effect or Burden on attacks against you from certain angles or factions; clears when you leave protection or it is withdrawn.                                              |
+| Bolstered           | Reassurance, magical warding, or careful preparation.             | Edge on Checks to resist a specific danger (fear, charm, fire, interrogation); often tied to a short Clock or a single scene.                                                       |
+| Focused             | Calm, centered attention on a task or goal.                       | Edge on RSN‑heavy or precision actions related to the focus; may impose Burden on unrelated impulsive choices; clears when you are interrupted or choose to break focus.      |
+| Backed by Authority | Acting with formal sanction, warrants, or clear mandate.          | Lower DCs or Edge on social Checks with people who respect that authority; higher DCs when dealing with those who resent or fear it. Clears when the mandate expires or is revoked. |
 
 You can add beneficial Conditions when characters earn them through play—completing preparation, forging
         alliances, or achieving symbolic victories. They are a good way to reward smart choices without rewriting
@@ -233,11 +233,11 @@ When you are in the middle of play and do not want to stop for long lists, use t
 
 1. **Describe first.**Paint the scene in plain language—what feels unstable, crowded, eerie, or hopeful.
 1. **Name 1–3 Tags.**Turn the most important details into Tags that will matter for Checks.
-1. **Roll and resolve.**Apply Tags and existing Conditions as Advantage/Disadvantage, DC shifts, or changes to consequences.
+1. **Roll and resolve.**Apply Tags and existing Conditions as Edge/Burden, DC shifts, or changes to consequences.
 1. **Update states.**If the outcome is significant, add or clear Conditions or adjust Clocks.
 1. **Move on.**Do not retag everything every round; only update when the fiction clearly changes.
 
-If you are ever unsure which mechanical tweak to use, start with Advantage/Disadvantage. Only reach for DC
+If you are ever unsure which mechanical tweak to use, start with Edge/Burden. Only reach for DC
         shifts or new Clocks when you want to signal larger changes in risk or pacing.
 
 > **GM Guidance**
