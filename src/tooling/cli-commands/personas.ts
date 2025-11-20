@@ -1,6 +1,7 @@
 import { getDatabase } from '../database/index.js';
 import { hydrateAllCorePersonas } from '../personas/hydrator.js';
 import { generatePersonaBatch } from '../personas/generator.js';
+import { log } from '../logging/logger.js';
 
 export interface GenerateOptions {
   seed?: number;
@@ -12,9 +13,9 @@ export interface GenerateOptions {
  * Loads all 10 core personas into the database
  */
 export function hydrateCore(): void {
-  console.log('Hydrating core personas...');
+  log.info('Hydrating core personas...');
   const count = hydrateAllCorePersonas();
-  console.log(`✓ Loaded ${count} core personas`);
+  log.info(`✓ Loaded ${count} core personas`);
 }
 
 /**
@@ -25,7 +26,7 @@ export async function generate(
   count: number,
   options?: GenerateOptions
 ): Promise<void> {
-  console.log(`Generating ${count} personas...`);
+  log.info(`Generating ${count} personas...`);
 
   const batchSize = options?.batchSize || 10;
   const db = getDatabase();
@@ -58,10 +59,10 @@ export async function generate(
       generated++;
     }
 
-    console.log(`  Generated ${generated}/${count}...`);
+    log.info(`  Generated ${generated}/${count}...`);
   }
 
-  console.log(`✓ Generated ${generated} personas`);
+  log.info(`✓ Generated ${generated} personas`);
 }
 
 /**
@@ -74,26 +75,26 @@ export async function stats(): Promise<void> {
   // Get all personas
   const allPersonas = db.personas.getAll();
 
-  console.log('\n=== Persona Statistics ===\n');
-  console.log(`Total personas: ${allPersonas.length}`);
+  log.info('\n=== Persona Statistics ===\n');
+  log.info(`Total personas: ${allPersonas.length}`);
 
   // Count by type
   const byType = countBy(allPersonas, 'type');
-  console.log(`  Core: ${byType.core || 0}`);
-  console.log(`  Generated: ${byType.generated || 0}`);
+  log.info(`  Core: ${byType.core || 0}`);
+  log.info(`  Generated: ${byType.generated || 0}`);
 
   // Count by archetype
-  console.log('\nArchetypes:');
+  log.info('\nArchetypes:');
   const byArchetype = countBy(allPersonas, 'archetype');
   for (const [archetype, count] of Object.entries(byArchetype)) {
-    console.log(`  ${archetype}: ${count}`);
+    log.info(`  ${archetype}: ${count}`);
   }
 
   // Count by experience level
-  console.log('\nExperience Levels:');
+  log.info('\nExperience Levels:');
   const byExperience = countBy(allPersonas, 'experience_level');
   for (const [level, count] of Object.entries(byExperience)) {
-    console.log(`  ${level}: ${count}`);
+    log.info(`  ${level}: ${count}`);
   }
 }
 

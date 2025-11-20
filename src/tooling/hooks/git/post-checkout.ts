@@ -1,4 +1,5 @@
 import { readFile } from 'fs/promises';
+import { log } from '../../logging/logger.js';
 
 export async function postCheckout(): Promise<void> {
   try {
@@ -7,20 +8,20 @@ export async function postCheckout(): Promise<void> {
     const context = extractSection(content, '## Context');
     const instructions = extractSection(content, '## Instructions');
 
-    console.log('📋 Current Context:');
+    log.info('📋 Current Context:');
     if (context) {
-      console.log(context);
+      log.info(context);
     } else {
-      console.log('(No context set)');
+      log.info('(No context set)');
     }
 
     if (instructions) {
-      console.log('\n📝 Active Instructions:');
-      console.log(instructions);
+      log.info('\n📝 Active Instructions:');
+      log.info(instructions);
     }
   } catch (error: unknown) {
     if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
-      console.warn('⚠️  PROMPT.md not found');
+      log.warn('⚠️  PROMPT.md not found');
     } else {
       throw error;
     }
@@ -35,5 +36,5 @@ function extractSection(content: string, heading: string): string | null {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  postCheckout().catch(console.error);
+  postCheckout().catch((err) => log.error(err));
 }

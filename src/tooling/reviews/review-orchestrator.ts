@@ -3,6 +3,7 @@ import { CampaignClient, type Campaign } from './campaign-client.js';
 import { snapshotBook, snapshotChapter } from './content-snapshot.js';
 import { PersonaClient } from '../database/persona-client.js';
 import { writePromptFiles, writeAnalyzerPromptFile } from './prompt-writer.js';
+import { log } from '../logging/logger.js';
 
 export interface InitializeCampaignParams {
   campaignName: string;
@@ -109,16 +110,16 @@ export class ReviewOrchestrator {
     const writtenFiles = writePromptFiles(this.db, campaignId);
 
     // Output instructions for user
-    console.log(`\n✅ Campaign created: ${campaignId}`);
-    console.log(`✅ Generated ${writtenFiles.length} review prompts\n`);
-    console.log(`📁 Prompts directory: data/reviews/prompts/${campaignId}/\n`);
-    console.log('Next: Tell Claude Code to execute reviews\n');
-    console.log('────────────────────────────────────────────────────────');
-    console.log(`Read prompts from data/reviews/prompts/${campaignId}/`);
-    console.log(`and execute reviewer agents in batches of 5`);
-    console.log('────────────────────────────────────────────────────────\n');
-    console.log(`After agents complete, check status with:`);
-    console.log(`  pnpm review status ${campaignId}\n`);
+    log.info(`\n✅ Campaign created: ${campaignId}`);
+    log.info(`✅ Generated ${writtenFiles.length} review prompts\n`);
+    log.info(`📁 Prompts directory: data/reviews/prompts/${campaignId}/\n`);
+    log.info('Next: Tell Claude Code to execute reviews\n');
+    log.info('────────────────────────────────────────────────────────');
+    log.info(`Read prompts from data/reviews/prompts/${campaignId}/`);
+    log.info(`and execute reviewer agents in batches of 5`);
+    log.info('────────────────────────────────────────────────────────\n');
+    log.info(`After agents complete, check status with:`);
+    log.info(`  pnpm review status ${campaignId}\n`);
   }
 
   executeAnalysis(campaignId: string): void {
@@ -144,14 +145,14 @@ export class ReviewOrchestrator {
     const analyzerPromptPath = writeAnalyzerPromptFile(this.db, campaignId);
 
     // Output instructions for user
-    console.log(`\n✅ All reviews complete! Ready for analysis.`);
-    console.log(`✅ Found ${reviews.length} reviews to analyze\n`);
-    console.log(`📁 Analyzer prompt: ${analyzerPromptPath}\n`);
-    console.log('Next: Tell Claude Code to run analysis\n');
-    console.log('────────────────────────────────────────────────────────');
-    console.log(`Read analyzer prompt from ${analyzerPromptPath}`);
-    console.log(`and execute analyzer agent`);
-    console.log('────────────────────────────────────────────────────────\n');
+    log.info(`\n✅ All reviews complete! Ready for analysis.`);
+    log.info(`✅ Found ${reviews.length} reviews to analyze\n`);
+    log.info(`📁 Analyzer prompt: ${analyzerPromptPath}\n`);
+    log.info('Next: Tell Claude Code to run analysis\n');
+    log.info('────────────────────────────────────────────────────────');
+    log.info(`Read analyzer prompt from ${analyzerPromptPath}`);
+    log.info(`and execute analyzer agent`);
+    log.info('────────────────────────────────────────────────────────\n');
   }
 
   completeCampaign(campaignId: string): void {
@@ -167,14 +168,14 @@ export class ReviewOrchestrator {
     // Update status
     this.campaignClient.updateStatus(campaignId, 'completed');
 
-    console.log(`\n✅ Campaign ${campaignId} completed successfully`);
+    log.info(`\n✅ Campaign ${campaignId} completed successfully`);
 
     const reviews = this.campaignClient.getCampaignReviews(campaignId);
     const analysis = this.campaignClient.getCampaignAnalysis(campaignId);
 
-    console.log(`\nSummary:`);
-    console.log(`  Reviews: ${reviews.length}`);
-    console.log(`  Analysis: ${analysis ? 'Generated' : 'Not found'}`);
-    console.log(`  Status: completed`);
+    log.info(`\nSummary:`);
+    log.info(`  Reviews: ${reviews.length}`);
+    log.info(`  Analysis: ${analysis ? 'Generated' : 'Not found'}`);
+    log.info(`  Status: completed`);
   }
 }

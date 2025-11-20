@@ -3,11 +3,12 @@
  * Sample script to demonstrate persona generation and analyze distribution
  */
 import { generatePersona, generatePersonaBatch } from './generator.js';
+import { log } from '../logging/logger.js';
 
-console.log('=== Procedural Persona Generation Demo ===\n');
+log.info('=== Procedural Persona Generation Demo ===\n');
 
 // Generate 3 sample personas with fixed seeds for reproducibility
-console.log('--- Sample Generated Personas (Deterministic) ---\n');
+log.info('--- Sample Generated Personas (Deterministic) ---\n');
 
 const samples = [
   generatePersona(42),
@@ -16,31 +17,31 @@ const samples = [
 ];
 
 samples.forEach((persona, index) => {
-  console.log(`\nSample ${index + 1} (seed: ${persona.seed}):`);
-  console.log(`  Archetype: ${persona.dimensions.archetypes}`);
-  console.log(
+  log.info(`\nSample ${index + 1} (seed: ${persona.seed}):`);
+  log.info(`  Archetype: ${persona.dimensions.archetypes}`);
+  log.info(
     `  Experience: ${persona.dimensions.experience_levels}`
   );
-  console.log(
+  log.info(
     `  Cognitive Styles: ${persona.dimensions.cognitive_styles.primary}${persona.dimensions.cognitive_styles.secondary ? ` + ${persona.dimensions.cognitive_styles.secondary}` : ''}`
   );
-  console.log(
+  log.info(
     `  Playstyle: ${persona.dimensions.playstyle_modifiers.join(', ')}`
   );
-  console.log(
+  log.info(
     `  System Exposure: ${persona.dimensions.system_exposures.join(', ')}`
   );
-  console.log(
+  log.info(
     `  Fiction-First: ${persona.dimensions.fiction_first_alignment}`
   );
-  console.log(`  GM Philosophy: ${persona.dimensions.gm_philosophy}`);
-  console.log(
+  log.info(`  GM Philosophy: ${persona.dimensions.gm_philosophy}`);
+  log.info(
     `  Affinity Score: ${persona.affinityScore.toFixed(2)}`
   );
 });
 
 // Generate a batch and analyze distribution
-console.log('\n\n--- Batch Generation Analysis (100 personas) ---\n');
+log.info('\n\n--- Batch Generation Analysis (100 personas) ---\n');
 
 const batch = generatePersonaBatch(100, { seed: 12345 });
 
@@ -86,47 +87,47 @@ batch.forEach((persona) => {
   }
 });
 
-console.log('Archetype Distribution:');
+log.info('Archetype Distribution:');
 Array.from(archetypeCounts.entries())
   .sort((a, b) => b[1] - a[1])
   .forEach(([archetype, count]) => {
     const percentage = ((count / batch.length) * 100).toFixed(1);
-    console.log(`  ${archetype.padEnd(20)} ${count} (${percentage}%)`);
+    log.info(`  ${archetype.padEnd(20)} ${count} (${percentage}%)`);
   });
 
-console.log('\nExperience Level Distribution:');
+log.info('\nExperience Level Distribution:');
 Array.from(experienceCounts.entries())
   .sort((a, b) => b[1] - a[1])
   .forEach(([level, count]) => {
     const percentage = ((count / batch.length) * 100).toFixed(1);
-    console.log(`  ${level.padEnd(30)} ${count} (${percentage}%)`);
+    log.info(`  ${level.padEnd(30)} ${count} (${percentage}%)`);
   });
 
-console.log('\nFiction-First Alignment Distribution:');
+log.info('\nFiction-First Alignment Distribution:');
 Array.from(fictionFirstCounts.entries())
   .sort((a, b) => b[1] - a[1])
   .forEach(([alignment, count]) => {
     const percentage = ((count / batch.length) * 100).toFixed(1);
-    console.log(`  ${alignment.padEnd(20)} ${count} (${percentage}%)`);
+    log.info(`  ${alignment.padEnd(20)} ${count} (${percentage}%)`);
   });
 
-console.log('\nGM Philosophy Distribution:');
+log.info('\nGM Philosophy Distribution:');
 Array.from(gmPhilosophyCounts.entries())
   .sort((a, b) => b[1] - a[1])
   .forEach(([philosophy, count]) => {
     const percentage = ((count / batch.length) * 100).toFixed(1);
-    console.log(`  ${philosophy.padEnd(30)} ${count} (${percentage}%)`);
+    log.info(`  ${philosophy.padEnd(30)} ${count} (${percentage}%)`);
   });
 
-console.log('\nAffinity Analysis:');
-console.log(
+log.info('\nAffinity Analysis:');
+log.info(
   `  Personas with positive affinity: ${personasWithAffinity}/${batch.length} (${((personasWithAffinity / batch.length) * 100).toFixed(1)}%)`
 );
-console.log(
+log.info(
   `  Average affinity score: ${(totalAffinityScore / batch.length).toFixed(3)}`
 );
-console.log(
+log.info(
   `  Total affinity score: ${totalAffinityScore.toFixed(2)}`
 );
 
-console.log('\n=== Generation Complete ===');
+log.info('\n=== Generation Complete ===');

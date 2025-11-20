@@ -2,9 +2,10 @@ import { execSync } from 'child_process';
 import { runLinters } from '../../scripts/run-linters.js';
 import { validatePlanNaming } from '../../validators/plan-naming-validator.js';
 import { getDatabase } from '../../database/index.js';
+import { log } from '../../logging/logger.js';
 
 export async function preCommit(): Promise<void> {
-  console.log('🎣 Running pre-commit checks...\n');
+  log.info('🎣 Running pre-commit checks...\n');
 
   // 1. Get staged files
   const stagedFiles = getStagedFiles();
@@ -13,28 +14,28 @@ export async function preCommit(): Promise<void> {
   await runLinters(stagedFiles);
 
   // 3. Run tests
-  console.log('🧪 Running tests...');
+  log.info('🧪 Running tests...');
   try {
     execSync('pnpm test', { stdio: 'inherit' });
-    console.log('✅ Tests passed\n');
+    log.info('✅ Tests passed\n');
   } catch {
-    console.error('❌ Tests failed');
+    log.error('❌ Tests failed');
     process.exit(1);
   }
 
   // 4. Validate plan naming
   const planFiles = stagedFiles.filter(f => f.startsWith('docs/plans/') && f.endsWith('.md'));
   if (planFiles.length > 0) {
-    console.log('📋 Validating plan naming...');
+    log.info('📋 Validating plan naming...');
     for (const file of planFiles) {
       const result = validatePlanNaming(file);
       if (!result.valid) {
-        console.error(`❌ Invalid plan name: ${file}`);
-        console.error(result.error);
+        log.error(`❌ Invalid plan name: ${file}`);
+        log.error(result.error);
         process.exit(1);
       }
     }
-    console.log('✅ Plan naming validated\n');
+    log.info('✅ Plan naming validated\n');
   }
 
   // 5. Snapshot staged book files before commit
@@ -43,21 +44,21 @@ export async function preCommit(): Promise<void> {
   );
 
   if (bookFiles.length > 0) {
-    console.log('📸 Creating pre-commit snapshots...');
+    log.info('📸 Creating pre-commit snapshots...');
     const db = getDatabase();
 
     for (const file of bookFiles) {
       try {
         await db.snapshots.createChapterSnapshot(file, 'git');
-        console.log(`  ✓ ${file}`);
+        log.info(`  ✓ ${file}`);
       } catch (error) {
-        console.error(`  ✗ ${file}:`, error);
+        log.error(`  ✗ ${file}:`, error);
       }
     }
-    console.log('');
+    log.info('');
   }
 
-  console.log('✨ All pre-commit checks passed!\n');
+  log.info('✨ All pre-commit checks passed!\n');
 }
 
 function getStagedFiles(): string[] {
@@ -69,5 +70,5 @@ function getStagedFiles(): string[] {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  preCommit().catch(console.error);
+  preCommit().catch((err) => log.error(err));
 }

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 export async function setupHooks(): Promise<void> {
   try {
-    console.log('🔧 Setting up Razorweave development environment...\n');
+    log.info('🔧 Setting up Razorweave development environment...\n');
 
     // Find project root (3 levels up from this script: scripts -> tooling -> src -> root)
     const __filename = fileURLToPath(import.meta.url);
@@ -14,7 +14,7 @@ export async function setupHooks(): Promise<void> {
     const projectRoot = join(__dirname, '..', '..', '..');
 
     // 1. Install husky
-    console.log('📦 Installing git hooks...');
+    log.info('📦 Installing git hooks...');
 
     if (!existsSync(join(projectRoot, '.husky'))) {
       execSync('npx --prefix src/tooling husky install', { stdio: 'inherit', cwd: projectRoot });
@@ -37,10 +37,10 @@ pnpm --filter @razorweave/tooling exec tsx hooks/git/commit-msg.ts "$1"
 pnpm --filter @razorweave/tooling exec tsx hooks/git/post-commit.ts
 `);
 
-    console.log('✅ Git hooks installed\n');
+    log.info('✅ Git hooks installed\n');
 
     // 3. Create Claude hooks directory
-    console.log('📦 Installing Claude hooks...');
+    log.info('📦 Installing Claude hooks...');
 
     const claudeHooksDir = join(projectRoot, '.claude', 'hooks');
     await mkdir(claudeHooksDir, { recursive: true });
@@ -66,15 +66,16 @@ export default async function(tool: string, args: unknown, result: unknown) {
 
     await createClaudeHook(claudeHooksDir, 'user_prompt_submit.ts', `
 import { userPromptSubmit } from '@razorweave/tooling/hooks/claude'
+import { log } from '../logging/logger.js';
 export default async function(prompt: string) {
   return await userPromptSubmit(prompt)
 }
 `);
 
-    console.log('✅ Claude hooks installed\n');
+    log.info('✅ Claude hooks installed\n');
 
     // 4. Create root config files
-    console.log('📦 Creating configuration files...');
+    log.info('📦 Creating configuration files...');
 
     await writeFile(
       join(projectRoot, '.eslintrc.cjs'),
@@ -92,14 +93,14 @@ export default async function(prompt: string) {
       JSON.stringify(markdownlintConfig, null, 2)
     );
 
-    console.log('✅ Configuration files created\n');
-    console.log('✨ Setup complete!\n');
-    console.log('Next steps:');
-    console.log('- Run `pnpm lint` to check code quality');
-    console.log('- Run `pnpm validate` to check documentation');
-    console.log('- Commit changes to test git hooks');
+    log.info('✅ Configuration files created\n');
+    log.info('✨ Setup complete!\n');
+    log.info('Next steps:');
+    log.info('- Run `pnpm lint` to check code quality');
+    log.info('- Run `pnpm validate` to check documentation');
+    log.info('- Commit changes to test git hooks');
   } catch (error) {
-    console.error('❌ Setup failed:', error instanceof Error ? error.message : String(error));
+    log.error('❌ Setup failed:', error instanceof Error ? error.message : String(error));
     throw error;
   }
 }
@@ -124,5 +125,5 @@ async function createClaudeHook(
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  setupHooks().catch(console.error);
+  setupHooks().catch((err) => log.error(err));
 }

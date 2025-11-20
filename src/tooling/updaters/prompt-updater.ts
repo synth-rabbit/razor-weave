@@ -1,4 +1,5 @@
 import { writeFile } from 'fs/promises';
+import { log } from '../logging/logger.js';
 
 const PROMPT_TEMPLATE = `# Razorweave Project
 
@@ -30,13 +31,13 @@ All detailed documentation is located in \`docs/\`:
 `;
 
 export async function resetPromptMd(): Promise<boolean> {
-  console.log('📝 Resetting PROMPT.md...');
+  log.info('📝 Resetting PROMPT.md...');
   await writeFile('PROMPT.md', PROMPT_TEMPLATE);
-  console.log('✅ Reset PROMPT.md to template');
+  log.info('✅ Reset PROMPT.md to template');
   return true;
 }
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  resetPromptMd().catch(console.error);
+  resetPromptMd().catch((err) => log.error(err));
 }

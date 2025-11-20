@@ -1,4 +1,5 @@
 import { getDatabase } from '../../database/index.js';
+import { log } from '../../logging/logger.js';
 
 interface AfterToolCallResult {
   success: boolean;
@@ -14,12 +15,12 @@ export async function afterToolCall(
 
   // 1. Log successful file writes for tracking
   if (tool === 'Write' && typeof typedArgs.file_path === 'string') {
-    console.log(`✅ Created: ${typedArgs.file_path}`);
+    log.info(`✅ Created: ${typedArgs.file_path}`);
   }
 
   // 2. Log successful file edits
   if (tool === 'Edit' && typeof typedArgs.file_path === 'string') {
-    console.log(`✏️  Updated: ${typedArgs.file_path}`);
+    log.info(`✏️  Updated: ${typedArgs.file_path}`);
   }
 
   // 3. Track test execution results
@@ -30,9 +31,9 @@ export async function afterToolCall(
       const output = resultObj.stdout || resultObj.stderr || '';
 
       if (output.includes('FAIL') || output.includes('failed')) {
-        console.log('⚠️  Tests failed - review output above');
+        log.info('⚠️  Tests failed - review output above');
       } else if (output.includes('PASS') || output.includes('passed')) {
-        console.log('✅ Tests passed');
+        log.info('✅ Tests passed');
       }
     }
   }
@@ -45,9 +46,9 @@ export async function afterToolCall(
       try {
         const db = getDatabase();
         await db.snapshots.createChapterSnapshot(filePath, 'claude');
-        console.log(`📸 Snapshotted: ${filePath}`);
+        log.info(`📸 Snapshotted: ${filePath}`);
       } catch (error) {
-        console.error(`Failed to snapshot ${filePath}:`, error);
+        log.error(`Failed to snapshot ${filePath}:`, error);
       }
     }
 
@@ -57,9 +58,9 @@ export async function afterToolCall(
         const { readFileSync } = await import('fs');
         const content = readFileSync(filePath, 'utf-8');
         db.artifacts.create(filePath, content, 'generated_content');
-        console.log(`📦 Archived: ${filePath}`);
+        log.info(`📦 Archived: ${filePath}`);
       } catch (error) {
-        console.error(`Failed to archive ${filePath}:`, error);
+        log.error(`Failed to archive ${filePath}:`, error);
       }
     }
   }

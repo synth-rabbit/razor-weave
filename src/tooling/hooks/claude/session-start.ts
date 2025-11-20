@@ -1,9 +1,10 @@
 import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { glob } from 'glob';
+import { log } from '../../logging/logger.js';
 
 export async function sessionStart(): Promise<void> {
-  console.log('🚀 Razorweave Session Starting...\n');
+  log.info('🚀 Razorweave Session Starting...\n');
 
   // 1. Read and display PROMPT.md
   await displayPromptContext();
@@ -14,7 +15,7 @@ export async function sessionStart(): Promise<void> {
   // 3. Show relevant style guides
   await displayRelevantGuides();
 
-  console.log('\n✨ Ready to work!\n');
+  log.info('\n✨ Ready to work!\n');
 }
 
 async function displayPromptContext(): Promise<void> {
@@ -24,21 +25,21 @@ async function displayPromptContext(): Promise<void> {
     const context = extractSection(content, '## Context');
     const instructions = extractSection(content, '## Instructions');
 
-    console.log('📋 Session Context:');
+    log.info('📋 Session Context:');
     if (context && context.trim()) {
-      console.log(context);
+      log.info(context);
     } else {
-      console.log('(No context set - update PROMPT.md with current focus)');
+      log.info('(No context set - update PROMPT.md with current focus)');
     }
 
     if (instructions && instructions.trim()) {
-      console.log('\n📝 Active Instructions:');
-      console.log(instructions);
+      log.info('\n📝 Active Instructions:');
+      log.info(instructions);
     }
-    console.log('');
+    log.info('');
   } catch (error: unknown) {
     if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
-      console.warn('⚠️  PROMPT.md not found\n');
+      log.warn('⚠️  PROMPT.md not found\n');
     } else {
       throw error;
     }
@@ -46,11 +47,11 @@ async function displayPromptContext(): Promise<void> {
 }
 
 async function displayProjectStatus(): Promise<void> {
-  console.log('📊 Project Status:');
+  log.info('📊 Project Status:');
 
   // Count packages
   const packages = await glob('src/*/package.json');
-  console.log(`- Packages: ${packages.length}`);
+  log.info(`- Packages: ${packages.length}`);
 
   // Count active plans
   const indexFiles = await glob('docs/plans/*-index.md');
@@ -61,17 +62,17 @@ async function displayProjectStatus(): Promise<void> {
       activePlans.push(file);
     }
   }
-  console.log(`- Active Plans: ${activePlans.length}`);
+  log.info(`- Active Plans: ${activePlans.length}`);
 
   if (activePlans.length > 0) {
-    console.log('\n  Active:');
+    log.info('\n  Active:');
     activePlans.forEach(plan => {
       const name = plan.split('/').pop()?.replace('-index.md', '');
-      console.log(`  - ${name}`);
+      log.info(`  - ${name}`);
     });
   }
 
-  console.log('');
+  log.info('');
 }
 
 async function displayRelevantGuides(): Promise<void> {
@@ -84,8 +85,8 @@ async function displayRelevantGuides(): Promise<void> {
   const existing = guides.filter(g => existsSync(g.path));
 
   if (existing.length > 0) {
-    console.log('📚 Available Style Guides:');
-    existing.forEach(g => console.log(`- ${g.name}: ${g.path}`));
+    log.info('📚 Available Style Guides:');
+    existing.forEach(g => log.info(`- ${g.name}: ${g.path}`));
   }
 }
 
@@ -97,5 +98,5 @@ function extractSection(content: string, heading: string): string | null {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  sessionStart().catch(console.error);
+  sessionStart().catch((err) => log.error(err));
 }

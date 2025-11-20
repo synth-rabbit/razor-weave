@@ -1,7 +1,8 @@
 import { readFile, writeFile, readdir } from 'fs/promises';
+import { log } from '../logging/logger.js';
 
 export async function updateAgentsMd(): Promise<boolean> {
-  console.log('📝 Updating AGENTS.md...');
+  log.info('📝 Updating AGENTS.md...');
 
   try {
     // Read current AGENTS.md
@@ -17,7 +18,7 @@ export async function updateAgentsMd(): Promise<boolean> {
     // Find and replace Agent Roles section
     const agentRolesStart = content.indexOf('## Agent Roles');
     if (agentRolesStart === -1) {
-      console.warn('⚠️  Could not find "## Agent Roles" section');
+      log.warn('⚠️  Could not find "## Agent Roles" section');
       return false;
     }
 
@@ -36,14 +37,14 @@ export async function updateAgentsMd(): Promise<boolean> {
     // Only write if changed
     if (content !== updatedContent) {
       await writeFile('AGENTS.md', updatedContent);
-      console.log('✅ Updated AGENTS.md');
+      log.info('✅ Updated AGENTS.md');
       return true;
     }
 
-    console.log('ℹ️  AGENTS.md already up to date');
+    log.info('ℹ️  AGENTS.md already up to date');
     return false;
   } catch (error) {
-    console.error('❌ Failed to update AGENTS.md:', error);
+    log.error('❌ Failed to update AGENTS.md:', error);
     throw error;
   }
 }
@@ -102,5 +103,5 @@ function getAgentDescription(dir: string): string {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  updateAgentsMd().catch(console.error);
+  updateAgentsMd().catch((err) => log.error(err));
 }

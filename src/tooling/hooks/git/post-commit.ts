@@ -2,9 +2,10 @@ import { execSync } from 'child_process';
 import { updateAgentsMd } from '../../updaters/agents-updater.js';
 import { resetPromptMd } from '../../updaters/prompt-updater.js';
 import { getDatabase } from '../../database/index.js';
+import { log } from '../../logging/logger.js';
 
 export async function postCommit(): Promise<void> {
-  console.log('🎣 Running post-commit updates...\n');
+  log.info('🎣 Running post-commit updates...\n');
 
   const lastCommit = getLastCommit();
   const changedFiles = getChangedFiles(lastCommit);
@@ -24,7 +25,7 @@ export async function postCommit(): Promise<void> {
   const commitSha = getLastCommit();
   const db = getDatabase();
   db.snapshots.markAsCommitted(commitSha);
-  console.log(`✅ Marked snapshots as committed: ${commitSha.substring(0, 7)}\n`);
+  log.info(`✅ Marked snapshots as committed: ${commitSha.substring(0, 7)}\n`);
 
   // Update state
   db.state.set('last_commit', commitSha);
@@ -32,17 +33,17 @@ export async function postCommit(): Promise<void> {
 
   // 4. Amend commit with updated files if any changed
   if (filesUpdated) {
-    console.log('📦 Amending commit with updated files...');
+    log.info('📦 Amending commit with updated files...');
     try {
       execSync('git add AGENTS.md PROMPT.md', { stdio: 'inherit' });
       execSync('git commit --amend --no-edit --no-verify', { stdio: 'inherit' });
-      console.log('✅ Commit amended with documentation updates');
+      log.info('✅ Commit amended with documentation updates');
     } catch (error) {
-      console.error('❌ Failed to amend commit:', error);
+      log.error('❌ Failed to amend commit:', error);
     }
   }
 
-  console.log('\n✨ Post-commit complete!\n');
+  log.info('\n✨ Post-commit complete!\n');
 }
 
 function getLastCommit(): string {
@@ -58,5 +59,5 @@ function getChangedFiles(commit: string): string[] {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  postCommit().catch(console.error);
+  postCommit().catch((err) => log.error(err));
 }

@@ -2,6 +2,7 @@ import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { ValidationError } from './types.js';
+import { log } from '../logging/logger.js';
 
 const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
@@ -21,7 +22,7 @@ const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
  * const content = '[Link](./other.md#heading)';
  * const errors = await validateLinks(content, '/path/to/file.md');
  * if (errors.length > 0) {
- *   console.log('Found broken links:', errors);
+ *   log.info('Found broken links:', errors);
  * }
  * ```
  */

@@ -1,5 +1,6 @@
 import { readFile } from 'fs/promises';
 import { ValidationResult } from '../../validators/types.js';
+import { log } from '../../logging/logger.js';
 
 const EMOJI_TYPE_MAP: Record<string, string> = {
   '✨': 'feat',
@@ -56,20 +57,20 @@ export async function commitMsg(commitMsgFile: string): Promise<void> {
   const result = validateCommitMsg(firstLine);
 
   if (!result.valid) {
-    console.error('❌ Invalid commit message format\n');
-    console.error(result.error);
+    log.error('❌ Invalid commit message format\n');
+    log.error(result.error);
     process.exit(1);
   }
 
-  console.log('✅ Commit message validated');
+  log.info('✅ Commit message validated');
 }
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   const commitMsgFile = process.argv[2];
   if (!commitMsgFile) {
-    console.error('Usage: commit-msg <commit-msg-file>');
+    log.error('Usage: commit-msg <commit-msg-file>');
     process.exit(1);
   }
-  commitMsg(commitMsgFile).catch(console.error);
+  commitMsg(commitMsgFile).catch((err) => log.error(err));
 }
