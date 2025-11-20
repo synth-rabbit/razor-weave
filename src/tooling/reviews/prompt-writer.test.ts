@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 import Database from 'better-sqlite3';
 import { createTables } from '../database/schema.js';
 import { CampaignClient } from './campaign-client.js';
@@ -11,10 +12,11 @@ describe('Prompt Writer', () => {
   let db: Database.Database;
   let campaignClient: CampaignClient;
   let personaClient: PersonaClient;
-  const testBookPath = 'data/test/prompt-writer-test-book.html';
+  const testBookPath = join(process.cwd(), '..', '..', 'data', 'test', 'prompt-writer-test-book.html');
 
   beforeEach(() => {
-    mkdirSync('data/test', { recursive: true });
+    const testDir = join(process.cwd(), '..', '..', 'data', 'test');
+    mkdirSync(testDir, { recursive: true });
     writeFileSync(testBookPath, '<html><body><h1>Test Book</h1></body></html>');
 
     db = new Database(':memory:');
@@ -53,8 +55,8 @@ describe('Prompt Writer', () => {
 
   afterEach(() => {
     db.close();
-    rmSync('data/test', { recursive: true, force: true });
-    rmSync('data/reviews/prompts', { recursive: true, force: true });
+    rmSync(join(process.cwd(), '..', '..', 'data', 'test'), { recursive: true, force: true });
+    rmSync(join(process.cwd(), '..', '..', 'data', 'reviews', 'prompts'), { recursive: true, force: true });
   });
 
   it('writes reviewer prompt files for all campaign personas', () => {

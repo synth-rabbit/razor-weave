@@ -4,8 +4,8 @@ import { mkdirSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
 import { createTables } from '../database/schema.js';
 import { PersonaClient } from '../database/persona-client.js';
-import { hydratePersona, loadPersonaFromFile } from './hydrator.js';
-import { generatePersona, generatePersonaBatch } from './generator.js';
+import { loadPersonaFromFile } from './hydrator.js';
+import { generatePersona } from './generator.js';
 import { validatePersonaCoherence } from './coherence.js';
 
 /**
@@ -21,7 +21,7 @@ describe('Persona System Integration Tests', () => {
 
   beforeEach(() => {
     // Create unique test database for each test
-    const testDir = join(process.cwd(), 'data', 'test');
+    const testDir = join(process.cwd(), '..', '..', 'data', 'test');
     mkdirSync(testDir, { recursive: true });
 
     testDbPath = join(testDir, `test-personas-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.db`);
@@ -39,7 +39,7 @@ describe('Persona System Integration Tests', () => {
   });
 
   describe('Full Workflow Test', () => {
-    it('should complete full workflow: hydrate core, generate batch, query all', async () => {
+    it('should complete full workflow: hydrate core, generate batch, query all', () => {
       // Step 1: Hydrate all 10 core personas
       const coreIds = [
         'core-sarah-new-gm',
@@ -125,7 +125,7 @@ describe('Persona System Integration Tests', () => {
   });
 
   describe('Distribution Analysis', () => {
-    it('should generate diverse personas across all 11 dimensions', async () => {
+    it('should generate diverse personas across all 11 dimensions', () => {
       const batchSize = 200;
       const personas = [];
 
@@ -166,7 +166,7 @@ describe('Persona System Integration Tests', () => {
       expect(maxArchetypeConcentration).toBeLessThan(0.98);
     });
 
-    it('should show balanced distribution in multi-value dimensions', async () => {
+    it('should show balanced distribution in multi-value dimensions', () => {
       const batchSize = 150;
       const personas = [];
 
@@ -190,7 +190,7 @@ describe('Persona System Integration Tests', () => {
   });
 
   describe('Coherence Verification', () => {
-    it('should generate 100 personas that all pass coherence validation', async () => {
+    it('should generate 100 personas that all pass coherence validation', () => {
       const batchSize = 100;
       let validCount = 0;
       let totalAffinityScore = 0;
@@ -218,7 +218,7 @@ describe('Persona System Integration Tests', () => {
       expect(avgAffinityScore).toBeGreaterThanOrEqual(0);
     });
 
-    it('should never generate exclusion violations', async () => {
+    it('should never generate exclusion violations', () => {
       const batchSize = 100;
 
       for (let i = 0; i < batchSize; i++) {
@@ -234,7 +234,7 @@ describe('Persona System Integration Tests', () => {
       }
     });
 
-    it('should report affinity score statistics for batch', async () => {
+    it('should report affinity score statistics for batch', () => {
       const batchSize = 100;
       const affinityScores = [];
 
@@ -262,7 +262,7 @@ describe('Persona System Integration Tests', () => {
   });
 
   describe('Deterministic Generation', () => {
-    it('should produce identical results with same seed', async () => {
+    it('should produce identical results with same seed', () => {
       const seed = 42;
       const count = 10;
 
@@ -301,7 +301,7 @@ describe('Persona System Integration Tests', () => {
       }
     });
 
-    it('should generate different personas with different seeds', async () => {
+    it('should generate different personas with different seeds', () => {
       const persona1 = generatePersona(1000);
       const persona2 = generatePersona(2000);
 
@@ -317,7 +317,7 @@ describe('Persona System Integration Tests', () => {
   });
 
   describe('Database Persistence', () => {
-    it('should persist data correctly across database connections', async () => {
+    it('should persist data correctly across database connections', () => {
       // Create a persona and save it
       const generated = generatePersona(12345);
       const personaId = client.create({
@@ -361,7 +361,7 @@ describe('Persona System Integration Tests', () => {
       expect(retrievedDims.life_contexts).toEqual(generated.dimensions.life_contexts);
     });
 
-    it('should handle multiple personas without data corruption', async () => {
+    it('should handle multiple personas without data corruption', () => {
       const batchSize = 50;
       const personaIds = [];
 
