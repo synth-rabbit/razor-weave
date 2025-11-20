@@ -455,4 +455,309 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
+  // ============================================================================
+  // BOOKMARKING SYSTEM
+  // ============================================================================
+
+  const BOOKMARKS_KEY = 'razorweave-bookmarks';
+  const MAX_BOOKMARKS = 10;
+
+  // Get bookmarks from localStorage
+  function getBookmarks() {
+    try {
+      const stored = localStorage.getItem(BOOKMARKS_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.error('Error loading bookmarks:', e);
+      return [];
+    }
+  }
+
+  // Save bookmarks to localStorage
+  function saveBookmarks(bookmarks) {
+    try {
+      localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+    } catch (e) {
+      console.error('Error saving bookmarks:', e);
+    }
+  }
+
+  // Check if section is bookmarked
+  function isBookmarked(sectionId) {
+    const bookmarks = getBookmarks();
+    return bookmarks.some(b => b.id === sectionId);
+  }
+
+  // Add bookmark button to headings
+  function addBookmarkButtons() {
+    const headings = document.querySelectorAll('.reader-content h2[id], .reader-content h3[id]');
+
+    headings.forEach(heading => {
+      const sectionId = heading.getAttribute('id');
+      if (!sectionId) return;
+
+      const button = document.createElement('button');
+      button.className = 'bookmark-btn';
+      button.setAttribute('aria-label', 'Bookmark this section');
+      button.setAttribute('data-section-id', sectionId);
+      button.title = 'Bookmark this section';
+
+      // Set initial state
+      if (isBookmarked(sectionId)) {
+        button.classList.add('bookmarked');
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+      } else {
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+      }
+
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleBookmark(sectionId, heading.textContent.trim(), button);
+      });
+
+      heading.appendChild(button);
+    });
+  }
+
+  // Toggle bookmark
+  function toggleBookmark(sectionId, title, button) {
+    let bookmarks = getBookmarks();
+    const existing = bookmarks.findIndex(b => b.id === sectionId);
+
+    if (existing !== -1) {
+      // Remove bookmark
+      bookmarks.splice(existing, 1);
+      button.classList.remove('bookmarked');
+      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+    } else {
+      // Add bookmark
+      if (bookmarks.length >= MAX_BOOKMARKS) {
+        alert(`Maximum ${MAX_BOOKMARKS} bookmarks allowed. Remove one to add another.`);
+        return;
+      }
+
+      bookmarks.push({
+        id: sectionId,
+        title: title,
+        timestamp: Date.now()
+      });
+
+      button.classList.add('bookmarked');
+      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+    }
+
+    saveBookmarks(bookmarks);
+    updateBookmarksDropdown();
+  }
+
+  // Create bookmarks dropdown in header
+  function createBookmarksDropdown() {
+    const siteNav = document.querySelector('.site-nav');
+    if (!siteNav) return;
+
+    const dropdown = document.createElement('li');
+    dropdown.className = 'bookmarks-dropdown';
+    dropdown.innerHTML = `
+      <button class="bookmarks-toggle" aria-label="My Bookmarks">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <span class="bookmarks-count">0</span>
+      </button>
+      <div class="bookmarks-menu" id="bookmarksMenu">
+        <div class="bookmarks-header">
+          <h3>My Bookmarks</h3>
+        </div>
+        <ul class="bookmarks-list" id="bookmarksList"></ul>
+      </div>
+    `;
+
+    // Insert before dark mode toggle
+    const darkModeButton = siteNav.querySelector('.dark-mode-toggle');
+    const darkModeToggle = darkModeButton ? darkModeButton.parentElement : null;
+    if (darkModeToggle) {
+      siteNav.insertBefore(dropdown, darkModeToggle);
+    } else {
+      siteNav.appendChild(dropdown);
+    }
+
+    const toggle = dropdown.querySelector('.bookmarks-toggle');
+    const menu = dropdown.querySelector('.bookmarks-menu');
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('open');
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+
+    updateBookmarksDropdown();
+  }
+
+  // Update bookmarks dropdown content
+  function updateBookmarksDropdown() {
+    const bookmarksList = document.getElementById('bookmarksList');
+    const bookmarksCount = document.querySelector('.bookmarks-count');
+    if (!bookmarksList || !bookmarksCount) return;
+
+    const bookmarks = getBookmarks();
+    bookmarksCount.textContent = bookmarks.length;
+
+    if (bookmarks.length === 0) {
+      bookmarksList.innerHTML = '<li class="bookmarks-empty">No bookmarks yet</li>';
+      return;
+    }
+
+    bookmarksList.innerHTML = bookmarks.map(bookmark => `
+      <li class="bookmark-item">
+        <a href="#${bookmark.id}" class="bookmark-link">
+          ${bookmark.title}
+        </a>
+        <button class="bookmark-remove" data-id="${bookmark.id}" aria-label="Remove bookmark">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </li>
+    `).join('');
+
+    // Add remove handlers
+    bookmarksList.querySelectorAll('.bookmark-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const sectionId = btn.dataset.id;
+        removeBookmark(sectionId);
+      });
+    });
+
+    // Close dropdown when clicking bookmark link
+    bookmarksList.querySelectorAll('.bookmark-link').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelector('.bookmarks-menu')?.classList.remove('open');
+      });
+    });
+  }
+
+  // Remove bookmark
+  function removeBookmark(sectionId) {
+    let bookmarks = getBookmarks();
+    bookmarks = bookmarks.filter(b => b.id !== sectionId);
+    saveBookmarks(bookmarks);
+    updateBookmarksDropdown();
+
+    // Update button if visible
+    const button = document.querySelector(`.bookmark-btn[data-section-id="${sectionId}"]`);
+    if (button) {
+      button.classList.remove('bookmarked');
+      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+    }
+  }
+
+  // Initialize bookmarking
+  if (document.querySelector('.reader-content')) {
+    addBookmarkButtons();
+    createBookmarksDropdown();
+  }
+
+  // ============================================================================
+  // READER MODE (Distraction-Free)
+  // ============================================================================
+
+  const READER_MODE_KEY = 'razorweave-reader-mode';
+
+  // Get reader mode preference
+  function getReaderMode() {
+    return localStorage.getItem(READER_MODE_KEY) === 'true';
+  }
+
+  // Save reader mode preference
+  function setReaderMode(enabled) {
+    localStorage.setItem(READER_MODE_KEY, enabled.toString());
+  }
+
+  // Create reader mode toggle
+  function createReaderModeToggle() {
+    const siteNav = document.querySelector('.site-nav');
+    if (!siteNav) return;
+
+    const toggle = document.createElement('li');
+    toggle.innerHTML = `
+      <button class="reader-mode-toggle" aria-label="Toggle reader mode" title="Reader Mode (distraction-free)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </button>
+    `;
+
+    // Insert before bookmarks
+    const bookmarksDropdown = siteNav.querySelector('.bookmarks-dropdown');
+    if (bookmarksDropdown) {
+      siteNav.insertBefore(toggle, bookmarksDropdown);
+    } else {
+      const darkModeButton = siteNav.querySelector('.dark-mode-toggle');
+      const darkModeToggle = darkModeButton ? darkModeButton.parentElement : null;
+      if (darkModeToggle) {
+        siteNav.insertBefore(toggle, darkModeToggle);
+      } else {
+        siteNav.appendChild(toggle);
+      }
+    }
+
+    const button = toggle.querySelector('.reader-mode-toggle');
+
+    // Create floating close button for reader mode
+    const closeButton = document.createElement('button');
+    closeButton.className = 'reader-mode-close';
+    closeButton.setAttribute('aria-label', 'Exit reader mode');
+    closeButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    `;
+    document.body.appendChild(closeButton);
+
+    // Function to toggle reader mode
+    function toggleReaderMode(enabled) {
+      if (enabled) {
+        document.body.classList.add('reader-mode');
+      } else {
+        document.body.classList.remove('reader-mode');
+      }
+      setReaderMode(enabled);
+    }
+
+    // Apply saved preference
+    if (getReaderMode()) {
+      document.body.classList.add('reader-mode');
+    }
+
+    // Toggle button click
+    button.addEventListener('click', () => {
+      const isEnabled = document.body.classList.toggle('reader-mode');
+      setReaderMode(isEnabled);
+    });
+
+    // Close button click
+    closeButton.addEventListener('click', () => {
+      toggleReaderMode(false);
+    });
+
+    // Keyboard shortcut: Escape to exit reader mode (prevent default to not exit fullscreen)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('reader-mode')) {
+        e.preventDefault(); // Prevent exiting fullscreen
+        toggleReaderMode(false);
+      }
+    });
+  }
+
+  // Initialize reader mode
+  if (document.querySelector('.reader-content')) {
+    createReaderModeToggle();
+  }
 });

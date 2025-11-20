@@ -882,6 +882,39 @@ body.reader-mode .reader-mode-toggle:hover {
   opacity: 1;
 }
 
+/* Reader mode close button */
+.reader-mode-close {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  z-index: 1001; /* Above reader-mode-toggle */
+  background: var(--color-white);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-xl);
+  transition: all var(--transition-fast);
+  color: var(--color-primary);
+}
+
+body.reader-mode .reader-mode-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reader-mode-close:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+.reader-mode-close:active {
+  transform: scale(0.95);
+}
+
 /* ============================================================================
    PRINT OPTIMIZATION
    ============================================================================ */
@@ -986,6 +1019,7 @@ body.reader-mode .reader-mode-toggle:hover {
   .bookmark-btn,
   .bookmarks-dropdown,
   .reader-mode-toggle,
+  .reader-mode-close,
   .reading-progress {
     display: none;
   }
