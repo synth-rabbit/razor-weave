@@ -255,6 +255,36 @@
   overflow: visible;
 }
 
+.breadcrumb > a {
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  position: relative;
+  color: var(--color-electric-blue);
+  text-decoration: none;
+}
+
+.breadcrumb > a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-hot-pink);
+  transition: width var(--transition-normal);
+}
+
+.breadcrumb > a:hover {
+  background: var(--color-light-pink);
+  color: var(--color-deep-purple);
+  text-decoration: none;
+}
+
+.breadcrumb > a:hover::after {
+  width: 100%;
+}
+
 .breadcrumb-search-btn {
   background: none;
   border: none;
@@ -269,11 +299,27 @@
   flex-shrink: 0;
   font-size: 0.9rem;
   font-weight: 500;
+  position: relative;
+}
+
+.breadcrumb-search-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-hot-pink);
+  transition: width var(--transition-normal);
 }
 
 .breadcrumb-search-btn:hover {
-  background: var(--color-light-blue);
+  background: var(--color-light-pink);
   color: var(--color-deep-purple);
+}
+
+.breadcrumb-search-btn:hover::after {
+  width: 100%;
 }
 
 .breadcrumb-search-btn:active {
@@ -300,6 +346,7 @@
 .breadcrumb-feedback-link:hover {
   background: var(--color-light-pink);
   color: var(--color-deep-purple);
+  text-decoration: none;
 }
 
 .breadcrumb-feedback-link:active {
@@ -320,11 +367,27 @@
   flex-shrink: 0;
   font-size: 0.9rem;
   font-weight: 500;
+  position: relative;
+}
+
+.breadcrumb-icon-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-hot-pink);
+  transition: width var(--transition-normal);
 }
 
 .breadcrumb-icon-btn:hover {
-  background: var(--color-light-blue);
+  background: var(--color-light-pink);
   color: var(--color-deep-purple);
+}
+
+.breadcrumb-icon-btn:hover::after {
+  width: 100%;
 }
 
 .breadcrumb-icon-btn:active {

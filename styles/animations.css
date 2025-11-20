@@ -70,11 +70,11 @@ section.visible {
    =================================== */
 
 /* Underline slide animation */
-a:not(.btn):not(.site-nav a) {
+a:not(.btn):not(.site-nav a):not(.breadcrumb a) {
   position: relative;
 }
 
-a:not(.btn):not(.site-nav a)::after {
+a:not(.btn):not(.site-nav a):not(.breadcrumb a)::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -85,7 +85,7 @@ a:not(.btn):not(.site-nav a)::after {
   transition: width var(--transition-normal);
 }
 
-a:not(.btn):not(.site-nav a):hover::after {
+a:not(.btn):not(.site-nav a):not(.breadcrumb a):hover::after {
   width: 100%;
 }
 
