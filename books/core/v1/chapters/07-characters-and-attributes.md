@@ -145,7 +145,7 @@ Agility covers balance, precision, and quick reactions. It appears when you dodg
 *Trigger:*A character sprints across slick rooftop tiles to reach a signal mast before an alarm
 >         spreads.
 *Roll:*The GM sets DC 18 (Hard) due to rain and height. The character with AGI 1 and a relevant
->         Skill rolls `4d6+1`. A hazardous Tag on the roof may impose Disadvantage if the group ignored earlier
+>         Skill rolls `4d6+1`. A hazardous Tag on the roof may impose Burden if the group ignored earlier
 >         warnings.
 *Consequence:*On a full success, they reach the mast in time. On a partial success, they make
 >         it but leave evidence behind or trigger a lesser alarm. On a failure, they slip, and the GM ticks a
@@ -162,7 +162,7 @@ Presence governs social force, confidence, and emotional weight. It appears when
 >         make the case.
 *Roll:*The GM sets DC 14 (Routine) if the request is modest, or higher if the stakes are severe.
 >         The character with PRE 2 and an appropriate Skill rolls `4d6+2`. Helpful Tags (Shared History) or
->         Proficiencies (Bureaucratic Procedures) may grant Advantage.
+>         Proficiencies (Bureaucratic Procedures) may grant Edge.
 *Consequence:*On a full success, the delay is granted cleanly. On a partial success, the delay
 >         comes with a favor owed or a complication. On a failure, the official refuses and alerts a rival faction.
 

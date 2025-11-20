@@ -23,7 +23,7 @@ Skills always operate on the fiction‑first principle introduced earlier:
 > **Example**
 > **Example – When a Skill Matters**
 In a cozy neighborhood campaign, a character with Baking might roll to impress a skeptical community elder
->         with a carefully prepared cake, gaining Advantage on future social scenes with that community. In a sci‑fi
+>         with a carefully prepared cake, gaining Edge on future social scenes with that community. In a sci‑fi
 >         relay station, a character with Systems Diagnostics might roll to stabilize failing life support. Both are
 >         “skills,” but the way they appear in the fiction depends on the setting and the situation.
 
@@ -150,7 +150,7 @@ Skills rarely act alone. Proficiencies deepen them, Tags color the environment a
 > **Example – Skill with Proficiency and Tags**
 A character with the Systems Diagnostics Skill and the “Telegraph Instruments” Proficiency attempts to
 >         stabilize a failing relay in a canyon station. The scene has the Tags*Dim Light*and*Unstable*due to flickering lamps and tremors.
-The GM decides the Proficiency lowers the effective DC and grants Advantage on RSN + Systems Diagnostics
+The GM decides the Proficiency lowers the effective DC and grants Edge on RSN + Systems Diagnostics
 >         Checks. However,*Unstable*means failures may tick a “Structural Collapse” Clock. The Skill,
 >         Proficiency, and Tags combine to make the moment specific and tense.
 

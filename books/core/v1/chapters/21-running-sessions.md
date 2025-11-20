@@ -178,7 +178,7 @@ When a Check is appropriate,**set DCs with context**. Use the DC ladder from Cha
         let the fiction shape where you land on that ladder. A task might be Routine in calm conditions but Hard in
         a burning building. Say out loud what makes it easier or harder; this keeps DCs from feeling arbitrary.
 
-As you choose DCs,**use Tags and Conditions**as levers. Apply Advantage, Disadvantage, or DC
+As you choose DCs,**use Tags and Conditions**as levers. Apply Edge, Burden, or DC
         shifts when Tags and Conditions clearly help or hinder the attempt. A character with the*Focused*Condition tackling a research problem in a*Well‑Stocked Archive*should feel the difference compared
         to a distracted argument in a noisy tavern.
 
@@ -188,7 +188,7 @@ Finally,**show outcomes in the fiction**. When you know the outcome tier, descri
 
 > **Example**
 > **Example – Check with Tags and Outcome Tiers**
-The group tries to cross a slick rooftop in high wind. The location has*Slick*and*Elevated*Tags. The GM calls for a 4d6 Check using AGI and an appropriate Skill, DC 16 (Tough), with Disadvantage from*Slick*. A Partial Success means someone slides toward the edge and starts a*Falling*Clock.
+The group tries to cross a slick rooftop in high wind. The location has*Slick*and*Elevated*Tags. The GM calls for a 4d6 Check using AGI and an appropriate Skill, DC 16 (Tough), with Burden from*Slick*. A Partial Success means someone slides toward the edge and starts a*Falling*Clock.
 >         A Failure fills several segments at once.
 
 ### Using Tags, Conditions, and Clocks During Play

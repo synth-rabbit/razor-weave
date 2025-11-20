@@ -24,7 +24,7 @@ List the faction’s**resources**: people, tools, territory, secrets, and reputa
         explain why the faction matters. A group with few members but crucial information can be as powerful in play
         as a large guild with warehouses and security forces. Finally, assign two to four**Tags**that
         capture reputation, methods, and vulnerabilities:*Respected but Overstretched*,*Paranoid*,*Brutal Efficiency*,*Old Obligations*. These Tags help you improvise DC adjustments,
-        Advantage or Disadvantage, and likely reactions when the PCs put pressure on the faction or ask for help.
+        Edge or Burden, and likely reactions when the PCs put pressure on the faction or ask for help.
 
 ### Faction Relationships and Maps
 

@@ -39,8 +39,8 @@ Operations & Logistics Proficiencies****************
 
 **Default benefits:**Routine harbor tasks—assigning a berth, arranging a standard off‑load,
         reading signal flags—rarely require a Check. When pressure mounts, Harbor Operations often lowers DCs for
-        Logistics or Systems & Diagnostics Checks, or grants Advantage when re‑routing traffic under tight
-        deadlines (for example, a Hard DC 18 task might become a Routine DC 14 with Advantage).
+        Logistics or Systems & Diagnostics Checks, or grants Edge when re‑routing traffic under tight
+        deadlines (for example, a Hard DC 18 task might become a Routine DC 14 with Edge).
 
 **Opportunities and risks:**Harbor Operations puts you near the heart of trade and travel.
         The GM can use this Proficiency to surface rumors, political pressure, smuggling attempts, and accidents.
@@ -54,7 +54,7 @@ Operations & Logistics Proficiencies****************
 > **Example – Harbor Operations**
 A storm front closes in on a coastal city while the docks are packed. The GM frames a 6‑segment “Clear the
 >         Harbor” Clock. A PC with Harbor Operations and Systems & Diagnostics takes charge. Instead of rolling
->         at DC 18, their Proficiency reduces the task to DC 14 and grants Advantage on a PRE + Systems &
+>         at DC 18, their Proficiency reduces the task to DC 14 and grants Edge on a PRE + Systems &
 >         Diagnostics Check as they issue orders and adjust schedules. On a Full Success, two segments of the Clock
 >         fill and ships pull away cleanly. On a Partial, the Clock advances but one overloaded vessel is forced to
 >         remain, creating a new problem when the storm hits.
@@ -102,7 +102,7 @@ The group must move refugees across an arid plateau. The GM sets a “Reach the 
         activity. In play, this Proficiency often appears in tense sequences where timing matters.
 
 **Default benefits:**Routine scheduling rarely calls for a roll. Under pressure, Station
-        Traffic Control can provide Advantage on PRE or RSN Checks involving large‑scale movement, and may allow
+        Traffic Control can provide Edge on PRE or RSN Checks involving large‑scale movement, and may allow
         the group to treat some Failures as Partial Successes when responding quickly averts the worst outcomes.
 
 **Opportunities and risks:**Traffic controllers are plugged into both official channels and
@@ -118,7 +118,7 @@ The group must move refugees across an arid plateau. The GM sets a “Reach the 
 A sabotage attempt targets a relay station during peak shift. The GM introduces a “Cascade Failure” Clock
 >         and several Tags:*Crowded*,*Noisy*,*Alert Security*. A PC with Station Traffic
 >         Control uses RSN + Systems & Diagnostics to re‑route trains and isolate damaged lines at DC 16 with
->         Advantage. On a Full Success, they tick the Clock back and stabilize traffic. On a Partial, they prevent a
+>         Edge. On a Full Success, they tick the Clock back and stabilize traffic. On a Partial, they prevent a
 >         catastrophic collision but leave parts of the network shut down, creating political fallout in later
 >         scenes.
 
@@ -178,7 +178,7 @@ Searching for the origins of a disputed estate, a PC consults city ledgers. The 
 
 **Default benefits:**With this Proficiency, the GM will usually share more and safer context
         from strange texts without requiring a Check. When rolls are needed—often RSN + Lore & Analysis or RSN
-        + Investigation—Occult Librarianship can justify Advantage or reduce DCs, particularly when evaluating
+        + Investigation—Occult Librarianship can justify Edge or reduce DCs, particularly when evaluating
         whether a ritual is incomplete or corrupt.
 
 **Opportunities and risks:**This Proficiency naturally introduces fronts tied to forbidden
@@ -192,7 +192,7 @@ Searching for the origins of a disputed estate, a PC consults city ledgers. The 
 > **Example**
 > **Example – Occult Librarianship**
 A PC examines a ritual folio tied to recent disappearances. The GM calls for an RSN + Lore & Analysis
->         Check at DC 16 with Advantage due to Occult Librarianship. A Full Success reveals that the ritual is
+>         Check at DC 16 with Edge due to Occult Librarianship. A Full Success reveals that the ritual is
 >         missing a crucial protective stanza, explaining why the victims were unmade rather than transported. A
 >         Partial identifies the ritual’s purpose but not its flaw, inviting the PCs to consider attempting it
 >         themselves at great risk.
@@ -222,7 +222,7 @@ A PC examines a ritual folio tied to recent disappearances. The GM calls for an 
 > **Example**
 > **Example – Cold‑Case Records**
 The PCs suspect a recent arson is tied to decades‑old factory fires. The GM calls for an RSN + Investigation
->         Check at DC 15, with Cold‑Case Records granting Advantage. A Full Success uncovers a pattern of suppressed
+>         Check at DC 15, with Cold‑Case Records granting Edge. A Full Success uncovers a pattern of suppressed
 >         reports implicating the same family of contractors. A Partial connects the new fire to the old pattern but
 >         also surfaces that the original investigator disappeared after filing their last report, adding a new layer
 >         of danger.
@@ -253,7 +253,7 @@ Medicine & Care Proficiencies****************
         Field Medicine (Skill) or Grit & Endurance to stabilize allies while under threat.
 
 **Default benefits:**Routine first aid in safe contexts requires no roll. Under pressure,
-        Field Medicine can reduce DCs on MIG or RSN Checks to treat Conditions like*Bleeding*or*Poisoned*, or justify Advantage when you have minimal equipment but ample experience.
+        Field Medicine can reduce DCs on MIG or RSN Checks to treat Conditions like*Bleeding*or*Poisoned*, or justify Edge when you have minimal equipment but ample experience.
 
 **Opportunities and risks:**This Proficiency invites the GM to present hard choices: which
         patient to treat first, what resources to expend now versus later, and how to balance the physical and
@@ -266,7 +266,7 @@ Medicine & Care Proficiencies****************
 > **Example – Field Medicine**
 After an ambush on a mountain road, several allies are down. The GM sets a “Stabilize the Wounded” Clock
 >         and notes Tags like*Hazardous*(falling rocks) and*Limited Supplies*. A PC with Field
->         Medicine makes a MIG + Field Medicine Skill Check at DC 15 with Advantage. A Full Success both stabilizes
+>         Medicine makes a MIG + Field Medicine Skill Check at DC 15 with Edge. A Full Success both stabilizes
 >         the worst injury and advances the Clock significantly. A Partial stabilizes the ally but depletes bandages
 >         and drugs, adding a “Supply Shortage” Clock for the next leg of the journey.
 
@@ -282,7 +282,7 @@ After an ambush on a mountain road, several allies are down. The GM sets a “St
 
 **Default benefits:**Clinical Practice may remove the need to roll for routine care in
         well‑equipped settings. When Checks are necessary—such as rushing experimental treatment or pushing a
-        facility past safe capacity—this Proficiency can grant Advantage on RSN + Medicine or PRE + Command
+        facility past safe capacity—this Proficiency can grant Edge on RSN + Medicine or PRE + Command
         Checks.
 
 **Opportunities and risks:**Institutional medicine is entangled with politics, funding, and
@@ -295,7 +295,7 @@ After an ambush on a mountain road, several allies are down. The GM sets a “St
 > **Example**
 > **Example – Clinical Practice**
 A PC attempts to secure an isolated ward for a contagious patient. The GM calls for a PRE + Command &
->         Coordination Check at DC 16, with Clinical Practice granting Advantage. A Full Success gets the ward and
+>         Coordination Check at DC 16, with Clinical Practice granting Edge. A Full Success gets the ward and
 >         staff they need. A Partial success grants the ward but flags their actions to hospital leadership, adding
 >         a “Administrative Scrutiny” Clock.
 
@@ -309,7 +309,7 @@ A PC attempts to secure an isolated ward for a contagious patient. The GM calls 
         that overwhelm normal systems. In play, this Proficiency allows PCs to coordinate both care and crowd
         control under extreme stress.
 
-**Default benefits:**Trauma Response can reduce DCs or grant Advantage on PRE + Command &
+**Default benefits:**Trauma Response can reduce DCs or grant Edge on PRE + Command &
         Coordination, MIG + Grit & Endurance, or RSN + Systems & Diagnostics Checks tied to emergency
         management. It also justifies treating some Failures as Partial Successes where lives are saved but at the
         cost of resources, structural damage, or new Conditions.
@@ -355,7 +355,7 @@ Community & Institutions Proficiencies****************
 
 **Default benefits:**Community Organizing often allows PRE + Persuasion & Appeal or PRE +
         Command & Coordination Checks to operate at lower DCs when you advocate for local needs, or grants
-        Advantage when the cause clearly aligns with community interests.
+        Edge when the cause clearly aligns with community interests.
 
 **Opportunities and risks:**Organized communities can change the course of campaigns—but
         organizing also paints targets on visible leaders. The GM can use this Proficiency to bring fronts focused
@@ -381,7 +381,7 @@ A factory district faces unsafe conditions. A PC with Community Organizing calls
 
 **Default benefits:**Court Etiquette can remove the need for rolls to avoid faux pas in
         formal settings. When Checks are required—such as persuading a council or reading the mood of a court—this
-        Proficiency can lower DCs or grant Advantage on PRE + Insight & Empathy or PRE + Persuasion &
+        Proficiency can lower DCs or grant Edge on PRE + Insight & Empathy or PRE + Persuasion &
         Appeal Checks.
 
 **Opportunities and risks:**Courts and councils are rich with intrigue. The GM can use this
@@ -396,7 +396,7 @@ A factory district faces unsafe conditions. A PC with Community Organizing calls
 > **Example – Court Etiquette**
 Seeking support from a royal council, a PC presents a petition. Court Etiquette lets them bypass rolls to
 >         gain entry and avoid simple missteps. The GM then calls for a PRE + Persuasion & Appeal Check at DC 16
->         with Advantage. A Full Success wins backing with favorable terms. A Partial secures support but binds the
+>         with Edge. A Full Success wins backing with favorable terms. A Partial secures support but binds the
 >         group to host a high‑profile event that will later draw unwelcome attention.
 
 #### Neighborhood Fixer — Role Proficiency
@@ -456,7 +456,7 @@ Security & Covert Operations Proficiencies****************
         quietly bypass a facility’s blind spot, or recognize when an enemy has deliberately left a gap as bait.
 
 **Default benefits:**Routine assessments of basic perimeters require no roll. Under pressure,
-        Perimeter Security can lower DCs or grant Advantage on RSN + Investigation, RSN + Perception &
+        Perimeter Security can lower DCs or grant Edge on RSN + Investigation, RSN + Perception &
         Awareness, or AGI + Stealth & Evasion Checks related to security layouts and blind spots.
 
 **Opportunities and risks:**This Proficiency naturally ties into Clocks representing
@@ -471,7 +471,7 @@ Security & Covert Operations Proficiencies****************
 > **Example – Perimeter Security**
 The PCs must slip into a relay control yard. The GM describes fences, towers, and patrols, then calls for an
 >         RSN + Perception & Awareness Check at DC 15, modified by Perimeter Security. On a Full Success, the PC
->         identifies a blind spot between cameras and patrol arcs, granting Advantage to the next AGI + Stealth &
+>         identifies a blind spot between cameras and patrol arcs, granting Edge to the next AGI + Stealth &
 >         Evasion Check for the group. On a Partial, they find a workable route but misjudge timing, ticking a “Guards
 >         Suspicious” Clock as a light briefly sweeps across their path.
 
@@ -487,7 +487,7 @@ The PCs must slip into a relay control yard. The GM describes fences, towers, an
 
 **Default benefits:**Simple underworld contacts or purchases may be handled without rolls,
         especially in familiar territory. When tension is high—crossing syndicates, dealing with informants, or
-        trying to operate quietly in hostile turf—Criminal Underworld can lower DCs or grant Advantage on PRE +
+        trying to operate quietly in hostile turf—Criminal Underworld can lower DCs or grant Edge on PRE +
         Streetwise, PRE + Deception & Performance, or PRE + Persuasion & Appeal Checks.
 
 **Opportunities and risks:**Underworld ties cut both ways. The GM can use this Proficiency to
@@ -500,7 +500,7 @@ The PCs must slip into a relay control yard. The GM describes fences, towers, an
 > **Example**
 > **Example – Criminal Underworld**
 The PCs want unregistered weapons before a risky job. A PC with Criminal Underworld knows which alley
->         warehouse to visit. The GM calls for a PRE + Streetwise Check at DC 14 with Advantage. On a Full Success,
+>         warehouse to visit. The GM calls for a PRE + Streetwise Check at DC 14 with Edge. On a Full Success,
 >         they secure the gear quietly. On a Partial, they get what they want, but the supplier quietly informs a
 >         local boss that “something big is coming,” ticking a “Gang Interest” Clock.
 
@@ -515,7 +515,7 @@ The PCs want unregistered weapons before a risky job. A PC with Criminal Underwo
 **Default benefits:**With this Proficiency, the GM may simply tell you when obvious
         surveillance is present or when your own operational security is clearly compromised. When a Check is
         appropriate—often AGI + Stealth & Evasion, PRE + Deception & Performance, or RSN + Investigation—
-        Espionage Tradecraft can lower DCs or grant Advantage, especially when the PC has had time to prepare.
+        Espionage Tradecraft can lower DCs or grant Edge, especially when the PC has had time to prepare.
 
 **Opportunities and risks:**Tradecraft invites layered plots. The GM can use this Proficiency
         to build cat‑and‑mouse games where both PCs and NPCs are constantly testing each other’s preparations and

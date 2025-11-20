@@ -24,9 +24,9 @@ Tags and Conditions are the shared vocabulary the table uses to talk about advan
 A Tag is a short descriptor applied to a scene, location, object, or situation. It becomes a flag:
         “remember this when resolving actions here.” Tags typically:
 
-- Grant Advantage or Disadvantage on certain Checks.
+- Grant Edge or Burden on certain Checks.
 - Raise or lower DCs for specific actions.
-- Change position or effect (how risky an action feels or how big its impact is).
+- Change risk or impact (how dangerous an action is or how much effect it has).
 
 You do not tag every detail. A room is just a room until its darkness, instability, crowd, or sacred
         significance matters to what characters are attempting. Tag the things that will shape decisions.
@@ -47,7 +47,7 @@ You can invent new Tags that fit your setting. The important part is agreeing at
 The GM describes a warehouse full of stacked crates, narrow aisles, and oil-spotted floors. They assign
 >         the Tags*Cramped*,*Fragile Cover*, and*Slick*.
 *Cramped*makes wide swings and large weapons awkward.*Fragile Cover*means wooden crates
->         can be shredded by fire, potentially stripping cover away.*Slick*imposes Disadvantage on fast
+>         can be shredded by fire, potentially stripping cover away.*Slick*imposes Burden on fast
 >         movement or acrobatic maneuvers. Every decision in this scene now has texture.
 
 ### What Conditions Do
@@ -58,7 +58,7 @@ Conditions represent persistent states that modify what a character can safely a
 
 Conditions typically:
 
-- Impose Disadvantage on certain actions.
+- Impose Burden on certain actions.
 - Limit available options (cannot run, cannot act this turn, cannot speak clearly).
 - Threaten further harm if ignored (ongoing damage, ticking Clocks).
 
@@ -66,14 +66,14 @@ Conditions typically:
 
 A full alphabetical list appears in the Glossary. Here are a few you will see often:
 
-- **Exhausted**– Disadvantage on demanding physical actions until you rest or receive
+- **Exhausted**– Burden on demanding physical actions until you rest or receive
           meaningful aid.
 - **Bleeding**– Time pressure from an untreated wound. If not stabilized, it may tick a
           personal Clock or escalate to worse states.
 - **Restrained**– You are held or pinned. You cannot move freely and must break free or
           be helped.
-- **Dazed**– Disoriented; Disadvantage on perception and reaction until you recover.
-- **Frightened**– Disadvantage on actions while a specific threat is visible; clears when
+- **Dazed**– Disoriented; Burden on perception and reaction until you recover.
+- **Frightened**– Burden on actions while a specific threat is visible; clears when
           you rally, escape, or defeat the source.
 
 > **Example**
@@ -86,12 +86,12 @@ A character fails a Check while crossing a compromised catwalk. Rather than simp
 
 Tags and Conditions do not require new rules. They plug directly into the Check system:
 
-- Tags often grant Advantage or Disadvantage on Checks that interact with them.
-- Conditions usually impose Disadvantage or limit which approaches are reasonable.
-- Some Tags shift DCs or change position and effect instead of modifying dice directly.
+- Tags often grant Edge or Burden on Checks that interact with them.
+- Conditions usually impose Burden or limit which approaches are reasonable.
+- Some Tags shift DCs or change risk and impact instead of modifying dice directly.
 
 When you are about to roll, quickly review which Tags and Conditions are relevant. Ask: “Does this make
-        the action easier, harder, or riskier?” Then adjust Advantage/Disadvantage, DC, or consequences
+        the action easier, harder, or riskier?” Then adjust Edge/Burden, DC, or consequences
         accordingly.
 
 > **Example**
@@ -99,7 +99,7 @@ When you are about to roll, quickly review which Tags and Conditions are relevan
 In a horror‑tinged mystery, a character stalks through a foggy graveyard at night. The scene has Tags*Dim Light*and*Obscured*. The character is also*Frightened*from a previous
 >         encounter.
 When they attempt to sneak past patrolling figures,*Dim Light*and*Obscured*might grant
->         Advantage on Stealth, but*Frightened*could impose Disadvantage on actions taken while the threat
+>         Edge on Stealth, but*Frightened*could impose Burden on actions taken while the threat
 >         is visible. The GM weighs these factors, cancels opposing modifiers as needed, and describes how the
 >         character’s shaky nerves show up in the fiction.
 

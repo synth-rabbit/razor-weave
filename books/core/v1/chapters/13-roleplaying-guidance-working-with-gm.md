@@ -138,7 +138,7 @@ Many tables like to create shared backstory—why the group is together, who the
 A session centers on another character’s estranged sibling arriving in town. Rather than trying to solve
 >         the sibling’s problems, the rest of the group plays into the situation: one offers quiet moral support,
 >         another runs interference with a suspicious faction, a third uses a Set Up action in a later conflict to
->         give the spotlight character Advantage. Everyone gets to act, but the emotional core of the session stays
+>         give the spotlight character Edge. Everyone gets to act, but the emotional core of the session stays
 >         with the sibling relationship.
 
 ### Working with the GM

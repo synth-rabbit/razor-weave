@@ -88,14 +88,14 @@ Typical Skill advancements include:
 
 Advancement does not need to be numeric to matter. Sometimes, the best Skill advancement is updating its
         description in your notes to match what the character has actually done—then letting that broader scope
-        justify Advantage or new fictional permissions in future scenes.
+        justify Edge or new fictional permissions in future scenes.
 
 > **Example**
 > **Example – Skill Advancement Through Play**
 Over several arcs, a PC repeatedly uses Systems & Diagnostics not just on machines but on social
 >         systems—modeling faction responses and predicting policy fallout. When an advancement trigger hits, the
 >         table agrees that this Skill now explicitly covers “social modeling” as part of its description. Future
->         Checks in that niche may receive Advantage or lower DCs, reflecting that lived experience.
+>         Checks in that niche may receive Edge or lower DCs, reflecting that lived experience.
 
 ### Proficiency Advancement
 
@@ -112,7 +112,7 @@ Examples:
 - Cold‑Case Records broadens to cover not just police archives but independent and underground records.
 
 When a Proficiency advances, talk through concrete fictional changes first—new contacts, credentials, or
-        responsibilities—then decide how often it will justify Advantage, reduced DCs, or automatic success for
+        responsibilities—then decide how often it will justify Edge, reduced DCs, or automatic success for
         routine tasks in its expanded area.
 
 ### Milestones, Arcs, and Growth

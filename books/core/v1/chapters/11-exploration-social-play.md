@@ -102,7 +102,7 @@ The group negotiates safe passage with a gang leader tagged as*Ruthless*and*Prof
 
 Deception is high‑risk and high‑reward. Successful lies open doors; failed lies create enemies. Keep lies
         simple, grounded in partial truths, and aligned with visible facts when possible. The GM may grant
-        Advantage when your story matches what NPCs can already see or believe.
+        Edge when your story matches what NPCs can already see or believe.
 
 Reading people through Insight or similar approaches lets you detect lies, gauge mood, and identify
         pressure points. On Full Success, the GM can tell you what an NPC most wants right now or what they are
