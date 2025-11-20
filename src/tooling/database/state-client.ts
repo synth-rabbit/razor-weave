@@ -1,5 +1,6 @@
 // src/tooling/database/state-client.ts
 import type Database from 'better-sqlite3';
+import { DatabaseError } from '../errors/index.js';
 
 export class StateClient {
   private db: Database.Database;
@@ -9,33 +10,45 @@ export class StateClient {
   }
 
   set(key: string, value: unknown): void {
-    const serialized = JSON.stringify(value);
+    try {
+      const serialized = JSON.stringify(value);
 
-    const stmt = this.db.prepare(`
-      INSERT INTO state (key, value, updated_at)
-      VALUES (?, ?, CURRENT_TIMESTAMP)
-      ON CONFLICT(key) DO UPDATE SET
-        value = excluded.value,
-        updated_at = CURRENT_TIMESTAMP
-    `);
+      const stmt = this.db.prepare(`
+        INSERT INTO state (key, value, updated_at)
+        VALUES (?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(key) DO UPDATE SET
+          value = excluded.value,
+          updated_at = CURRENT_TIMESTAMP
+      `);
 
-    stmt.run(key, serialized);
+      stmt.run(key, serialized);
+    } catch (error) {
+      throw new DatabaseError(
+        `Failed to set state for key "${key}": ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
   }
 
   get(key: string): unknown {
-    const stmt = this.db.prepare(`
-      SELECT value FROM state
-      WHERE key = ? AND archived = FALSE
-    `);
-
-    const row = stmt.get(key) as { value: string } | undefined;
-
-    if (!row) return null;
-
     try {
-      return JSON.parse(row.value);
-    } catch {
-      return row.value;
+      const stmt = this.db.prepare(`
+        SELECT value FROM state
+        WHERE key = ? AND archived = FALSE
+      `);
+
+      const row = stmt.get(key) as { value: string } | undefined;
+
+      if (!row) return null;
+
+      try {
+        return JSON.parse(row.value);
+      } catch {
+        return row.value;
+      }
+    } catch (error) {
+      throw new DatabaseError(
+        `Failed to get state for key "${key}": ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
