@@ -40,7 +40,7 @@ describe('beforeToolCall', () => {
 
   it('should block invalid plan names', async () => {
     const { validatePlanNaming } = await import('../../validators/plan-naming-validator.js');
-    (validatePlanNaming as any).mockReturnValue({
+    vi.mocked(validatePlanNaming).mockReturnValue({
       valid: false,
       error: 'Invalid name'
     });
@@ -52,7 +52,7 @@ describe('beforeToolCall', () => {
 
   it('should suggest tests for new TypeScript files', async () => {
     const { existsSync } = await import('fs');
-    (existsSync as any).mockReturnValue(false);
+    vi.mocked(existsSync).mockReturnValue(false);
 
     const logSpy = vi.spyOn(logger.log, 'info');
     await beforeToolCall('Write', { file_path: 'src/new-file.ts' });
