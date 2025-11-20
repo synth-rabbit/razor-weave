@@ -237,6 +237,7 @@
 .breadcrumb {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-md) var(--spacing-lg);
   padding-top: calc(var(--spacing-md) + 4px);
