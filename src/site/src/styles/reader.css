@@ -305,6 +305,31 @@
   transform: scale(0.98);
 }
 
+.breadcrumb-icon-btn {
+  background: none;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  color: var(--color-deep-purple);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.breadcrumb-icon-btn:hover {
+  background: var(--color-light-purple);
+  color: var(--color-electric-blue);
+}
+
+.breadcrumb-icon-btn:active {
+  transform: scale(0.98);
+}
+
 /* Breadcrumb corner decorations - bottom corners */
 .breadcrumb::before {
   content: '';
@@ -676,22 +701,7 @@ html {
 }
 
 .bookmarks-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-ink-black);
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
   position: relative;
-}
-
-.bookmarks-toggle:hover {
-  background: var(--color-light-blue);
-  color: var(--color-electric-blue);
 }
 
 .bookmarks-count {

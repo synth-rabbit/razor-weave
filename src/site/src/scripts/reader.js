@@ -551,16 +551,21 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBookmarksDropdown();
   }
 
-  // Create bookmarks dropdown in header
+  // Create bookmarks dropdown in breadcrumb
   function createBookmarksDropdown() {
-    const siteNav = document.querySelector('.site-nav');
-    if (!siteNav) return;
+    const breadcrumb = document.querySelector('.breadcrumb');
+    if (!breadcrumb) return;
 
-    const dropdown = document.createElement('li');
+    const separator = document.createElement('span');
+    separator.className = 'breadcrumb-separator';
+    separator.textContent = '|';
+
+    const dropdown = document.createElement('div');
     dropdown.className = 'bookmarks-dropdown';
     dropdown.innerHTML = `
-      <button class="bookmarks-toggle" aria-label="My Bookmarks">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+      <button class="bookmarks-toggle breadcrumb-icon-btn" aria-label="My Bookmarks">
+        <span>Bookmarks</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
         <span class="bookmarks-count">0</span>
       </button>
       <div class="bookmarks-menu" id="bookmarksMenu">
@@ -571,14 +576,9 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    // Insert before dark mode toggle
-    const darkModeButton = siteNav.querySelector('.dark-mode-toggle');
-    const darkModeToggle = darkModeButton ? darkModeButton.parentElement : null;
-    if (darkModeToggle) {
-      siteNav.insertBefore(dropdown, darkModeToggle);
-    } else {
-      siteNav.appendChild(dropdown);
-    }
+    // Append to breadcrumb
+    breadcrumb.appendChild(separator);
+    breadcrumb.appendChild(dropdown);
 
     const toggle = dropdown.querySelector('.bookmarks-toggle');
     const menu = dropdown.querySelector('.bookmarks-menu');
@@ -680,34 +680,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Create reader mode toggle
   function createReaderModeToggle() {
-    const siteNav = document.querySelector('.site-nav');
-    if (!siteNav) return;
+    const breadcrumb = document.querySelector('.breadcrumb');
+    if (!breadcrumb) return;
 
-    const toggle = document.createElement('li');
-    toggle.innerHTML = `
-      <button class="reader-mode-toggle" aria-label="Toggle reader mode" title="Reader Mode (distraction-free)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-          <circle cx="12" cy="12" r="3"></circle>
-        </svg>
-      </button>
+    const toggle = document.createElement('span');
+    toggle.className = 'breadcrumb-separator';
+    toggle.textContent = '|';
+
+    const button = document.createElement('button');
+    button.className = 'reader-mode-toggle breadcrumb-icon-btn';
+    button.setAttribute('aria-label', 'Toggle reader mode');
+    button.setAttribute('title', 'Reader Mode');
+    button.innerHTML = `
+      <span>Reader</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
     `;
 
-    // Insert before bookmarks
-    const bookmarksDropdown = siteNav.querySelector('.bookmarks-dropdown');
-    if (bookmarksDropdown) {
-      siteNav.insertBefore(toggle, bookmarksDropdown);
-    } else {
-      const darkModeButton = siteNav.querySelector('.dark-mode-toggle');
-      const darkModeToggle = darkModeButton ? darkModeButton.parentElement : null;
-      if (darkModeToggle) {
-        siteNav.insertBefore(toggle, darkModeToggle);
-      } else {
-        siteNav.appendChild(toggle);
-      }
-    }
-
-    const button = toggle.querySelector('.reader-mode-toggle');
+    // Append to breadcrumb
+    breadcrumb.appendChild(toggle);
+    breadcrumb.appendChild(button);
 
     // Create floating close button for reader mode
     const closeButton = document.createElement('button');
