@@ -6,6 +6,7 @@ import { CampaignClient } from './campaign-client.js';
 import { PersonaClient } from '../database/persona-client.js';
 import { snapshotBook } from './content-snapshot.js';
 import { writeReviewMarkdown } from './markdown-writer.js';
+import { TESTING } from '../constants/index.js';
 
 describe('Review System Integration', () => {
   let db: Database.Database;
@@ -107,7 +108,7 @@ describe('Review System Integration', () => {
         overall_assessment:
           'Great starting point with minor clarity issues',
       },
-      agentExecutionTime: 5000,
+      agentExecutionTime: TESTING.MOCK_AGENT_EXECUTION_TIME_MS,
     });
 
     const reviewId2 = campaignClient.createPersonaReview({

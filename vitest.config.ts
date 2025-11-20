@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import { COVERAGE_THRESHOLDS } from './src/tooling/constants/index.js';
 
 export default defineConfig({
   test: {
@@ -14,10 +15,10 @@ export default defineConfig({
         '.worktrees/**',
       ],
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 80,
-        statements: 80,
+        lines: COVERAGE_THRESHOLDS.LINES,
+        functions: COVERAGE_THRESHOLDS.FUNCTIONS,
+        branches: COVERAGE_THRESHOLDS.BRANCHES,
+        statements: COVERAGE_THRESHOLDS.STATEMENTS,
       },
     },
   },

@@ -7,6 +7,7 @@ import { ReviewOrchestrator } from './review-orchestrator.js';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { resolve } from 'path';
 import * as logger from '../logging/logger.js';
+import { TESTING } from '../constants/index.js';
 
 describe('ReviewOrchestrator', () => {
   let db: Database.Database;
@@ -193,7 +194,7 @@ describe('ReviewOrchestrator', () => {
           issue_annotations: [],
           overall_assessment: 'Good',
         },
-        agentExecutionTime: 5000,
+        agentExecutionTime: TESTING.MOCK_AGENT_EXECUTION_TIME_MS,
       });
 
       orchestrator.executeAnalysis(campaignId);
@@ -242,7 +243,7 @@ describe('ReviewOrchestrator', () => {
           issue_annotations: [],
           overall_assessment: 'Good',
         },
-        agentExecutionTime: 5000,
+        agentExecutionTime: TESTING.MOCK_AGENT_EXECUTION_TIME_MS,
       });
       orchestrator.executeAnalysis(campaignId);
 
