@@ -49,3 +49,13 @@ source/codex/
 data/project.db
 data/project.db-shm
 data/project.db-wal
+src/tooling/data/project.db
+src/tooling/data/project.db-shm
+src/tooling/data/project.db-wal
+
+# Test data directories
+src/tooling/data/reviews/
+data/test/
+
+# Backup files
+*.backup
