@@ -331,10 +331,6 @@ describe('Procedural Generation Engine', () => {
       // Generate enough personas that statistically some should match affinity rules
       const batch = generatePersonaBatch(100);
 
-      const personasWithAffinity = batch.filter(
-        (p) => p.affinityScore > 0
-      );
-
       // With 100 personas, we should statistically get some matches
       // But this is probabilistic, so we just check the scores are calculated
       expect(batch.every((p) => typeof p.affinityScore === 'number')).toBe(

@@ -254,7 +254,7 @@ describe('CampaignClient', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(reviews).toHaveLength(2);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      expect(reviews.map((r) => r.persona_id)).toEqual(['core-sarah', 'core-alex']);
+      expect(reviews.map((r: unknown) => (r as { persona_id: string }).persona_id)).toEqual(['core-sarah', 'core-alex']);
     });
   });
 
