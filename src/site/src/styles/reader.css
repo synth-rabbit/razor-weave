@@ -892,26 +892,21 @@ body.reader-mode .reader-mode-toggle:hover {
     display: none !important;
   }
 
-  /* Page breaks - Tier 1: Always break for major sections */
+  /* Page breaks - Tier 1: Part sections only */
   .reader-content .part-intro {
     page-break-before: always;
     page-break-after: avoid;
   }
 
-  /* H1s break ONLY if not inside .part-intro (avoid double breaks) */
-  .reader-content h1 {
-    page-break-before: auto;
-    page-break-after: avoid;
-  }
-
-  .reader-content header > h1,
-  .reader-content section:not(.part-intro) > h1 {
-    page-break-before: always;
-  }
-
   /* Exception: Don't force blank first page */
   .reader-content .part-intro:first-of-type {
     page-break-before: auto;
+  }
+
+  /* All H1s: no forced breaks (let content flow naturally) */
+  .reader-content h1 {
+    page-break-before: auto;
+    page-break-after: avoid;
   }
 
   /* Character sheets: Start on new page, but allow natural breaks */
