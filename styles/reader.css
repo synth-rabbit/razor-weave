@@ -834,20 +834,7 @@ html {
    ============================================================================ */
 
 .reader-mode-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-ink-black);
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
-}
-
-.reader-mode-toggle:hover {
-  background: var(--color-light-purple);
-  color: var(--color-deep-purple);
+  /* Inherits from .breadcrumb-icon-btn */
 }
 
 /* Hide elements in reader mode */
