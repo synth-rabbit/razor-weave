@@ -71,11 +71,14 @@ describe('Database Schema', () => {
   });
 
   it('should have correct indexes', () => {
-    const indexes = db.prepare("SELECT name FROM sqlite_master WHERE type='index'").all();
+    interface IndexRow {
+      name: string;
+    }
+    const indexes = db.prepare("SELECT name FROM sqlite_master WHERE type='index'").all() as IndexRow[];
     expect(indexes.length).toBeGreaterThan(0);
 
     // Check for specific important indexes
-    const indexNames = indexes.map((idx: any) => idx.name);
+    const indexNames = indexes.map((idx) => idx.name);
     expect(indexNames).toContain('idx_state_key');
     expect(indexNames).toContain('idx_campaigns_status');
     expect(indexNames).toContain('idx_persona_reviews_campaign');
