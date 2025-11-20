@@ -35,7 +35,7 @@ Old content here
 More content`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
+    vi.mocked(fsPromises.readdir).mockImplementation((_path, options?: unknown): Promise<Dirent[] | string[]> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [
           { name: 'content', isDirectory: () => true },
@@ -76,7 +76,7 @@ This is some existing content that won't match
 ## Other Section`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
+    vi.mocked(fsPromises.readdir).mockImplementation((_path, options?: unknown): Promise<Dirent[] | string[]> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [
           { name: 'review', isDirectory: () => true },
@@ -96,7 +96,7 @@ This is some existing content that won't match
     const mockContent = `# AGENTS.md\n\nNo agent roles section here`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
+    vi.mocked(fsPromises.readdir).mockImplementation((_path, options?: unknown): Promise<Dirent[] | string[]> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [] as Dirent[];
       }
@@ -116,8 +116,7 @@ This is some existing content that won't match
 
     await expect(updateAgentsMd()).rejects.toThrow('File not found');
     expect(errorSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Failed to update'),
-      expect.any(Error)
+      expect.stringContaining('Failed to update')
     );
   });
 
@@ -131,7 +130,7 @@ Old content
 ## Other Section`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
+    vi.mocked(fsPromises.readdir).mockImplementation((_path, options?: unknown): Promise<Dirent[] | string[]> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [{ name: 'content', isDirectory: () => true }] as Dirent[];
       }
@@ -157,7 +156,7 @@ Old content
 ## Other Section`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
+    vi.mocked(fsPromises.readdir).mockImplementation((_path, options?: unknown): Promise<Dirent[] | string[]> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [
           { name: 'review', isDirectory: () => true },

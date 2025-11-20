@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { hydrateCore, generate, stats } from './personas.js';
-import { getDatabase } from '../database/index.js';
+import { getDatabase, ProjectDatabase } from '../database/index.js';
 import { hydrateAllCorePersonas } from '../personas/hydrator.js';
 import { generatePersonaBatch } from '../personas/generator.js';
 import * as logger from '../logging/logger.js';
@@ -10,17 +10,19 @@ vi.mock('../database/index.js');
 vi.mock('../personas/hydrator.js');
 vi.mock('../personas/generator.js');
 
-interface MockDatabase {
-  personas: {
-    create: ReturnType<typeof vi.fn>;
-    getAll: ReturnType<typeof vi.fn>;
-    countByDimension: ReturnType<typeof vi.fn>;
-  };
+interface MockPersonaClient {
+  create: Mock<[data: unknown], string>;
+  getAll: Mock<[], unknown[]>;
+  countByDimension: Mock<[], Record<string, number>>;
+}
+
+interface MockDatabase extends Partial<ProjectDatabase> {
+  personas: MockPersonaClient;
 }
 
 describe('personas CLI commands', () => {
   let mockDb: MockDatabase;
-  let logSpy: any;
+  let logSpy: Mock;
 
   beforeEach(() => {
     // Reset mocks
@@ -32,13 +34,13 @@ describe('personas CLI commands', () => {
     // Setup mock database
     mockDb = {
       personas: {
-        create: vi.fn().mockReturnValue('test-id'),
-        getAll: vi.fn().mockReturnValue([]),
-        countByDimension: vi.fn().mockReturnValue({}),
+        create: vi.fn<[data: unknown], string>().mockReturnValue('test-id'),
+        getAll: vi.fn<[], unknown[]>().mockReturnValue([]),
+        countByDimension: vi.fn<[], Record<string, number>>().mockReturnValue({}),
       },
     };
 
-    vi.mocked(getDatabase).mockReturnValue(mockDb as any);
+    vi.mocked(getDatabase).mockReturnValue(mockDb);
   });
 
   describe('hydrate-core command', () => {
@@ -148,7 +150,7 @@ describe('personas CLI commands', () => {
       await generate(1);
 
       expect(mockDb.personas.create).toHaveBeenCalledWith({
-        name: expect.stringContaining('Generated'),
+        name: expect.stringContaining('Generated') as unknown as string,
         type: 'generated',
         archetype: 'Mentor',
         experience_level: 'Advanced',
