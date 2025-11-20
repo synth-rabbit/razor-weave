@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 import type { ReviewData, AnalysisData } from './schemas.js';
+import { FileError } from '../errors/index.js';
 
 export interface ReviewMarkdownData {
   campaignId: string;
@@ -59,8 +60,15 @@ ${reviewData.issue_annotations
 ${reviewData.overall_assessment}
 `;
 
-  mkdirSync(dirname(outputPath), { recursive: true });
-  writeFileSync(outputPath, markdown, 'utf-8');
+  try {
+    mkdirSync(dirname(outputPath), { recursive: true });
+    writeFileSync(outputPath, markdown, 'utf-8');
+  } catch (error) {
+    throw new FileError(
+      `Failed to write review markdown: ${error instanceof Error ? error.message : String(error)}`,
+      outputPath
+    );
+  }
 }
 
 export interface AnalysisMarkdownData {
@@ -144,6 +152,14 @@ ${personaBreakdownsContent}
 ${trendAnalysisContent}`.trim();
 
   const finalOutputPath = outputPath || `data/reviews/analysis/${campaignId}.md`;
-  mkdirSync(dirname(finalOutputPath), { recursive: true });
-  writeFileSync(finalOutputPath, markdown, 'utf-8');
+
+  try {
+    mkdirSync(dirname(finalOutputPath), { recursive: true });
+    writeFileSync(finalOutputPath, markdown, 'utf-8');
+  } catch (error) {
+    throw new FileError(
+      `Failed to write analysis markdown: ${error instanceof Error ? error.message : String(error)}`,
+      finalOutputPath
+    );
+  }
 }
