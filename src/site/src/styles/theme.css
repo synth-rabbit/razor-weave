@@ -54,6 +54,74 @@
 }
 
 /* ===================================
+   DARK MODE COLORS
+   =================================== */
+
+body.dark-mode {
+  /* Core Synthwave Colors (stay bright in dark mode) */
+  --color-electric-blue: #00D9FF;
+  --color-hot-pink: #FF006E;
+  --color-deep-purple: #9D4EDD;
+
+  /* Dark Neutrals */
+  --color-ink-black: #E5E5E5;
+  --color-medium-gray: #A0A0A0;
+  --color-border-gray: #333333;
+  --color-light-gray: #0F0F0F;
+  --color-white: #000000;
+
+  /* Tinted Backgrounds (darker) */
+  --color-light-blue: #1A1A2E;
+  --color-light-pink: #2A1A2A;
+  --color-light-purple: #221A2E;
+
+  /* Semantic Colors */
+  --color-success: #39FF14;
+  --color-caution: #FFB347;
+}
+
+/* Always dark header on home page */
+body.home-page .site-header {
+  background: #1A1A2E;
+}
+
+body.home-page .site-logo {
+  color: #FFFFFF;
+}
+
+body.home-page .site-nav a {
+  color: #FFFFFF;
+}
+
+body.home-page .site-nav a:hover {
+  background: var(--color-hot-pink);
+  color: #FFFFFF;
+}
+
+body.home-page .site-nav a.active {
+  border-bottom-color: var(--color-hot-pink);
+}
+
+body.home-page .nav-toggle span {
+  background: #FFFFFF;
+}
+
+/* Keep hero text white on home page */
+body.home-page .hero p {
+  color: #FFFFFF;
+}
+
+/* Darker cards in dark mode */
+body.dark-mode .card {
+  background: #0A0A0A;
+}
+
+/* Hide card corner decorations in dark mode */
+body.dark-mode .card-corner {
+  display: none;
+}
+
+/* ===================================
    TYPOGRAPHY
    =================================== */
 

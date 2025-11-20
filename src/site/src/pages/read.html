@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/styles/components.css">
   <link rel="stylesheet" href="/styles/textures.css">
   <link rel="stylesheet" href="/styles/reader.css">
+  <link rel="stylesheet" href="/styles/animations.css">
 </head>
 <body>
   <!-- Reading Progress Bar -->
@@ -52,7 +53,7 @@
     <ul class="toc-root">
       <li>
         <a href="#part-i-foundations" accesskey="1">Part I: Foundations</a>
-        <ul>
+        <ul class="toc-list">
           <li><a href="#ch-01-welcome-to-the-game">1. Welcome to the Game</a></li>
           <li><a href="#ch-02-core-concepts">2. Core Concepts at a Glance</a></li>
           <li><a href="#ch-03-how-to-use-this-rulebook">3. How to Use This Rulebook</a></li>
@@ -70,7 +71,7 @@
       </li>
       <li>
         <a href="#part-ii-skills-proficiencies" accesskey="2">Part II: Skills, Proficiencies, and Mechanical Reference</a>
-        <ul>
+        <ul class="toc-list">
           <li><a href="#ch-14-skills-system-overview">14. Skills System Overview</a></li>
           <li><a href="#ch-15-skills-reference-by-attribute">15. Skills Reference</a></li>
           <li><a href="#ch-16-proficiencies-system-overview">16. Proficiencies System Overview</a></li>
@@ -82,7 +83,7 @@
       </li>
       <li>
         <a href="#part-iii-reference-and-gm" accesskey="3">Part III: Game Master Section</a>
-        <ul>
+        <ul class="toc-list">
           <li><a href="#ch-21-running-sessions">21. Running Sessions</a></li>
           <li><a href="#ch-22-running-campaigns">22. Running Campaigns</a></li>
           <li><a href="#ch-23-designing-scenarios-one-shots">23. Designing Scenarios and One Shots</a></li>
@@ -93,7 +94,7 @@
       </li>
       <li>
         <a href="#part-iv-glossary-index" accesskey="4">Part IV: Reference Sheets, Glossary, and Index</a>
-        <ul>
+        <ul class="toc-list">
           <li><a href="#ch-27-sheets-and-play-aids">27. Sheets and Play Aids</a></li>
           <li><a href="#ch-28-glossary" accesskey="g">28. Glossary</a></li>
           <li><a href="#ch-29-index" accesskey="i">29. Index</a></li>
@@ -112,6 +113,14 @@
         <a href="/read.html">Read</a>
         <span class="breadcrumb-separator">/</span>
         <span class="breadcrumb-current" id="breadcrumb-current">Introduction</span>
+        <span class="breadcrumb-separator">|</span>
+        <button class="breadcrumb-search-btn" id="breadcrumbSearchBtn" aria-label="Search content" title="Search (Ctrl+K)">
+          <span>Search</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
       </nav>
 
     <!-- Part I: Foundations -->
@@ -8211,6 +8220,8 @@
 
   {{FOOTER}}
 
+  <script src="/scripts/nav-toggle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
   <script src="/scripts/reader.js"></script>
 </body>
 </html>

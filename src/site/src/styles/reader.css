@@ -1,5 +1,6 @@
 /* Reading Progress Bar */
 .reading-progress {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -32,8 +33,16 @@
   top: 0;
   max-height: 100vh;
   overflow-y: auto;
-  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-lg) 0;
+  padding: var(--spacing-lg);
+  background: linear-gradient(180deg,
+    rgba(98, 71, 170, 0.06) 0%,
+    rgba(0, 217, 255, 0.06) 100%
+  ),
+  var(--color-white);
+  border-right: 2px solid var(--color-border-gray);
+  border-radius: var(--radius-sm);
 }
+
 
 .reader-content {
   max-width: 800px;
@@ -42,7 +51,8 @@
 
 /* TOC Styling */
 .toc-root,
-.toc-list {
+.toc-list,
+.toc-root ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -72,6 +82,11 @@
   font-weight: 700;
   border-left: 3px solid var(--color-hot-pink);
   padding-left: var(--spacing-xs);
+}
+
+/* Add bottom margin to last nested TOC list for scrollability */
+.toc-root > li:last-child > ul {
+  margin-bottom: 100px;
 }
 
 /* Content Typography */
@@ -167,9 +182,55 @@
   background: rgba(98, 71, 170, 0.03); /* Very light purple tint */
   border: 2px solid var(--color-deep-purple);
   padding: var(--spacing-lg);
+  padding-top: 90px; /* Space for top corners */
+  padding-bottom: 90px; /* Space for bottom corners */
   margin: var(--spacing-xl) 0;
   border-radius: var(--radius-md);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: visible; /* Allow corners to show outside border-radius */
+}
+
+/* Sheet block corners - top corners */
+.reader-content .sheet-block::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 80px;
+  background-image:
+    url('/images/decorative/corner-tl.png'),
+    url('/images/decorative/corner-tr.png');
+  background-position:
+    top left,
+    top right;
+  background-repeat: no-repeat;
+  background-size: 80px 80px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Sheet block corners - bottom corners */
+.reader-content .sheet-block::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  right: -2px;
+  height: 80px;
+  background-image:
+    url('/images/decorative/corner-bl.png'),
+    url('/images/decorative/corner-br.png');
+  background-position:
+    bottom left,
+    bottom right;
+  background-repeat: no-repeat;
+  background-size: 80px 80px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Breadcrumb Navigation */
@@ -178,17 +239,73 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-md) var(--spacing-lg);
+  padding-top: calc(var(--spacing-md) + 4px);
+  padding-bottom: calc(var(--spacing-md) - 4px);
   margin-bottom: var(--spacing-lg);
   font-size: 0.9rem;
   color: var(--color-medium-gray);
   position: sticky;
-  top: 70px; /* Below header (header height + padding) */
+  top: -25px; /* Overlaps header slightly */
   background: var(--color-white);
   z-index: 999; /* Just below header (1000) but above content */
-  border-bottom: 1px solid var(--color-border-gray);
   margin-left: calc(var(--spacing-lg) * -1);
   margin-right: calc(var(--spacing-lg) * -1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: visible;
+}
+
+.breadcrumb-search-btn {
+  background: none;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  color: var(--color-electric-blue);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.breadcrumb-search-btn:hover {
+  background: var(--color-light-blue);
+  color: var(--color-deep-purple);
+}
+
+.breadcrumb-search-btn:active {
+  transform: scale(0.98);
+}
+
+/* Breadcrumb corner decorations - bottom corners */
+.breadcrumb::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: -10px;
+  width: 50px;
+  height: 50px;
+  background: url('/images/decorative/corner-bl.png') no-repeat;
+  background-size: contain;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.breadcrumb::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  right: -10px;
+  width: 50px;
+  height: 50px;
+  background: url('/images/decorative/corner-br.png') no-repeat;
+  background-size: contain;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .breadcrumb a {
