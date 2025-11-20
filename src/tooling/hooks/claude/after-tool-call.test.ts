@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { afterToolCall } from './after-tool-call.js';
+import * as logger from '../../logging/logger.js';
 
 // Mock the database
 vi.mock('../../database/index.js', () => ({
@@ -19,52 +20,46 @@ vi.mock('fs', () => ({
 }));
 
 describe('afterToolCall', () => {
+  let logSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    logSpy = vi.spyOn(logger.log, 'info');
+  });
+
   it('should log successful file writes', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
     await afterToolCall('Write', { file_path: 'test.txt' }, {});
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Created: test.txt'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Created: test.txt'));
   });
 
   it('should log successful file edits', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
     await afterToolCall('Edit', { file_path: 'test.txt' }, {});
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Updated: test.txt'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Updated: test.txt'));
   });
 
   it('should track test failures', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
     await afterToolCall('Bash', { command: 'pnpm test' }, { stdout: 'FAIL some test' });
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Tests failed'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Tests failed'));
   });
 
   it('should track test passes', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
     await afterToolCall('Bash', { command: 'pnpm test' }, { stdout: 'PASS all tests' });
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Tests passed'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Tests passed'));
   });
 
   it('should snapshot book chapter changes', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
     await afterToolCall('Write', { file_path: 'books/core/chapter-01.md' }, {});
 
     // Verify snapshot was logged (indicating function was called)
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Snapshotted'));
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('books/core/chapter-01.md'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Snapshotted'));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('books/core/chapter-01.md'));
   });
 
   it('should archive data artifacts', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
     await afterToolCall('Write', { file_path: 'data/output/test.json' }, {});
 
     // Verify artifact was archived (indicating function was called)
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Archived'));
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('data/output/test.json'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Archived'));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('data/output/test.json'));
   });
 
   it('should always return success', async () => {

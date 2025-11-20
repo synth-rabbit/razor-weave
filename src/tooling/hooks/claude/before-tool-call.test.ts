@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { beforeToolCall } from './before-tool-call.js';
+import * as logger from '../../logging/logger.js';
 
 // Mock the file system
 vi.mock('fs', () => ({
@@ -22,10 +23,10 @@ describe('beforeToolCall', () => {
   });
 
   it('should warn about critical file modifications', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(logger.log, 'info');
     await beforeToolCall('Edit', { file_path: 'AGENTS.md' });
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Modifying critical file'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Modifying critical file'));
+    logSpy.mockRestore();
   });
 
   it('should validate plan naming for plan files', async () => {
@@ -53,16 +54,16 @@ describe('beforeToolCall', () => {
     const { existsSync } = await import('fs');
     (existsSync as any).mockReturnValue(false);
 
-    const consoleSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(logger.log, 'info');
     await beforeToolCall('Write', { file_path: 'src/new-file.ts' });
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Consider creating test'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Consider creating test'));
+    logSpy.mockRestore();
   });
 
   it('should show style guide for markdown files', async () => {
-    const consoleSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(logger.log, 'info');
     await beforeToolCall('Write', { file_path: 'docs/plans/new-plan-index.md' });
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Relevant style guide'));
-    consoleSpy.mockRestore();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Relevant style guide'));
+    logSpy.mockRestore();
   });
 });
