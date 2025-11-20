@@ -934,6 +934,17 @@ body.reader-mode .reader-mode-toggle:hover {
     display: table-header-group;
   }
 
+  /* Page breaks - Tier 3: Soft guidance for headings */
+  .reader-content h2 {
+    page-break-after: avoid; /* Keep with following content */
+    page-break-before: auto; /* Allow natural breaks if needed */
+  }
+
+  .reader-content h3,
+  .reader-content h4 {
+    page-break-after: avoid; /* Keep with following content */
+  }
+
   /* Hide navigation and interactive elements */
   .site-header,
   .site-footer,
