@@ -3,6 +3,7 @@ import {
   validatePersonaCoherence,
   type PersonaDimensions,
 } from './coherence.js';
+import { PERSONA_GENERATION } from '../constants/index.js';
 
 export interface GenerationOptions {
   seed?: number;
@@ -123,10 +124,12 @@ export function generatePersonaBatch(
 
   for (let i = 0; i < count; i++) {
     // Use larger increments to ensure diverse personas
-    const personaSeed = baseSeed + i * 1000;
+    const personaSeed = baseSeed + i * PERSONA_GENERATION.BATCH_SEED_INCREMENT;
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      const rng = new SeededRandom(personaSeed + attempt * 100000);
+      const rng = new SeededRandom(
+        personaSeed + attempt * PERSONA_GENERATION.RETRY_SEED_INCREMENT
+      );
       const dimensions = generateDimensions(rng);
 
       const validation = validatePersonaCoherence(dimensions);

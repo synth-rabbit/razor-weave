@@ -4,6 +4,7 @@ import { mkdirSync } from 'node:fs';
 import { createTables } from '../database/schema.js';
 import { CampaignClient } from './campaign-client.js';
 import type { CreateCampaignData } from './campaign-client.js';
+import { TESTING } from '../constants/index.js';
 
 describe('CampaignClient', () => {
   let db: Database.Database;
@@ -131,7 +132,7 @@ describe('CampaignClient', () => {
           issue_annotations: [],
           overall_assessment: 'Solid work',
         },
-        agentExecutionTime: 5000,
+        agentExecutionTime: TESTING.MOCK_AGENT_EXECUTION_TIME_MS,
       });
 
       expect(reviewId).toBeGreaterThan(0);

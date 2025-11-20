@@ -6,6 +6,7 @@ import { CampaignClient } from './campaign-client.js';
 import { snapshotBook } from './content-snapshot.js';
 import { generateReviewerPromptFile, generateAnalyzerPromptFile } from './prompt-generator.js';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
+import { TESTING } from '../constants/index.js';
 
 describe('generateReviewerPromptFile', () => {
   let db: Database.Database;
@@ -145,7 +146,7 @@ describe('generateReviewerPromptFile', () => {
         issue_annotations: [],
         overall_assessment: 'Solid',
       },
-      agentExecutionTime: 5000,
+      agentExecutionTime: TESTING.MOCK_AGENT_EXECUTION_TIME_MS,
     });
 
     // Generate analyzer prompt
