@@ -6,13 +6,40 @@ import type { ChapterVersion } from './types.js';
 
 let snapshotCounter = 0;
 
+/**
+ * Client for managing content snapshots in the database.
+ * Provides versioning and history tracking for chapters and books.
+ */
 export class SnapshotClient {
   private db: Database.Database;
 
+  /**
+   * Creates a new SnapshotClient instance.
+   * @param db - The better-sqlite3 database instance
+   */
   constructor(db: Database.Database) {
     this.db = db;
   }
 
+  /**
+   * Creates a snapshot of a chapter file.
+   * Generates a unique content ID and stores chapter content with hash verification.
+   *
+   * @param filePath - Absolute path to the chapter markdown file
+   * @param source - Source of the snapshot ('git' or 'claude')
+   * @param options - Optional configuration
+   * @param options.commitSha - Git commit SHA if from git source
+   * @returns Content ID in format 'chapter-{12hexchars}'
+   *
+   * @example
+   * ```ts
+   * const contentId = snapshotClient.createChapterSnapshot(
+   *   'books/core/v1/chapters/01-intro.md',
+   *   'claude'
+   * );
+   * console.log(contentId); // 'chapter-a1b2c3d4e5f6'
+   * ```
+   */
   createChapterSnapshot(
     filePath: string,
     source: 'git' | 'claude',
@@ -55,6 +82,27 @@ export class SnapshotClient {
     return contentId;
   }
 
+  /**
+   * Creates a snapshot of an entire book file.
+   * Stores book HTML content with version and chapter count metadata.
+   *
+   * @param options - Book snapshot configuration
+   * @param options.bookPath - Path to the book HTML file
+   * @param options.version - Book version identifier (e.g., 'v1.0', 'draft')
+   * @param options.chapterCount - Number of chapters in the book
+   * @param options.source - Source of snapshot, defaults to 'claude'
+   * @returns Content ID in format 'book-{12hexchars}'
+   *
+   * @example
+   * ```ts
+   * const contentId = snapshotClient.createBookSnapshot({
+   *   bookPath: 'site/core_rulebook.html',
+   *   version: 'v1.0',
+   *   chapterCount: 30
+   * });
+   * console.log(contentId); // 'book-9f8e7d6c5b4a'
+   * ```
+   */
   createBookSnapshot(options: {
     bookPath: string;
     version: string;
@@ -83,6 +131,14 @@ export class SnapshotClient {
     return contentId;
   }
 
+  /**
+   * Retrieves version history for a chapter.
+   * Returns snapshots in reverse chronological order (newest first).
+   *
+   * @param chapterPath - Path to the chapter file
+   * @param limit - Optional maximum number of versions to return
+   * @returns Array of chapter versions, excluding archived versions
+   */
   getChapterHistory(chapterPath: string, limit?: number): ChapterVersion[] {
     const limitClause = limit ? `LIMIT ${limit}` : '';
 
@@ -96,6 +152,14 @@ export class SnapshotClient {
     return stmt.all(chapterPath) as ChapterVersion[];
   }
 
+  /**
+   * Retrieves the chapter version that existed at a specific time.
+   * Returns the most recent non-archived snapshot at or before the timestamp.
+   *
+   * @param chapterPath - Path to the chapter file
+   * @param timestamp - Point in time to query
+   * @returns Chapter version at that time, or null if none exists
+   */
   getChapterAtTime(chapterPath: string, timestamp: Date): ChapterVersion | null {
     const stmt = this.db.prepare(`
       SELECT * FROM chapter_versions
@@ -110,6 +174,12 @@ export class SnapshotClient {
     return row as ChapterVersion | null;
   }
 
+  /**
+   * Marks recent Claude-generated snapshots as committed to git.
+   * Updates all Claude snapshots from the last hour that don't have a commit SHA.
+   *
+   * @param commitSha - The git commit SHA to associate with snapshots
+   */
   markAsCommitted(commitSha: string): void {
     const stmt = this.db.prepare(`
       UPDATE chapter_versions
@@ -122,6 +192,12 @@ export class SnapshotClient {
     stmt.run(commitSha);
   }
 
+  /**
+   * Archives a snapshot version.
+   * Archived versions are excluded from history queries.
+   *
+   * @param id - The snapshot ID to archive
+   */
   archive(id: number): void {
     const stmt = this.db.prepare(`
       UPDATE chapter_versions
@@ -132,6 +208,12 @@ export class SnapshotClient {
     stmt.run(id);
   }
 
+  /**
+   * Unarchives a previously archived snapshot.
+   * Makes the version visible in history queries again.
+   *
+   * @param id - The snapshot ID to unarchive
+   */
   unarchive(id: number): void {
     const stmt = this.db.prepare(`
       UPDATE chapter_versions
