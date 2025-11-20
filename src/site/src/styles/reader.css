@@ -916,28 +916,28 @@ body.reader-mode .reader-mode-toggle:hover {
   }
 
   /* Page breaks - Tier 2: Strongly avoid breaks in content blocks */
+  /* Firefox-compatible: use only page-break-* properties, not break-* */
   .reader-content table,
   .reader-content .example,
   .reader-content .gm,
   .reader-content ul,
   .reader-content ol {
     page-break-inside: avoid;
-    break-inside: avoid; /* Modern syntax */
   }
 
   /* Allow sheets to break naturally (they're large) */
   .reader-content .sheet-block {
-    page-break-inside: auto; /* Allow breaking for large sheets */
+    page-break-inside: auto;
   }
 
   /* For glossary/index: allow breaks but keep dt+dd together */
   .reader-content dl {
-    page-break-inside: auto; /* Allow breaks in long lists */
+    page-break-inside: auto;
   }
 
   .reader-content dt,
   .reader-content dd {
-    page-break-inside: avoid; /* Keep individual entries together */
+    page-break-inside: avoid;
   }
 
   /* Keep dt with its dd */
@@ -945,15 +945,24 @@ body.reader-mode .reader-mode-toggle:hover {
     page-break-after: avoid;
   }
 
-  /* Extra insurance for table rows */
-  .reader-content tr {
-    page-break-inside: avoid;
-    break-inside: avoid;
+  /* Table handling - simplified for Firefox compatibility */
+  .reader-content table {
+    page-break-inside: auto; /* Allow tables to break if needed */
   }
 
-  /* Table headers repeat on multi-page tables */
+  .reader-content tr {
+    page-break-inside: avoid;
+  }
+
+  /* Table headers repeat - Firefox needs thead display */
   .reader-content thead {
     display: table-header-group;
+  }
+
+  /* Prevent orphaned table cells */
+  .reader-content td,
+  .reader-content th {
+    page-break-inside: avoid;
   }
 
   /* Page breaks - Tier 3: Soft guidance for headings */
