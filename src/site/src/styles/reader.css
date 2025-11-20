@@ -893,15 +893,24 @@ body.reader-mode .reader-mode-toggle:hover {
   }
 
   /* Page breaks - Tier 1: Always break for major sections */
-  .reader-content h1,
   .reader-content .part-intro {
     page-break-before: always;
     page-break-after: avoid;
   }
 
+  /* H1s break ONLY if not inside .part-intro (avoid double breaks) */
+  .reader-content h1 {
+    page-break-before: auto;
+    page-break-after: avoid;
+  }
+
+  .reader-content header > h1,
+  .reader-content section:not(.part-intro) > h1 {
+    page-break-before: always;
+  }
+
   /* Exception: Don't force blank first page */
-  .reader-content h1:first-child,
-  .reader-content .part-intro:first-child {
+  .reader-content .part-intro:first-of-type {
     page-break-before: auto;
   }
 
@@ -970,25 +979,65 @@ body.reader-mode .reader-mode-toggle:hover {
     max-width: 100%;
   }
 
-  /* Basic typography */
-  body {
-    font-size: 11pt;
-    line-height: 1.5;
-  }
-
+  /* Typography with spacing */
   .reader-content h1 {
     font-size: 20pt;
+    margin-top: 0; /* Starts new page */
+    margin-bottom: 2rem;
   }
 
   .reader-content h2 {
     font-size: 16pt;
+    margin-top: 1.5rem;
+    border-bottom: 2pt solid #000; /* Visual divider */
+    padding-bottom: 0.5rem;
   }
 
   .reader-content h3 {
     font-size: 13pt;
+    margin-top: 1rem;
   }
 
   .reader-content h4 {
     font-size: 12pt;
+    margin-top: 0.75rem;
+  }
+
+  /* Visual distinction for special content */
+  .reader-content .example {
+    border-left: 4pt solid #0099cc;
+    padding: 1rem;
+    margin: 1rem 0;
+    background: rgba(0, 217, 255, 0.1) !important;
+  }
+
+  .reader-content .gm {
+    border-left: 4pt solid #7B2CBF;
+    padding: 1rem;
+    margin: 1rem 0;
+    background: rgba(123, 44, 191, 0.1) !important;
+  }
+
+  .reader-content .sheet-block {
+    border: 3pt solid #000;
+    padding: 1.5rem;
+    background: #fff !important;
+  }
+
+  /* Table spacing */
+  .reader-content table {
+    margin: 1rem 0;
+  }
+
+  /* Improved readability */
+  body {
+    line-height: 1.6;
+  }
+
+  /* Orphans and widows */
+  .reader-content p,
+  .reader-content li {
+    orphans: 3;
+    widows: 3;
   }
 }
