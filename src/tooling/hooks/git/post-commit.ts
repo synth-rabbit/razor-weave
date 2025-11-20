@@ -39,7 +39,7 @@ export async function postCommit(): Promise<void> {
       execSync('git commit --amend --no-edit --no-verify', { stdio: 'inherit' });
       log.info('✅ Commit amended with documentation updates');
     } catch (error) {
-      log.error('❌ Failed to amend commit:', error);
+      log.error(`❌ Failed to amend commit: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

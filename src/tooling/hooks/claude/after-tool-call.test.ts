@@ -20,7 +20,7 @@ vi.mock('fs', () => ({
 }));
 
 describe('afterToolCall', () => {
-  let logSpy: ReturnType<typeof vi.spyOn>;
+  let logSpy: ReturnType<typeof vi.spyOn<typeof logger.log, 'info'>>;
 
   beforeEach(() => {
     logSpy = vi.spyOn(logger.log, 'info');

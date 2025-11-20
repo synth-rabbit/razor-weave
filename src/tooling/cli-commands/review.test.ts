@@ -1,21 +1,17 @@
-/* eslint-disable no-console */
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { reviewBook, listCampaigns } from './review.js';
+import * as logger from '../logging/logger.js';
 
-// Mock console.log to capture output
-let consoleOutput: string[] = [];
-const originalLog = console.log;
+// Spy on logger to capture output
+let logSpy: ReturnType<typeof vi.spyOn>;
 
 beforeEach(() => {
-  consoleOutput = [];
-  console.log = (...args: unknown[]): void => {
-    consoleOutput.push(args.join(' '));
-  };
+  logSpy = vi.spyOn(logger.log, 'info').mockImplementation(() => {});
 });
 
 afterEach(() => {
-  console.log = originalLog;
+  vi.restoreAllMocks();
 });
 
 describe('Review CLI Commands', () => {
@@ -35,7 +31,7 @@ describe('Review CLI Commands', () => {
     it('creates campaign and shows ID', () => {
       reviewBook(testBookPath);
 
-      const output = consoleOutput.join('\n');
+      const output = logSpy.mock.calls.map(call => String(call[0])).join('\n');
       expect(output).toContain('Campaign created');
       expect(output).toContain('campaign-');
     });
@@ -46,7 +42,7 @@ describe('Review CLI Commands', () => {
       reviewBook(testBookPath);
       listCampaigns();
 
-      const output = consoleOutput.join('\n');
+      const output = logSpy.mock.calls.map(call => String(call[0])).join('\n');
       expect(output).toContain('Found');
       expect(output).toContain('campaigns');
     });

@@ -48,7 +48,7 @@ export async function afterToolCall(
         await db.snapshots.createChapterSnapshot(filePath, 'claude');
         log.info(`📸 Snapshotted: ${filePath}`);
       } catch (error) {
-        log.error(`Failed to snapshot ${filePath}:`, error);
+        log.error(`Failed to snapshot ${filePath}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
 
@@ -60,7 +60,7 @@ export async function afterToolCall(
         db.artifacts.create(filePath, content, 'generated_content');
         log.info(`📦 Archived: ${filePath}`);
       } catch (error) {
-        log.error(`Failed to archive ${filePath}:`, error);
+        log.error(`Failed to archive ${filePath}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
   }
