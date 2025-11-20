@@ -190,3 +190,44 @@ Strong page-break rules, generous spacing, and visual hierarchy without HTML cha
 **Design validated:** 2025-11-20
 **Ready for implementation:** Yes
 **Estimated time:** 1-2 hours (implementation + testing)
+
+---
+
+## Implementation Complete
+
+**Date:** 2025-11-20
+**Implementation Plan:** `2025-11-20-print-optimization-implementation.md`
+**Commits:**
+- faa945d - feat(print): add Tier 1 page breaks for major sections
+- 7950b54 - feat(print): add Tier 2 page breaks to prevent content splits
+- cdc2a3c - feat(print): add Tier 3 page break guidance for headings
+- 83d99b3 - feat(print): add visual hierarchy and spacing
+- b2ebb7e - feat(print): hide web-only content
+- 8debc85 - fix(print): tune page breaks after testing
+- 4a20eee - fix(print): simplify page-break rules to eliminate blank pages
+- b46a398 - fix(print): Firefox-specific print compatibility fixes
+- ea89f69 - feat(pdf): wire up Chrome-generated PDF for downloads
+
+**Testing:** Validated in Chrome (✅ works well), Firefox (⚠️ has blank page issues)
+
+**Result:**
+- ✅ Chrome: All success criteria met
+- ✅ Chapters flow naturally within Parts
+- ✅ Character sheets break cleanly
+- ✅ Visual hierarchy clear with borders and spacing
+- ✅ Web-only content hidden
+- ⚠️ Firefox: Known issue with CSS page-breaks creating excessive blank pages
+- ✅ Interim solution: Chrome-generated PDF available for download
+
+**Firefox Issue:**
+Firefox print engine has known compatibility issues with certain CSS page-break combinations, creating ~110 blank pages between sections. Attempted fixes:
+- Removed modern `break-*` syntax
+- Simplified page-break rules
+- Added table cell protection
+
+**Current Status:**
+- Chrome/Safari users: Use browser print (Cmd/Ctrl+P) for best results
+- Firefox users: Download pre-generated PDF from website
+- Future work: Investigate Firefox-specific CSS workarounds or alternative PDF generation
+
+**Rollback:** If needed, restore with `cp src/site/src/styles/reader.css.backup src/site/src/styles/reader.css`
