@@ -914,22 +914,40 @@ body.reader-mode .reader-mode-toggle:hover {
     page-break-before: auto;
   }
 
-  /* Character sheets: Isolated on own pages */
+  /* Character sheets: Start on new page, but allow natural breaks */
   .reader-content .sheet-block {
     page-break-before: always;
-    page-break-after: always;
+    page-break-after: auto; /* Changed from always - removes blank pages */
   }
 
   /* Page breaks - Tier 2: Strongly avoid breaks in content blocks */
   .reader-content table,
   .reader-content .example,
   .reader-content .gm,
-  .reader-content .sheet-block,
   .reader-content ul,
-  .reader-content ol,
-  .reader-content dl {
+  .reader-content ol {
     page-break-inside: avoid;
     break-inside: avoid; /* Modern syntax */
+  }
+
+  /* Allow sheets to break naturally (they're large) */
+  .reader-content .sheet-block {
+    page-break-inside: auto; /* Allow breaking for large sheets */
+  }
+
+  /* For glossary/index: allow breaks but keep dt+dd together */
+  .reader-content dl {
+    page-break-inside: auto; /* Allow breaks in long lists */
+  }
+
+  .reader-content dt,
+  .reader-content dd {
+    page-break-inside: avoid; /* Keep individual entries together */
+  }
+
+  /* Keep dt with its dd */
+  .reader-content dt {
+    page-break-after: avoid;
   }
 
   /* Extra insurance for table rows */
@@ -1028,6 +1046,13 @@ body.reader-mode .reader-mode-toggle:hover {
     border: 3pt solid #000;
     padding: 1.5rem;
     background: #fff !important;
+    box-decoration-break: clone; /* Prevent border splitting across pages */
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Prevent orphaned borders on headings */
+  .reader-content h2 {
+    overflow: visible; /* Ensure border doesn't orphan */
   }
 
   /* Table spacing */
