@@ -911,6 +911,29 @@ body.reader-mode .reader-mode-toggle:hover {
     page-break-after: always;
   }
 
+  /* Page breaks - Tier 2: Strongly avoid breaks in content blocks */
+  .reader-content table,
+  .reader-content .example,
+  .reader-content .gm,
+  .reader-content .sheet-block,
+  .reader-content ul,
+  .reader-content ol,
+  .reader-content dl {
+    page-break-inside: avoid;
+    break-inside: avoid; /* Modern syntax */
+  }
+
+  /* Extra insurance for table rows */
+  .reader-content tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Table headers repeat on multi-page tables */
+  .reader-content thead {
+    display: table-header-group;
+  }
+
   /* Hide navigation and interactive elements */
   .site-header,
   .site-footer,
