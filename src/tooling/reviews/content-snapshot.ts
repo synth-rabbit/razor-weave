@@ -55,6 +55,29 @@ export interface ChapterSnapshot {
 
 let snapshotCounter = 0;
 
+/**
+ * Creates a snapshot of a book HTML file in the database.
+ * Generates a unique content ID and stores the file content with hash verification.
+ *
+ * @param db - The better-sqlite3 database instance
+ * @param data - Book snapshot configuration
+ * @param data.bookPath - Path to the book HTML file
+ * @param data.version - Book version identifier (e.g., 'v1.0')
+ * @param data.source - Source of the snapshot ('git' or 'claude')
+ * @param data.commitSha - Optional git commit SHA
+ * @param data.metadata - Optional additional metadata
+ * @returns Content ID in format 'book-{12hexchars}'
+ * @throws Error if file does not exist
+ *
+ * @example
+ * ```ts
+ * const contentId = snapshotBook(db, {
+ *   bookPath: 'site/core_rulebook.html',
+ *   version: 'v1.0',
+ *   source: 'claude'
+ * });
+ * ```
+ */
 export function snapshotBook(
   db: Database.Database,
   data: SnapshotBookData
@@ -96,6 +119,13 @@ export function snapshotBook(
   return contentId;
 }
 
+/**
+ * Retrieves a book snapshot by its content ID.
+ *
+ * @param db - The better-sqlite3 database instance
+ * @param contentId - The book content ID (format: 'book-{12hexchars}')
+ * @returns BookSnapshot object or null if not found
+ */
 export function getBookSnapshot(
   db: Database.Database,
   contentId: string
@@ -108,6 +138,33 @@ export function getBookSnapshot(
   return row ? (row as BookSnapshot) : null;
 }
 
+/**
+ * Creates a snapshot of a chapter markdown file in the database.
+ * Generates a unique content ID and stores the file content with hash verification.
+ *
+ * @param db - The better-sqlite3 database instance
+ * @param data - Chapter snapshot configuration
+ * @param data.bookPath - Path to the parent book
+ * @param data.chapterPath - Path to the chapter markdown file
+ * @param data.chapterName - Name of the chapter
+ * @param data.version - Chapter version identifier
+ * @param data.source - Source of the snapshot ('git' or 'claude')
+ * @param data.commitSha - Optional git commit SHA
+ * @param data.metadata - Optional additional metadata
+ * @returns Content ID in format 'chapter-{12hexchars}'
+ * @throws Error if file does not exist
+ *
+ * @example
+ * ```ts
+ * const contentId = snapshotChapter(db, {
+ *   bookPath: 'books/core/v1',
+ *   chapterPath: 'books/core/v1/chapters/01-intro.md',
+ *   chapterName: '01-intro',
+ *   version: 'v1.0',
+ *   source: 'claude'
+ * });
+ * ```
+ */
 export function snapshotChapter(
   db: Database.Database,
   data: SnapshotChapterData
@@ -151,6 +208,13 @@ export function snapshotChapter(
   return contentId;
 }
 
+/**
+ * Retrieves a chapter snapshot by its content ID.
+ *
+ * @param db - The better-sqlite3 database instance
+ * @param contentId - The chapter content ID (format: 'chapter-{12hexchars}')
+ * @returns ChapterSnapshot object or null if not found
+ */
 export function getChapterSnapshot(
   db: Database.Database,
   contentId: string

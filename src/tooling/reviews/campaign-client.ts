@@ -110,13 +110,45 @@ export interface CampaignListFilters {
   contentId?: number;
 }
 
+/**
+ * Client for managing review campaigns and their lifecycle.
+ * Handles campaign creation, persona reviews, analysis, and status tracking.
+ */
 export class CampaignClient {
   private db: Database.Database;
 
+  /**
+   * Creates a new CampaignClient instance.
+   * @param db - The better-sqlite3 database instance
+   */
   constructor(db: Database.Database) {
     this.db = db;
   }
 
+  /**
+   * Creates a new review campaign.
+   * Generates a unique campaign ID and initializes with 'pending' status.
+   *
+   * @param data - Campaign configuration
+   * @param data.campaignName - Human-readable campaign name
+   * @param data.contentType - Type of content being reviewed ('book' or 'chapter')
+   * @param data.contentId - Content ID from snapshot (e.g., 'book-abc123')
+   * @param data.personaSelectionStrategy - How personas were selected
+   * @param data.personaIds - Array of persona IDs to review content
+   * @param data.metadata - Optional additional metadata
+   * @returns Campaign ID in format 'campaign-YYYYMMDD-HHMMSS-{random}'
+   *
+   * @example
+   * ```ts
+   * const campaignId = campaignClient.createCampaign({
+   *   campaignName: 'Core Rulebook v1.0 Review',
+   *   contentType: 'book',
+   *   contentId: 'book-abc123',
+   *   personaSelectionStrategy: 'all_core',
+   *   personaIds: ['sarah-explorer', 'alex-tactician']
+   * });
+   * ```
+   */
   createCampaign(data: CreateCampaignData): string {
     // Generate campaign ID in format: campaign-YYYYMMDD-HHMMSS-randomString
     const now = new Date();
@@ -147,12 +179,26 @@ export class CampaignClient {
     return id;
   }
 
+  /**
+   * Retrieves a campaign by its ID.
+   *
+   * @param id - The campaign ID
+   * @returns Campaign object or null if not found
+   */
   getCampaign(id: string): Campaign | null {
     const stmt = this.db.prepare('SELECT * FROM review_campaigns WHERE id = ?');
     const row = stmt.get(id);
     return row ? (row as Campaign) : null;
   }
 
+  /**
+   * Updates a campaign's status.
+   * Automatically sets completed_at timestamp when status changes to 'completed'.
+   *
+   * @param campaignId - The campaign ID to update
+   * @param status - New status ('pending' | 'in_progress' | 'analyzing' | 'completed' | 'failed')
+   * @param completedAt - Optional explicit completion time, defaults to now if status is 'completed'
+   */
   updateStatus(
     campaignId: string,
     status: CampaignStatus,
@@ -177,6 +223,17 @@ export class CampaignClient {
     stmt.run(status, completedAtStr, campaignId);
   }
 
+  /**
+   * Creates a persona's review for a campaign.
+   * Stores structured review data including ratings, feedback, and issue annotations.
+   *
+   * @param data - Review data
+   * @param data.campaignId - The campaign this review belongs to
+   * @param data.personaId - The persona providing the review
+   * @param data.reviewData - Structured review with ratings (1-10) and narrative feedback
+   * @param data.agentExecutionTime - Optional agent execution time in milliseconds
+   * @returns Database row ID of the created review
+   */
   createPersonaReview(data: PersonaReviewData): number {
     const reviewDataJson = JSON.stringify(data.reviewData);
 
@@ -198,18 +255,41 @@ export class CampaignClient {
     return result.lastInsertRowid as number;
   }
 
+  /**
+   * Retrieves a persona review by its database ID.
+   *
+   * @param id - The review row ID
+   * @returns PersonaReview object or null if not found
+   */
   getPersonaReview(id: number): PersonaReview | null {
     const stmt = this.db.prepare('SELECT * FROM persona_reviews WHERE id = ?');
     const row = stmt.get(id);
     return row ? (row as PersonaReview) : null;
   }
 
+  /**
+   * Retrieves all persona reviews for a campaign.
+   *
+   * @param campaignId - The campaign ID
+   * @returns Array of persona reviews
+   */
   getCampaignReviews(campaignId: string): PersonaReview[] {
     const stmt = this.db.prepare('SELECT * FROM persona_reviews WHERE campaign_id = ?');
     const rows = stmt.all(campaignId);
     return rows as PersonaReview[];
   }
 
+  /**
+   * Creates an aggregated analysis for a campaign.
+   * Analyzes all persona reviews and generates priority rankings, dimension summaries,
+   * and persona breakdowns.
+   *
+   * @param data - Analysis data
+   * @param data.campaignId - The campaign being analyzed
+   * @param data.analysisData - Structured analysis with executive summary, rankings, and breakdowns
+   * @param data.markdownPath - Path where markdown report will be written
+   * @returns Database row ID of the created analysis
+   */
   createCampaignAnalysis(data: CampaignAnalysisData): number {
     const analysisDataJson = JSON.stringify(data.analysisData);
 
@@ -228,6 +308,12 @@ export class CampaignClient {
     return result.lastInsertRowid as number;
   }
 
+  /**
+   * Retrieves the campaign analysis.
+   *
+   * @param campaignId - The campaign ID
+   * @returns CampaignAnalysis object or null if not found
+   */
   getCampaignAnalysis(campaignId: string): CampaignAnalysis | null {
     const stmt = this.db.prepare(`
       SELECT * FROM campaign_analyses WHERE campaign_id = ?
@@ -237,6 +323,13 @@ export class CampaignClient {
     return row ? (row as CampaignAnalysis) : null;
   }
 
+  /**
+   * Lists campaigns with optional filtering.
+   * Results are ordered by creation date (newest first).
+   *
+   * @param filters - Optional filters for status, content type, or content ID
+   * @returns Array of campaigns matching the filters
+   */
   listCampaigns(filters: CampaignListFilters): Campaign[] {
     let sql = 'SELECT * FROM review_campaigns WHERE 1=1';
     const params: unknown[] = [];
