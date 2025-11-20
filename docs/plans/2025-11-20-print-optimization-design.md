@@ -207,6 +207,11 @@ Strong page-break rules, generous spacing, and visual hierarchy without HTML cha
 - 4a20eee - fix(print): simplify page-break rules to eliminate blank pages
 - b46a398 - fix(print): Firefox-specific print compatibility fixes
 - ea89f69 - feat(pdf): wire up Chrome-generated PDF for downloads
+- e2f2ad4 - feat(reader): add visible close button for reader mode
+- 710a603 - feat(ui): move reader mode and bookmarks to breadcrumb
+- b1d326d - refactor(ui): simplify breadcrumb buttons to icon-only with blue theme
+- b556229 - style(breadcrumb): center breadcrumb content
+- c610d6a - docs: add implementation plans for print optimization and site Phase 2
 
 **Testing:** Validated in Chrome (✅ works well), Firefox (⚠️ has blank page issues)
 
@@ -229,5 +234,12 @@ Firefox print engine has known compatibility issues with certain CSS page-break 
 - Chrome/Safari users: Use browser print (Cmd/Ctrl+P) for best results
 - Firefox users: Download pre-generated PDF from website
 - Future work: Investigate Firefox-specific CSS workarounds or alternative PDF generation
+
+**Additional UI Improvements:**
+- Reader mode close button: Floating X button in top-right, prevents fullscreen exit on Escape
+- Breadcrumb reorganization: Moved reader mode toggle and bookmarks to breadcrumb
+- Icon-only design: Simplified buttons to icons with hover tooltips
+- Centered breadcrumb: All content centered horizontally for better visual balance
+- Consistent theming: All utility buttons use electric blue theme with light blue hover
 
 **Rollback:** If needed, restore with `cp src/site/src/styles/reader.css.backup src/site/src/styles/reader.css`
