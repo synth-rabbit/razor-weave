@@ -310,7 +310,7 @@
   border: none;
   padding: 0.3rem 0.6rem;
   cursor: pointer;
-  color: var(--color-deep-purple);
+  color: var(--color-electric-blue);
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
   display: flex;
@@ -322,8 +322,8 @@
 }
 
 .breadcrumb-icon-btn:hover {
-  background: var(--color-light-purple);
-  color: var(--color-electric-blue);
+  background: var(--color-light-blue);
+  color: var(--color-deep-purple);
 }
 
 .breadcrumb-icon-btn:active {

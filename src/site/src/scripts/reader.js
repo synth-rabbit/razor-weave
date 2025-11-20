@@ -563,8 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdown = document.createElement('div');
     dropdown.className = 'bookmarks-dropdown';
     dropdown.innerHTML = `
-      <button class="bookmarks-toggle breadcrumb-icon-btn" aria-label="My Bookmarks">
-        <span>Bookmarks</span>
+      <button class="bookmarks-toggle breadcrumb-icon-btn" aria-label="My Bookmarks" title="Bookmarks">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
         <span class="bookmarks-count">0</span>
       </button>
@@ -692,7 +691,6 @@ document.addEventListener('DOMContentLoaded', () => {
     button.setAttribute('aria-label', 'Toggle reader mode');
     button.setAttribute('title', 'Reader Mode');
     button.innerHTML = `
-      <span>Reader</span>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
         <circle cx="12" cy="12" r="3"></circle>
