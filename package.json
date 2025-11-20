@@ -1,0 +1,44 @@
+{
+  "name": "razorweave",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Razorweave TTRPG content creation and publishing system",
+  "scripts": {
+    "build": "pnpm -r build",
+    "build:watch": "pnpm -r --parallel build:watch",
+    "clean": "pnpm -r clean",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:watch": "vitest watch --coverage",
+    "test:coverage:ui": "vitest --ui --coverage",
+    "typecheck": "pnpm -r typecheck",
+    "setup": "pnpm --filter @razorweave/tooling exec tsx scripts/setup-hooks.ts",
+    "lint": "pnpm lint:ts && pnpm lint:md",
+    "lint:ts": "eslint 'src/**/*.ts'",
+    "lint:md": "markdownlint-cli2 '**/*.md' '#node_modules' '#dist'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix && prettier 'src/**/*.ts' --write",
+    "validate": "pnpm --filter @razorweave/tooling exec tsx scripts/run-validators.ts"
+  },
+  "devDependencies": {
+    "@razorweave/tooling": "workspace:*",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@vitest/coverage-v8": "^1.6.1",
+    "eslint": "^8.56.0",
+    "markdownlint-cli2": "^0.12.1",
+    "prettier": "^3.2.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.14.2+sha1.1670a65b60df5f95e9f0cb7de46e605d9bd74fda",
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
