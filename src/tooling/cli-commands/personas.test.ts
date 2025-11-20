@@ -3,6 +3,7 @@ import { hydrateCore, generate, stats } from './personas.js';
 import { getDatabase } from '../database/index.js';
 import { hydrateAllCorePersonas } from '../personas/hydrator.js';
 import { generatePersonaBatch } from '../personas/generator.js';
+import * as logger from '../logging/logger.js';
 
 // Mock the dependencies
 vi.mock('../database/index.js');
@@ -11,14 +12,14 @@ vi.mock('../personas/generator.js');
 
 describe('personas CLI commands', () => {
   let mockDb: any;
-  let consoleLogSpy: any;
+  let logSpy: any;
 
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
 
-    // Mock console.log to capture output
-    consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    // Spy on logger.log.info to capture output
+    logSpy = vi.spyOn(logger.log, 'info').mockImplementation(() => {});
 
     // Setup mock database
     mockDb = {
@@ -39,8 +40,8 @@ describe('personas CLI commands', () => {
       hydrateCore();
 
       expect(hydrateAllCorePersonas).toHaveBeenCalledOnce();
-      expect(consoleLogSpy).toHaveBeenCalledWith('Hydrating core personas...');
-      expect(consoleLogSpy).toHaveBeenCalledWith('✓ Loaded 10 core personas');
+      expect(logSpy).toHaveBeenCalledWith('Hydrating core personas...');
+      expect(logSpy).toHaveBeenCalledWith('✓ Loaded 10 core personas');
     });
 
     it('should be idempotent (safe to run multiple times)', () => {
@@ -59,7 +60,7 @@ describe('personas CLI commands', () => {
 
       hydrateCore();
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('✓ Loaded 5 core personas');
+      expect(logSpy).toHaveBeenCalledWith('✓ Loaded 5 core personas');
     });
   });
 
@@ -110,8 +111,8 @@ describe('personas CLI commands', () => {
 
       expect(generatePersonaBatch).toHaveBeenCalledWith(2, undefined);
       expect(mockDb.personas.create).toHaveBeenCalledTimes(2);
-      expect(consoleLogSpy).toHaveBeenCalledWith('Generating 2 personas...');
-      expect(consoleLogSpy).toHaveBeenCalledWith('✓ Generated 2 personas');
+      expect(logSpy).toHaveBeenCalledWith('Generating 2 personas...');
+      expect(logSpy).toHaveBeenCalledWith('✓ Generated 2 personas');
     });
 
     it('should save generated personas to database', async () => {
@@ -247,9 +248,9 @@ describe('personas CLI commands', () => {
 
       await generate(25, { batchSize: 10 });
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Generated 10/25...');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Generated 20/25...');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Generated 25/25...');
+      expect(logSpy).toHaveBeenCalledWith('  Generated 10/25...');
+      expect(logSpy).toHaveBeenCalledWith('  Generated 20/25...');
+      expect(logSpy).toHaveBeenCalledWith('  Generated 25/25...');
     });
   });
 
@@ -262,8 +263,8 @@ describe('personas CLI commands', () => {
 
       await stats();
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('\n=== Persona Statistics ===\n');
-      expect(consoleLogSpy).toHaveBeenCalledWith('Total personas: 2');
+      expect(logSpy).toHaveBeenCalledWith('\n=== Persona Statistics ===\n');
+      expect(logSpy).toHaveBeenCalledWith('Total personas: 2');
     });
 
     it('should show distribution by type (core vs generated)', async () => {
@@ -275,8 +276,8 @@ describe('personas CLI commands', () => {
 
       await stats();
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Core: 2');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Generated: 1');
+      expect(logSpy).toHaveBeenCalledWith('  Core: 2');
+      expect(logSpy).toHaveBeenCalledWith('  Generated: 1');
     });
 
     it('should show distribution by archetype', async () => {
@@ -288,9 +289,9 @@ describe('personas CLI commands', () => {
 
       await stats();
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('\nArchetypes:');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Mentor: 2');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Explorer: 1');
+      expect(logSpy).toHaveBeenCalledWith('\nArchetypes:');
+      expect(logSpy).toHaveBeenCalledWith('  Mentor: 2');
+      expect(logSpy).toHaveBeenCalledWith('  Explorer: 1');
     });
 
     it('should show distribution by experience level', async () => {
@@ -302,9 +303,9 @@ describe('personas CLI commands', () => {
 
       await stats();
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('\nExperience Levels:');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Advanced: 2');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Beginner: 1');
+      expect(logSpy).toHaveBeenCalledWith('\nExperience Levels:');
+      expect(logSpy).toHaveBeenCalledWith('  Advanced: 2');
+      expect(logSpy).toHaveBeenCalledWith('  Beginner: 1');
     });
 
     it('should handle empty database', async () => {
@@ -312,9 +313,9 @@ describe('personas CLI commands', () => {
 
       await stats();
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('Total personas: 0');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Core: 0');
-      expect(consoleLogSpy).toHaveBeenCalledWith('  Generated: 0');
+      expect(logSpy).toHaveBeenCalledWith('Total personas: 0');
+      expect(logSpy).toHaveBeenCalledWith('  Core: 0');
+      expect(logSpy).toHaveBeenCalledWith('  Generated: 0');
     });
   });
 });
