@@ -627,3 +627,334 @@ html {
     font-size: 1.2rem;
   }
 }
+
+/* ============================================================================
+   BOOKMARKING SYSTEM
+   ============================================================================ */
+
+/* Bookmark buttons on headings */
+.bookmark-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-medium-gray);
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: all var(--transition-fast);
+  vertical-align: middle;
+}
+
+.reader-content h2:hover .bookmark-btn,
+.reader-content h3:hover .bookmark-btn,
+.bookmark-btn:focus {
+  opacity: 1;
+}
+
+.bookmark-btn:hover {
+  background: var(--color-light-blue);
+  color: var(--color-electric-blue);
+}
+
+.bookmark-btn.bookmarked {
+  opacity: 1;
+  color: var(--color-hot-pink);
+}
+
+.bookmark-btn.bookmarked:hover {
+  background: var(--color-light-pink);
+  color: var(--color-hot-pink);
+}
+
+/* Bookmarks dropdown in header */
+.bookmarks-dropdown {
+  position: relative;
+}
+
+.bookmarks-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-ink-black);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.bookmarks-toggle:hover {
+  background: var(--color-light-blue);
+  color: var(--color-electric-blue);
+}
+
+.bookmarks-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--color-hot-pink);
+  color: var(--color-white);
+  border-radius: 9px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.bookmarks-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--color-white);
+  border: 2px solid var(--color-border-gray);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 280px;
+  max-width: 350px;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.bookmarks-menu.open {
+  display: block;
+  animation: dropdownSlideIn 0.2s ease-out;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bookmarks-header {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 2px solid var(--color-border-gray);
+  background: linear-gradient(135deg,
+    var(--color-light-blue) 0%,
+    var(--color-light-purple) 100%
+  );
+}
+
+.bookmarks-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-deep-purple);
+}
+
+.bookmarks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.bookmark-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-light-gray);
+  transition: background var(--transition-fast);
+}
+
+.bookmark-item:hover {
+  background: var(--color-light-blue);
+}
+
+.bookmark-link {
+  flex: 1;
+  color: var(--color-ink-black);
+  text-decoration: none;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bookmark-link:hover {
+  color: var(--color-electric-blue);
+  text-decoration: underline;
+}
+
+.bookmark-remove {
+  background: none;
+  border: none;
+  color: var(--color-medium-gray);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.bookmark-remove:hover {
+  background: var(--color-light-pink);
+  color: var(--color-hot-pink);
+}
+
+.bookmarks-empty {
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-medium-gray);
+  font-size: 0.9rem;
+}
+
+/* ============================================================================
+   READER MODE (Distraction-Free)
+   ============================================================================ */
+
+.reader-mode-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-ink-black);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.reader-mode-toggle:hover {
+  background: var(--color-light-purple);
+  color: var(--color-deep-purple);
+}
+
+/* Hide elements in reader mode */
+body.reader-mode .site-header,
+body.reader-mode .site-footer,
+body.reader-mode .breadcrumb,
+body.reader-mode .chapter-nav,
+body.reader-mode .reader-toc,
+body.reader-mode .toc-toggle,
+body.reader-mode .bookmark-btn,
+body.reader-mode .bookmarks-dropdown,
+body.reader-mode .reading-progress {
+  display: none !important;
+}
+
+/* Expand content in reader mode */
+body.reader-mode .reader-container {
+  grid-template-columns: 1fr;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl);
+}
+
+body.reader-mode .reader-content {
+  max-width: 100%;
+}
+
+/* Keep reader mode toggle visible */
+body.reader-mode .reader-mode-toggle {
+  position: fixed;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  z-index: 1000;
+  background: var(--color-white);
+  border: 2px solid var(--color-border-gray);
+  padding: 0.75rem;
+  box-shadow: var(--shadow-lg);
+  opacity: 0.3;
+  transition: opacity var(--transition-fast);
+}
+
+body.reader-mode .reader-mode-toggle:hover {
+  opacity: 1;
+}
+
+/* ============================================================================
+   PRINT OPTIMIZATION
+   ============================================================================ */
+
+@media print {
+  /* Hide texture overlay that blocks content */
+  body::after {
+    display: none !important;
+  }
+
+  /* Page breaks - Tier 1: Always break for major sections */
+  .reader-content h1,
+  .reader-content .part-intro {
+    page-break-before: always;
+    page-break-after: avoid;
+  }
+
+  /* Exception: Don't force blank first page */
+  .reader-content h1:first-child,
+  .reader-content .part-intro:first-child {
+    page-break-before: auto;
+  }
+
+  /* Character sheets: Isolated on own pages */
+  .reader-content .sheet-block {
+    page-break-before: always;
+    page-break-after: always;
+  }
+
+  /* Hide navigation and interactive elements */
+  .site-header,
+  .site-footer,
+  .reader-toc,
+  .toc-toggle,
+  .breadcrumb,
+  .chapter-nav,
+  .bookmark-btn,
+  .bookmarks-dropdown,
+  .reader-mode-toggle,
+  .reading-progress {
+    display: none;
+  }
+
+  /* Full width content */
+  .reader-container {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    padding: 20pt;
+  }
+
+  .reader-content {
+    max-width: 100%;
+  }
+
+  /* Basic typography */
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .reader-content h1 {
+    font-size: 20pt;
+  }
+
+  .reader-content h2 {
+    font-size: 16pt;
+  }
+
+  .reader-content h3 {
+    font-size: 13pt;
+  }
+
+  .reader-content h4 {
+    font-size: 12pt;
+  }
+}
