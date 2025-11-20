@@ -9,8 +9,8 @@
  */
 
 import { hydrateCore, generate, stats } from './personas.js';
-import {
 import { log } from '../logging/logger.js';
+import {
   reviewBook,
   reviewChapter,
   listCampaigns,
@@ -121,12 +121,12 @@ async function main(): Promise<void> {
 
         viewCampaign(campaignId, options);
       } else {
-        log.error('Unknown review subcommand:', subcommand);
+        log.error(`Unknown review subcommand: ${subcommand}`);
         log.error('Available subcommands: book, chapter, list, view, status');
         process.exit(1);
       }
     } else {
-      log.error('Unknown command:', command);
+      log.error(`Unknown command: ${command}`);
       log.error('Available commands:');
       log.error('  hydrate-core                             - Load all core personas');
       log.error('  generate <count> [--seed=N]              - Generate N personas');
@@ -139,7 +139,7 @@ async function main(): Promise<void> {
       process.exit(1);
     }
   } catch (error) {
-    log.error('Error:', error instanceof Error ? error.message : error);
+    log.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);
   }
 }

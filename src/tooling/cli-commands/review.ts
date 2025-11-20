@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { getDatabase } from '../database/index.js';
-import {
 import { log } from '../logging/logger.js';
+import {
   CampaignClient,
   ReviewOrchestrator,
   type CampaignStatus,
