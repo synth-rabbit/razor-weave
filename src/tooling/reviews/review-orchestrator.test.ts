@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import Database from 'better-sqlite3';
 import { createTables } from '../database/schema.js';
 import { CampaignClient } from './campaign-client.js';
@@ -6,6 +6,7 @@ import { PersonaClient } from '../database/persona-client.js';
 import { ReviewOrchestrator } from './review-orchestrator.js';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { resolve } from 'path';
+import * as logger from '../logging/logger.js';
 
 describe('ReviewOrchestrator', () => {
   let db: Database.Database;
@@ -128,11 +129,7 @@ describe('ReviewOrchestrator', () => {
     });
 
     it('logs agent execution plan', () => {
-      const consoleSpy: string[] = [];
-      const originalLog = console.log;
-      console.log = (...args: unknown[]) => {
-        consoleSpy.push(args.join(' '));
-      };
+      const logSpy = vi.spyOn(logger.log, 'info');
 
       const campaignId = orchestrator.initializeCampaign({
         campaignName: 'Test Campaign',
@@ -144,13 +141,13 @@ describe('ReviewOrchestrator', () => {
 
       orchestrator.executeReviews(campaignId);
 
-      const output = consoleSpy.join('\n');
-      expect(output).toContain('Campaign created:');
-      expect(output).toContain('Generated 1 review prompts');
-      expect(output).toContain('Prompts directory:');
-      expect(output).toContain('execute reviewer agents in batches of 5');
+      const allCalls = logSpy.mock.calls.map(call => String(call[0])).join('\n');
+      expect(allCalls).toContain('Campaign created:');
+      expect(allCalls).toContain('Generated 1 review prompts');
+      expect(allCalls).toContain('Prompts directory:');
+      expect(allCalls).toContain('execute reviewer agents in batches of 5');
 
-      console.log = originalLog;
+      logSpy.mockRestore();
     });
   });
 
