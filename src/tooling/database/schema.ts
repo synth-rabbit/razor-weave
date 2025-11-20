@@ -24,9 +24,11 @@ export function createTables(db: Database.Database): void {
   // Create book_versions table
   db.exec(`
     CREATE TABLE IF NOT EXISTS book_versions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      content_id TEXT PRIMARY KEY,
+      id INTEGER,
       book_path TEXT NOT NULL,
       version TEXT NOT NULL,
+      chapter_count INTEGER,
       content TEXT NOT NULL,
       metadata TEXT,
       file_hash TEXT,
@@ -45,7 +47,8 @@ export function createTables(db: Database.Database): void {
   // Create chapter_versions table
   db.exec(`
     CREATE TABLE IF NOT EXISTS chapter_versions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      content_id TEXT PRIMARY KEY,
+      id INTEGER,
       book_path TEXT NOT NULL,
       chapter_path TEXT NOT NULL,
       chapter_name TEXT NOT NULL,
@@ -146,7 +149,7 @@ export function createTables(db: Database.Database): void {
       id TEXT PRIMARY KEY,
       campaign_name TEXT NOT NULL,
       content_type TEXT NOT NULL CHECK(content_type IN ('book', 'chapter')),
-      content_id INTEGER NOT NULL,
+      content_id TEXT NOT NULL,
       persona_selection_strategy TEXT NOT NULL CHECK(
         persona_selection_strategy IN ('all_core', 'manual', 'smart_sampling')
       ),

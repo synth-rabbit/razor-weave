@@ -4,6 +4,8 @@ import { readFileSync } from 'fs';
 import { createHash } from 'crypto';
 import type { ChapterVersion } from './types.js';
 
+let snapshotCounter = 0;
+
 export class SnapshotClient {
   private db: Database.Database;
 
@@ -11,11 +13,18 @@ export class SnapshotClient {
     this.db = db;
   }
 
-  async createChapterSnapshot(
+  createChapterSnapshot(
     filePath: string,
     source: 'git' | 'claude',
     options?: { commitSha?: string }
-  ): Promise<number> {
+  ): string {
+    const contentId =
+      'chapter-' +
+      createHash('sha256')
+        .update(filePath + Date.now() + (snapshotCounter++))
+        .digest('hex')
+        .substring(0, 12);
+
     const content = readFileSync(filePath, 'utf-8');
     const hash = createHash('sha256').update(content).digest('hex');
 
@@ -26,12 +35,13 @@ export class SnapshotClient {
 
     const stmt = this.db.prepare(`
       INSERT INTO chapter_versions (
-        book_path, chapter_path, chapter_name, version,
+        content_id, book_path, chapter_path, chapter_name, version,
         content, file_hash, source, commit_sha, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
     `);
 
-    const result = stmt.run(
+    stmt.run(
+      contentId,
       bookPath,
       filePath,
       chapterName,
@@ -42,22 +52,35 @@ export class SnapshotClient {
       options?.commitSha || null
     );
 
-    return result.lastInsertRowid as number;
+    return contentId;
   }
 
-  async createBookSnapshot(
-    bookPath: string,
-    source: 'git' | 'claude'
-  ): Promise<number> {
-    // Placeholder - would aggregate all chapters
+  createBookSnapshot(options: {
+    bookPath: string;
+    version: string;
+    chapterCount: number;
+    source?: 'git' | 'claude';
+  }): string {
+    const { bookPath, version, chapterCount, source = 'claude' } = options;
+    const contentId =
+      'book-' +
+      createHash('sha256')
+        .update(bookPath + Date.now() + (snapshotCounter++))
+        .digest('hex')
+        .substring(0, 12);
+
+    const content = readFileSync(bookPath, 'utf-8');
+    const fileHash = createHash('sha256').update(content).digest('hex');
+
     const stmt = this.db.prepare(`
       INSERT INTO book_versions (
-        book_path, version, content, source, created_at
-      ) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+        content_id, book_path, version, chapter_count,
+        content, file_hash, source, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
     `);
 
-    const result = stmt.run(bookPath, 'draft', '{}', source);
-    return result.lastInsertRowid as number;
+    stmt.run(contentId, bookPath, version, chapterCount, content, fileHash, source);
+    return contentId;
   }
 
   getChapterHistory(chapterPath: string, limit?: number): ChapterVersion[] {

@@ -19,7 +19,7 @@ export type PersonaSelectionStrategy =
 export interface CreateCampaignData {
   campaignName: string;
   contentType: ContentType;
-  contentId: number;
+  contentId: string;
   personaSelectionStrategy: PersonaSelectionStrategy;
   personaIds: string[];
   metadata?: Record<string, unknown>;
@@ -29,7 +29,7 @@ export interface Campaign {
   id: string;
   campaign_name: string;
   content_type: ContentType;
-  content_id: number;
+  content_id: string;
   persona_selection_strategy: PersonaSelectionStrategy;
   persona_ids: string;
   status: CampaignStatus;

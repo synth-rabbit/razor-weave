@@ -1,70 +1,66 @@
-// src/tooling/database/snapshot-client.test.ts
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { ProjectDatabase } from './client.js';
-import { unlinkSync, writeFileSync, mkdirSync } from 'fs';
-import { dirname } from 'path';
+import Database from 'better-sqlite3';
+import { createTables } from './schema.js';
+import { SnapshotClient } from './snapshot-client.js';
+import { writeFileSync, mkdirSync, rmSync } from 'fs';
 
 describe('SnapshotClient', () => {
-  let db: ProjectDatabase;
-  const testDbPath = 'data/test-snapshots.db';
-  const testChapterPath = 'data/test-chapter.md';
+  let db: Database.Database;
+  let client: SnapshotClient;
+  const testDir = 'data/test-snapshots';
+  const testBookPath = `${testDir}/test-book.html`;
 
   beforeEach(() => {
-    // Ensure directories exist
-    mkdirSync('data', { recursive: true });
-    db = new ProjectDatabase(testDbPath);
+    db = new Database(':memory:');
+    createTables(db);
+    client = new SnapshotClient(db);
 
-    // Create test chapter file
-    mkdirSync(dirname(testChapterPath), { recursive: true });
-    writeFileSync(testChapterPath, '# Test Chapter\n\nThis is test content.');
+    mkdirSync(testDir, { recursive: true });
+    writeFileSync(testBookPath, '<html><body>Test</body></html>');
   });
 
   afterEach(() => {
     db.close();
-    try {
-      unlinkSync(testDbPath);
-      unlinkSync(testDbPath + '-shm');
-      unlinkSync(testDbPath + '-wal');
-      unlinkSync(testChapterPath);
-    } catch {
-      // Ignore
-    }
+    rmSync(testDir, { recursive: true, force: true });
   });
 
-  it('should create chapter snapshot', async () => {
-    const id = await db.snapshots.createChapterSnapshot(testChapterPath, 'claude');
+  describe('createBookSnapshot', () => {
+    it('should return content ID string matching pattern book-*', () => {
+      const contentId = client.createBookSnapshot({
+        bookPath: testBookPath,
+        version: '1.0.0',
+        chapterCount: 1,
+      });
 
-    expect(id).toBeGreaterThan(0);
+      expect(typeof contentId).toBe('string');
+      expect(contentId).toMatch(/^book-[a-f0-9]+$/);
+    });
+
+    it('should store content ID in database', () => {
+      const contentId = client.createBookSnapshot({
+        bookPath: testBookPath,
+        version: '1.0.0',
+        chapterCount: 1,
+      });
+
+      const row = db.prepare('SELECT * FROM book_versions WHERE content_id = ?').get(contentId);
+      expect(row).toBeDefined();
+      expect(row).toHaveProperty('content_id', contentId);
+    });
   });
 
-  it('should get chapter history', async () => {
-    await db.snapshots.createChapterSnapshot(testChapterPath, 'claude');
-    // Small delay to ensure different timestamps
-    await new Promise(resolve => setTimeout(resolve, 10));
-    await db.snapshots.createChapterSnapshot(testChapterPath, 'git', { commitSha: 'abc123' });
+  describe('createChapterSnapshot', () => {
+    it('should return content ID string matching pattern chapter-*', () => {
+      const chapterPath = `${testDir}/chapter-01.md`;
+      writeFileSync(chapterPath, '# Chapter 1\n\nContent here');
 
-    const history = db.snapshots.getChapterHistory(testChapterPath);
+      const contentId = client.createChapterSnapshot(
+        chapterPath,
+        'claude'
+      );
 
-    expect(history).toHaveLength(2);
-    expect(history[0].source).toBe('git');
-    expect(history[1].source).toBe('claude');
-  });
-
-  it('should mark snapshots as committed', async () => {
-    await db.snapshots.createChapterSnapshot(testChapterPath, 'claude');
-
-    db.snapshots.markAsCommitted('abc123');
-
-    const history = db.snapshots.getChapterHistory(testChapterPath);
-    expect(history[0].commit_sha).toBe('abc123');
-  });
-
-  it('should archive snapshots', async () => {
-    const id = await db.snapshots.createChapterSnapshot(testChapterPath, 'claude');
-
-    db.snapshots.archive(id);
-
-    const history = db.snapshots.getChapterHistory(testChapterPath);
-    expect(history).toHaveLength(0); // Archived snapshots excluded
+      expect(typeof contentId).toBe('string');
+      expect(contentId).toMatch(/^chapter-[a-f0-9]+$/);
+    });
   });
 });

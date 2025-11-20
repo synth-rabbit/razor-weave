@@ -67,7 +67,8 @@ describe('Review System Integration', () => {
       source: 'claude',
     });
 
-    expect(contentId).toBeGreaterThan(0);
+    expect(typeof contentId).toBe('string');
+    expect(contentId).toMatch(/^book-[a-f0-9]+$/);
 
     // Step 2: Create campaign
     const campaignId = campaignClient.createCampaign({

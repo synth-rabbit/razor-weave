@@ -30,16 +30,17 @@ describe('Content Snapshot', () => {
 
   describe('snapshotBook', () => {
     it('creates book snapshot with file hash', () => {
-      const id = snapshotBook(db, {
+      const contentId = snapshotBook(db, {
         bookPath: testBookPath,
         version: 'v1.2',
         source: 'git',
         commitSha: 'abc123',
       });
 
-      expect(id).toBeGreaterThan(0);
+      expect(typeof contentId).toBe('string');
+      expect(contentId).toMatch(/^book-[a-f0-9]+$/);
 
-      const snapshot = getBookSnapshot(db, id);
+      const snapshot = getBookSnapshot(db, contentId);
       expect(snapshot).toBeDefined();
       expect(snapshot?.book_path).toBe(testBookPath);
       expect(snapshot?.version).toBe('v1.2');
@@ -66,7 +67,7 @@ describe('Content Snapshot', () => {
     });
 
     it('creates chapter snapshot with file hash', () => {
-      const id = snapshotChapter(db, {
+      const contentId = snapshotChapter(db, {
         bookPath: 'core/v1',
         chapterPath: testChapterPath,
         chapterName: 'Chapter 1',
@@ -75,9 +76,10 @@ describe('Content Snapshot', () => {
         commitSha: 'abc123',
       });
 
-      expect(id).toBeGreaterThan(0);
+      expect(typeof contentId).toBe('string');
+      expect(contentId).toMatch(/^chapter-[a-f0-9]+$/);
 
-      const snapshot = getChapterSnapshot(db, id);
+      const snapshot = getChapterSnapshot(db, contentId);
       expect(snapshot).toBeDefined();
       expect(snapshot?.chapter_path).toBe(testChapterPath);
       expect(snapshot?.chapter_name).toBe('Chapter 1');

@@ -22,11 +22,12 @@ export function generateReviewerPromptFile(
   }
 
   // Get content details
-  const contentQuery = db.prepare('SELECT * FROM book_versions WHERE id = ?');
+  const contentQuery = db.prepare('SELECT * FROM book_versions WHERE content_id = ?');
   const content = contentQuery.get(campaign.content_id) as {
-    id: number;
-    content_hash: string;
+    content_id: string;
+    file_hash: string;
     version: string;
+    content: string;
   };
   if (!content) {
     throw new Error(`Content not found: ${campaign.content_id}`);
@@ -47,10 +48,10 @@ PERSONA: ${personaId} (${persona.archetype}/${persona.experience_level})
 Full persona profile:
 ${JSON.stringify(persona, null, 2)}
 
-CONTENT: Book (version ${content.version}, hash ${content.content_hash})
-- Content ID: ${content.id} (stored in book_versions table)
+CONTENT: Book (version ${content.version}, hash ${content.file_hash})
+- Content ID: ${content.content_id} (stored in book_versions table)
 - Retrieve content using:
-  SELECT content FROM book_versions WHERE id = ${content.id}
+  SELECT content FROM book_versions WHERE content_id = '${content.content_id}'
 
 TASK: Review this book from ${persona.name}'s perspective
 

@@ -22,7 +22,8 @@ export interface SnapshotChapterData {
 }
 
 export interface BookSnapshot {
-  id: number;
+  content_id: string;
+  id: number | null;
   book_path: string;
   version: string;
   content: string;
@@ -36,7 +37,8 @@ export interface BookSnapshot {
 }
 
 export interface ChapterSnapshot {
-  id: number;
+  content_id: string;
+  id: number | null;
   book_path: string;
   chapter_path: string;
   chapter_name: string;
@@ -51,10 +53,12 @@ export interface ChapterSnapshot {
   archived_at: string | null;
 }
 
+let snapshotCounter = 0;
+
 export function snapshotBook(
   db: Database.Database,
   data: SnapshotBookData
-): number {
+): string {
   if (!existsSync(data.bookPath)) {
     throw new Error(`File not found: ${data.bookPath}`);
   }
@@ -63,14 +67,23 @@ export function snapshotBook(
   const fileHash = calculateHash(content);
   const metadataJson = data.metadata ? JSON.stringify(data.metadata) : null;
 
+  // Generate content ID with counter for uniqueness
+  const contentId =
+    'book-' +
+    createHash('sha256')
+      .update(data.bookPath + Date.now() + (snapshotCounter++))
+      .digest('hex')
+      .substring(0, 12);
+
   const stmt = db.prepare(`
     INSERT INTO book_versions (
-      book_path, version, content, metadata,
+      content_id, book_path, version, content, metadata,
       file_hash, source, commit_sha
-    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  const result = stmt.run(
+  stmt.run(
+    contentId,
     data.bookPath,
     data.version,
     content,
@@ -80,25 +93,25 @@ export function snapshotBook(
     data.commitSha || null
   );
 
-  return result.lastInsertRowid as number;
+  return contentId;
 }
 
 export function getBookSnapshot(
   db: Database.Database,
-  id: number
+  contentId: string
 ): BookSnapshot | null {
   const stmt = db.prepare(`
-    SELECT * FROM book_versions WHERE id = ?
+    SELECT * FROM book_versions WHERE content_id = ?
   `);
 
-  const row = stmt.get(id);
+  const row = stmt.get(contentId);
   return row ? (row as BookSnapshot) : null;
 }
 
 export function snapshotChapter(
   db: Database.Database,
   data: SnapshotChapterData
-): number {
+): string {
   if (!existsSync(data.chapterPath)) {
     throw new Error(`File not found: ${data.chapterPath}`);
   }
@@ -107,14 +120,23 @@ export function snapshotChapter(
   const fileHash = calculateHash(content);
   const metadataJson = data.metadata ? JSON.stringify(data.metadata) : null;
 
+  // Generate content ID with counter for uniqueness
+  const contentId =
+    'chapter-' +
+    createHash('sha256')
+      .update(data.chapterPath + Date.now() + (snapshotCounter++))
+      .digest('hex')
+      .substring(0, 12);
+
   const stmt = db.prepare(`
     INSERT INTO chapter_versions (
-      book_path, chapter_path, chapter_name, version,
+      content_id, book_path, chapter_path, chapter_name, version,
       content, metadata, file_hash, source, commit_sha
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  const result = stmt.run(
+  stmt.run(
+    contentId,
     data.bookPath,
     data.chapterPath,
     data.chapterName,
@@ -126,18 +148,18 @@ export function snapshotChapter(
     data.commitSha || null
   );
 
-  return result.lastInsertRowid as number;
+  return contentId;
 }
 
 export function getChapterSnapshot(
   db: Database.Database,
-  id: number
+  contentId: string
 ): ChapterSnapshot | null {
   const stmt = db.prepare(`
-    SELECT * FROM chapter_versions WHERE id = ?
+    SELECT * FROM chapter_versions WHERE content_id = ?
   `);
 
-  const row = stmt.get(id);
+  const row = stmt.get(contentId);
   return row ? (row as ChapterSnapshot) : null;
 }
 
