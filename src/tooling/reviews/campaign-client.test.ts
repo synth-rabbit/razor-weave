@@ -7,14 +7,12 @@ import type { CreateCampaignData } from './campaign-client.js';
 
 describe('CampaignClient', () => {
   let db: Database.Database;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let client: any;
+  let client: CampaignClient;
 
   beforeEach(() => {
     mkdirSync('data', { recursive: true });
     db = new Database(':memory:');
     createTables(db);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     client = new CampaignClient(db);
   });
 
@@ -34,36 +32,24 @@ describe('CampaignClient', () => {
       };
 
       // createCampaign returns just the ID
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaignId = client.createCampaign(data);
 
       // Verify ID format
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       expect(campaignId).toMatch(/^campaign-\d{8}-\d{6}-[a-z0-9]+$/);
 
       // Use getCampaign to retrieve the full object
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaign = client.getCampaign(campaignId);
 
       // Assert Campaign object properties
       expect(campaign).toBeDefined();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.id).toBe(campaignId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.campaign_name).toBe(data.campaignName);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.content_type).toBe(data.contentType);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.content_id).toBe(data.contentId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.persona_selection_strategy).toBe(data.personaSelectionStrategy);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.persona_ids).toBe(JSON.stringify(data.personaIds));
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.status).toBe('pending');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.created_at).toBeTruthy();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.completed_at).toBeNull();
 
       // Verify database persistence
@@ -75,7 +61,6 @@ describe('CampaignClient', () => {
   describe('updateStatus', () => {
     it('should update campaign status', () => {
       // Create a campaign
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
@@ -85,28 +70,20 @@ describe('CampaignClient', () => {
       });
 
       // Update to in_progress
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       client.updateStatus(campaignId, 'in_progress');
 
       // Verify status updated
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaign = client.getCampaign(campaignId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.status).toBe('in_progress');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaign?.completed_at).toBeNull();
 
       // Update to completed with timestamp
       const completedAt = new Date();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       client.updateStatus(campaignId, 'completed', completedAt);
 
       // Verify final status
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const completedCampaign = client.getCampaign(campaignId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(completedCampaign?.status).toBe('completed');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(completedCampaign?.completed_at).toBeTruthy();
     });
   });
@@ -132,7 +109,6 @@ describe('CampaignClient', () => {
         'narrative'
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
@@ -141,9 +117,7 @@ describe('CampaignClient', () => {
         personaIds: ['core-sarah'],
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const reviewId = client.createPersonaReview({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         campaignId,
         personaId: 'core-sarah',
         reviewData: {
@@ -160,17 +134,12 @@ describe('CampaignClient', () => {
         agentExecutionTime: 5000,
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       expect(reviewId).toBeGreaterThan(0);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const review = client.getPersonaReview(reviewId);
       expect(review).toBeDefined();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(review?.campaign_id).toBe(campaignId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(review?.persona_id).toBe('core-sarah');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(review?.status).toBe('completed');
     });
   });
@@ -214,7 +183,6 @@ describe('CampaignClient', () => {
         'analytical'
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
@@ -223,9 +191,7 @@ describe('CampaignClient', () => {
         personaIds: ['core-sarah', 'core-alex'],
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       client.createPersonaReview({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         campaignId,
         personaId: 'core-sarah',
         reviewData: {
@@ -236,9 +202,7 @@ describe('CampaignClient', () => {
         },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       client.createPersonaReview({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         campaignId,
         personaId: 'core-alex',
         reviewData: {
@@ -249,18 +213,14 @@ describe('CampaignClient', () => {
         },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const reviews = client.getCampaignReviews(campaignId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(reviews).toHaveLength(2);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       expect(reviews.map((r: unknown) => (r as { persona_id: string }).persona_id)).toEqual(['core-sarah', 'core-alex']);
     });
   });
 
   describe('createCampaignAnalysis', () => {
     it('creates campaign analysis record', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
@@ -269,9 +229,7 @@ describe('CampaignClient', () => {
         personaIds: ['core-sarah'],
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const analysisId = client.createCampaignAnalysis({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         campaignId,
         analysisData: {
           executive_summary: 'Overall good',
@@ -287,22 +245,17 @@ describe('CampaignClient', () => {
         markdownPath: 'data/reviews/analysis/test.md',
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       expect(analysisId).toBeGreaterThan(0);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const analysis = client.getCampaignAnalysis(campaignId);
       expect(analysis).toBeDefined();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(analysis?.campaign_id).toBe(campaignId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(analysis?.markdown_path).toBe('data/reviews/analysis/test.md');
     });
   });
 
   describe('listCampaigns', () => {
     beforeEach(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       client.createCampaign({
         campaignName: 'Campaign 1',
         contentType: 'book',
@@ -311,7 +264,6 @@ describe('CampaignClient', () => {
         personaIds: ['core-sarah'],
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const id2 = client.createCampaign({
         campaignName: 'Campaign 2',
         contentType: 'chapter',
@@ -320,32 +272,23 @@ describe('CampaignClient', () => {
         personaIds: ['core-alex'],
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       client.updateStatus(id2, 'completed');
     });
 
     it('lists all campaigns', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaigns = client.listCampaigns({});
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaigns).toHaveLength(2);
     });
 
     it('filters by status', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaigns = client.listCampaigns({ status: 'completed' });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaigns).toHaveLength(1);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaigns[0].campaign_name).toBe('Campaign 2');
     });
 
     it('filters by content type', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const campaigns = client.listCampaigns({ contentType: 'book' });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaigns).toHaveLength(1);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(campaigns[0].campaign_name).toBe('Campaign 1');
     });
   });
