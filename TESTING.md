@@ -49,7 +49,55 @@ Test multiple modules working together.
 
 ### E2E Tests
 
-Test complete workflows with real database (in-memory).
+Located in `src/tooling/e2e/`
+
+Test complete workflows from start to finish using real implementations.
+
+**Pattern:**
+
+```typescript
+import { execSync } from 'child_process';
+import Database from 'better-sqlite3';
+import { createTables } from '../database/schema.js';
+
+describe('E2E Workflow', () => {
+  let db: Database.Database;
+  const dbPath = 'data/project.db';
+
+  beforeEach(() => {
+    // For E2E tests, use fresh database with current schema
+    execSync(`rm -f ${dbPath} ${dbPath}-shm ${dbPath}-wal`);
+    db = new Database(dbPath);
+    createTables(db);
+  });
+
+  afterEach(() => {
+    db.close();
+  });
+
+  it('should complete full workflow', () => {
+    // Execute CLI commands
+    execSync('pnpm tsx cli-commands/run.ts generate 5 --seed=12345');
+
+    // Verify database state
+    const count = db.prepare('SELECT COUNT(*) as count FROM personas').get();
+    expect(count.count).toBe(5);
+  });
+});
+```
+
+**Characteristics:**
+- Use real CLI commands via `execSync`
+- Use actual database files (not `:memory:` for CLI tests)
+- Clean up test data in `afterEach`
+- Test complete user workflows
+- Verify both command output AND database state
+- Use fresh database per test to avoid schema issues
+
+**Example Tests:**
+- `review-workflow.test.ts` - Persona → Snapshot → Campaign → Review workflow
+- `git-workflow.test.ts` - Git operations with state tracking
+- `cli-commands.test.ts` - CLI command execution and database verification
 
 ## Testing Patterns
 
