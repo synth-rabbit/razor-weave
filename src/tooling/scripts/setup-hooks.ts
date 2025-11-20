@@ -3,6 +3,7 @@ import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { log } from '../logging/logger.js';
 
 export async function setupHooks(): Promise<void> {
   try {
