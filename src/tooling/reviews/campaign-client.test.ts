@@ -25,7 +25,7 @@ describe('CampaignClient', () => {
       const data: CreateCampaignData = {
         campaignName: 'Core Rulebook v1.0 Review',
         contentType: 'book',
-        contentId: 1,
+        contentId: 'book-test001',
         personaSelectionStrategy: 'all_core',
         personaIds: ['core-sarah', 'core-alex'],
         metadata: { version: '1.0' }
@@ -64,7 +64,7 @@ describe('CampaignClient', () => {
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
-        contentId: 1,
+        contentId: 'book-test001',
         personaSelectionStrategy: 'all_core',
         personaIds: ['core-sarah']
       });
@@ -112,7 +112,7 @@ describe('CampaignClient', () => {
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
-        contentId: 1,
+        contentId: 'book-test001',
         personaSelectionStrategy: 'all_core',
         personaIds: ['core-sarah'],
       });
@@ -186,7 +186,7 @@ describe('CampaignClient', () => {
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
-        contentId: 1,
+        contentId: 'book-test001',
         personaSelectionStrategy: 'all_core',
         personaIds: ['core-sarah', 'core-alex'],
       });
@@ -224,7 +224,7 @@ describe('CampaignClient', () => {
       const campaignId = client.createCampaign({
         campaignName: 'Test Campaign',
         contentType: 'book',
-        contentId: 1,
+        contentId: 'book-test001',
         personaSelectionStrategy: 'all_core',
         personaIds: ['core-sarah'],
       });
@@ -259,7 +259,7 @@ describe('CampaignClient', () => {
       client.createCampaign({
         campaignName: 'Campaign 1',
         contentType: 'book',
-        contentId: 1,
+        contentId: 'book-test001',
         personaSelectionStrategy: 'all_core',
         personaIds: ['core-sarah'],
       });
@@ -267,7 +267,7 @@ describe('CampaignClient', () => {
       const id2 = client.createCampaign({
         campaignName: 'Campaign 2',
         contentType: 'chapter',
-        contentId: 2,
+        contentId: 'book-test002',
         personaSelectionStrategy: 'manual',
         personaIds: ['core-alex'],
       });
