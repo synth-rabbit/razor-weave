@@ -10,8 +10,16 @@ vi.mock('../database/index.js');
 vi.mock('../personas/hydrator.js');
 vi.mock('../personas/generator.js');
 
+interface MockDatabase {
+  personas: {
+    create: ReturnType<typeof vi.fn>;
+    getAll: ReturnType<typeof vi.fn>;
+    countByDimension: ReturnType<typeof vi.fn>;
+  };
+}
+
 describe('personas CLI commands', () => {
-  let mockDb: any;
+  let mockDb: MockDatabase;
   let logSpy: any;
 
   beforeEach(() => {
@@ -30,7 +38,7 @@ describe('personas CLI commands', () => {
       },
     };
 
-    vi.mocked(getDatabase).mockReturnValue(mockDb);
+    vi.mocked(getDatabase).mockReturnValue(mockDb as any);
   });
 
   describe('hydrate-core command', () => {

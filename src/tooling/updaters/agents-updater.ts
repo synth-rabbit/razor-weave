@@ -44,7 +44,7 @@ export async function updateAgentsMd(): Promise<boolean> {
     log.info('ℹ️  AGENTS.md already up to date');
     return false;
   } catch (error) {
-    log.error('❌ Failed to update AGENTS.md:', error);
+    log.error(`❌ Failed to update AGENTS.md: ${error instanceof Error ? error.message : String(error)}`);
     throw error;
   }
 }

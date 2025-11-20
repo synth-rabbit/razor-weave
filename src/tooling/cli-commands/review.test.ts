@@ -31,7 +31,7 @@ describe('Review CLI Commands', () => {
     it('creates campaign and shows ID', () => {
       reviewBook(testBookPath);
 
-      const output = logSpy.mock.calls.map(call => String(call[0])).join('\n');
+      const output = logSpy.mock.calls.map((call: any) => String(call[0])).join('\n');
       expect(output).toContain('Campaign created');
       expect(output).toContain('campaign-');
     });
@@ -42,7 +42,7 @@ describe('Review CLI Commands', () => {
       reviewBook(testBookPath);
       listCampaigns();
 
-      const output = logSpy.mock.calls.map(call => String(call[0])).join('\n');
+      const output = logSpy.mock.calls.map((call: any) => String(call[0])).join('\n');
       expect(output).toContain('Found');
       expect(output).toContain('campaigns');
     });

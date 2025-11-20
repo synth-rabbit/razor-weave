@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { updateAgentsMd } from './agents-updater.js';
 import * as fsPromises from 'fs/promises';
+import { Dirent } from 'fs';
 import * as logger from '../logging/logger.js';
 
 // Mock fs/promises
@@ -34,14 +35,14 @@ Old content here
 More content`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (path: string, options?: unknown) => {
+    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [
           { name: 'content', isDirectory: () => true },
           { name: 'review', isDirectory: () => true },
-        ] as fsPromises.Dirent[];
+        ] as Dirent[];
       }
-      return ['agent1.ts', 'agent2.ts'] as unknown as fsPromises.Dirent[];
+      return ['agent1.ts', 'agent2.ts'] as unknown as Dirent[];
     });
 
     const result = await updateAgentsMd();
@@ -75,11 +76,11 @@ This is some existing content that won't match
 ## Other Section`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (path: string, options?: unknown) => {
+    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [
           { name: 'review', isDirectory: () => true },
-        ] as fsPromises.Dirent[];
+        ] as Dirent[];
       }
       return [];
     });
@@ -95,9 +96,9 @@ This is some existing content that won't match
     const mockContent = `# AGENTS.md\n\nNo agent roles section here`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (path: string, options?: unknown) => {
+    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
-        return [] as fsPromises.Dirent[];
+        return [] as Dirent[];
       }
       return [];
     });
@@ -130,9 +131,9 @@ Old content
 ## Other Section`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (path: string, options?: unknown) => {
+    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
-        return [{ name: 'content', isDirectory: () => true }] as fsPromises.Dirent[];
+        return [{ name: 'content', isDirectory: () => true }] as Dirent[];
       }
       return ['content-agent.ts', 'content-agent.test.ts', 'utils.ts'];
     });
@@ -156,13 +157,13 @@ Old content
 ## Other Section`;
 
     vi.mocked(fsPromises.readFile).mockResolvedValueOnce(mockContent);
-    vi.mocked(fsPromises.readdir).mockImplementation(async (path: string, options?: unknown) => {
+    vi.mocked(fsPromises.readdir).mockImplementation(async (_path, options?: unknown): Promise<any> => {
       if (typeof options === 'object' && options !== null && 'withFileTypes' in options) {
         return [
           { name: 'review', isDirectory: () => true },
           { name: 'content', isDirectory: () => true },
           { name: 'playtest', isDirectory: () => true },
-        ] as fsPromises.Dirent[];
+        ] as Dirent[];
       }
       return [];
     });

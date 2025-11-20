@@ -54,8 +54,8 @@ describe('setupHooks', () => {
 
     const writeFileCalls = vi.mocked(fsPromises.writeFile).mock.calls;
     const hookFiles = writeFileCalls
-      .map(call => call[0])
-      .filter((path: string) => path.includes('.husky'));
+      .map(call => call[0] as string)
+      .filter((path) => path.includes('.husky'));
 
     expect(hookFiles.some((path: string) => path.includes('post-checkout'))).toBe(true);
     expect(hookFiles.some((path: string) => path.includes('pre-commit'))).toBe(true);
@@ -77,24 +77,24 @@ describe('setupHooks', () => {
 
     const writeFileCalls = vi.mocked(fsPromises.writeFile).mock.calls;
     const claudeFiles = writeFileCalls
-      .map(call => call[0])
-      .filter((path: string) => path.includes('.claude/hooks'));
+      .map(call => call[0] as string)
+      .filter(path => path.includes('.claude/hooks'));
 
-    expect(claudeFiles.some((path: string) => path.includes('session_start.ts'))).toBe(true);
-    expect(claudeFiles.some((path: string) => path.includes('before_tool_call.ts'))).toBe(true);
-    expect(claudeFiles.some((path: string) => path.includes('after_tool_call.ts'))).toBe(true);
-    expect(claudeFiles.some((path: string) => path.includes('user_prompt_submit.ts'))).toBe(true);
+    expect(claudeFiles.some(path => path.includes('session_start.ts'))).toBe(true);
+    expect(claudeFiles.some(path => path.includes('before_tool_call.ts'))).toBe(true);
+    expect(claudeFiles.some(path => path.includes('after_tool_call.ts'))).toBe(true);
+    expect(claudeFiles.some(path => path.includes('user_prompt_submit.ts'))).toBe(true);
   });
 
   it('should create configuration files', async () => {
     await setupHooks();
 
     const writeFileCalls = vi.mocked(fsPromises.writeFile).mock.calls;
-    const configFiles = writeFileCalls.map(call => call[0]);
+    const configFiles = writeFileCalls.map(call => call[0] as string);
 
-    expect(configFiles.some((path: string) => path.includes('.eslintrc.cjs'))).toBe(true);
-    expect(configFiles.some((path: string) => path.includes('.prettierrc.cjs'))).toBe(true);
-    expect(configFiles.some((path: string) => path.includes('.markdownlint.json'))).toBe(true);
+    expect(configFiles.some(path => path.includes('.eslintrc.cjs'))).toBe(true);
+    expect(configFiles.some(path => path.includes('.prettierrc.cjs'))).toBe(true);
+    expect(configFiles.some(path => path.includes('.markdownlint.json'))).toBe(true);
   });
 
   it('should log success messages', async () => {

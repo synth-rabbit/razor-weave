@@ -37,16 +37,16 @@ describe('runLinters', () => {
     runLinters(['src/tooling/test.ts', 'docs/README.md']);
 
     expect(execSyncMock).toHaveBeenCalled();
-    const calls = execSyncMock.mock.calls.map(call => String(call[0]));
-    expect(calls.some(cmd => cmd.includes('eslint'))).toBe(true);
+    const calls = execSyncMock.mock.calls.map((call: any) => String(call[0]));
+    expect(calls.some((cmd: string) => cmd.includes('eslint'))).toBe(true);
   });
 
   it('should filter and lint only Markdown files', () => {
     runLinters(['docs/README.md']);
 
     expect(execSyncMock).toHaveBeenCalled();
-    const calls = execSyncMock.mock.calls.map(call => String(call[0]));
-    expect(calls.some(cmd => cmd.includes('markdownlint'))).toBe(true);
+    const calls = execSyncMock.mock.calls.map((call: any) => String(call[0]));
+    expect(calls.some((cmd: string) => cmd.includes('markdownlint'))).toBe(true);
   });
 
   it('should handle TypeScript lint failure', () => {
@@ -70,15 +70,18 @@ describe('runLinters', () => {
 
     expect(execSyncMock).toHaveBeenCalled();
     const calls = execSyncMock.mock.calls;
-    expect(calls.some(([cmd]: [string]) => cmd.includes('cd') && cmd.includes('tooling'))).toBe(true);
+    expect(calls.some((args: any) => {
+      const cmd = args[0] as string;
+      return cmd.includes('cd') && cmd.includes('tooling');
+    })).toBe(true);
   });
 
   it('should lint both TS and MD files when both present', () => {
     runLinters(['test.ts', 'test.md']);
 
     expect(execSyncMock).toHaveBeenCalled();
-    const calls = execSyncMock.mock.calls.map(call => String(call[0]));
-    expect(calls.some(cmd => cmd.includes('eslint'))).toBe(true);
-    expect(calls.some(cmd => cmd.includes('markdownlint'))).toBe(true);
+    const calls = execSyncMock.mock.calls.map((call: any) => String(call[0]));
+    expect(calls.some((cmd: string) => cmd.includes('eslint'))).toBe(true);
+    expect(calls.some((cmd: string) => cmd.includes('markdownlint'))).toBe(true);
   });
 });

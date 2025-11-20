@@ -46,8 +46,9 @@ describe('ESLint Configuration', () => {
     expect(consoleRule).toBeDefined();
     expect(Array.isArray(consoleRule)).toBe(true);
     expect(consoleRule[1]).toHaveProperty('allow');
-    expect(consoleRule[1].allow).toContain('warn');
-    expect(consoleRule[1].allow).toContain('error');
+    const consoleRuleConfig = consoleRule[1] as { allow: string[] };
+    expect(consoleRuleConfig.allow).toContain('warn');
+    expect(consoleRuleConfig.allow).toContain('error');
   });
 
   it('should ignore dist and node_modules', () => {
@@ -59,6 +60,7 @@ describe('ESLint Configuration', () => {
     const unusedVarsRule = eslintConfig.rules['@typescript-eslint/no-unused-vars'];
     expect(Array.isArray(unusedVarsRule)).toBe(true);
     expect(unusedVarsRule[1]).toHaveProperty('argsIgnorePattern');
-    expect(unusedVarsRule[1].argsIgnorePattern).toBe('^_');
+    const unusedVarsRuleConfig = unusedVarsRule[1] as { argsIgnorePattern: string };
+    expect(unusedVarsRuleConfig.argsIgnorePattern).toBe('^_');
   });
 });

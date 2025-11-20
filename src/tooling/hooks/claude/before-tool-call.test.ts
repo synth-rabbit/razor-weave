@@ -31,7 +31,7 @@ describe('beforeToolCall', () => {
 
   it('should validate plan naming for plan files', async () => {
     const { validatePlanNaming } = await import('../../validators/plan-naming-validator.js');
-    (validatePlanNaming as any).mockReturnValue({ valid: true, format: 'index' });
+    vi.mocked(validatePlanNaming).mockReturnValue({ valid: true, format: 'index' });
 
     const result = await beforeToolCall('Write', { file_path: 'docs/plans/test-index.md' });
     expect(result.allow).toBe(true);

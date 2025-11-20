@@ -2,7 +2,6 @@ import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { ValidationError } from './types.js';
-import { log } from '../logging/logger.js';
 
 const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 

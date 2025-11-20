@@ -101,7 +101,7 @@ export default async function(prompt: string) {
     log.info('- Run `pnpm validate` to check documentation');
     log.info('- Commit changes to test git hooks');
   } catch (error) {
-    log.error('❌ Setup failed:', error instanceof Error ? error.message : String(error));
+    log.error(`❌ Setup failed: ${error instanceof Error ? error.message : String(error)}`);
     throw error;
   }
 }
