@@ -113,8 +113,8 @@ Quick reference for navigating the Razorweave project.
 ### Scripts
 - **Location**: `scripts/`
 - **Review scripts**: `scripts/review/`
-- **Database verification**: `scripts/verify-database.ts`
+- **Database verification**: `src/tooling/scripts/verify-database.ts`
 
 ### Database
-- **Location**: `src/tooling/data/project.db`
+- **Location**: `data/project.db`
 - **Documentation**: [Project Database Guide](docs/workflows/PROJECT_DATABASE.md)
