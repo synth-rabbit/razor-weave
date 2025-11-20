@@ -968,6 +968,12 @@ body.reader-mode .reader-mode-toggle:hover {
     display: none;
   }
 
+  /* Hide web-only content */
+  #keyboard-shortcuts,
+  .web-only {
+    display: none;
+  }
+
   /* Full width content */
   .reader-container {
     grid-template-columns: 1fr;
