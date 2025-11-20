@@ -52,7 +52,7 @@ export async function preCommit(): Promise<void> {
         await db.snapshots.createChapterSnapshot(file, 'git');
         log.info(`  ✓ ${file}`);
       } catch (error) {
-        log.error(`  ✗ ${file}:`, error);
+        log.error(`  ✗ ${file}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
     log.info('');

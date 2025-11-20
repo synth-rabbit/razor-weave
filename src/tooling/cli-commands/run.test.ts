@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 // Since run.ts is a CLI entry point that calls process.argv and process.exit,
 // we'll test that it exports the expected structure and can be imported
