@@ -67,29 +67,48 @@ export class ReviewOrchestrator {
       });
     }
 
+    // Resolve persona IDs with sampling options
+    const resolvedPersonaIds = this.resolvePersonaIds(params);
+
     // Create campaign
     const campaignId = this.campaignClient.createCampaign({
       campaignName,
       contentType,
       contentId,
       personaSelectionStrategy,
-      personaIds: personaIds || [],
+      personaIds: resolvedPersonaIds,
     });
 
     return campaignId;
   }
 
-  private resolvePersonaIds(campaign: Campaign): string[] {
+  private resolvePersonaIds(params: InitializeCampaignParams): string[] {
     const personaClient = new PersonaClient(this.db);
 
-    if (campaign.persona_selection_strategy === 'all_core') {
-      const allPersonas = personaClient.getAll();
-      const corePersonas = allPersonas.filter((p) => p.type === 'core');
-      return corePersonas.map((p) => p.id);
-    } else {
-      // Manual selection
-      return JSON.parse(campaign.persona_ids || '[]') as string[];
+    // Mode 1: Generated only (generatedCount)
+    if (params.generatedCount !== undefined && params.generatedCount > 0) {
+      const focus = params.focus ?? inferFocus(params.contentPath);
+      return samplePersonas(this.db, params.generatedCount, focus);
     }
+
+    // Get core personas
+    let coreIds: string[] = [];
+    if (params.personaSelectionStrategy === 'all_core') {
+      const allPersonas = personaClient.getAll();
+      coreIds = allPersonas.filter((p) => p.type === 'core').map((p) => p.id);
+    } else if (params.personaSelectionStrategy === 'manual' && params.personaIds) {
+      coreIds = params.personaIds;
+    }
+
+    // Mode 2: Core + generated (plusCount)
+    if (params.plusCount !== undefined && params.plusCount > 0) {
+      const focus = params.focus ?? inferFocus(params.contentPath);
+      const sampledIds = samplePersonas(this.db, params.plusCount, focus);
+      return [...coreIds, ...sampledIds];
+    }
+
+    // Mode 3: Core only (default)
+    return coreIds;
   }
 
   executeReviews(campaignId: string): void {
@@ -105,8 +124,8 @@ export class ReviewOrchestrator {
     // Update status to in_progress
     this.campaignClient.updateStatus(campaignId, 'in_progress');
 
-    // Resolve persona IDs
-    const personaIds = this.resolvePersonaIds(campaign);
+    // Get persona IDs (already resolved during initializeCampaign)
+    const personaIds = JSON.parse(campaign.persona_ids || '[]') as string[];
     if (personaIds.length === 0) {
       throw new Error('No personas selected for review');
     }

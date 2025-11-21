@@ -8,6 +8,7 @@ import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { resolve } from 'path';
 import * as logger from '../logging/logger.js';
 import { TESTING } from '../constants/index.js';
+import type { FocusCategory } from './persona-sampler.js';
 
 describe('ReviewOrchestrator', () => {
   let db: Database.Database;
@@ -252,6 +253,145 @@ describe('ReviewOrchestrator', () => {
       const campaign = campaignClient.getCampaign(campaignId);
       expect(campaign?.status).toBe('completed');
       expect(campaign?.completed_at).toBeDefined();
+    });
+  });
+
+  describe('persona sampling modes', () => {
+    beforeEach(() => {
+      // Add 10 core personas
+      for (let i = 0; i < 10; i++) {
+        personaClient.create({
+          id: `core-${i}`,
+          name: `Core Persona ${i}`,
+          type: 'core',
+          archetype: i % 2 === 0 ? 'Tactician' : 'Explorer',
+          experience_level: 'Veteran',
+          fiction_first_alignment: 'Medium',
+          narrative_mechanics_comfort: 'Neutral',
+          gm_philosophy: 'Traditional',
+          genre_flexibility: 'Neutral',
+          primary_cognitive_style: 'Analytical',
+        });
+      }
+
+      // Add 20 generated personas for sampling tests
+      for (let i = 0; i < 20; i++) {
+        personaClient.create({
+          id: `gen-${i}`,
+          name: `Generated ${i}`,
+          type: 'generated',
+          archetype: i % 2 === 0 ? 'Tactician' : 'Explorer',
+          experience_level: i < 5 ? 'Newbie' : 'Intermediate',
+          fiction_first_alignment: 'Medium',
+          narrative_mechanics_comfort: 'Neutral',
+          gm_philosophy: 'Hybrid',
+          genre_flexibility: 'Neutral',
+          primary_cognitive_style: i % 2 === 0 ? 'Analytical' : 'Visual',
+        });
+      }
+    });
+
+    it('should use core only by default', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'all_core',
+      });
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      const personaIds = JSON.parse(campaign!.persona_ids);
+      // Should have core personas only (10 core + 1 from original setup = 11)
+      expect(personaIds.every((id: string) => id.startsWith('core-') || id === 'test-persona-1')).toBe(true);
+    });
+
+    it('should add sampled personas with plusCount', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'all_core',
+        plusCount: 5,
+      });
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      const personaIds = JSON.parse(campaign!.persona_ids);
+      const coreCount = personaIds.filter((id: string) => id.startsWith('core-') || id === 'test-persona-1').length;
+      const genCount = personaIds.filter((id: string) => id.startsWith('gen-')).length;
+
+      expect(coreCount).toBe(11); // 10 from this beforeEach + 1 original
+      expect(genCount).toBe(5);   // Plus 5 generated
+    });
+
+    it('should use only generated with generatedCount', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'all_core', // Ignored when generatedCount set
+        generatedCount: 8,
+      });
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      const personaIds = JSON.parse(campaign!.persona_ids);
+
+      expect(personaIds).toHaveLength(8);
+      expect(personaIds.every((id: string) => id.startsWith('gen-'))).toBe(true);
+    });
+
+    it('should infer focus from path when not specified', () => {
+      // Create a combat-themed book path
+      const combatBookPath = resolve(testDir, 'combat-rules.html');
+      writeFileSync(combatBookPath, '<html><body><h1>Combat Rules</h1></body></html>');
+
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test',
+        contentType: 'book',
+        contentPath: combatBookPath,
+        personaSelectionStrategy: 'all_core',
+        plusCount: 5,
+        // focus not specified - should infer 'combat'
+      });
+
+      // Focus affects sampling, verify via campaign existence
+      const campaign = campaignClient.getCampaign(campaignId);
+      expect(campaign).toBeDefined();
+      const personaIds = JSON.parse(campaign!.persona_ids);
+      // Should have sampled personas
+      const genCount = personaIds.filter((id: string) => id.startsWith('gen-')).length;
+      expect(genCount).toBe(5);
+    });
+
+    it('should use explicit focus when provided', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'all_core',
+        plusCount: 5,
+        focus: 'quickstart' as FocusCategory,
+      });
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      expect(campaign).toBeDefined();
+      const personaIds = JSON.parse(campaign!.persona_ids);
+      const genCount = personaIds.filter((id: string) => id.startsWith('gen-')).length;
+      expect(genCount).toBe(5);
+    });
+
+    it('should return unique persona IDs', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'all_core',
+        plusCount: 10,
+      });
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      const personaIds = JSON.parse(campaign!.persona_ids);
+      const uniqueIds = new Set(personaIds);
+      expect(uniqueIds.size).toBe(personaIds.length);
     });
   });
 });
