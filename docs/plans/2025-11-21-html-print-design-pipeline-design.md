@@ -21,21 +21,40 @@ Build pipeline to convert markdown chapters into styled HTML for:
 ### Directory Structure
 
 ```
-src/tooling/html-builder/
-├── index.ts              # Public exports
-├── builder.ts            # Main build orchestrator
-├── parser.ts             # unified/remark markdown→AST
-├── transforms/           # AST transformations
-│   ├── examples.ts       # > **Example** → div.example
-│   ├── gm-boxes.ts       # > **GM** → div.gm
-│   ├── glossary-links.ts # Auto-link glossary terms
-│   └── sheets.ts         # Sheet block handling
-├── generators/
-│   ├── toc.ts            # Table of contents from headings
-│   └── index.ts          # Auto-generated index
+src/tooling/html-gen/                    # Shared between print & web workflows
+├── index.ts                             # Public exports
+├── pipeline.ts                          # Base unified processor setup
+├── hasher.ts                            # File hashing utilities
+├── build-client.ts                      # Database operations for html_builds
+├── toc-generator.ts                     # Build TOC from headings
+├── index-generator.ts                   # Auto-generated index
+├── assembler.ts                         # Combine content + template
+├── transforms/                          # Remark/rehype plugins (shared)
+│   ├── example-blocks.ts                # > **Example** → div.example
+│   ├── gm-boxes.ts                      # > **GM** → div.gm
+│   ├── glossary-links.ts                # Auto-link glossary terms
+│   ├── semantic-ids.ts                  # Heading ID generation
+│   ├── wrap-chapters.ts                 # <section id="ch-XX"> wrappers
+│   └── index.ts
 ├── templates/
-│   └── print-design.html # Full template with embedded CSS
-└── cli.ts                # CLI command handlers
+│   ├── print-design.html                # Print template (embedded CSS)
+│   └── web-reader.html                  # Web template (external scripts)
+│
+├── print/                               # Print-design specific
+│   ├── index.ts
+│   ├── build.ts                         # Build command logic
+│   ├── list.ts                          # List command logic
+│   ├── diff.ts                          # Diff command logic
+│   ├── promote.ts                       # Promote command logic
+│   └── print.test.ts
+│
+└── web/                                 # Web-reader specific
+    ├── index.ts
+    ├── build.ts
+    ├── list.ts
+    ├── diff.ts
+    ├── promote.ts
+    └── web.test.ts
 ```
 
 ### Data Flow
@@ -114,25 +133,48 @@ unified()
 
 ## Content Assembly
 
+### Part Structure
+
+Content is organized into 4 parts (same structure as web-reader for consistency):
+
+| Part | ID | Title | Chapters |
+|------|-----|-------|----------|
+| I | `part-i-foundations` | Foundations | 1-13 |
+| II | `part-ii-skills-proficiencies` | Skills, Proficiencies, and Mechanical Reference | 14-20 |
+| III | `part-iii-reference-and-gm` | Game Master Section | 21-26 |
+| IV | `part-iv-glossary-index` | Reference Sheets, Glossary, and Index | 27-30 |
+
+Each part has an intro section with explanatory text before its chapters.
+
 ### Assembly Order
 
 ```
 1. Cover Page (from template)
-2. Table of Contents (auto-generated)
-3. Chapters 01-26 (from chapters/)
-4. Chapter 27: Reference Sheets (from sheets/)
-   - 27.1 Character Sheet
-   - 27.2 Advancement Tracker
-   - 27.3 Session Log
-   - 27.4 GM Session Prep
-   - 27.5 Campaign Fronts Sheet
-   - 27.6 NPC/VPC Profile
-   - 27.7 Reference: Tags & Conditions
-   - 27.8 Reference: Clocks Templates
-   - 27.9 Reference: DC Tiers
-5. Chapter 28: Glossary (from chapters/)
-6. Chapter 29: Index (auto-generated, replaces markdown)
-7. Chapter 30: Inspirations and Acknowledgments (from chapters/)
+2. Table of Contents (auto-generated, grouped by parts)
+3. Part I: Foundations
+   - Part intro section
+   - Chapters 01-13
+4. Part II: Skills, Proficiencies, and Mechanical Reference
+   - Part intro section
+   - Chapters 14-20
+5. Part III: Game Master Section
+   - Part intro section
+   - Chapters 21-26
+6. Part IV: Reference Sheets, Glossary, and Index
+   - Part intro section
+   - Chapter 27: Reference Sheets (from sheets/)
+     - 27.1 Character Sheet
+     - 27.2 Advancement Tracker
+     - 27.3 Session Log
+     - 27.4 GM Session Prep
+     - 27.5 Campaign Fronts Sheet
+     - 27.6 NPC/VPC Profile
+     - 27.7 Reference: Tags & Conditions
+     - 27.8 Reference: Clocks Templates
+     - 27.9 Reference: DC Tiers
+   - Chapter 28: Glossary (from chapters/)
+   - Chapter 29: Index (auto-generated, ignores markdown)
+   - Chapter 30: Inspirations and Acknowledgments (from chapters/)
 ```
 
 ### Sheets HTML Structure
@@ -389,6 +431,37 @@ All commands output JSON by default for agent consumption.
 
 ---
 
+## Alignment with web-reader Workflow
+
+Both `print-design` and `web-reader` workflows share infrastructure. Decisions made during alignment:
+
+### Shared Components
+
+| Component | Notes |
+|-----------|-------|
+| Database schema | `html_builds`, `html_build_sources` tables |
+| unified/remark packages | Same dependencies |
+| File hashing | `html-gen/hasher.ts` |
+| Build client | `html-gen/build-client.ts` |
+| Example transform | `> **Example**` → `div.example` |
+| GM transform | `> **GM**` → `div.gm` (standardized class name) |
+| Semantic IDs | Heading ID generation |
+| Glossary auto-linking | Both workflows auto-link terms from Ch 28 |
+| Index auto-generation | Both workflows auto-generate Ch 29 |
+| Part structure | Both use 4-part structure with intro sections |
+
+### Workflow-Specific
+
+| Aspect | print-design | web-reader |
+|--------|--------------|------------|
+| Output path | `data/html/print-design/` | `data/html/web-reader/` |
+| Template | Embedded CSS (~1000 lines) | External scripts/CSS |
+| JavaScript | None (static) | reader.js integration |
+| Promotion target | `books/core/v1/exports/html/` | `src/site/src/pages/read.html` |
+| CLI namespace | `html:print:*` | `html:web:*` |
+
+---
+
 ## Open Questions
 
 1. **Sheet ordering**: Current order based on filename — is this the desired final order?
@@ -399,6 +472,6 @@ All commands output JSON by default for agent consumption.
 
 ## Next Steps
 
-1. Compare with other HTML workflow plan
-2. Identify shared infrastructure vs. workflow-specific work
-3. Create detailed implementation plans with task breakdowns
+1. Create detailed implementation plans with task breakdowns
+2. Identify which phases can be built as shared infrastructure first
+3. Coordinate with web-reader workflow on shared component development
