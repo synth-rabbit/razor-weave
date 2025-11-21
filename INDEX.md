@@ -63,11 +63,7 @@ Quick reference for navigating the Razorweave project.
   - Validators: `src/tooling/validators/`
   - Linters: `src/tooling/linters/`
 - **Shared**: `src/shared/` - Shared utilities
-- **CLI Tools**: `src/cli/`
 - **Site Generator**: `src/site/`
-- **Workflows**: `src/workflows/`
-- **Tools**: `src/tools/`
-- **Maintenance**: `src/maintenance/`
 
 **Planned:**
 - **Agents**: `src/agents/`

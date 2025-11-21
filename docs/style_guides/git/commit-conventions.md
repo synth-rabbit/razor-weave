@@ -31,14 +31,10 @@ emoji type(scope): subject
 
 Scope should match the package name:
 
-- `agents` - Changes to @razorweave/agents
-- `cli` - Changes to @razorweave/cli
+- `tooling` - Changes to @razorweave/tooling
 - `shared` - Changes to @razorweave/shared
 - `site` - Changes to @razorweave/site
-- `workflows` - Changes to @razorweave/workflows
-- `tooling` - Changes to @razorweave/tooling
-- `tools` - Changes to @razorweave/tools
-- `maintenance` - Changes to @razorweave/maintenance
+- `agents` - Changes to @razorweave/agents
 
 For cross-package or root changes, use a descriptive scope:
 

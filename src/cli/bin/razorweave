@@ -1,7 +1,0 @@
-#!/usr/bin/env node
-
-// Razorweave CLI executable
-// TODO: Implement CLI entry point
-
-console.log('Razorweave CLI - TypeScript project setup complete!');
-console.log('Implementation coming soon...');

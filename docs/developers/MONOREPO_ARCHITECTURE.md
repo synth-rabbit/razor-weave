@@ -69,10 +69,8 @@ Each package has:
 
 ### Other Packages
 
-- **@razorweave/cli** - CLI tools
 - **@razorweave/site** - Website generator
-- **@razorweave/workflows** - Workflow automation
-- **@razorweave/agents** - Agentic systems (planned)
+- **@razorweave/agents** - Agentic systems (stub - see STUBS.md)
 
 ## Working with Packages
 
@@ -117,7 +115,7 @@ pnpm --filter @razorweave/tooling add package-name
 
 **Workspace dependency (internal):**
 ```bash
-pnpm --filter @razorweave/cli add @razorweave/shared@workspace:*
+pnpm --filter @razorweave/tooling add @razorweave/shared@workspace:*
 ```
 
 ### Package Dependencies
