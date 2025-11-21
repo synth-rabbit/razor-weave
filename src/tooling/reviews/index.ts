@@ -17,6 +17,15 @@ export {
   writeAnalyzerPromptFile,
 } from './prompt-writer.js';
 
+// Persona sampling
+export {
+  inferFocus,
+  scorePersona,
+  samplePersonas,
+  FOCUS_CATEGORIES,
+} from './persona-sampler.js';
+
 // Re-export types
 export type { CampaignStatus, ContentType } from './campaign-client.js';
 export type { InitializeCampaignParams } from './review-orchestrator.js';
+export type { FocusCategory, PersonaForScoring } from './persona-sampler.js';
