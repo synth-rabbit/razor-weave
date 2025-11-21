@@ -8,7 +8,12 @@
  *   pnpm tsx src/tooling/cli-commands/run.ts stats
  */
 
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 import { hydrateCore, generate, stats } from './personas.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = resolve(__dirname, '../../..');
 import { log } from '../logging/logger.js';
 import {
   reviewBook,
@@ -151,10 +156,10 @@ async function main(): Promise<void> {
       switch (subcommand) {
         case 'build': {
           const result = await buildPrintHtml({
-            bookPath: 'books/core/v1',
-            chaptersDir: 'books/core/v1/chapters',
-            sheetsDir: 'books/core/v1/sheets',
-            outputPath: 'data/html/print-design/core-rulebook.html',
+            bookPath: resolve(REPO_ROOT, 'books/core/v1'),
+            chaptersDir: resolve(REPO_ROOT, 'books/core/v1/chapters'),
+            sheetsDir: resolve(REPO_ROOT, 'books/core/v1/sheets'),
+            outputPath: resolve(REPO_ROOT, 'data/html/print-design/core-rulebook.html'),
           });
           console.log(JSON.stringify(result, null, 2));
           process.exit(result.success ? 0 : 1);
@@ -185,8 +190,8 @@ async function main(): Promise<void> {
         }
         case 'promote': {
           const result = await promotePrintBuild({
-            sourcePath: 'data/html/print-design/core-rulebook.html',
-            targetPath: 'books/core/v1/exports/html/core_rulebook.html',
+            sourcePath: resolve(REPO_ROOT, 'data/html/print-design/core-rulebook.html'),
+            targetPath: resolve(REPO_ROOT, 'books/core/v1/exports/html/core_rulebook.html'),
           });
           console.log(JSON.stringify(result, null, 2));
           process.exit(result.success ? 0 : 1);
