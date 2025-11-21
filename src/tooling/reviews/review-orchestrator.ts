@@ -4,6 +4,7 @@ import { snapshotBook, snapshotChapter } from './content-snapshot.js';
 import { PersonaClient } from '../database/persona-client.js';
 import { writePromptFiles, writeAnalyzerPromptFile } from './prompt-writer.js';
 import { log } from '../logging/logger.js';
+import { inferFocus, samplePersonas, type FocusCategory } from './persona-sampler.js';
 
 export interface InitializeCampaignParams {
   campaignName: string;
@@ -14,6 +15,10 @@ export interface InitializeCampaignParams {
   // Additional fields for chapter snapshots
   bookPath?: string;
   chapterName?: string;
+  // Sampling options
+  plusCount?: number;      // Core + N generated
+  generatedCount?: number; // N generated only
+  focus?: FocusCategory;   // Override inferred focus
 }
 
 export class ReviewOrchestrator {
