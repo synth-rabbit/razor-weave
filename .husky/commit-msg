@@ -1,2 +1,0 @@
-#!/bin/sh
-pnpm --filter @razorweave/tooling exec tsx hooks/git/commit-msg.ts "$1"

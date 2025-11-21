@@ -15,3 +15,12 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Keep snapshot baselines
+!tests/visual/snapshots/
