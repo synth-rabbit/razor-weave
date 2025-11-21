@@ -7,6 +7,7 @@ export default defineConfig({
       '**/node_modules/**',
       '**/dist/**',
       '**/.worktrees/**',
+      '**/*.spec.ts',  // Playwright tests
     ],
     coverage: {
       provider: 'v8',

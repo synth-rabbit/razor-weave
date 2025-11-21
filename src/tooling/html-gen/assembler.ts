@@ -67,14 +67,15 @@ export function assembleContent(parts: AssemblyParts): string {
     // Add chapters in this part
     for (const chapter of parts.chapters) {
       if (chapter.number >= startChapter && chapter.number <= endChapter) {
-        sections.push(wrapChapter(chapter.number, chapter.slug, chapter.html));
+        // Chapter 27 combines its narrative intro with the actual sheets
+        if (chapter.number === 27 && parts.sheets.length > 0) {
+          const sheetsHtml = assembleSheetBlocks(parts.sheets);
+          const combinedHtml = chapter.html + '\n\n' + sheetsHtml;
+          sections.push(wrapChapter(chapter.number, chapter.slug, combinedHtml));
+        } else {
+          sections.push(wrapChapter(chapter.number, chapter.slug, chapter.html));
+        }
       }
-    }
-
-    // Chapter 27 is sheets
-    if (startChapter <= 27 && endChapter >= 27) {
-      const sheetsSection = assembleSheets(parts.sheets);
-      sections.push(sheetsSection);
     }
   }
 
@@ -82,19 +83,15 @@ export function assembleContent(parts: AssemblyParts): string {
 }
 
 /**
- * Assemble sheets into Chapter 27 section
+ * Assemble sheet blocks (without section wrapper)
+ * Returns HTML for all sheets with headings, to be appended to chapter 27 content
  */
-function assembleSheets(sheets: SheetHtml[]): string {
-  const wrappedSheets = sheets.map((s, i) => {
+function assembleSheetBlocks(sheets: SheetHtml[]): string {
+  return sheets.map((s, i) => {
     const sectionNum = `27.${i + 1}`;
     const withHeading = `<h3>${sectionNum} ${formatSheetTitle(s.slug)}</h3>\n${s.html}`;
     return wrapSheet(s.slug, withHeading);
   }).join('\n\n');
-
-  return `<section id="ch-27-reference-sheets">
-  <h2>27. Reference Sheets</h2>
-  ${wrappedSheets}
-</section>`;
 }
 
 /**

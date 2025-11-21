@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
+import { dirname, join } from 'path';
 import Database from 'better-sqlite3';
 import { createTables } from '../database/schema.js';
 import { CampaignClient } from './campaign-client.js';
@@ -12,10 +13,15 @@ describe('Review System Integration', () => {
   let db: Database.Database;
   let campaignClient: CampaignClient;
   let personaClient: PersonaClient;
-  const testBookPath = 'data/test/integration-book.html';
+  let testDir: string;
+  let testBookPath: string;
 
   beforeEach(() => {
-    mkdirSync('data/test', { recursive: true });
+    // Create unique test directory to avoid parallel test collisions
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    testDir = join(process.cwd(), 'data', `test-reviews-${uniqueId}`);
+    mkdirSync(testDir, { recursive: true });
+    testBookPath = join(testDir, 'integration-book.html');
     writeFileSync(
       testBookPath,
       '<html><body><h1>Integration Test Book</h1><p>Test content</p></body></html>'
@@ -57,7 +63,9 @@ describe('Review System Integration', () => {
 
   afterEach(() => {
     db.close();
-    rmSync('data/test', { recursive: true, force: true });
+    if (existsSync(testDir)) {
+      rmSync(testDir, { recursive: true, force: true });
+    }
   });
 
   it('completes full campaign workflow', () => {
@@ -143,7 +151,7 @@ describe('Review System Integration', () => {
     const review1 = campaignClient.getPersonaReview(reviewId1);
     expect(review1).toBeDefined();
 
-    const markdownPath1 = `data/test/reviews/${campaignId}/test-sarah.md`;
+    const markdownPath1 = join(testDir, 'reviews', campaignId, 'test-sarah.md');
     writeReviewMarkdown(
       {
         campaignId,
@@ -209,7 +217,7 @@ describe('Review System Integration', () => {
           },
         },
       },
-      markdownPath: `data/test/reviews/analysis/${campaignId}.md`,
+      markdownPath: join(testDir, 'reviews', 'analysis', `${campaignId}.md`),
     });
 
     expect(analysisId).toBeGreaterThan(0);

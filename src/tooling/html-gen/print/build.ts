@@ -16,9 +16,11 @@ import rehypeStringify from 'rehype-stringify';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 
+import type Database from 'better-sqlite3';
 import { readChapters, readSheets } from '../chapter-reader.js';
-import { hashFiles } from '../hasher.js';
+import { hashFile, hashFiles } from '../hasher.js';
 import { generateToc, renderTocHtml } from '../toc-generator.js';
+import { HtmlBuildClient } from '../build-client.js';
 import { assembleContent, type ChapterHtml, type SheetHtml } from '../assembler.js';
 import { renderTemplate, type TemplateVars } from '../template-renderer.js';
 import { remarkExampleBlocks, remarkGmBoxes, remarkSemanticIds } from '../transforms/index.js';
@@ -42,7 +44,7 @@ export interface BuildOptions {
   chaptersDir: string;
   sheetsDir: string;
   outputPath: string;
-  skipDatabase?: boolean;
+  db?: Database.Database;
 }
 
 export interface BuildResult {
@@ -202,6 +204,42 @@ export async function buildPrintHtml(options: BuildOptions): Promise<BuildResult
 
     // Write output
     await writeFile(options.outputPath, finalHtml, 'utf-8');
+
+    // Record build to database if provided
+    if (options.db) {
+      const buildClient = new HtmlBuildClient(options.db);
+
+      // Hash individual files for source tracking
+      const sources: Array<{
+        filePath: string;
+        contentHash: string;
+        fileType: 'chapter' | 'sheet';
+      }> = [];
+
+      for (const chapter of chapters) {
+        sources.push({
+          filePath: chapter.filePath,
+          contentHash: await hashFile(chapter.filePath),
+          fileType: 'chapter',
+        });
+      }
+
+      for (const sheet of sheets) {
+        sources.push({
+          filePath: sheet.filePath,
+          contentHash: await hashFile(sheet.filePath),
+          fileType: 'sheet',
+        });
+      }
+
+      buildClient.createBuild({
+        outputType: 'print-design',
+        bookPath: options.bookPath,
+        outputPath: options.outputPath,
+        sourceHash,
+        sources,
+      });
+    }
 
     return {
       success: true,

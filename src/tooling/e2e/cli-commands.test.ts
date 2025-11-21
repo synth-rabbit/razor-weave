@@ -58,7 +58,7 @@ describe('E2E CLI Commands', () => {
 
   it('should generate personas via CLI and verify in database', () => {
     // Run CLI command to generate personas
-    const output = execSync('pnpm tsx cli-commands/run.ts generate 5 --seed=12345', {
+    const output = execSync('pnpm tsx src/tooling/cli-commands/run.ts generate 5 --seed=12345', {
       encoding: 'utf-8',
     });
 
@@ -91,12 +91,12 @@ describe('E2E CLI Commands', () => {
 
   it('should run stats command and display persona distribution', () => {
     // First generate some personas
-    execSync('pnpm tsx cli-commands/run.ts generate 10', {
+    execSync('pnpm tsx src/tooling/cli-commands/run.ts generate 10', {
       stdio: 'ignore',
     });
 
     // Run stats command
-    const output = execSync('pnpm tsx cli-commands/run.ts stats', {
+    const output = execSync('pnpm tsx src/tooling/cli-commands/run.ts stats', {
       encoding: 'utf-8',
     });
 
@@ -107,7 +107,7 @@ describe('E2E CLI Commands', () => {
 
   it('should create review campaign via CLI', () => {
     // Hydrate core personas first (review uses all_core strategy by default)
-    execSync('pnpm tsx cli-commands/run.ts hydrate-core', {
+    execSync('pnpm tsx src/tooling/cli-commands/run.ts hydrate-core', {
       stdio: 'ignore',
     });
 
@@ -116,7 +116,7 @@ describe('E2E CLI Commands', () => {
     execSync(`echo '<html><body>Test</body></html>' > ${testBook}`);
 
     // Run review command
-    const output = execSync(`pnpm tsx cli-commands/run.ts review book ${testBook}`, {
+    const output = execSync(`pnpm tsx src/tooling/cli-commands/run.ts review book ${testBook}`, {
       encoding: 'utf-8',
     });
 

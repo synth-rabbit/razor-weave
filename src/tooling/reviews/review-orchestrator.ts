@@ -153,7 +153,7 @@ export class ReviewOrchestrator {
     log.info(`and execute reviewer agents in batches of 5`);
     log.info('────────────────────────────────────────────────────────\n');
     log.info(`After agents complete, check status with:`);
-    log.info(`  pnpm review status ${campaignId}\n`);
+    log.info(`  pnpm review:status ${campaignId}\n`);
   }
 
   executeAnalysis(campaignId: string): void {

@@ -155,11 +155,13 @@ async function main(): Promise<void> {
 
       switch (subcommand) {
         case 'build': {
+          const db = getDatabase();
           const result = await buildPrintHtml({
             bookPath: resolve(REPO_ROOT, 'books/core/v1'),
             chaptersDir: resolve(REPO_ROOT, 'books/core/v1/chapters'),
             sheetsDir: resolve(REPO_ROOT, 'books/core/v1/sheets'),
             outputPath: resolve(REPO_ROOT, 'data/html/print-design/core-rulebook.html'),
+            db: db.db,
           });
           console.log(JSON.stringify(result, null, 2));
           process.exit(result.success ? 0 : 1);

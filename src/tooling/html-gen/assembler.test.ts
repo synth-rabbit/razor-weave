@@ -22,15 +22,13 @@ describe('assembler', () => {
   });
 
   describe('assembleContent', () => {
-    it('combines chapters and sheets in order', () => {
+    it('combines chapters in order with part intros', () => {
       const parts = {
         chapters: [
           { number: 1, slug: 'welcome', html: '<h2>1. Welcome</h2>' },
           { number: 2, slug: 'concepts', html: '<h2>2. Concepts</h2>' },
         ],
-        sheets: [
-          { slug: 'character-sheet', html: '<h3>Character Sheet</h3>' },
-        ],
+        sheets: [],
         partIntros: new Map([
           ['part-i-foundations', '<p>Part I intro</p>'],
         ]),
@@ -38,13 +36,39 @@ describe('assembler', () => {
 
       const assembled = assembleContent(parts);
 
-      // Check order
+      // Check order - chapters appear in sequence
       const ch1Index = assembled.indexOf('ch-01-welcome');
       const ch2Index = assembled.indexOf('ch-02-concepts');
-      const sheetIndex = assembled.indexOf('character-sheet');
 
       expect(ch1Index).toBeLessThan(ch2Index);
-      expect(ch2Index).toBeLessThan(sheetIndex);
+      expect(assembled).toContain('Part I intro');
+    });
+
+    it('appends sheets to chapter 27 content', () => {
+      const parts = {
+        chapters: [
+          { number: 27, slug: 'sheets-and-play-aids', html: '<h2>27. Sheets and Play Aids</h2><p>Intro text</p>' },
+        ],
+        sheets: [
+          { slug: 'character-sheet', html: '<p>Character fields</p>' },
+          { slug: 'session-log', html: '<p>Session fields</p>' },
+        ],
+        partIntros: new Map(),
+      };
+
+      const assembled = assembleContent(parts);
+
+      // Sheets should be inside chapter 27 section
+      expect(assembled).toContain('ch-27-sheets-and-play-aids');
+      expect(assembled).toContain('<h2>27. Sheets and Play Aids</h2>');
+      expect(assembled).toContain('Intro text');
+      expect(assembled).toContain('character-sheet');
+      expect(assembled).toContain('session-log');
+
+      // Sheet blocks should appear AFTER chapter intro
+      const introIndex = assembled.indexOf('Intro text');
+      const sheetIndex = assembled.indexOf('character-sheet');
+      expect(introIndex).toBeLessThan(sheetIndex);
     });
   });
 });
