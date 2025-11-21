@@ -200,6 +200,38 @@ export function createTables(db: Database.Database): void {
     CREATE INDEX IF NOT EXISTS idx_campaign_analyses_campaign ON campaign_analyses(campaign_id);
   `);
 
+  // Create html_builds table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS html_builds (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      build_id TEXT UNIQUE NOT NULL,
+      output_type TEXT NOT NULL,
+      book_path TEXT NOT NULL,
+      output_path TEXT NOT NULL,
+      source_hash TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      status TEXT NOT NULL CHECK (status IN ('success', 'failed'))
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_html_builds_output_type
+      ON html_builds(output_type);
+  `);
+
+  // Create html_build_sources table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS html_build_sources (
+      build_id TEXT NOT NULL,
+      file_path TEXT NOT NULL,
+      content_hash TEXT NOT NULL,
+      file_type TEXT NOT NULL CHECK (file_type IN ('chapter', 'sheet')),
+      PRIMARY KEY (build_id, file_path),
+      FOREIGN KEY (build_id) REFERENCES html_builds(build_id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_html_build_sources_build_id
+      ON html_build_sources(build_id);
+  `);
+
   // Store schema version
   db.exec(`
     CREATE TABLE IF NOT EXISTS schema_info (
