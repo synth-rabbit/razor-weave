@@ -15,3 +15,4 @@ export * from './chapter-reader.js';
 export * from './toc-generator.js';
 export * from './index-generator.js';
 export * from './assembler.js';
+export * from './template-renderer.js';
