@@ -1,4 +1,5 @@
 // src/tooling/reviews/persona-sampler.ts
+import type Database from 'better-sqlite3';
 
 export type FocusCategory =
   | 'general'
@@ -158,4 +159,90 @@ export function scorePersona(
   }
 
   return score;
+}
+
+/**
+ * Sample generated personas with focus-weighted selection.
+ *
+ * Algorithm:
+ * 1. Query all generated personas
+ * 2. Score each against focus
+ * 3. Sort by score descending
+ * 4. Take top 70% deterministically
+ * 5. Randomly sample remaining 30% from pool
+ *
+ * @param db - Database connection
+ * @param count - Number of personas to sample
+ * @param focus - Focus category for weighting
+ * @returns Array of persona IDs
+ * @throws Error if not enough generated personas available
+ */
+export function samplePersonas(
+  db: Database.Database,
+  count: number,
+  focus: FocusCategory
+): string[] {
+  // Query all generated personas
+  const stmt = db.prepare(`
+    SELECT id, archetype, experience_level, primary_cognitive_style,
+           fiction_first_alignment, gm_philosophy
+    FROM personas
+    WHERE type = 'generated' AND active = 1
+  `);
+  const personas = stmt.all() as PersonaForScoring[];
+
+  if (personas.length === 0) {
+    throw new Error('Not enough generated personas: 0 available, need ' + count);
+  }
+
+  // Adjust count if more requested than available
+  const actualCount = Math.min(count, personas.length);
+
+  if (actualCount < count) {
+    // Warning: not enough personas, using all available
+  }
+
+  // For general focus, just random sample
+  if (focus === 'general') {
+    return shuffleAndTake(personas.map(p => p.id), actualCount);
+  }
+
+  // Score and sort
+  const scored = personas.map(p => ({
+    id: p.id,
+    score: scorePersona(p, focus),
+  }));
+  scored.sort((a, b) => b.score - a.score);
+
+  // 70% deterministic from top scores
+  const deterministicCount = Math.ceil(actualCount * 0.7);
+  const randomCount = actualCount - deterministicCount;
+
+  const result: string[] = [];
+
+  // Take top scorers deterministically
+  for (let i = 0; i < deterministicCount && i < scored.length; i++) {
+    result.push(scored[i].id);
+  }
+
+  // Randomly sample from remaining pool
+  if (randomCount > 0) {
+    const remaining = scored.slice(deterministicCount).map(s => s.id);
+    const randomPicks = shuffleAndTake(remaining, randomCount);
+    result.push(...randomPicks);
+  }
+
+  return result;
+}
+
+/**
+ * Fisher-Yates shuffle and take first N elements
+ */
+function shuffleAndTake(arr: string[], count: number): string[] {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, count);
 }

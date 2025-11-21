@@ -1,6 +1,7 @@
 // src/tooling/reviews/persona-sampler.test.ts
-import { describe, it, expect } from 'vitest';
-import { FOCUS_CATEGORIES, inferFocus, scorePersona, type FocusCategory } from './persona-sampler.js';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import Database from 'better-sqlite3';
+import { FOCUS_CATEGORIES, inferFocus, scorePersona, samplePersonas, type FocusCategory } from './persona-sampler.js';
 
 describe('persona-sampler', () => {
   describe('FOCUS_CATEGORIES', () => {
@@ -114,6 +115,86 @@ describe('persona-sampler', () => {
       // Scores depend on diversity, both have valid gm_philosophy
       expect(score1).toBeGreaterThanOrEqual(0);
       expect(score2).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  describe('samplePersonas', () => {
+    let db: Database.Database;
+
+    beforeEach(() => {
+      db = new Database(':memory:');
+      // Create personas table
+      db.exec(`
+        CREATE TABLE personas (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          type TEXT NOT NULL DEFAULT 'generated',
+          archetype TEXT NOT NULL,
+          experience_level TEXT NOT NULL,
+          primary_cognitive_style TEXT,
+          fiction_first_alignment TEXT,
+          gm_philosophy TEXT,
+          active INTEGER DEFAULT 1
+        )
+      `);
+
+      // Insert test personas
+      const insert = db.prepare(`
+        INSERT INTO personas (id, name, type, archetype, experience_level, primary_cognitive_style, fiction_first_alignment, gm_philosophy)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+
+      // 5 Tacticians (good for combat)
+      for (let i = 0; i < 5; i++) {
+        insert.run(`tact-${i}`, `Tactician ${i}`, 'generated', 'Tactician', 'Veteran', 'Analytical', 'Low', 'Traditional');
+      }
+      // 5 Explorers (good for narrative)
+      for (let i = 0; i < 5; i++) {
+        insert.run(`exp-${i}`, `Explorer ${i}`, 'generated', 'Explorer', 'Intermediate', 'Visual', 'High', 'Collaborative');
+      }
+      // 5 Newbies (good for quickstart)
+      for (let i = 0; i < 5; i++) {
+        insert.run(`newb-${i}`, `Newbie ${i}`, 'generated', 'Socializer', 'Newbie', 'Verbal', 'Medium', 'Hybrid');
+      }
+    });
+
+    afterEach(() => {
+      db.close();
+    });
+
+    it('should sample requested count', () => {
+      const result = samplePersonas(db, 5, 'general');
+      expect(result).toHaveLength(5);
+    });
+
+    it('should return all if count exceeds available', () => {
+      const result = samplePersonas(db, 100, 'general');
+      expect(result).toHaveLength(15); // Only 15 in db
+    });
+
+    it('should favor Tacticians for combat focus', () => {
+      const result = samplePersonas(db, 7, 'combat');
+      const tacticians = result.filter(id => id.startsWith('tact-'));
+      // With 70% deterministic, should get most tacticians
+      expect(tacticians.length).toBeGreaterThanOrEqual(4);
+    });
+
+    it('should favor Newbies for quickstart focus', () => {
+      const result = samplePersonas(db, 7, 'quickstart');
+      const newbies = result.filter(id => id.startsWith('newb-'));
+      expect(newbies.length).toBeGreaterThanOrEqual(4);
+    });
+
+    it('should return unique IDs', () => {
+      const result = samplePersonas(db, 10, 'general');
+      const unique = new Set(result);
+      expect(unique.size).toBe(result.length);
+    });
+
+    it('should throw if not enough generated personas', () => {
+      // Clear all personas
+      db.exec('DELETE FROM personas');
+      expect(() => samplePersonas(db, 5, 'general')).toThrow(/not enough/i);
     });
   });
 });
