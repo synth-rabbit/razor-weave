@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { reviewBook, listCampaigns } from './review.js';
+import { hydrateCore } from './personas.js';
 import * as logger from '../logging/logger.js';
 
 // Spy on logger to capture output
@@ -21,6 +22,8 @@ describe('Review CLI Commands', () => {
   beforeEach(() => {
     mkdirSync(testDir, { recursive: true });
     writeFileSync(testBookPath, '<html><body>Test</body></html>');
+    // Hydrate core personas so review commands have personas to use
+    hydrateCore();
   });
 
   afterEach(() => {

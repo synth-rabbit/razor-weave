@@ -31,7 +31,7 @@ describe('Database Integration', () => {
   it('should track full workflow: Claude edit -> commit -> state update', async () => {
     // Simulate Claude edit
     const snapshot1 = await db.snapshots.createChapterSnapshot(testChapterPath, 'claude');
-    expect(snapshot1).toBeGreaterThan(0);
+    expect(snapshot1).toBeTruthy(); // Returns string ID
 
     // Simulate git commit
     db.snapshots.markAsCommitted('abc123');
