@@ -62,14 +62,20 @@ async function main(): Promise<void> {
         const bookPath = args[2];
         if (!bookPath) {
           log.error('Error: Please provide a book path');
-          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review book <path> [--personas=all_core|id1,id2]');
+          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review book <path> [--personas=...] [--plus=N] [--generated=N] [--focus=...]');
           process.exit(1);
         }
 
-        const options: { personas?: string } = {};
+        const options: { personas?: string; plus?: number; generated?: number; focus?: string } = {};
         for (let i = 3; i < args.length; i++) {
           if (args[i].startsWith('--personas=')) {
             options.personas = args[i].split('=')[1];
+          } else if (args[i].startsWith('--plus=')) {
+            options.plus = parseInt(args[i].split('=')[1], 10);
+          } else if (args[i].startsWith('--generated=')) {
+            options.generated = parseInt(args[i].split('=')[1], 10);
+          } else if (args[i].startsWith('--focus=')) {
+            options.focus = args[i].split('=')[1];
           }
         }
 
@@ -78,14 +84,20 @@ async function main(): Promise<void> {
         const chapterPath = args[2];
         if (!chapterPath) {
           log.error('Error: Please provide a chapter path');
-          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review chapter <path> [--personas=all_core|id1,id2]');
+          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review chapter <path> [--personas=...] [--plus=N] [--generated=N] [--focus=...]');
           process.exit(1);
         }
 
-        const options: { personas?: string } = {};
+        const options: { personas?: string; plus?: number; generated?: number; focus?: string } = {};
         for (let i = 3; i < args.length; i++) {
           if (args[i].startsWith('--personas=')) {
             options.personas = args[i].split('=')[1];
+          } else if (args[i].startsWith('--plus=')) {
+            options.plus = parseInt(args[i].split('=')[1], 10);
+          } else if (args[i].startsWith('--generated=')) {
+            options.generated = parseInt(args[i].split('=')[1], 10);
+          } else if (args[i].startsWith('--focus=')) {
+            options.focus = args[i].split('=')[1];
           }
         }
 
@@ -131,8 +143,10 @@ async function main(): Promise<void> {
       log.error('  hydrate-core                             - Load all core personas');
       log.error('  generate <count> [--seed=N]              - Generate N personas');
       log.error('  stats                                     - Show persona statistics');
-      log.error('  review book <path> [--personas=...]       - Review an HTML book');
-      log.error('  review chapter <path> [--personas=...]    - Review a markdown chapter');
+      log.error('  review book <path> [options]              - Review an HTML book');
+      log.error('  review chapter <path> [options]           - Review a markdown chapter');
+      log.error('    Options: --personas=..., --plus=N, --generated=N, --focus=<category>');
+      log.error('    Focus categories: general, gm-content, combat, narrative, character-creation, quickstart');
       log.error('  review list [--status=...] [--content-type=...] - List campaigns');
       log.error('  review view <id> [--format=text|json]    - View campaign details');
       log.error('  review status <id>                        - Check campaign status');

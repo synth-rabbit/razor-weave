@@ -6,10 +6,14 @@ import {
   ReviewOrchestrator,
   type CampaignStatus,
   type ContentType,
+  type FocusCategory,
 } from '../reviews/index.js';
 
 export interface ReviewBookOptions {
   personas?: string;
+  plus?: number;
+  generated?: number;
+  focus?: string;
 }
 
 export interface ListCampaignsFilters {
@@ -23,7 +27,7 @@ export interface ListCampaignsFilters {
 function executeReviewCampaign(
   contentPath: string,
   contentType: 'book' | 'chapter',
-  options?: { personas?: string }
+  options?: ReviewBookOptions
 ): void {
   log.info(`\nReviewing ${contentType}: ${contentPath}\n`);
 
@@ -31,6 +35,12 @@ function executeReviewCampaign(
   const rawDb = db.getDb();
   const campaignClient = new CampaignClient(rawDb);
   const orchestrator = new ReviewOrchestrator(rawDb, campaignClient);
+
+  // Validate mutual exclusivity
+  if (options?.plus !== undefined && options?.generated !== undefined) {
+    log.error('Error: --plus and --generated are mutually exclusive');
+    process.exit(1);
+  }
 
   // Parse persona selection
   let personaSelectionStrategy: 'all_core' | 'manual' = 'all_core';
@@ -41,7 +51,14 @@ function executeReviewCampaign(
     personaIds = options.personas.split(',').map((id) => id.trim());
   }
 
-  // Initialize campaign
+  // Validate focus if provided
+  const validFocuses = ['general', 'gm-content', 'combat', 'narrative', 'character-creation', 'quickstart'];
+  if (options?.focus && !validFocuses.includes(options.focus)) {
+    log.error(`Error: Invalid focus '${options.focus}'. Valid options: ${validFocuses.join(', ')}`);
+    process.exit(1);
+  }
+
+  // Initialize campaign with sampling options
   log.info('Creating review campaign...');
   const campaignId = orchestrator.initializeCampaign({
     campaignName: `${contentPath} Review - ${new Date().toISOString()}`,
@@ -49,6 +66,9 @@ function executeReviewCampaign(
     contentPath,
     personaSelectionStrategy,
     personaIds,
+    plusCount: options?.plus,
+    generatedCount: options?.generated,
+    focus: options?.focus as FocusCategory | undefined,
   });
 
   // Generate prompt files and show next steps
