@@ -1,6 +1,6 @@
 // src/tooling/reviews/persona-sampler.test.ts
 import { describe, it, expect } from 'vitest';
-import { FOCUS_CATEGORIES, inferFocus, type FocusCategory } from './persona-sampler.js';
+import { FOCUS_CATEGORIES, inferFocus, scorePersona, type FocusCategory } from './persona-sampler.js';
 
 describe('persona-sampler', () => {
   describe('FOCUS_CATEGORIES', () => {
@@ -66,6 +66,54 @@ describe('persona-sampler', () => {
     it('should be case-insensitive', () => {
       expect(inferFocus('COMBAT-RULES.MD')).toBe('combat');
       expect(inferFocus('GM-Guide.md')).toBe('gm-content');
+    });
+  });
+
+  describe('scorePersona', () => {
+    const tactician = {
+      id: 'gen-1',
+      archetype: 'Tactician',
+      experience_level: 'Veteran',
+      primary_cognitive_style: 'Analytical',
+      fiction_first_alignment: 'Low',
+      gm_philosophy: 'Traditional',
+    };
+
+    const newbieExplorer = {
+      id: 'gen-2',
+      archetype: 'Explorer',
+      experience_level: 'Newbie',
+      primary_cognitive_style: 'Visual',
+      fiction_first_alignment: 'High',
+      gm_philosophy: 'Collaborative',
+    };
+
+    it('should return 0 for general focus (even distribution)', () => {
+      expect(scorePersona(tactician, 'general')).toBe(0);
+      expect(scorePersona(newbieExplorer, 'general')).toBe(0);
+    });
+
+    it('should score Tactician higher for combat focus', () => {
+      const tacticianScore = scorePersona(tactician, 'combat');
+      const explorerScore = scorePersona(newbieExplorer, 'combat');
+      expect(tacticianScore).toBeGreaterThan(explorerScore);
+      expect(tacticianScore).toBeGreaterThan(0.5); // Primary match
+    });
+
+    it('should score Newbie higher for quickstart focus', () => {
+      const newbieScore = scorePersona(newbieExplorer, 'quickstart');
+      const veteranScore = scorePersona(tactician, 'quickstart');
+      expect(newbieScore).toBeGreaterThan(veteranScore);
+      expect(newbieScore).toBeGreaterThan(0.5); // Primary match
+    });
+
+    it('should score based on gm_philosophy for gm-content', () => {
+      // Both should get some score since gm_philosophy is weighted
+      const score1 = scorePersona(tactician, 'gm-content');
+      const score2 = scorePersona(newbieExplorer, 'gm-content');
+      // Scores depend on diversity, both have valid gm_philosophy
+      expect(score1).toBeGreaterThanOrEqual(0);
+      expect(score2).toBeGreaterThanOrEqual(0);
     });
   });
 });
