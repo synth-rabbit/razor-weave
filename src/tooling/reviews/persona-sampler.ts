@@ -92,3 +92,70 @@ export function inferFocus(contentPath: string): FocusCategory {
   }
   return 'general';
 }
+
+export interface PersonaForScoring {
+  id: string;
+  archetype: string;
+  experience_level: string;
+  primary_cognitive_style: string;
+  fiction_first_alignment: string;
+  gm_philosophy: string;
+  [key: string]: string; // Allow dynamic field access
+}
+
+/**
+ * Score a persona against a focus category.
+ * Higher scores = better match for focus.
+ * Returns 0-1 range.
+ */
+export function scorePersona(
+  persona: PersonaForScoring,
+  focus: FocusCategory
+): number {
+  const config = FOCUS_CATEGORIES[focus];
+
+  // General focus = even distribution, no scoring
+  if (focus === 'general') {
+    return 0;
+  }
+
+  let score = 0;
+
+  // Primary dimension scoring
+  if (config.primaryDimension) {
+    const field = config.primaryDimension.field;
+    const value = persona[field];
+    const allowedValues = config.primaryDimension.values;
+
+    if (allowedValues) {
+      // Specific values get the weight
+      if (allowedValues.includes(value)) {
+        score += config.primaryWeight;
+      }
+    } else {
+      // Any value gets weight (for diversity)
+      if (value) {
+        score += config.primaryWeight;
+      }
+    }
+  }
+
+  // Secondary dimension scoring
+  if (config.secondaryDimension) {
+    const field = config.secondaryDimension.field;
+    const value = persona[field];
+    const allowedValues = config.secondaryDimension.values;
+
+    if (allowedValues) {
+      if (allowedValues.includes(value)) {
+        score += config.secondaryWeight;
+      }
+    } else {
+      if (value) {
+        score += config.secondaryWeight;
+      }
+    }
+  }
+
+  return score;
+}
