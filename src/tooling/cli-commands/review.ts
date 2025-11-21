@@ -51,7 +51,8 @@ function executeReviewCampaign(
     personaIds,
   });
 
-  log.info(`Campaign created: ${campaignId}`);
+  // Generate prompt files and show next steps
+  orchestrator.executeReviews(campaignId);
 }
 
 /**
