@@ -5,4 +5,6 @@
  * Used by both print-design and web-reader workflows.
  */
 
-// Utilities - exports added as modules are implemented
+// Utilities
+export * from './hasher.js';
+export * from './build-client.js';
