@@ -1,0 +1,101 @@
+name: Deploy Website to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/site/**'
+      - '.github/workflows/deploy-site.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: |
+          cd src/site
+          pnpm install
+
+      - name: Install Playwright browsers
+        run: |
+          cd src/site
+          pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: |
+          cd src/site
+          pnpm test --project=desktop-chrome
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: src/site/playwright-report/
+          retention-days: 7
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: |
+          cd src/site
+          pnpm install
+
+      - name: Build site
+        run: |
+          cd src/site
+          pnpm build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./src/site/dist
+          cname: razorweave.com
+
+  smoke-test:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Smoke test live site
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://razorweave.com)
+          if [ "$response" != "200" ]; then
+            echo "Site returned $response instead of 200"
+            exit 1
+          fi
+          echo "Site is live and returning 200"
