@@ -9,9 +9,12 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
+import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
+import { visit } from 'unist-util-visit';
+import type { Root } from 'mdast';
 
 import { readChapters, readSheets } from '../chapter-reader.js';
 import { hashFiles } from '../hasher.js';
@@ -19,6 +22,20 @@ import { generateToc, renderTocHtml } from '../toc-generator.js';
 import { assembleContent, type ChapterHtml, type SheetHtml } from '../assembler.js';
 import { renderTemplate, type TemplateVars } from '../template-renderer.js';
 import { remarkExampleBlocks, remarkGmBoxes, remarkSemanticIds } from '../transforms/index.js';
+
+/**
+ * Strip YAML frontmatter from AST
+ */
+function remarkStripFrontmatter() {
+  return (tree: Root) => {
+    visit(tree, 'yaml', (_node, index, parent) => {
+      if (parent && typeof index === 'number') {
+        parent.children.splice(index, 1);
+        return index;
+      }
+    });
+  };
+}
 
 export interface BuildOptions {
   bookPath: string;
@@ -39,11 +56,13 @@ export interface BuildResult {
 }
 
 /**
- * Create the markdown processing pipeline
+ * Create the markdown processing pipeline with print-specific transforms
  */
-function createPipeline() {
+function createPrintPipeline() {
   return unified()
     .use(remarkParse)
+    .use(remarkFrontmatter, ['yaml'])  // Parse frontmatter
+    .use(remarkStripFrontmatter)        // Remove it from output
     .use(remarkGfm)
     .use(remarkExampleBlocks)
     .use(remarkGmBoxes)
@@ -83,7 +102,7 @@ function getTemplatePath(): string {
  */
 export async function buildPrintHtml(options: BuildOptions): Promise<BuildResult> {
   const buildId = generateBuildId();
-  const pipeline = createPipeline();
+  const pipeline = createPrintPipeline();
 
   try {
     // Read source files
