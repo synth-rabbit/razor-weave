@@ -133,9 +133,19 @@ export class ReviewOrchestrator {
     // Generate prompt files
     const writtenFiles = writePromptFiles(this.db, campaignId);
 
+    // Count persona types for breakdown display
+    const coreCount = personaIds.filter(id => id.startsWith('core-')).length;
+    const generatedCount = personaIds.length - coreCount;
+
     // Output instructions for user
     log.info(`\n✅ Campaign created: ${campaignId}`);
-    log.info(`✅ Generated ${writtenFiles.length} review prompts\n`);
+    let promptCountMsg = `✅ Generated ${writtenFiles.length} review prompts`;
+    if (coreCount > 0 && generatedCount > 0) {
+      promptCountMsg += ` (${coreCount} core + ${generatedCount} sampled)`;
+    } else if (generatedCount > 0) {
+      promptCountMsg += ` (${generatedCount} sampled generated)`;
+    }
+    log.info(`${promptCountMsg}\n`);
     log.info(`📁 Prompts directory: data/reviews/prompts/${campaignId}/\n`);
     log.info('Next: Tell Claude Code to execute reviews\n');
     log.info('────────────────────────────────────────────────────────');
