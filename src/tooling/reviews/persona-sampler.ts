@@ -58,3 +58,37 @@ export const FOCUS_CATEGORIES: Record<FocusCategory, FocusWeightConfig> = {
     secondaryDimension: { field: 'archetype' }, // All archetypes
   },
 };
+
+const FOCUS_PATTERNS: Record<FocusCategory, RegExp[]> = {
+  general: [], // No patterns - fallback
+  'gm-content': [/gm[-_]?/i, /game[-_]?master/i, /running[-_]/i],
+  combat: [/combat/i, /fighting/i, /weapons/i, /battle/i],
+  narrative: [/narrative/i, /roleplay/i, /story/i, /fiction/i],
+  'character-creation': [/character/i, /creation/i, /build/i],
+  quickstart: [/quickstart/i, /intro/i, /getting[-_]?started/i, /beginner/i],
+};
+
+// Order matters - first match wins
+const INFERENCE_ORDER: FocusCategory[] = [
+  'quickstart',
+  'combat',
+  'narrative',
+  'character-creation',
+  'gm-content',
+];
+
+/**
+ * Infer focus category from content path.
+ * Returns 'general' if no patterns match.
+ */
+export function inferFocus(contentPath: string): FocusCategory {
+  for (const category of INFERENCE_ORDER) {
+    const patterns = FOCUS_PATTERNS[category];
+    for (const pattern of patterns) {
+      if (pattern.test(contentPath)) {
+        return category;
+      }
+    }
+  }
+  return 'general';
+}
