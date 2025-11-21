@@ -59,41 +59,6 @@ importers:
         specifier: ^5.3.3
         version: 5.9.3
 
-  src/cli:
-    dependencies:
-      '@razorweave/agents':
-        specifier: workspace:*
-        version: link:../agents
-      '@razorweave/shared':
-        specifier: workspace:*
-        version: link:../shared
-      '@razorweave/workflows':
-        specifier: workspace:*
-        version: link:../workflows
-      commander:
-        specifier: ^11.1.0
-        version: 11.1.0
-    devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.25
-      typescript:
-        specifier: ^5.3.3
-        version: 5.9.3
-
-  src/maintenance:
-    dependencies:
-      '@razorweave/shared':
-        specifier: workspace:*
-        version: link:../shared
-    devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.25
-      typescript:
-        specifier: ^5.3.3
-        version: 5.9.3
-
   src/shared:
     dependencies:
       '@anthropic-ai/sdk':
@@ -176,35 +141,6 @@ importers:
       vitest:
         specifier: ^1.1.0
         version: 1.6.1(@types/node@20.19.25)
-
-  src/tools:
-    dependencies:
-      '@razorweave/shared':
-        specifier: workspace:*
-        version: link:../shared
-    devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.25
-      typescript:
-        specifier: ^5.3.3
-        version: 5.9.3
-
-  src/workflows:
-    dependencies:
-      '@razorweave/agents':
-        specifier: workspace:*
-        version: link:../agents
-      '@razorweave/shared':
-        specifier: workspace:*
-        version: link:../shared
-    devDependencies:
-      '@types/node':
-        specifier: ^20.10.0
-        version: 20.19.25
-      typescript:
-        specifier: ^5.3.3
-        version: 5.9.3
 
 packages:
 
@@ -1618,11 +1554,6 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
-    dev: false
-
-  /commander@11.1.0:
-    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
-    engines: {node: '>=16'}
     dev: false
 
   /commander@13.1.0:
