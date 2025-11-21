@@ -112,8 +112,7 @@ describe('setupHooks', () => {
 
     await expect(setupHooks()).rejects.toThrow('Write failed');
     expect(errorSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Setup failed'),
-      expect.any(String)
+      expect.stringContaining('Setup failed')
     );
   });
 });

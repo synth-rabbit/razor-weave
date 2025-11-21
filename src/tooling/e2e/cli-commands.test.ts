@@ -106,8 +106,8 @@ describe('E2E CLI Commands', () => {
   });
 
   it('should create review campaign via CLI', () => {
-    // Generate test personas first
-    execSync('pnpm tsx cli-commands/run.ts generate 3', {
+    // Hydrate core personas first (review uses all_core strategy by default)
+    execSync('pnpm tsx cli-commands/run.ts hydrate-core', {
       stdio: 'ignore',
     });
 
@@ -131,7 +131,8 @@ describe('E2E CLI Commands', () => {
     } | undefined;
 
     expect(campaign).toBeDefined();
-    expect(campaign?.status).toBe('pending');
+    // Status is in_progress after reviewBook() runs executeReviews()
+    expect(campaign?.status).toBe('in_progress');
 
     // Cleanup
     execSync(`rm -f ${testBook}`);
