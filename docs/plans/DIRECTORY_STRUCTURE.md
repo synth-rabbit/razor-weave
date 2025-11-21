@@ -194,15 +194,14 @@ src/
         scripts/         # Setup and maintenance scripts
         validators/      # Validation scripts
         data/            # Database files
-    tools/               # Additional development tools
-    workflows/           # Workflow automation
+    agents/              # Agentic systems (stub)
 ```
 
 **Changes from proposal:**
-- Added `tooling/` package for build tools and validation
+- Added `tooling/` package for build tools, validation, CLI, and reviews
 - Added `shared/` package for shared utilities
 - Site generator is in `src/site/` not root `site/`
-- Tools are in `src/tools/` not root `tools/`
+- Removed `tools/`, `workflows/`, `cli/`, `maintenance/` - functionality merged into `tooling/`
 
 ## scripts Directory
 
@@ -233,24 +232,20 @@ data/
 
 ### Implemented Differently
 
-1. **tools/ → src/tools/**
-   - **Reason:** Better organization within monorepo structure
-   - **Impact:** Tools are now a workspace package
-
-2. **site/ → src/site/**
+1. **site/ → src/site/**
    - **Reason:** Site generator is a workspace package
    - **Impact:** Can share code with other packages
 
-3. **Added src/tooling/**
-   - **Reason:** Need centralized build tools and validation
-   - **Contains:** Database, hooks, linters, validators
+2. **Added src/tooling/**
+   - **Reason:** Need centralized build tools, validation, CLI, and reviews
+   - **Contains:** Database, hooks, linters, validators, CLI commands, review system
    - **Impact:** Improved developer experience
 
-4. **Added src/shared/**
+3. **Added src/shared/**
    - **Reason:** Share utilities across packages
    - **Impact:** Reduces code duplication
 
-5. **Added configuration directories**
+4. **Added configuration directories**
    - **.claude/** - Claude Code hooks
    - **.husky/** - Git hooks
    - **Reason:** Tool integration
