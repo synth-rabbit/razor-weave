@@ -16,10 +16,11 @@ This index tracks implementation of the HTML generation system for both `print-d
 
 | Phase | Name | Status | Plan File |
 |-------|------|--------|-----------|
-| P1 | Foundation | Pending | `2025-11-21-html-gen-P1-foundation.md` |
-| P2 | Transforms | Pending | `2025-11-21-html-gen-P2-transforms.md` |
+| P1 | Foundation | Complete | `2025-11-21-html-gen-P1-foundation.md` |
+| P2 | Transforms | Complete | `2025-11-21-html-gen-P2-transforms.md` |
 | P3 | Assembly | Pending | `2025-11-21-html-gen-P3-assembly.md` |
-| P4 | Print CLI | Pending | `2025-11-21-html-gen-P4-print-cli.md` |
+| P4-print | Print CLI | Pending | `2025-11-21-html-gen-P4-print-cli.md` |
+| P4-web | Web Reader CLI | Pending | `2025-11-21-html-gen-P4-web.md` |
 | P5 | Advanced Features | Not Started | (glossary linking, to be created) |
 | P6 | Sheet Refinement | Not Started | (iterative, per-sheet) |
 
@@ -50,12 +51,20 @@ This index tracks implementation of the HTML generation system for both `print-d
 - **Estimated Tasks:** 5
 - **Dependencies:** P2
 
-### Phase 4: Print CLI (Print-specific)
-- Template extraction
+### Phase 4-print: Print CLI (Print-specific)
+- Template extraction for print
 - Template renderer
 - Build orchestrator
 - CLI commands (build, list, diff, promote)
 - **Estimated Tasks:** 6
+- **Dependencies:** P3
+
+### Phase 4-web: Web Reader CLI (Web-specific)
+- Web-specific ID transform (ch-XX prefixed IDs)
+- Template extraction from `read.html`
+- Build orchestrator with caching
+- CLI commands (`html:web:build`, `list`, `diff`, `promote`)
+- **Estimated Tasks:** 8
 - **Dependencies:** P3
 
 ### Phase 5: Advanced Features (Optional)
@@ -76,15 +85,20 @@ This index tracks implementation of the HTML generation system for both `print-d
 
 **For print-design workflow:**
 ```
-P1 → P2 → P3 → P4 → (P5 optional) → P6
+P1 → P2 → P3 → P4-print → (P5 optional) → P6
 ```
 
-**For web-reader workflow (separate plans needed):**
+**For web-reader workflow:**
 ```
-P1 → P2 → P3 → P4-web → ...
+P1 → P2 → P3 → P4-web → (P5 optional) → P6
 ```
 
-Phases 1-3 only need to be implemented once — both workflows share them.
+**Current Status:** P1 and P2 are complete. Both workflows share P1-P3.
+
+**Recommended Execution:**
+1. Complete P3 (Assembly) — shared infrastructure
+2. Complete P4-web — web reader workflow (waiting on Playwright tests)
+3. Complete P4-print — print workflow
 
 ---
 
@@ -115,6 +129,7 @@ Phases 1-3 only need to be implemented once — both workflows share them.
 
 ## CLI Commands (after P4)
 
+**Print workflow (after P4-print):**
 ```bash
 pnpm html:print:build          # Build print-design HTML
 pnpm html:print:list           # List previous builds
@@ -122,16 +137,38 @@ pnpm html:print:diff <id>      # Show changes since build
 pnpm html:print:promote        # Copy to exports/
 ```
 
+**Web workflow (after P4-web):**
+```bash
+pnpm html:web:build [--force]  # Build web reader HTML
+pnpm html:web:list [--limit=N] # List previous builds
+pnpm html:web:diff <id>        # Show changes since build
+pnpm html:web:promote          # Copy to src/site/src/pages/read.html
+```
+
 ---
 
 ## Success Criteria
 
-- [ ] `pnpm html:print:build` produces valid HTML
-- [ ] HTML renders correctly in browser
-- [ ] Print preview shows proper formatting
-- [ ] All transforms work (examples, GM boxes, IDs)
+**Shared (P1-P3):**
+- [x] Database schema for html_builds and html_build_sources
+- [x] File hashing utilities (SHA-256)
+- [x] Build client for database operations
+- [x] All transforms work (examples, GM boxes, semantic IDs)
 - [ ] TOC has 4-part structure
 - [ ] Sheets are assembled as Chapter 27
 - [ ] Build history tracked in database
 - [ ] Diff shows changed files between builds
+
+**Print workflow (P4-print):**
+- [ ] `pnpm html:print:build` produces valid HTML
+- [ ] HTML renders correctly in browser
+- [ ] Print preview shows proper formatting
 - [ ] Promote copies to `books/core/v1/exports/html/`
+
+**Web workflow (P4-web):**
+- [ ] `pnpm html:web:build` produces valid HTML
+- [ ] Generated HTML matches structure of `read.html`
+- [ ] All JavaScript functionality works (TOC, quick jump, bookmarks)
+- [ ] Chapter IDs follow `ch-XX-slug` pattern
+- [ ] `pnpm html:web:promote` copies to `src/site/src/pages/read.html`
+- [ ] Playwright tests pass after promote
