@@ -13,3 +13,4 @@ export * from './pipeline.js';
 // Assembly
 export * from './chapter-reader.js';
 export * from './toc-generator.js';
+export * from './index-generator.js';
