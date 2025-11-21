@@ -3,6 +3,11 @@ import { COVERAGE_THRESHOLDS } from './src/tooling/constants/index.js';
 
 export default defineConfig({
   test: {
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.worktrees/**',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
