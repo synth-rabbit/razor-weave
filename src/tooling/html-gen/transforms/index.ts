@@ -5,4 +5,4 @@
  * to semantic HTML structures.
  */
 
-// Will export transforms as they are created
+export { remarkExampleBlocks } from './example-blocks.js';
