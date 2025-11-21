@@ -26,7 +26,11 @@
     "review:view": "tsx src/tooling/cli-commands/run.ts review view",
     "personas:hydrate": "tsx src/tooling/cli-commands/run.ts hydrate-core",
     "personas:generate": "tsx src/tooling/cli-commands/run.ts generate",
-    "personas:stats": "tsx src/tooling/cli-commands/run.ts stats"
+    "personas:stats": "tsx src/tooling/cli-commands/run.ts stats",
+    "html:print:build": "pnpm --filter @razorweave/tooling html:print:build",
+    "html:print:list": "pnpm --filter @razorweave/tooling html:print:list",
+    "html:print:diff": "pnpm --filter @razorweave/tooling html:print:diff",
+    "html:print:promote": "pnpm --filter @razorweave/tooling html:print:promote"
   },
   "devDependencies": {
     "@razorweave/tooling": "workspace:*",
