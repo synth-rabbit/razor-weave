@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkRehype from 'remark-rehype';
+import rehypeStringify from 'rehype-stringify';
 import { createPipeline, processMarkdown } from './pipeline.js';
+import { remarkExampleBlocks, remarkGmBoxes, remarkSemanticIds } from './transforms/index.js';
 
 describe('pipeline', () => {
   describe('createPipeline', () => {
@@ -57,5 +63,40 @@ describe('pipeline', () => {
 
       expect(html).toContain('<blockquote>');
     });
+  });
+});
+
+describe('pipeline with transforms', () => {
+  it('processes document with all transforms', async () => {
+    const pipeline = unified()
+      .use(remarkParse)
+      .use(remarkExampleBlocks)
+      .use(remarkGmBoxes)
+      .use(remarkSemanticIds)
+      .use(remarkGfm)
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeStringify, { allowDangerousHtml: true });
+
+    const markdown = `
+## 4. Core Principles
+
+### The Golden Rule
+
+> **Example**
+> An example of play.
+
+> **GM Guidance**
+> Tips for the GM.
+
+Regular paragraph here.
+`;
+
+    const result = await pipeline.process(markdown);
+    const html = String(result);
+
+    expect(html).toContain('id="core-principles"');
+    expect(html).toContain('id="the-golden-rule"');
+    expect(html).toContain('class="example"');
+    expect(html).toContain('class="gm"');
   });
 });
