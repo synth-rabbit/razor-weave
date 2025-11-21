@@ -222,4 +222,124 @@ describe('HtmlBuildClient', () => {
       expect(build!.status).toBe('failed');
     });
   });
+
+  describe('diffBuilds', () => {
+    it('identifies added files', () => {
+      const build1Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path1',
+        sourceHash: 'hash1',
+        sources: [
+          { filePath: 'chapter1.md', contentHash: 'h1', fileType: 'chapter' },
+        ],
+      });
+
+      const build2Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path2',
+        sourceHash: 'hash2',
+        sources: [
+          { filePath: 'chapter1.md', contentHash: 'h1', fileType: 'chapter' },
+          { filePath: 'chapter2.md', contentHash: 'h2', fileType: 'chapter' },
+        ],
+      });
+
+      const diff = client.diffBuilds(build1Id, build2Id);
+
+      expect(diff.added).toEqual(['chapter2.md']);
+      expect(diff.removed).toEqual([]);
+      expect(diff.changed).toEqual([]);
+    });
+
+    it('identifies removed files', () => {
+      const build1Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path1',
+        sourceHash: 'hash1',
+        sources: [
+          { filePath: 'chapter1.md', contentHash: 'h1', fileType: 'chapter' },
+          { filePath: 'chapter2.md', contentHash: 'h2', fileType: 'chapter' },
+        ],
+      });
+
+      const build2Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path2',
+        sourceHash: 'hash2',
+        sources: [
+          { filePath: 'chapter1.md', contentHash: 'h1', fileType: 'chapter' },
+        ],
+      });
+
+      const diff = client.diffBuilds(build1Id, build2Id);
+
+      expect(diff.added).toEqual([]);
+      expect(diff.removed).toEqual(['chapter2.md']);
+      expect(diff.changed).toEqual([]);
+    });
+
+    it('identifies changed files', () => {
+      const build1Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path1',
+        sourceHash: 'hash1',
+        sources: [
+          { filePath: 'chapter1.md', contentHash: 'old-hash', fileType: 'chapter' },
+        ],
+      });
+
+      const build2Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path2',
+        sourceHash: 'hash2',
+        sources: [
+          { filePath: 'chapter1.md', contentHash: 'new-hash', fileType: 'chapter' },
+        ],
+      });
+
+      const diff = client.diffBuilds(build1Id, build2Id);
+
+      expect(diff.added).toEqual([]);
+      expect(diff.removed).toEqual([]);
+      expect(diff.changed).toEqual(['chapter1.md']);
+    });
+
+    it('handles complex diff with all change types', () => {
+      const build1Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path1',
+        sourceHash: 'hash1',
+        sources: [
+          { filePath: 'kept-same.md', contentHash: 'same', fileType: 'chapter' },
+          { filePath: 'will-change.md', contentHash: 'old', fileType: 'chapter' },
+          { filePath: 'will-remove.md', contentHash: 'h3', fileType: 'chapter' },
+        ],
+      });
+
+      const build2Id = client.createBuild({
+        outputType: 'print-design',
+        bookPath: 'books/core/v1',
+        outputPath: 'path2',
+        sourceHash: 'hash2',
+        sources: [
+          { filePath: 'kept-same.md', contentHash: 'same', fileType: 'chapter' },
+          { filePath: 'will-change.md', contentHash: 'new', fileType: 'chapter' },
+          { filePath: 'newly-added.md', contentHash: 'h4', fileType: 'chapter' },
+        ],
+      });
+
+      const diff = client.diffBuilds(build1Id, build2Id);
+
+      expect(diff.added).toEqual(['newly-added.md']);
+      expect(diff.removed).toEqual(['will-remove.md']);
+      expect(diff.changed).toEqual(['will-change.md']);
+    });
+  });
 });
