@@ -6,3 +6,4 @@
  */
 
 export { remarkExampleBlocks } from './example-blocks.js';
+export { remarkGmBoxes } from './gm-boxes.js';
