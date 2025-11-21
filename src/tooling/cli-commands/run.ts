@@ -29,6 +29,14 @@ import {
   diffPrintBuild,
   promotePrintBuild,
 } from '../html-gen/print/index.js';
+import {
+  buildWebReader,
+  listWebBuilds,
+  formatBuildList,
+  diffWebBuild,
+  formatDiff,
+  promoteWebBuild,
+} from '../html-gen/web/index.js';
 import { getDatabase } from '../database/index.js';
 import { HtmlBuildClient } from '../html-gen/build-client.js';
 
@@ -204,6 +212,57 @@ async function main(): Promise<void> {
           log.error('Available: build, list, diff, promote');
           process.exit(1);
       }
+    } else if (command === 'html' && args[1] === 'web') {
+      const subcommand = args[2];
+      const db = getDatabase();
+
+      switch (subcommand) {
+        case 'build': {
+          const force = args.includes('--force');
+          const result = await buildWebReader({
+            bookPath: resolve(REPO_ROOT, 'books/core/v1'),
+            chaptersDir: resolve(REPO_ROOT, 'books/core/v1/chapters'),
+            sheetsDir: resolve(REPO_ROOT, 'books/core/v1/sheets'),
+            outputPath: resolve(REPO_ROOT, 'data/html/web-reader/core-rulebook.html'),
+            templatePath: resolve(REPO_ROOT, 'src/tooling/html-gen/templates/web-reader.html'),
+            db: db.db,
+            force,
+          });
+          console.log(JSON.stringify(result, null, 2));
+          process.exit(result.status === 'failed' ? 1 : 0);
+          break;
+        }
+        case 'list': {
+          const limitArg = args.find(a => a.startsWith('--limit='));
+          const limit = limitArg ? parseInt(limitArg.split('=')[1], 10) : 10;
+          const builds = listWebBuilds(db.db, limit);
+          console.log(formatBuildList(builds));
+          break;
+        }
+        case 'diff': {
+          const buildId = args[3];
+          if (!buildId) {
+            log.error('Usage: html web diff <build-id>');
+            process.exit(1);
+          }
+          const diff = diffWebBuild(db.db, buildId, resolve(REPO_ROOT, 'books/core/v1/chapters'));
+          console.log(formatDiff(diff));
+          break;
+        }
+        case 'promote': {
+          const result = await promoteWebBuild({
+            sourcePath: resolve(REPO_ROOT, 'data/html/web-reader/core-rulebook.html'),
+            targetPath: resolve(REPO_ROOT, 'src/site/src/pages/read.html'),
+          });
+          console.log(result.success ? 'Promoted successfully!' : `Failed: ${result.error}`);
+          process.exit(result.success ? 0 : 1);
+          break;
+        }
+        default:
+          log.error(`Unknown html web command: ${subcommand}`);
+          log.error('Available: build, list, diff, promote');
+          process.exit(1);
+      }
     } else {
       log.error(`Unknown command: ${command}`);
       log.error('Available commands:');
@@ -221,6 +280,10 @@ async function main(): Promise<void> {
       log.error('  html print list                           - List print builds');
       log.error('  html print diff <build-id>                - Diff vs latest build');
       log.error('  html print promote                        - Copy to exports/');
+      log.error('  html web build [--force]                  - Build web-reader HTML');
+      log.error('  html web list [--limit=N]                 - List web builds');
+      log.error('  html web diff <build-id>                  - Diff vs build');
+      log.error('  html web promote                          - Copy to site pages/');
       process.exit(1);
     }
   } catch (error) {

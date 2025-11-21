@@ -8,3 +8,4 @@
 export { remarkExampleBlocks } from './example-blocks.js';
 export { remarkGmBoxes } from './gm-boxes.js';
 export { remarkSemanticIds, slugify } from './semantic-ids.js';
+export { remarkWebIds, type WebIdsOptions } from './web-ids.js';

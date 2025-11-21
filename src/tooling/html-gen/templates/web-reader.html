@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read Online - Razorweave Core Rulebook</title>
+  <meta name="description" content="Read the complete Razorweave Core Rulebook online with enhanced navigation, search, and bookmarking.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://razorweave.com/read.html">
+  <meta property="og:title" content="Razorweave Core Rulebook - Read Online">
+  <meta property="og:description" content="Read the complete Razorweave Core Rulebook online with enhanced navigation, search, and bookmarking.">
+  <meta property="og:image" content="https://razorweave.com/images/hero/preview-scene.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://razorweave.com/read.html">
+  <meta name="twitter:title" content="Razorweave Core Rulebook - Read Online">
+  <meta name="twitter:description" content="Read the complete Razorweave Core Rulebook online with enhanced navigation, search, and bookmarking.">
+  <meta name="twitter:image" content="https://razorweave.com/images/hero/preview-scene.jpg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/components.css">
+  <link rel="stylesheet" href="/styles/textures.css">
+  <link rel="stylesheet" href="/styles/reader.css">
+  <link rel="stylesheet" href="/styles/animations.css">
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress">
+    <div class="reading-progress-bar"></div>
+  </div>
+
+  <header class="site-header">
+  <div class="container">
+    <a href="/index.html" class="site-logo">
+      <img src="/images/logos/main-logo.svg" alt="Razorweave" height="48">
+    </a>
+
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav>
+      <ul class="site-nav">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/read.html">Read</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/license.html">License</a></li>
+        <li>
+          <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+  <!-- TOC Toggle Button (mobile only) -->
+  <button class="toc-toggle">Table of Contents</button>
+
+  <!-- Quick Jump Modal -->
+  <div class="quick-jump-modal" id="quickJumpModal">
+    <div class="quick-jump-container">
+      <input
+        type="text"
+        class="quick-jump-search"
+        id="quickJumpSearch"
+        placeholder="Jump to section... (Ctrl+K)"
+        autocomplete="off"
+      >
+      <ul class="quick-jump-results" id="quickJumpResults"></ul>
+      <div class="quick-jump-hint">
+        Use <kbd>↑</kbd> <kbd>↓</kbd> to navigate, <kbd>Enter</kbd> to select, <kbd>Esc</kbd> to close
+      </div>
+    </div>
+  </div>
+
+  <div class="reader-container">
+    <!-- Table of Contents Sidebar -->
+    <aside class="reader-toc">
+      <h2>Table of Contents</h2>
+
+{{TOC}}
+
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="reader-content">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/index.html">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="/read.html">Read</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current" id="breadcrumb-current">Introduction</span>
+        <span class="breadcrumb-separator">|</span>
+        <button class="breadcrumb-search-btn" id="breadcrumbSearchBtn" aria-label="Search content" title="Search (Ctrl+K)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+        <span class="breadcrumb-separator">|</span>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBO8_zf4pxOQeMN7pIUre7jkWJdPzMMNKJjLewajuqHkG6g/viewform" target="_blank" rel="noopener" class="breadcrumb-feedback-link" title="Share your gameplay feedback">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </a>
+      </nav>
+
+{{CONTENT}}
+
+    </main>
+  </div>
+
+  <footer class="site-footer">
+  <div class="container">
+    <nav>
+      <a href="/about.html">About</a>
+      <a href="/license.html">License</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBO8_zf4pxOQeMN7pIUre7jkWJdPzMMNKJjLewajuqHkG6g/viewform" target="_blank" rel="noopener">Feedback</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+    <p style="font-size: 0.85rem; margin-top: var(--spacing-sm);">
+      <strong>Disclaimer:</strong> Razorweave is a work of fiction. Any resemblance to real persons, places, or events is coincidental.
+      Provided "as is" without warranty. See <a href="/terms.html">Terms of Service</a> for details.
+    </p>
+    <p>&copy; 2025 Joshua Edwards. All rights reserved.</p>
+  </div>
+</footer>
+
+
+  <script src="/scripts/nav-toggle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+  <script src="/scripts/reader.js"></script>
+</body>
+</html>

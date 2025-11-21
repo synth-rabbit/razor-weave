@@ -30,7 +30,11 @@
     "html:print:build": "pnpm --filter @razorweave/tooling html:print:build",
     "html:print:list": "pnpm --filter @razorweave/tooling html:print:list",
     "html:print:diff": "pnpm --filter @razorweave/tooling html:print:diff",
-    "html:print:promote": "pnpm --filter @razorweave/tooling html:print:promote"
+    "html:print:promote": "pnpm --filter @razorweave/tooling html:print:promote",
+    "html:web:build": "tsx src/tooling/cli-commands/run.ts html web build",
+    "html:web:list": "tsx src/tooling/cli-commands/run.ts html web list",
+    "html:web:diff": "tsx src/tooling/cli-commands/run.ts html web diff",
+    "html:web:promote": "tsx src/tooling/cli-commands/run.ts html web promote"
   },
   "devDependencies": {
     "@razorweave/tooling": "workspace:*",
