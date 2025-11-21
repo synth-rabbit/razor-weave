@@ -18,7 +18,7 @@ export default defineConfig({
   webServer: process.env.BASE_URL
     ? undefined
     : {
-        command: 'pnpm build && pnpm exec live-server dist --port=4173 --no-browser',
+        command: 'pnpm exec live-server dist --port=4173 --no-browser',
         port: 4173,
         reuseExistingServer: !process.env.CI,
         timeout: 120000,
