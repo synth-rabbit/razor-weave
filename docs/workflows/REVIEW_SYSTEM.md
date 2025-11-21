@@ -39,6 +39,57 @@ pnpm review list --content-type=book
 pnpm review view campaign-20251118-143025-abc123
 ```
 
+## Persona Sampling
+
+Beyond the 10 core personas, you can include procedurally generated personas for broader coverage.
+
+### Three Selection Modes
+
+```bash
+# Default: 10 core personas only
+pnpm review book src/site/core_rulebook_web.html
+
+# Core + sampled generated personas
+pnpm review book src/site/core_rulebook_web.html --plus=20
+
+# Generated personas only (no core)
+pnpm review book src/site/core_rulebook_web.html --generated=50
+```
+
+### Focus Categories
+
+Use `--focus` to weight persona selection toward specific content types:
+
+```bash
+pnpm review book chapters/combat.md --plus=15 --focus=combat
+```
+
+| Focus | Description | Primary Weight |
+|-------|-------------|----------------|
+| `general` | Even distribution across all dimensions | — |
+| `gm-content` | GM guides, running the game | gm_philosophy |
+| `combat` | Combat rules, tactics | Tactician archetype |
+| `narrative` | Roleplay, story mechanics | fiction_first_alignment |
+| `character-creation` | Character building | All archetypes evenly |
+| `quickstart` | Beginner content | Newbie experience level |
+
+### Path-Based Focus Inference
+
+Without explicit `--focus`, the system infers from the content path:
+
+| Path | Inferred Focus |
+|------|----------------|
+| `chapters/combat-rules.md` | `combat` |
+| `chapters/gm-guide.md` | `gm-content` |
+| `chapters/getting-started.md` | `quickstart` |
+| `src/site/core_rulebook_web.html` | `general` |
+
+### Validation Rules
+
+- `--plus` and `--generated` are mutually exclusive
+- `--focus` only applies when using `--plus` or `--generated`
+- Requires sufficient generated personas in database
+
 ## Architecture
 
 **Campaign-Based Model:**
@@ -129,6 +180,13 @@ Every review scores content on four dimensions (1-10):
 - Human-guided agent execution workflow
 - Status checking CLI command (pnpm review status)
 - Complete integration of all components
+
+**✅ Persona Sampling Complete:**
+- `--plus` flag for core + generated personas
+- `--generated` flag for generated-only reviews
+- `--focus` flag for weighted sampling
+- Path-based focus inference
+- Persona breakdown in CLI output
 
 **System Status:** Fully Functional
 
@@ -276,7 +334,25 @@ pnpm review book <path> --personas=core-sarah,core-alex
 
 # Review chapter
 pnpm review chapter <path-to-chapter.md> --personas=all_core
+
+# Include generated personas (core + 20 sampled)
+pnpm review book <path> --plus=20
+
+# Use only generated personas (no core)
+pnpm review book <path> --generated=50
+
+# Specify focus for weighted sampling
+pnpm review book <path> --plus=15 --focus=combat
 ```
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `--personas=<ids>` | Comma-separated persona IDs, or `all_core` |
+| `--plus=<N>` | Add N sampled generated personas to core |
+| `--generated=<N>` | Use only N generated personas (no core) |
+| `--focus=<category>` | Weight sampling: general, gm-content, combat, narrative, character-creation, quickstart |
 
 ### Check Campaign Status
 
@@ -319,10 +395,10 @@ import { getDatabase } from '@razorweave/tooling/database';
 import { CampaignClient } from '@razorweave/tooling/reviews';
 
 const db = getDatabase();
-const campaignClient = new CampaignClient(db.raw);
-const orchestrator = new ReviewOrchestrator(db.raw, campaignClient);
+const campaignClient = new CampaignClient(db.getDb());
+const orchestrator = new ReviewOrchestrator(db.getDb(), campaignClient);
 
-// Create campaign
+// Create campaign with core personas only
 const campaignId = orchestrator.initializeCampaign({
   campaignName: 'My Review',
   contentType: 'book',
@@ -330,10 +406,30 @@ const campaignId = orchestrator.initializeCampaign({
   personaSelectionStrategy: 'all_core',
 });
 
-// Execute reviews (placeholder - agents not yet implemented)
+// Or with persona sampling
+const sampledCampaignId = orchestrator.initializeCampaign({
+  campaignName: 'Sampled Review',
+  contentType: 'book',
+  contentPath: 'path/to/book.html',
+  personaSelectionStrategy: 'all_core',
+  plusCount: 20,           // Add 20 generated personas to core
+  focus: 'combat',         // Weight sampling toward combat-focused personas
+});
+
+// Or generated only
+const generatedCampaignId = orchestrator.initializeCampaign({
+  campaignName: 'Generated Only Review',
+  contentType: 'chapter',
+  contentPath: 'chapters/combat.md',
+  personaSelectionStrategy: 'manual',
+  generatedCount: 50,      // Use 50 generated personas, no core
+  focus: 'combat',
+});
+
+// Execute reviews (generates prompt files)
 orchestrator.executeReviews(campaignId);
 
-// Execute analysis (placeholder - agents not yet implemented)
+// Execute analysis (generates analyzer prompt)
 orchestrator.executeAnalysis(campaignId);
 
 // Complete campaign
@@ -342,7 +438,6 @@ orchestrator.completeCampaign(campaignId);
 
 ## Future Features
 
-- Smart persona sampling based on content type
 - Version comparison and regression detection
 - Review retry for failed personas (currently manual)
 - Automated batch size optimization
