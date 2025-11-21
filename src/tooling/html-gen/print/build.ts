@@ -72,6 +72,25 @@ function createPrintPipeline() {
 }
 
 /**
+ * Replace underscore fill sequences with styled form field spans
+ * Width varies based on underscore count:
+ * - 3-8 underscores: small (names, short labels)
+ * - 9-16 underscores: medium (phrases)
+ * - 17-30 underscores: large (sentences)
+ * - 31+ underscores: full width (paragraphs)
+ */
+function replaceUnderscoreFills(html: string): string {
+  return html.replace(/_{3,}/g, (match) => {
+    const len = match.length;
+    let sizeClass = 'fill-sm';
+    if (len >= 31) sizeClass = 'fill-full';
+    else if (len >= 17) sizeClass = 'fill-lg';
+    else if (len >= 9) sizeClass = 'fill-md';
+    return `<span class="fill-line ${sizeClass}"></span>`;
+  });
+}
+
+/**
  * Extract title from chapter content
  */
 function extractTitle(content: string, fallback: string): string {
@@ -127,13 +146,13 @@ export async function buildPrintHtml(options: BuildOptions): Promise<BuildResult
       });
     }
 
-    // Process sheets
+    // Process sheets (with underscore fill replacement)
     const processedSheets: SheetHtml[] = [];
     for (const sheet of sheets) {
       const result = await pipeline.process(sheet.content);
       processedSheets.push({
         slug: sheet.slug,
-        html: String(result),
+        html: replaceUnderscoreFills(String(result)),
       });
     }
 
