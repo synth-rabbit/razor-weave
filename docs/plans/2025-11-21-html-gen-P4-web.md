@@ -1347,4 +1347,37 @@ After Phase 4-Web:
 1. **Playwright Testing** — Run web reader tests to verify JavaScript compatibility
 2. **Part Intros** — Add part introduction content
 3. **Validation** — Compare generated output structure to current read.html
-4. **Sheets Refinement** — Review and fix sheet rendering issues
+
+---
+
+## Implementation Note: Sheet Styling (from Phase 4-Print)
+
+**IMPORTANT:** The web build pipeline MUST use the same sheet styling developed for print-design:
+
+### Required Transforms (copy from `print/build.ts`):
+
+1. **Frontmatter Stripping** — `remarkStripFrontmatter()` removes YAML metadata from sheets
+2. **Form Field Transform** — `replaceUnderscoreFills()` converts underscore sequences to styled spans
+
+### Required CSS (copy from `templates/print-design.html`):
+
+```css
+/* Compact sheet styling */
+.sheet-block h1 { font-size: 1.1rem; margin: 0 0 0.25rem 0; color: var(--color-electric-blue); }
+.sheet-block h2 { font-size: 0.9rem; margin: 0.5rem 0 0.15rem 0; color: var(--color-hot-pink); }
+.sheet-block p { margin: 0.1rem 0; font-size: 0.75rem; line-height: 1.3; }
+.sheet-block table { margin: 0.25rem 0; font-size: 0.7rem; }
+
+/* Form field lines */
+.sheet-block .fill-line { display: inline-block; border-bottom: 1px solid var(--color-border-gray); height: 1em; }
+.sheet-block .fill-sm { width: 4rem; }
+.sheet-block .fill-md { width: 8rem; }
+.sheet-block .fill-lg { width: 100%; max-width: 20rem; }
+.sheet-block .fill-full { width: 100%; }
+
+/* Hide bullets on fill-line list items */
+.sheet-block li:has(.fill-line) { list-style: none; margin-left: -1rem; }
+.sheet-block li .fill-line { width: 100%; display: block; }
+```
+
+This ensures sheets render identically in both print and web outputs.
