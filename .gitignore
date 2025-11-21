@@ -60,3 +60,6 @@ data/test/
 # Backup files
 *.backup
 .nyc_output/
+
+# Generated HTML output (keeps README.md)
+data/html/**/*.html

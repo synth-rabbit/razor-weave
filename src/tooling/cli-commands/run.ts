@@ -18,6 +18,14 @@ import {
   statusCampaign,
   type ListCampaignsFilters,
 } from './review.js';
+import {
+  buildPrintHtml,
+  listPrintBuilds,
+  diffPrintBuild,
+  promotePrintBuild,
+} from '../html-gen/print/index.js';
+import { getDatabase } from '../database/index.js';
+import { HtmlBuildClient } from '../html-gen/build-client.js';
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -137,6 +145,58 @@ async function main(): Promise<void> {
         log.error('Available subcommands: book, chapter, list, view, status');
         process.exit(1);
       }
+    } else if (command === 'html' && args[1] === 'print') {
+      const subcommand = args[2];
+
+      switch (subcommand) {
+        case 'build': {
+          const result = await buildPrintHtml({
+            bookPath: 'books/core/v1',
+            chaptersDir: 'books/core/v1/chapters',
+            sheetsDir: 'books/core/v1/sheets',
+            outputPath: 'data/html/print-design/core-rulebook.html',
+          });
+          console.log(JSON.stringify(result, null, 2));
+          process.exit(result.success ? 0 : 1);
+          break;
+        }
+        case 'list': {
+          const db = getDatabase();
+          const result = listPrintBuilds(db.db);
+          console.log(JSON.stringify(result, null, 2));
+          break;
+        }
+        case 'diff': {
+          const buildId = args[3];
+          if (!buildId) {
+            log.error('Usage: html print diff <build-id>');
+            process.exit(1);
+          }
+          const db = getDatabase();
+          const client = new HtmlBuildClient(db.db);
+          const latest = client.getLatestBuild('print-design');
+          if (!latest) {
+            log.error('No builds found');
+            process.exit(1);
+          }
+          const result = diffPrintBuild(db.db, buildId, latest.buildId);
+          console.log(JSON.stringify(result, null, 2));
+          break;
+        }
+        case 'promote': {
+          const result = await promotePrintBuild({
+            sourcePath: 'data/html/print-design/core-rulebook.html',
+            targetPath: 'books/core/v1/exports/html/core_rulebook.html',
+          });
+          console.log(JSON.stringify(result, null, 2));
+          process.exit(result.success ? 0 : 1);
+          break;
+        }
+        default:
+          log.error(`Unknown html print command: ${subcommand}`);
+          log.error('Available: build, list, diff, promote');
+          process.exit(1);
+      }
     } else {
       log.error(`Unknown command: ${command}`);
       log.error('Available commands:');
@@ -150,6 +210,10 @@ async function main(): Promise<void> {
       log.error('  review list [--status=...] [--content-type=...] - List campaigns');
       log.error('  review view <id> [--format=text|json]    - View campaign details');
       log.error('  review status <id>                        - Check campaign status');
+      log.error('  html print build                          - Build print-design HTML');
+      log.error('  html print list                           - List print builds');
+      log.error('  html print diff <build-id>                - Diff vs latest build');
+      log.error('  html print promote                        - Copy to exports/');
       process.exit(1);
     }
   } catch (error) {
