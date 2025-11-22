@@ -60,35 +60,52 @@ export function getAvailableFonts(): {
 
 /**
  * Register custom fonts with a PDFKit document.
+ * Falls back to system fonts when custom fonts aren't available.
  */
 export function registerFonts(doc: PDFKit.PDFDocument): void {
-  // Space Grotesk
+  // Space Grotesk - fallback to Helvetica variants
   if (fontExists(fontPaths.spaceGrotesk.medium)) {
     doc.registerFont('SpaceGrotesk-Medium', fontPaths.spaceGrotesk.medium);
+  } else {
+    doc.registerFont('SpaceGrotesk-Medium', 'Helvetica');
   }
   if (fontExists(fontPaths.spaceGrotesk.semiBold)) {
     doc.registerFont('SpaceGrotesk-SemiBold', fontPaths.spaceGrotesk.semiBold);
+  } else {
+    doc.registerFont('SpaceGrotesk-SemiBold', 'Helvetica-Bold');
   }
   if (fontExists(fontPaths.spaceGrotesk.bold)) {
     doc.registerFont('SpaceGrotesk-Bold', fontPaths.spaceGrotesk.bold);
+  } else {
+    doc.registerFont('SpaceGrotesk-Bold', 'Helvetica-Bold');
   }
 
-  // Inter
+  // Inter - fallback to Helvetica variants
   if (fontExists(fontPaths.inter.regular)) {
     doc.registerFont('Inter-Regular', fontPaths.inter.regular);
+  } else {
+    doc.registerFont('Inter-Regular', 'Helvetica');
   }
   if (fontExists(fontPaths.inter.medium)) {
     doc.registerFont('Inter-Medium', fontPaths.inter.medium);
+  } else {
+    doc.registerFont('Inter-Medium', 'Helvetica');
   }
   if (fontExists(fontPaths.inter.semiBold)) {
     doc.registerFont('Inter-SemiBold', fontPaths.inter.semiBold);
+  } else {
+    doc.registerFont('Inter-SemiBold', 'Helvetica-Bold');
   }
 
-  // JetBrains Mono
+  // JetBrains Mono - fallback to Courier
   if (fontExists(fontPaths.jetBrainsMono.regular)) {
     doc.registerFont('JetBrainsMono-Regular', fontPaths.jetBrainsMono.regular);
+  } else {
+    doc.registerFont('JetBrainsMono-Regular', 'Courier');
   }
   if (fontExists(fontPaths.jetBrainsMono.medium)) {
     doc.registerFont('JetBrainsMono-Medium', fontPaths.jetBrainsMono.medium);
+  } else {
+    doc.registerFont('JetBrainsMono-Medium', 'Courier');
   }
 }
