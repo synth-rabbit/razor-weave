@@ -2,3 +2,4 @@
 export * from './text';
 export * from './callouts';
 export * from './tables';
+export * from './chapter-opener';
