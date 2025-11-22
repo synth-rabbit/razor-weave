@@ -1,16 +1,16 @@
 // src/tooling/pdf-gen/renderers/sheets.ts
 import fs from 'fs';
-import path from 'path';
 import { colors } from '../utils/colors';
 import { grid, defaultConfig } from '../utils/layout';
+import { projectPath } from '../utils/paths';
 import type { SheetData, ContentBlock, TableData, ListData, HeadingData } from '../types';
 
 // Corner image paths
 const CORNER_IMAGES = {
-  tl: path.join(process.cwd(), 'src/site/public/images/decorative/corner-tl.png'),
-  tr: path.join(process.cwd(), 'src/site/public/images/decorative/corner-tr.png'),
-  bl: path.join(process.cwd(), 'src/site/public/images/decorative/corner-bl.png'),
-  br: path.join(process.cwd(), 'src/site/public/images/decorative/corner-br.png'),
+  tl: projectPath('src/site/public/images/decorative/corner-tl.png'),
+  tr: projectPath('src/site/public/images/decorative/corner-tr.png'),
+  bl: projectPath('src/site/public/images/decorative/corner-bl.png'),
+  br: projectPath('src/site/public/images/decorative/corner-br.png'),
 };
 
 const { pageWidth, pageHeight, margins } = defaultConfig;

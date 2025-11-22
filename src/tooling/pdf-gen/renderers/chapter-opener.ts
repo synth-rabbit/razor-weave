@@ -1,24 +1,24 @@
 // src/tooling/pdf-gen/renderers/chapter-opener.ts
 import fs from 'fs';
-import path from 'path';
 import { colors } from '../utils/colors';
 import { defaultConfig } from '../utils/layout';
+import { projectPath } from '../utils/paths';
 import { drawPerspectiveGrid, drawGradientStripe } from '../graphics/grid-background';
 
 // Corner image paths
 const CORNER_IMAGES = {
-  tl: path.join(process.cwd(), 'src/site/public/images/decorative/corner-tl.png'),
-  tr: path.join(process.cwd(), 'src/site/public/images/decorative/corner-tr.png'),
-  bl: path.join(process.cwd(), 'src/site/public/images/decorative/corner-bl.png'),
-  br: path.join(process.cwd(), 'src/site/public/images/decorative/corner-br.png'),
+  tl: projectPath('src/site/public/images/decorative/corner-tl.png'),
+  tr: projectPath('src/site/public/images/decorative/corner-tr.png'),
+  bl: projectPath('src/site/public/images/decorative/corner-bl.png'),
+  br: projectPath('src/site/public/images/decorative/corner-br.png'),
 };
 
 // Part background images
 const PART_BACKGROUNDS: Record<string, string> = {
-  'I': path.join(process.cwd(), 'data/pdfs/assets/part-1-background.png'),
-  'II': path.join(process.cwd(), 'data/pdfs/assets/part-2-background.png'),
-  'III': path.join(process.cwd(), 'data/pdfs/assets/part-3-background.png'),
-  'IV': path.join(process.cwd(), 'data/pdfs/assets/part-4-background.png'),
+  'I': projectPath('data/pdfs/assets/part-1-background.png'),
+  'II': projectPath('data/pdfs/assets/part-2-background.png'),
+  'III': projectPath('data/pdfs/assets/part-3-background.png'),
+  'IV': projectPath('data/pdfs/assets/part-4-background.png'),
 };
 
 /**

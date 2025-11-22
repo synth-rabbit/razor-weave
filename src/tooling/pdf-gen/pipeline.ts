@@ -13,6 +13,7 @@ import { renderTable } from './renderers/tables';
 import { renderSheet } from './renderers/sheets';
 import { createPageState, fitsOnPage, getContentStartY, getBodyContentX, grid, defaultConfig } from './utils/layout';
 import { colors } from './utils/colors';
+import { projectPath } from './utils/paths';
 import type { ChapterContent, ContentBlock, PageState, TableData, ListData, HeadingData, SheetData } from './types';
 
 /**
@@ -78,7 +79,7 @@ export async function generatePDF(
   let state = createPageState();
 
   // Render cover page (uses the initial page created by PDFKit)
-  const logoPath = path.join(process.cwd(), 'src/site/public/images/logos/main-logo.svg');
+  const logoPath = projectPath('src/site/public/images/logos/main-logo.svg');
   doc.addNamedDestination('cover');
   renderCoverPage(doc, logoPath);
   state.currentPage = 1;

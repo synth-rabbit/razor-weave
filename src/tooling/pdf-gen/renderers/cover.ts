@@ -1,13 +1,13 @@
 // src/tooling/pdf-gen/renderers/cover.ts
 import { colors } from '../utils/colors';
 import { defaultConfig } from '../utils/layout';
+import { projectPath } from '../utils/paths';
 import { drawPerspectiveGrid, drawGradientStripe } from '../graphics/grid-background';
 import fs from 'fs';
-import path from 'path';
 import SVGtoPDF from 'svg-to-pdfkit';
 
 // Cover artwork path
-const COVER_ARTWORK = path.join(process.cwd(), 'data/pdfs/assets/cover-artwork.png');
+const COVER_ARTWORK = projectPath('data/pdfs/assets/cover-artwork.png');
 
 /**
  * Render a cover page for the rulebook.

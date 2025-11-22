@@ -2,3 +2,4 @@
 export * from './colors';
 export * from './layout';
 export * from './fonts';
+export * from './paths';
