@@ -787,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
       search: {
         label: 'Search',
         shortcuts: [
-          { keys: 'Ctrl+KeyK', label: 'Quick Jump search', action: 'quickJump', note: '⌘K on Mac' },
+          { keys: 'Ctrl+KeyK', label: 'Quick Jump search', action: 'quickJump' },
         ]
       }
     };
