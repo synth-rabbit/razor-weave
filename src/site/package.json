@@ -4,7 +4,8 @@
   "description": "Static website for razorweave.com",
   "private": true,
   "scripts": {
-    "dev": "live-server src/pages --port=3000 --open=/index.html",
+    "dev": "vite",
+    "dev:legacy": "live-server src/pages --port=3000 --open=/index.html",
     "build": "node scripts/build.js",
     "deploy": "pnpm build && gh-pages -d dist",
     "test": "playwright test",
@@ -16,11 +17,17 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "live-server": "^1.2.2",
+    "fs-extra": "^11.1.1",
     "gh-pages": "^6.0.0",
-    "fs-extra": "^11.1.1"
+    "live-server": "^1.2.2",
+    "vite": "^7.2.4"
   },
-  "keywords": ["ttrpg", "tabletop", "rpg", "razorweave"],
+  "keywords": [
+    "ttrpg",
+    "tabletop",
+    "rpg",
+    "razorweave"
+  ],
   "author": "Panda Edwards",
   "license": "UNLICENSED"
 }
