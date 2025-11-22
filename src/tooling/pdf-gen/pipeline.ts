@@ -4,10 +4,10 @@ import path from 'path';
 import { createPDFDocument } from './document';
 import { parseHTMLFile, extractChapters } from './parser';
 import { renderChapterOpener } from './renderers/chapter-opener';
-import { renderParagraph, renderHeading } from './renderers/text';
+import { renderParagraph } from './renderers/text';
 import { renderExampleBox, renderGMBox } from './renderers/callouts';
 import { renderTable } from './renderers/tables';
-import { defaultConfig, createPageState, fitsOnPage, getContentStartY, getBodyContentX, grid } from './utils/layout';
+import { createPageState, fitsOnPage, getContentStartY, getBodyContentX, grid } from './utils/layout';
 import { colors } from './utils/colors';
 import type { ChapterContent, ContentBlock, PageState, TableData, ListData } from './types';
 
@@ -154,7 +154,7 @@ function renderContentBlock(
 /**
  * Estimate the height of a content block.
  */
-function estimateBlockHeight(doc: PDFKit.PDFDocument, block: ContentBlock): number {
+function estimateBlockHeight(_doc: PDFKit.PDFDocument, block: ContentBlock): number {
   // Rough estimates - can be refined
   switch (block.type) {
     case 'paragraph':

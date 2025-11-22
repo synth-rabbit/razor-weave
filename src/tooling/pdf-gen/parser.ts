@@ -130,7 +130,7 @@ function extractContentBlocks($: CheerioAPI, $parent: CheerioSelection): Content
 /**
  * Extract text content from an example or GM box.
  */
-function extractBoxContent($: CheerioAPI, $box: CheerioSelection): string {
+function extractBoxContent(_$: CheerioAPI, $box: CheerioSelection): string {
   // Remove the title (strong/b element) and get remaining text
   const $clone = $box.clone();
   $clone.find('strong, b').first().remove();
