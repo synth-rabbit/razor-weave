@@ -1,0 +1,105 @@
+/* ==========================================================================
+   PRINT.CSS - Print-Only Styles
+   Loaded with media="print" - only applies when printing (Cmd+P)
+   ========================================================================== */
+
+@media print {
+  /* ---------------------------------------------------------------------
+     Page Break Control for Sheets
+     Critical: Each sheet starts on a new page
+     --------------------------------------------------------------------- */
+  .sheet-block {
+    page-break-before: always;
+    break-before: page;
+    page-break-after: auto;
+    break-after: auto;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* First sheet in a section shouldn't force break if already at page start */
+  #ch-27-sheets .sheet-block:first-of-type {
+    page-break-before: auto;
+    break-before: auto;
+  }
+
+  /* ---------------------------------------------------------------------
+     Hide Interactive/Screen-Only Elements
+     --------------------------------------------------------------------- */
+  .reader-toc,
+  .reading-progress,
+  .quick-jump-modal,
+  .dark-mode-toggle,
+  .texture-overlay,
+  header nav,
+  footer {
+    display: none !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     Full-Width Print Layout
+     --------------------------------------------------------------------- */
+  .reader-container {
+    display: block;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .reader-content {
+    max-width: 100%;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  /* ---------------------------------------------------------------------
+     Sheet Print Enhancements
+     --------------------------------------------------------------------- */
+  .sheet-block {
+    /* Remove clip-path for cleaner print rendering */
+    clip-path: none;
+
+    /* Solid border for print clarity */
+    border: 2px solid #000;
+    border-left-width: 4px;
+
+    /* White background ensures clean print */
+    background: #fff !important;
+
+    /* Prevent border splitting across pages */
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Fill lines need darker borders for print */
+  .fill-line {
+    border-bottom-color: #666;
+    border-bottom-width: 1px;
+  }
+
+  /* ---------------------------------------------------------------------
+     Part/Chapter Page Breaks
+     --------------------------------------------------------------------- */
+  [id^="part-"] {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Avoid orphaned headings */
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Keep lists and tables together when possible */
+  ul, ol, table {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Minimum orphans/widows */
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+}

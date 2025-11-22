@@ -63,3 +63,4 @@ data/test/
 
 # Generated HTML output (keeps README.md)
 data/html/**/*.html
+data/production-mirror/
