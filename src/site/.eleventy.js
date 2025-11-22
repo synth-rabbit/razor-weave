@@ -20,6 +20,12 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addWatchTarget("src/styles/");
   eleventyConfig.addWatchTarget("src/scripts/");
 
+  // Dev server configuration
+  eleventyConfig.setServerOptions({
+    // Serve index.html for directory requests
+    indexFileName: "index.html"
+  });
+
   return {
     dir: {
       input: "pages",
