@@ -1,6 +1,13 @@
 // src/tooling/pdf-gen/cli.ts
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Project root is 3 levels up from src/tooling/pdf-gen/
+const PROJECT_ROOT = path.resolve(__dirname, '../../..');
 
 export interface PDFBuildOptions {
   input?: string;
@@ -21,8 +28,8 @@ export async function buildPDF(options: PDFBuildOptions = {}): Promise<void> {
     quick = false,
   } = options;
 
-  const inputPath = path.resolve(process.cwd(), input);
-  const outputPath = path.resolve(process.cwd(), output);
+  const inputPath = path.resolve(PROJECT_ROOT, input);
+  const outputPath = path.resolve(PROJECT_ROOT, output);
 
   console.log('Building PDF...');
   console.log(`  Input:  ${inputPath}`);
