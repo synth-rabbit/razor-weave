@@ -40,6 +40,12 @@
   <link rel="stylesheet" href="{{ style }}">
     {% endfor %}
   {% endif %}
+  {# Inline styles for page-specific CSS #}
+  {% if inlineStyles %}
+  <style>
+{{ inlineStyles | safe }}
+  </style>
+  {% endif %}
 </head>
 <body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
   {% include "partials/header.njk" %}
