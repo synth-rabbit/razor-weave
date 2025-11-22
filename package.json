@@ -35,6 +35,7 @@
     "html:web:list": "tsx src/tooling/cli-commands/run.ts html web list",
     "html:web:diff": "tsx src/tooling/cli-commands/run.ts html web diff",
     "html:web:promote": "tsx src/tooling/cli-commands/run.ts html web promote",
+    "pdf:build": "pnpm --filter @razorweave/tooling pdf:build",
     "site:dev": "pnpm --filter razorweave-site dev",
     "site:build": "pnpm --filter razorweave-site build",
     "site:test": "pnpm --filter razorweave-site test",
