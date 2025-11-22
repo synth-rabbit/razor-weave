@@ -29,6 +29,11 @@ jobs:
           cd src/site
           pnpm install
 
+      - name: Build site
+        run: |
+          cd src/site
+          pnpm build
+
       - name: Install Playwright browsers
         run: |
           cd src/site
