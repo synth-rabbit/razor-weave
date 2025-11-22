@@ -256,6 +256,40 @@ export class CampaignClient {
   }
 
   /**
+   * Creates multiple persona reviews in a single transaction.
+   * More efficient than calling createPersonaReview() in a loop.
+   *
+   * @param reviews - Array of review data to create
+   * @returns Array of database row IDs for the created reviews
+   */
+  createPersonaReviews(reviews: PersonaReviewData[]): number[] {
+    const createAll = this.db.transaction(() => {
+      const ids: number[] = [];
+      const stmt = this.db.prepare(`
+        INSERT INTO persona_reviews (
+          campaign_id, persona_id, review_data,
+          agent_execution_time, status
+        ) VALUES (?, ?, ?, ?, ?)
+      `);
+
+      for (const data of reviews) {
+        const result = stmt.run(
+          data.campaignId,
+          data.personaId,
+          JSON.stringify(data.reviewData),
+          data.agentExecutionTime ?? null,
+          'completed'
+        );
+        ids.push(result.lastInsertRowid as number);
+      }
+
+      return ids;
+    });
+
+    return createAll();
+  }
+
+  /**
    * Retrieves a persona review by its database ID.
    *
    * @param id - The review row ID

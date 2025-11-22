@@ -20,6 +20,8 @@ export class ProjectDatabase {
 
     this.db = new Database(finalPath);
     this.db.pragma('journal_mode = WAL');
+    this.db.pragma('busy_timeout = 5000'); // Wait up to 5s for locks
+    this.db.pragma('synchronous = NORMAL'); // Faster writes, still safe with WAL
 
     // Initialize schema
     createTables(this.db);
@@ -37,6 +39,14 @@ export class ProjectDatabase {
 
   getDb(): Database.Database {
     return this.db;
+  }
+
+  /**
+   * Execute a function within a transaction.
+   * All operations inside will be atomic - either all succeed or all rollback.
+   */
+  transaction<T>(fn: () => T): T {
+    return this.db.transaction(fn)();
   }
 }
 

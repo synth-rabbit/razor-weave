@@ -39,41 +39,45 @@ export class PersonaClient {
   create(data: PersonaData): string {
     const id = data.id || this.generateId(data.type);
 
-    // Insert main persona record
-    const stmt = this.db.prepare(`
-      INSERT INTO personas (
-        id, name, type, archetype, experience_level,
-        fiction_first_alignment, narrative_mechanics_comfort,
-        gm_philosophy, genre_flexibility,
-        primary_cognitive_style, secondary_cognitive_style,
-        schema_version, generated_seed
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
+    // Wrap in transaction for atomicity (persona + dimensions together)
+    const createPersona = this.db.transaction(() => {
+      // Insert main persona record
+      const stmt = this.db.prepare(`
+        INSERT INTO personas (
+          id, name, type, archetype, experience_level,
+          fiction_first_alignment, narrative_mechanics_comfort,
+          gm_philosophy, genre_flexibility,
+          primary_cognitive_style, secondary_cognitive_style,
+          schema_version, generated_seed
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `);
 
-    stmt.run(
-      id,
-      data.name,
-      data.type,
-      data.archetype,
-      data.experience_level,
-      data.fiction_first_alignment,
-      data.narrative_mechanics_comfort,
-      data.gm_philosophy,
-      data.genre_flexibility,
-      data.primary_cognitive_style,
-      data.secondary_cognitive_style || null,
-      data.schema_version || 1,
-      data.generated_seed || null
-    );
+      stmt.run(
+        id,
+        data.name,
+        data.type,
+        data.archetype,
+        data.experience_level,
+        data.fiction_first_alignment,
+        data.narrative_mechanics_comfort,
+        data.gm_philosophy,
+        data.genre_flexibility,
+        data.primary_cognitive_style,
+        data.secondary_cognitive_style || null,
+        data.schema_version || 1,
+        data.generated_seed || null
+      );
 
-    // Insert multi-value dimensions
-    this.setDimensions(id, {
-      playstyle_modifiers: data.playstyle_modifiers || [],
-      social_emotional_traits: data.social_emotional_traits || [],
-      system_exposures: data.system_exposures || [],
-      life_contexts: data.life_contexts || []
+      // Insert multi-value dimensions
+      this.setDimensions(id, {
+        playstyle_modifiers: data.playstyle_modifiers || [],
+        social_emotional_traits: data.social_emotional_traits || [],
+        system_exposures: data.system_exposures || [],
+        life_contexts: data.life_contexts || []
+      });
     });
 
+    createPersona();
     return id;
   }
 
