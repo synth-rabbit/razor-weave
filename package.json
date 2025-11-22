@@ -24,6 +24,7 @@
     "review:status": "tsx src/tooling/cli-commands/run.ts review status",
     "review:list": "tsx src/tooling/cli-commands/run.ts review list",
     "review:view": "tsx src/tooling/cli-commands/run.ts review view",
+    "review:analyze": "tsx src/tooling/cli-commands/run.ts review analyze",
     "personas:hydrate": "tsx src/tooling/cli-commands/run.ts hydrate-core",
     "personas:generate": "tsx src/tooling/cli-commands/run.ts generate",
     "personas:stats": "tsx src/tooling/cli-commands/run.ts stats",
@@ -43,6 +44,7 @@
     "site:deploy": "pnpm --filter razorweave-site deploy"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
     "@razorweave/tooling": "workspace:*",
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
