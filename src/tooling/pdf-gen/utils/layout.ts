@@ -21,13 +21,22 @@ export const defaultConfig: PDFConfig = {
 
 /**
  * Grid system: 12 columns within live area.
+ * Two-column layout for content pages.
  */
 export const grid = {
   columns: 12,
   columnWidth: 42,  // 504 / 12
   gutter: 18,
-  bodyColumns: 8,   // Body text spans 8 columns
-  bodyWidth: 336,   // 8 * 42
+  // Two-column layout
+  twoColumn: {
+    gutter: 18,
+    columnWidth: 243,  // (504 - 18) / 2
+    leftX: 54,         // margins.left
+    rightX: 315,       // margins.left + columnWidth + gutter
+  },
+  // Legacy single column (for fallback)
+  bodyColumns: 8,
+  bodyWidth: 336,
 } as const;
 
 /**
@@ -62,8 +71,13 @@ export function createPageState(): PageState {
   };
 }
 
+// Minimum space needed to avoid orphan content on a page
+const ORPHAN_THRESHOLD = 100; // At least 100pt of content space
+
 /**
  * Check if content fits on current page.
+ * Also considers orphan prevention - if remaining space is too small,
+ * prefer starting on a new page to avoid orphaned lines.
  */
 export function fitsOnPage(
   state: PageState,
@@ -71,7 +85,20 @@ export function fitsOnPage(
   config: PDFConfig = defaultConfig
 ): boolean {
   const bottomLimit = config.pageHeight - config.margins.bottom;
-  return state.yPosition + contentHeight <= bottomLimit;
+  const remainingSpace = bottomLimit - state.yPosition;
+
+  // If content fits completely, allow it
+  if (state.yPosition + contentHeight <= bottomLimit) {
+    return true;
+  }
+
+  // If we have very little remaining space, don't try to squeeze content
+  // This prevents orphaned lines at the bottom of pages
+  if (remainingSpace < ORPHAN_THRESHOLD) {
+    return false;
+  }
+
+  return false;
 }
 
 /**

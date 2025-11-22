@@ -63,3 +63,7 @@ data/test/
 
 # Generated HTML output (keeps README.md)
 data/html/**/*.html
+
+# Generated PDFs (keeps assets like artwork)
+data/pdfs/draft/
+data/pdfs/release/

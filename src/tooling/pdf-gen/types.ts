@@ -38,8 +38,19 @@ export interface SectionContent {
 }
 
 export interface ContentBlock {
-  type: 'paragraph' | 'example' | 'gm' | 'table' | 'list' | 'hr';
-  content: string | TableData | ListData;
+  type: 'paragraph' | 'example' | 'gm' | 'table' | 'list' | 'hr' | 'heading' | 'sheet';
+  content: string | TableData | ListData | HeadingData | SheetData;
+}
+
+export interface SheetData {
+  id: string;
+  title: string;
+  blocks: ContentBlock[];
+}
+
+export interface HeadingData {
+  level: 3 | 4;
+  text: string;
 }
 
 export interface TableData {
