@@ -102,4 +102,20 @@ test.describe('Visual Regression', () => {
       maxDiffPixelRatio: 0.01,
     });
   });
+
+  test('read.html keyboard shortcuts help panel', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto('/read.html');
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(() => document.fonts.ready);
+
+    // Open help panel with ? key
+    await page.keyboard.press('?');
+    await page.waitForTimeout(400); // Wait for slide-in animation
+
+    await expect(page).toHaveScreenshot('read-help-panel.png', {
+      fullPage: false,
+      maxDiffPixelRatio: 0.01,
+    });
+  });
 });
