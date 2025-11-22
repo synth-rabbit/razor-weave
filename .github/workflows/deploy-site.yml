@@ -29,15 +29,20 @@ jobs:
           cd src/site
           pnpm install
 
+      - name: Build site
+        run: |
+          cd src/site
+          pnpm build
+
       - name: Install Playwright browsers
         run: |
           cd src/site
           pnpm exec playwright install --with-deps chromium
 
-      - name: Run Playwright tests
+      - name: Run Playwright e2e tests
         run: |
           cd src/site
-          pnpm test --project=desktop-chrome
+          pnpm exec playwright test tests/e2e --project=desktop-chrome
 
       - name: Upload test artifacts on failure
         if: failure()

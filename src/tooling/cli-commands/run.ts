@@ -252,7 +252,7 @@ async function main(): Promise<void> {
         case 'promote': {
           const result = await promoteWebBuild({
             sourcePath: resolve(REPO_ROOT, 'data/html/web-reader/core-rulebook.html'),
-            targetPath: resolve(REPO_ROOT, 'src/site/src/pages/read.html'),
+            targetPath: resolve(REPO_ROOT, 'src/site/pages/read.html'),
           });
           console.log(result.success ? 'Promoted successfully!' : `Failed: ${result.error}`);
           process.exit(result.success ? 0 : 1);

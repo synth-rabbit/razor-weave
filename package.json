@@ -34,7 +34,12 @@
     "html:web:build": "tsx src/tooling/cli-commands/run.ts html web build",
     "html:web:list": "tsx src/tooling/cli-commands/run.ts html web list",
     "html:web:diff": "tsx src/tooling/cli-commands/run.ts html web diff",
-    "html:web:promote": "tsx src/tooling/cli-commands/run.ts html web promote"
+    "html:web:promote": "tsx src/tooling/cli-commands/run.ts html web promote",
+    "site:dev": "pnpm --filter razorweave-site dev",
+    "site:build": "pnpm --filter razorweave-site build",
+    "site:test": "pnpm --filter razorweave-site test",
+    "site:test:visual": "pnpm --filter razorweave-site test:visual",
+    "site:deploy": "pnpm --filter razorweave-site deploy"
   },
   "devDependencies": {
     "@razorweave/tooling": "workspace:*",

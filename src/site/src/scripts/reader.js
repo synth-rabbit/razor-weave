@@ -455,4 +455,615 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
+  // ============================================================================
+  // BOOKMARKING SYSTEM
+  // ============================================================================
+
+  const BOOKMARKS_KEY = 'razorweave-bookmarks';
+  const MAX_BOOKMARKS = 10;
+
+  // Get bookmarks from localStorage
+  function getBookmarks() {
+    try {
+      const stored = localStorage.getItem(BOOKMARKS_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.error('Error loading bookmarks:', e);
+      return [];
+    }
+  }
+
+  // Save bookmarks to localStorage
+  function saveBookmarks(bookmarks) {
+    try {
+      localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+    } catch (e) {
+      console.error('Error saving bookmarks:', e);
+    }
+  }
+
+  // Check if section is bookmarked
+  function isBookmarked(sectionId) {
+    const bookmarks = getBookmarks();
+    return bookmarks.some(b => b.id === sectionId);
+  }
+
+  // Add bookmark button to headings
+  function addBookmarkButtons() {
+    const headings = document.querySelectorAll('.reader-content h2[id], .reader-content h3[id]');
+
+    headings.forEach(heading => {
+      const sectionId = heading.getAttribute('id');
+      if (!sectionId) return;
+
+      const button = document.createElement('button');
+      button.className = 'bookmark-btn';
+      button.setAttribute('aria-label', 'Bookmark this section');
+      button.setAttribute('data-section-id', sectionId);
+      button.title = 'Bookmark this section';
+
+      // Set initial state
+      if (isBookmarked(sectionId)) {
+        button.classList.add('bookmarked');
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+      } else {
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+      }
+
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleBookmark(sectionId, heading.textContent.trim(), button);
+      });
+
+      heading.appendChild(button);
+    });
+  }
+
+  // Toggle bookmark
+  function toggleBookmark(sectionId, title, button) {
+    let bookmarks = getBookmarks();
+    const existing = bookmarks.findIndex(b => b.id === sectionId);
+
+    if (existing !== -1) {
+      // Remove bookmark
+      bookmarks.splice(existing, 1);
+      button.classList.remove('bookmarked');
+      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+    } else {
+      // Add bookmark
+      if (bookmarks.length >= MAX_BOOKMARKS) {
+        alert(`Maximum ${MAX_BOOKMARKS} bookmarks allowed. Remove one to add another.`);
+        return;
+      }
+
+      bookmarks.push({
+        id: sectionId,
+        title: title,
+        timestamp: Date.now()
+      });
+
+      button.classList.add('bookmarked');
+      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+    }
+
+    saveBookmarks(bookmarks);
+    updateBookmarksDropdown();
+  }
+
+  // Create bookmarks dropdown in breadcrumb
+  function createBookmarksDropdown() {
+    const breadcrumb = document.querySelector('.breadcrumb');
+    if (!breadcrumb) return;
+
+    const separator = document.createElement('span');
+    separator.className = 'breadcrumb-separator';
+    separator.textContent = '|';
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'bookmarks-dropdown';
+    dropdown.innerHTML = `
+      <button class="bookmarks-toggle breadcrumb-icon-btn" aria-label="My Bookmarks" title="Bookmarks">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <span class="bookmarks-count">0</span>
+      </button>
+      <div class="bookmarks-menu" id="bookmarksMenu">
+        <div class="bookmarks-header">
+          <h3>My Bookmarks</h3>
+        </div>
+        <ul class="bookmarks-list" id="bookmarksList"></ul>
+      </div>
+    `;
+
+    // Append to breadcrumb
+    breadcrumb.appendChild(separator);
+    breadcrumb.appendChild(dropdown);
+
+    const toggle = dropdown.querySelector('.bookmarks-toggle');
+    const menu = dropdown.querySelector('.bookmarks-menu');
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('open');
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+
+    updateBookmarksDropdown();
+  }
+
+  // Update bookmarks dropdown content
+  function updateBookmarksDropdown() {
+    const bookmarksList = document.getElementById('bookmarksList');
+    const bookmarksCount = document.querySelector('.bookmarks-count');
+    if (!bookmarksList || !bookmarksCount) return;
+
+    const bookmarks = getBookmarks();
+    bookmarksCount.textContent = bookmarks.length;
+
+    if (bookmarks.length === 0) {
+      bookmarksList.innerHTML = '<li class="bookmarks-empty">No bookmarks yet</li>';
+      return;
+    }
+
+    bookmarksList.innerHTML = bookmarks.map(bookmark => `
+      <li class="bookmark-item">
+        <a href="#${bookmark.id}" class="bookmark-link">
+          ${bookmark.title}
+        </a>
+        <button class="bookmark-remove" data-id="${bookmark.id}" aria-label="Remove bookmark">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </li>
+    `).join('');
+
+    // Add remove handlers
+    bookmarksList.querySelectorAll('.bookmark-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const sectionId = btn.dataset.id;
+        removeBookmark(sectionId);
+      });
+    });
+
+    // Close dropdown when clicking bookmark link
+    bookmarksList.querySelectorAll('.bookmark-link').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelector('.bookmarks-menu')?.classList.remove('open');
+      });
+    });
+  }
+
+  // Remove bookmark
+  function removeBookmark(sectionId) {
+    let bookmarks = getBookmarks();
+    bookmarks = bookmarks.filter(b => b.id !== sectionId);
+    saveBookmarks(bookmarks);
+    updateBookmarksDropdown();
+
+    // Update button if visible
+    const button = document.querySelector(`.bookmark-btn[data-section-id="${sectionId}"]`);
+    if (button) {
+      button.classList.remove('bookmarked');
+      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+    }
+  }
+
+  // Initialize bookmarking
+  if (document.querySelector('.reader-content')) {
+    addBookmarkButtons();
+    createBookmarksDropdown();
+  }
+
+  // ============================================================================
+  // READER MODE (Distraction-Free)
+  // ============================================================================
+
+  const READER_MODE_KEY = 'razorweave-reader-mode';
+
+  // Get reader mode preference
+  function getReaderMode() {
+    return localStorage.getItem(READER_MODE_KEY) === 'true';
+  }
+
+  // Save reader mode preference
+  function setReaderMode(enabled) {
+    localStorage.setItem(READER_MODE_KEY, enabled.toString());
+  }
+
+  // Create reader mode toggle
+  function createReaderModeToggle() {
+    const breadcrumb = document.querySelector('.breadcrumb');
+    if (!breadcrumb) return;
+
+    const toggle = document.createElement('span');
+    toggle.className = 'breadcrumb-separator';
+    toggle.textContent = '|';
+
+    const button = document.createElement('button');
+    button.className = 'reader-mode-toggle breadcrumb-icon-btn';
+    button.setAttribute('aria-label', 'Toggle reader mode');
+    button.setAttribute('title', 'Reader Mode');
+    button.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    `;
+
+    // Append to breadcrumb
+    breadcrumb.appendChild(toggle);
+    breadcrumb.appendChild(button);
+
+    // Create floating close button for reader mode
+    const closeButton = document.createElement('button');
+    closeButton.className = 'reader-mode-close';
+    closeButton.setAttribute('aria-label', 'Exit reader mode');
+    closeButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    `;
+    document.body.appendChild(closeButton);
+
+    // Function to toggle reader mode
+    function toggleReaderMode(enabled) {
+      if (enabled) {
+        document.body.classList.add('reader-mode');
+      } else {
+        document.body.classList.remove('reader-mode');
+      }
+      setReaderMode(enabled);
+    }
+
+    // Apply saved preference
+    if (getReaderMode()) {
+      document.body.classList.add('reader-mode');
+    }
+
+    // Toggle button click
+    button.addEventListener('click', () => {
+      const isEnabled = document.body.classList.toggle('reader-mode');
+      setReaderMode(isEnabled);
+    });
+
+    // Close button click
+    closeButton.addEventListener('click', () => {
+      toggleReaderMode(false);
+    });
+
+    // Note: Escape key removed - conflicts with browser fullscreen in Firefox
+    // Users can click the X button to exit reader mode
+  }
+
+  // Initialize reader mode
+  if (document.querySelector('.reader-content')) {
+    createReaderModeToggle();
+  }
+
+  // ============================================================================
+  // KEYBOARD SHORTCUTS SYSTEM
+  // ============================================================================
+
+  function initKeyboardShortcuts() {
+    const readerContent = document.querySelector('.reader-content');
+    if (!readerContent) return;
+
+    // Shortcut definitions - used for both handling and help panel
+    const shortcutGroups = {
+      navigation: {
+        label: 'Navigation',
+        shortcuts: [
+          { keys: 'Alt+ArrowLeft', label: 'Previous chapter', action: 'prevChapter' },
+          { keys: 'Alt+ArrowRight', label: 'Next chapter', action: 'nextChapter' },
+          { keys: 'Alt+ArrowUp', label: 'Previous section', action: 'prevSection' },
+          { keys: 'Alt+ArrowDown', label: 'Next section', action: 'nextSection' },
+          { keys: 'Alt+Home', label: 'Top of document', action: 'goTop' },
+          { keys: 'Alt+End', label: 'Bottom of document', action: 'goBottom' },
+        ]
+      },
+      quickJumps: {
+        label: 'Quick Jumps',
+        shortcuts: [
+          { keys: 'Alt+KeyG', label: 'Glossary', action: 'jumpGlossary' },
+          { keys: 'Alt+KeyI', label: 'Index', action: 'jumpIndex' },
+          { keys: 'Alt+KeyS', label: 'Reference Sheets', action: 'jumpSheets' },
+        ]
+      },
+      bookmarks: {
+        label: 'Bookmarks',
+        shortcuts: [
+          { keys: 'Alt+KeyB', label: 'Toggle bookmark', action: 'toggleBookmark' },
+          { keys: 'Alt+Shift+KeyB', label: 'Open bookmarks', action: 'openBookmarks' },
+        ]
+      },
+      search: {
+        label: 'Search',
+        shortcuts: [
+          { keys: 'Ctrl+KeyK', label: 'Quick Jump search', action: 'quickJump' },
+        ]
+      }
+    };
+
+    // Get all chapter sections
+    function getChapters() {
+      return Array.from(readerContent.querySelectorAll('section[id^="ch-"]'));
+    }
+
+    // Get all section headings (h1, h2, h3 with IDs)
+    function getSectionHeadings() {
+      return Array.from(readerContent.querySelectorAll('h1[id], h2[id], h3[id]'));
+    }
+
+    // Find current section based on scroll position
+    function getCurrentHeadingIndex(headings) {
+      const scrollPos = window.scrollY + 150;
+      let currentIndex = 0;
+
+      for (let i = 0; i < headings.length; i++) {
+        if (headings[i].offsetTop <= scrollPos) {
+          currentIndex = i;
+        } else {
+          break;
+        }
+      }
+      return currentIndex;
+    }
+
+    // Scroll to element with offset for sticky breadcrumb
+    function scrollToElement(element) {
+      if (!element) return;
+      const offset = 80; // Account for sticky breadcrumb
+      const top = element.offsetTop - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+
+    // Navigation actions
+    const actions = {
+      prevChapter: () => {
+        const chapters = getChapters();
+        const currentIndex = getCurrentHeadingIndex(chapters);
+        if (currentIndex > 0) {
+          scrollToElement(chapters[currentIndex - 1]);
+        }
+      },
+      nextChapter: () => {
+        const chapters = getChapters();
+        const currentIndex = getCurrentHeadingIndex(chapters);
+        if (currentIndex < chapters.length - 1) {
+          scrollToElement(chapters[currentIndex + 1]);
+        }
+      },
+      prevSection: () => {
+        const headings = getSectionHeadings();
+        const currentIndex = getCurrentHeadingIndex(headings);
+        if (currentIndex > 0) {
+          scrollToElement(headings[currentIndex - 1]);
+        }
+      },
+      nextSection: () => {
+        const headings = getSectionHeadings();
+        const currentIndex = getCurrentHeadingIndex(headings);
+        if (currentIndex < headings.length - 1) {
+          scrollToElement(headings[currentIndex + 1]);
+        }
+      },
+      goTop: () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+      goBottom: () => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      },
+      jumpGlossary: () => {
+        const el = document.getElementById('ch-28-glossary');
+        scrollToElement(el);
+      },
+      jumpIndex: () => {
+        const el = document.getElementById('ch-29-index');
+        scrollToElement(el);
+      },
+      jumpSheets: () => {
+        const el = document.getElementById('ch-27-sheets-and-play-aids');
+        scrollToElement(el);
+      },
+      toggleBookmark: () => {
+        // Find current section and toggle its bookmark
+        const headings = getSectionHeadings();
+        const currentIndex = getCurrentHeadingIndex(headings);
+        const currentHeading = headings[currentIndex];
+        if (currentHeading && currentHeading.id) {
+          // Trigger the bookmark system if it exists
+          const bookmarkBtn = document.querySelector('.bookmark-btn');
+          if (bookmarkBtn) {
+            // Use existing bookmark functionality
+            const event = new CustomEvent('toggleBookmark', { detail: { id: currentHeading.id } });
+            document.dispatchEvent(event);
+          }
+        }
+      },
+      openBookmarks: () => {
+        const bookmarkBtn = document.querySelector('.bookmark-btn');
+        if (bookmarkBtn) {
+          bookmarkBtn.click();
+        }
+      },
+      quickJump: () => {
+        const quickJumpBtn = document.getElementById('breadcrumbSearchBtn');
+        if (quickJumpBtn) {
+          quickJumpBtn.click();
+        }
+      },
+      toggleHelp: () => {
+        toggleHelpPanel();
+      }
+    };
+
+    // Build key combo string from event
+    function getKeyCombo(e) {
+      let combo = '';
+      if (e.ctrlKey || e.metaKey) combo += 'Ctrl+';
+      if (e.altKey) combo += 'Alt+';
+      if (e.shiftKey) combo += 'Shift+';
+      combo += e.code;
+      return combo;
+    }
+
+    // Build lookup map from shortcut groups
+    const shortcutMap = {};
+    Object.values(shortcutGroups).forEach(group => {
+      group.shortcuts.forEach(shortcut => {
+        shortcutMap[shortcut.keys] = shortcut.action;
+      });
+    });
+
+    // Main keyboard event handler
+    document.addEventListener('keydown', (e) => {
+      // Ignore when typing in inputs
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+        return;
+      }
+
+      // ? key toggles help (without modifiers)
+      if (e.key === '?' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        toggleHelpPanel();
+        return;
+      }
+
+      const combo = getKeyCombo(e);
+      const actionName = shortcutMap[combo];
+
+      if (actionName && actions[actionName]) {
+        e.preventDefault();
+        actions[actionName]();
+      }
+    });
+
+    // ========== HELP PANEL ==========
+
+    let helpPanel = null;
+
+    function createHelpPanel() {
+      const panel = document.createElement('div');
+      panel.className = 'shortcuts-help-panel';
+      panel.innerHTML = `
+        <div class="shortcuts-help-header">
+          <h3>Keyboard Shortcuts</h3>
+          <button class="shortcuts-help-close" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="shortcuts-help-content">
+          ${Object.values(shortcutGroups).map(group => `
+            <div class="shortcuts-group">
+              <h4>${group.label}</h4>
+              ${group.shortcuts.map(s => `
+                <div class="shortcut-row">
+                  <kbd>${formatKeyDisplay(s.keys)}${s.note ? ` <span class="shortcut-note">${s.note}</span>` : ''}</kbd>
+                  <span>${s.label}</span>
+                </div>
+              `).join('')}
+            </div>
+          `).join('')}
+          <div class="shortcuts-group">
+            <h4>Help</h4>
+            <div class="shortcut-row">
+              <kbd>?</kbd>
+              <span>Toggle this panel</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      panel.querySelector('.shortcuts-help-close').addEventListener('click', () => {
+        toggleHelpPanel(false);
+      });
+
+      document.body.appendChild(panel);
+      return panel;
+    }
+
+    function formatKeyDisplay(keys) {
+      const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+
+      let formatted = keys
+        .replace('ArrowLeft', '←')
+        .replace('ArrowRight', '→')
+        .replace('ArrowUp', '↑')
+        .replace('ArrowDown', '↓')
+        .replace('Key', '');
+
+      if (isMac) {
+        formatted = formatted
+          .replace('Alt+', '⌥ ')
+          .replace('Ctrl+', '⌘ ')
+          .replace('Shift+', '⇧ ');
+      } else {
+        formatted = formatted
+          .replace('Alt+', 'Alt + ')
+          .replace('Ctrl+', 'Ctrl + ')
+          .replace('Shift+', 'Shift + ');
+      }
+
+      return formatted;
+    }
+
+    function toggleHelpPanel(show) {
+      if (!helpPanel) {
+        helpPanel = createHelpPanel();
+      }
+
+      const shouldShow = show !== undefined ? show : !helpPanel.classList.contains('open');
+
+      if (shouldShow) {
+        helpPanel.classList.add('open');
+      } else {
+        helpPanel.classList.remove('open');
+      }
+    }
+
+    // Add help button to breadcrumb
+    function addHelpButton() {
+      const breadcrumb = document.querySelector('.breadcrumb');
+      if (!breadcrumb) return;
+
+      const separator = document.createElement('span');
+      separator.className = 'breadcrumb-separator';
+      separator.textContent = '|';
+
+      const button = document.createElement('button');
+      button.className = 'breadcrumb-icon-btn shortcuts-help-btn';
+      button.setAttribute('aria-label', 'Keyboard shortcuts');
+      button.setAttribute('title', 'Keyboard shortcuts (?)');
+      button.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <circle cx="12" cy="17" r="1" fill="currentColor"></circle>
+        </svg>
+      `;
+      button.addEventListener('click', () => toggleHelpPanel());
+
+      breadcrumb.appendChild(separator);
+      breadcrumb.appendChild(button);
+    }
+
+    // Initialize
+    addHelpButton();
+  }
+
+  // Initialize keyboard shortcuts
+  if (document.querySelector('.reader-content')) {
+    initKeyboardShortcuts();
+  }
 });
