@@ -1,7 +1,10 @@
 // src/tooling/pdf-gen/utils/fonts.ts
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { existsSync } from 'fs';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const FONTS_DIR = join(__dirname, '../fonts');
 
 export interface FontDefinition {
