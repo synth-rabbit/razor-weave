@@ -49,6 +49,15 @@
   line-height: 1.7;
 }
 
+/* Anchor scroll offset - ensures titles are visible below sticky breadcrumb */
+.reader-content h1[id],
+.reader-content h2[id],
+.reader-content h3[id],
+.reader-content [id^="ch-"],
+.reader-content [id^="part-"] {
+  scroll-margin-top: 5rem;
+}
+
 /* TOC Styling */
 .toc-root,
 .toc-list,
