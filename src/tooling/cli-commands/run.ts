@@ -21,6 +21,7 @@ import {
   listCampaigns,
   viewCampaign,
   statusCampaign,
+  analyzeCampaign,
   type ListCampaignsFilters,
 } from './review.js';
 import {
@@ -153,9 +154,17 @@ async function main(): Promise<void> {
         }
 
         viewCampaign(campaignId, options);
+      } else if (subcommand === 'analyze') {
+        const campaignId = args[2];
+        if (!campaignId) {
+          log.error('Error: Please provide a campaign ID');
+          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review analyze <campaign-id>');
+          process.exit(1);
+        }
+        analyzeCampaign(campaignId);
       } else {
         log.error(`Unknown review subcommand: ${subcommand}`);
-        log.error('Available subcommands: book, chapter, list, view, status');
+        log.error('Available subcommands: book, chapter, list, view, status, analyze');
         process.exit(1);
       }
     } else if (command === 'html' && args[1] === 'print') {
@@ -276,6 +285,7 @@ async function main(): Promise<void> {
       log.error('  review list [--status=...] [--content-type=...] - List campaigns');
       log.error('  review view <id> [--format=text|json]    - View campaign details');
       log.error('  review status <id>                        - Check campaign status');
+      log.error('  review analyze <id>                       - Analyze campaign reviews');
       log.error('  html print build                          - Build print-design HTML');
       log.error('  html print list                           - List print builds');
       log.error('  html print diff <build-id>                - Diff vs latest build');
