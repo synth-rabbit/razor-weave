@@ -52,7 +52,13 @@
     "plans:index": "tsx src/tooling/cli-commands/plans-index.ts",
     "book:register": "tsx src/tooling/cli-commands/book-register.ts",
     "book:list": "tsx src/tooling/cli-commands/book-list.ts",
-    "book:info": "tsx src/tooling/cli-commands/book-info.ts"
+    "book:info": "tsx src/tooling/cli-commands/book-info.ts",
+    "workflow:start": "tsx src/tooling/cli-commands/workflow-start.ts",
+    "workflow:status": "tsx src/tooling/cli-commands/workflow-status.ts",
+    "workflow:list": "tsx src/tooling/cli-commands/workflow-list.ts",
+    "workflow:pause": "tsx src/tooling/cli-commands/workflow-pause.ts",
+    "workflow:resume": "tsx src/tooling/cli-commands/workflow-resume.ts",
+    "workflow:cancel": "tsx src/tooling/cli-commands/workflow-cancel.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
