@@ -8,8 +8,27 @@
  */
 
 import { parseArgs } from 'util';
+import { execSync } from 'child_process';
+import { resolve, isAbsolute } from 'path';
 import { CLIFormatter } from '../cli/formatter';
 import { PlanGenerator } from '../plans/generator';
+
+// Get project root (git root or fallback to cwd)
+function getProjectRoot(): string {
+  try {
+    return execSync('git rev-parse --show-toplevel', { encoding: 'utf-8' }).trim();
+  } catch {
+    return process.cwd();
+  }
+}
+
+// Resolve path from project root
+function resolveFromRoot(filepath: string): string {
+  if (isAbsolute(filepath)) {
+    return filepath;
+  }
+  return resolve(getProjectRoot(), filepath);
+}
 
 // Parse arguments
 const { values } = parseArgs({
@@ -21,8 +40,8 @@ const { values } = parseArgs({
 });
 
 const sessionId = values.session;
-const eventsDir = values.events!;
-const outputDir = values.output!;
+const eventsDir = resolveFromRoot(values.events!);
+const outputDir = resolveFromRoot(values.output!);
 
 // Validate arguments
 if (!sessionId) {

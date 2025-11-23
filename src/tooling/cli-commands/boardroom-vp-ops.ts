@@ -12,11 +12,29 @@
 
 import { parseArgs } from 'util';
 import { execSync } from 'child_process';
+import { resolve, isAbsolute } from 'path';
 import { CLIFormatter } from '../cli/formatter';
 import { SessionManager } from '../cli/session-manager';
 import { VPInvoker } from '../agents/invoker';
 import { EventReader } from '../events/reader';
 import type { InsertEvent } from '../events/types';
+
+// Get project root (git root or fallback to cwd)
+function getProjectRoot(): string {
+  try {
+    return execSync('git rev-parse --show-toplevel', { encoding: 'utf-8' }).trim();
+  } catch {
+    return process.cwd();
+  }
+}
+
+// Resolve path from project root
+function resolveFromRoot(filepath: string): string {
+  if (isAbsolute(filepath)) {
+    return filepath;
+  }
+  return resolve(getProjectRoot(), filepath);
+}
 
 // Parse arguments
 const { values } = parseArgs({
@@ -31,7 +49,7 @@ const { values } = parseArgs({
 });
 
 const sessionId = values.session;
-const eventsDir = values.events!;
+const eventsDir = resolveFromRoot(values.events!);
 const ceoFeedback = values.feedback;
 const brainstormMode = values.brainstorm;
 const question = values.question;

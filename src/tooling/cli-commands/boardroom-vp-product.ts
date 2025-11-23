@@ -11,9 +11,27 @@
 import { parseArgs } from 'util';
 import { existsSync, readFileSync } from 'fs';
 import { execSync } from 'child_process';
+import { resolve, isAbsolute } from 'path';
 import { CLIFormatter } from '../cli/formatter';
 import { SessionManager } from '../cli/session-manager';
 import { VPInvoker } from '../agents/invoker';
+
+// Get project root (git root or fallback to cwd)
+function getProjectRoot(): string {
+  try {
+    return execSync('git rev-parse --show-toplevel', { encoding: 'utf-8' }).trim();
+  } catch {
+    return process.cwd();
+  }
+}
+
+// Resolve path from project root
+function resolveFromRoot(filepath: string): string {
+  if (isAbsolute(filepath)) {
+    return filepath;
+  }
+  return resolve(getProjectRoot(), filepath);
+}
 
 // Parse arguments
 const { values } = parseArgs({
@@ -23,11 +41,11 @@ const { values } = parseArgs({
   },
 });
 
-const proposalPath = values.proposal;
-const eventsDir = values.events!;
+const proposalPathArg = values.proposal;
+const eventsDir = resolveFromRoot(values.events!);
 
 // Validate arguments
-if (!proposalPath) {
+if (!proposalPathArg) {
   console.error(
     CLIFormatter.format({
       title: 'ERROR',
@@ -37,6 +55,9 @@ if (!proposalPath) {
   );
   process.exit(1);
 }
+
+// Resolve proposal path from project root
+const proposalPath = resolveFromRoot(proposalPathArg);
 
 if (!existsSync(proposalPath)) {
   console.error(
