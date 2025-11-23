@@ -17,29 +17,29 @@ approved: 2024-11-23
 
 ## Phases
 
-### Phase 0: Schema Unification & Foundation (NEW)
+### Phase 0: Schema Unification & Foundation ✅ COMPLETE
 
 Establish unified database infrastructure before building workflow features. Consolidate existing databases, add proper book registry with version linking, and implement plan lifecycle automation.
 
 **Acceptance Criteria:**
-- Single `data/project.db` contains all tables
-- `books` table exists with Core Rulebook registered
-- `book_versions` has `book_id` FK to `books`
-- `workflow_runs` table ready with input/output version references
-- All existing data preserved and verified
-- `docs/plans/` has clear status indicators via frontmatter
-- Plan lifecycle hooks functional (auto-complete on boardroom:approve)
+- [x] Single `data/project.db` contains all tables
+- [x] `books` table exists with Core Rulebook registered
+- [x] `book_versions` has `book_id` FK to `books`
+- [x] `workflow_runs` table ready with input/output version references
+- [x] All existing data preserved and verified
+- [x] `docs/plans/` has clear status indicators via frontmatter
+- [x] Plan lifecycle hooks functional (`pnpm plans:archive`, `pnpm plans:index`)
 
 **Milestones:**
-- M0.1 Schema Audit: Document all existing tables and data
-- M0.2 Unified Schema Design: Final schema approved by CEO
-- M0.3 Migration Scripts: Create and test migration scripts
-- M0.4 Data Migration: Execute migration, verify data integrity
-- M0.5 Tool Updates: Update any scripts referencing old paths/schemas
-- M0.6 Plan Cleanup: Archive completed plans, add status headers
-- M0.7 Plan Lifecycle Automation: Build hooks for automatic plan state management
+- [x] M0.1 Schema Audit: Document all existing tables and data
+- [x] M0.2 Unified Schema Design: Final schema approved by CEO
+- [x] M0.3 Migration Scripts: Create and test migration scripts
+- [x] M0.4 Data Migration: Execute migration, verify data integrity
+- [x] M0.5 Tool Updates: Update any scripts referencing old paths/schemas
+- [x] M0.6 Plan Cleanup: Archive completed plans, add status headers
+- [x] M0.7 Plan Lifecycle Automation: Build hooks for automatic plan state management
 
-**Human Gate:** CEO Review #0 after M0.2 (approve schema before migration)
+**Human Gate:** CEO Review #0 after M0.2 ✅ PASSED (schema approved before migration)
 
 ---
 
@@ -234,7 +234,14 @@ Wire all components together, ensure they work cohesively, add workflow triggers
 
 - [Unified Schema Design](../2024-11-23-prework-unified-schema-design.md) - Detailed schema and migration plan
 - [Original Proposal](../proposals/prework.md) - Initial prework proposal
-- [Boardroom Design](../2024-11-22-phase0-boardroom-design.md) - Phase 0 boardroom system design
+- [Boardroom Design](../archive/2024-11-22-phase0-boardroom-design.md) - Phase 0 boardroom system design
+- [VP Operations Analysis](sess_687bc31b-vp-ops.md) - Parallel execution schedule and batching
+
+## Execution Schedule
+
+For parallel task batching and execution order, see the [VP Operations Analysis](sess_687bc31b-vp-ops.md).
+
+**Summary:** 6 batches, max 6 parallel streams, Batches 1-5 parallel-safe, Batch 6 sequential.
 
 ---
 

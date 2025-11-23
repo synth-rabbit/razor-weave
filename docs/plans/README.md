@@ -7,6 +7,10 @@
 - [Prework: Unified Schema Design](2024-11-23-prework-unified-schema-design.md)
 - [Razorweave Master Plan](razorweave_master_plan_full.md)
 
+## Draft Plans
+
+- [Plan Index](README.md)
+
 ## Proposals
 
 - [Prework Proposal](proposals/prework.md) (DRAFT)
