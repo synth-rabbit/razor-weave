@@ -46,6 +46,7 @@
     "db:materialize": "tsx src/tooling/cli-commands/db-materialize.ts",
     "db:migrate": "tsx src/tooling/database/migrate.ts",
     "db:migrate:dry-run": "tsx src/tooling/database/migrate.ts data/project.db --dry-run",
+    "db:seed": "tsx src/tooling/books/seed.ts",
     "db:verify": "tsx src/tooling/database/verify.ts",
     "plans:archive": "tsx src/tooling/cli-commands/plans-archive.ts",
     "plans:index": "tsx src/tooling/cli-commands/plans-index.ts",
