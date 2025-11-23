@@ -8,6 +8,7 @@ import {
   generateWriterPrompt,
   generateEditorPrompt,
   generateSharedContext,
+  generateOrchestratorPrompt,
 } from './prompt-generator.js';
 
 describe('W1 Prompt Generator', () => {
@@ -291,6 +292,96 @@ describe('W1 Prompt Generator', () => {
       expect(context).toContain('Use second person.');
       expect(context).toContain('# Mechanics Style Guide');
       expect(context).toContain('Use 4d6.');
+    });
+  });
+
+  describe('generateOrchestratorPrompt', () => {
+    it('includes run ID and shared context path', () => {
+      const prompt = generateOrchestratorPrompt({
+        runId: 'wfrun_test123',
+        sharedContextPath: 'data/w1-prompts/wfrun_test123/shared-context.md',
+        chapters: [
+          {
+            chapterId: '06-character-creation',
+            sourcePath: 'books/core/v1/chapters/06-character-creation.md',
+            outputPath: 'data/w1-artifacts/wfrun_test123/chapters/06-character-creation.md',
+            modifications: ['Add quick-start box', 'Add example characters']
+          }
+        ],
+        batchSize: 5
+      });
+
+      expect(prompt).toContain('wfrun_test123');
+      expect(prompt).toContain('shared-context.md');
+    });
+
+    it('batches chapters correctly when under batch size', () => {
+      const prompt = generateOrchestratorPrompt({
+        runId: 'wfrun_test123',
+        sharedContextPath: 'data/w1-prompts/wfrun_test123/shared-context.md',
+        chapters: [
+          { chapterId: 'ch1', sourcePath: 's1', outputPath: 'o1', modifications: ['mod1'] },
+          { chapterId: 'ch2', sourcePath: 's2', outputPath: 'o2', modifications: ['mod2'] },
+          { chapterId: 'ch3', sourcePath: 's3', outputPath: 'o3', modifications: ['mod3'] }
+        ],
+        batchSize: 5
+      });
+
+      expect(prompt).toContain('Batch 1');
+      expect(prompt).not.toContain('Batch 2');
+      expect(prompt).toContain('ch1');
+      expect(prompt).toContain('ch2');
+      expect(prompt).toContain('ch3');
+    });
+
+    it('creates multiple batches when over batch size', () => {
+      const chapters = Array.from({ length: 7 }, (_, i) => ({
+        chapterId: `ch${i + 1}`,
+        sourcePath: `s${i + 1}`,
+        outputPath: `o${i + 1}`,
+        modifications: [`mod${i + 1}`]
+      }));
+
+      const prompt = generateOrchestratorPrompt({
+        runId: 'wfrun_test123',
+        sharedContextPath: 'data/w1-prompts/wfrun_test123/shared-context.md',
+        chapters,
+        batchSize: 5
+      });
+
+      expect(prompt).toContain('Batch 1');
+      expect(prompt).toContain('Batch 2');
+      expect(prompt).toContain('ch1');
+      expect(prompt).toContain('ch6');
+      expect(prompt).toContain('ch7');
+    });
+
+    it('includes subagent prompt template', () => {
+      const prompt = generateOrchestratorPrompt({
+        runId: 'wfrun_test123',
+        sharedContextPath: 'data/w1-prompts/wfrun_test123/shared-context.md',
+        chapters: [
+          { chapterId: 'ch1', sourcePath: 's1', outputPath: 'o1', modifications: ['mod1'] }
+        ],
+        batchSize: 5
+      });
+
+      expect(prompt).toContain('Subagent Prompt Template');
+      expect(prompt).toContain('Task()');
+    });
+
+    it('includes save command at end', () => {
+      const prompt = generateOrchestratorPrompt({
+        runId: 'wfrun_test123',
+        sharedContextPath: 'data/w1-prompts/wfrun_test123/shared-context.md',
+        chapters: [
+          { chapterId: 'ch1', sourcePath: 's1', outputPath: 'o1', modifications: ['mod1'] }
+        ],
+        batchSize: 5
+      });
+
+      expect(prompt).toContain('pnpm w1:content-modify --save-writer');
+      expect(prompt).toContain('--run=wfrun_test123');
     });
   });
 });

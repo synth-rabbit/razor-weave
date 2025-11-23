@@ -567,3 +567,82 @@ ${mechanicsStyleGuide}
 - Quick-reference table formatting should be uniform
 `;
 }
+
+export interface ChapterAssignment {
+  chapterId: string;
+  sourcePath: string;
+  outputPath: string;
+  modifications: string[];
+}
+
+export interface OrchestratorInput {
+  runId: string;
+  sharedContextPath: string;
+  chapters: ChapterAssignment[];
+  batchSize: number;
+}
+
+export function generateOrchestratorPrompt(input: OrchestratorInput): string {
+  const { runId, sharedContextPath, chapters, batchSize } = input;
+
+  // Split chapters into batches
+  const batches: ChapterAssignment[][] = [];
+  for (let i = 0; i < chapters.length; i += batchSize) {
+    batches.push(chapters.slice(i, i + batchSize));
+  }
+
+  // Generate batch sections
+  const batchSections = batches.map((batch, index) => {
+    const chapterRows = batch.map(ch =>
+      `| ${ch.chapterId} | ${ch.sourcePath} | ${ch.outputPath} | ${ch.modifications.join('; ')} |`
+    ).join('\n');
+
+    return `### Batch ${index + 1}
+Dispatch these Task() calls in a single message:
+
+| Chapter | Source | Output | Modifications |
+|---------|--------|--------|---------------|
+${chapterRows}
+`;
+  }).join('\n');
+
+  return `# W1 Writer Orchestrator
+
+You are coordinating parallel chapter modifications for workflow run \`${runId}\`.
+
+## Instructions
+
+1. Read the shared context: \`${sharedContextPath}\`
+2. Dispatch chapter writers in batches (max ${batchSize} parallel)
+3. Wait for each batch to complete before starting the next
+4. After all chapters are written, confirm completion
+
+## Chapter Assignments
+
+${batchSections}
+
+## Subagent Prompt Template
+
+For each Task(), use subagent_type="general-purpose" and this prompt:
+
+\`\`\`
+Read \`${sharedContextPath}\` for style guides and plan context.
+
+Modify chapter: {source_path}
+Write output to: {output_path}
+
+Modifications to apply:
+{list of modifications}
+
+Follow all style guide conventions. Preserve existing structure where not explicitly modified.
+Write the complete modified chapter to the output path.
+\`\`\`
+
+## Output Requirements
+
+After all chapters are written, save results:
+\`\`\`bash
+pnpm w1:content-modify --save-writer --run=${runId} --chapters=data/w1-artifacts/${runId}/chapters/
+\`\`\`
+`;
+}
