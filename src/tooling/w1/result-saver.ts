@@ -107,4 +107,59 @@ export class W1ResultSaver {
     mkdirSync(dirname(changelogPath), { recursive: true });
     writeFileSync(changelogPath, JSON.stringify(result.changelog, null, 2), 'utf-8');
   }
+
+  saveChapterReviewResult(result: Record<string, unknown>, outputPath: string): void {
+    mkdirSync(dirname(outputPath), { recursive: true });
+    writeFileSync(outputPath, JSON.stringify(result, null, 2), 'utf-8');
+
+    this.artifactRegistry.register({
+      workflowRunId: this.runId,
+      artifactType: 'qa_report',
+      artifactPath: outputPath,
+      metadata: {
+        w1_type: 'chapter_review',
+      },
+    });
+  }
+
+  saveMetricsEvaluationResult(
+    result: Record<string, unknown>,
+    outputPath: string,
+    iteration: number
+  ): void {
+    mkdirSync(dirname(outputPath), { recursive: true });
+    writeFileSync(outputPath, JSON.stringify(result, null, 2), 'utf-8');
+
+    this.artifactRegistry.register({
+      workflowRunId: this.runId,
+      artifactType: 'qa_report',
+      artifactPath: outputPath,
+      metadata: {
+        w1_type: 'metrics_evaluation',
+        iteration,
+        approved: result.approved,
+      },
+    });
+  }
+
+  saveReleaseNotesResult(result: Record<string, unknown>, outputPath: string): void {
+    mkdirSync(dirname(outputPath), { recursive: true });
+    writeFileSync(outputPath, JSON.stringify(result, null, 2), 'utf-8');
+
+    // Also write the markdown version if present
+    if (result.markdown && typeof result.markdown === 'string') {
+      const mdPath = outputPath.replace(/\.json$/, '.md');
+      writeFileSync(mdPath, result.markdown, 'utf-8');
+    }
+
+    this.artifactRegistry.register({
+      workflowRunId: this.runId,
+      artifactType: 'release_notes',
+      artifactPath: outputPath,
+      metadata: {
+        w1_type: 'release_notes',
+        version: result.version,
+      },
+    });
+  }
 }

@@ -259,3 +259,250 @@ pnpm w1:content-modify --save-domain --run=${context.runId} --result=<path-to-re
 \`\`\`
 `;
 }
+
+export interface MetricsEvalPromptContext {
+  runId: string;
+  iteration: number;
+  bookSlug: string;
+  baselineMetrics: {
+    aggregate_metrics: Record<string, number>;
+    chapter_metrics?: Array<{ chapter_id: string; metrics: Record<string, number> }>;
+  };
+  newMetrics: {
+    aggregate_metrics: Record<string, number>;
+    chapter_metrics?: Array<{ chapter_id: string; metrics: Record<string, number> }>;
+  };
+  improvementPlanContext?: string;
+}
+
+export function generateMetricsEvalPrompt(context: MetricsEvalPromptContext): string {
+  // Load PM metrics eval prompt template
+  const promptPath = join(process.cwd(), 'src/tooling/agents/prompts/pm-metrics-eval.md');
+  const promptTemplate = existsSync(promptPath)
+    ? readFileSync(promptPath, 'utf-8')
+    : '';
+
+  const baselineJson = JSON.stringify(context.baselineMetrics, null, 2);
+  const newMetricsJson = JSON.stringify(context.newMetrics, null, 2);
+
+  let prompt = `# W1 Metrics Evaluation Task
+
+You are the PM Metrics Evaluator agent for W1 workflow run \`${context.runId}\`.
+
+## Context
+
+- **Book:** ${context.bookSlug}
+- **Workflow Run:** ${context.runId}
+- **Iteration:** ${context.iteration}
+
+## Reference Documentation
+
+${promptTemplate}
+
+## Baseline Metrics (Before Modifications)
+
+\`\`\`json
+${baselineJson}
+\`\`\`
+
+## New Metrics (After Modifications)
+
+\`\`\`json
+${newMetricsJson}
+\`\`\`
+`;
+
+  if (context.improvementPlanContext) {
+    prompt += `
+## Improvement Plan Context
+
+${context.improvementPlanContext}
+`;
+  }
+
+  prompt += `
+## Task
+
+Evaluate the metrics comparison and determine whether to approve the modifications.
+Return ONLY a JSON object conforming to the MetricsEvaluationResult schema.
+
+## Output Requirements
+
+After evaluating the metrics, save the result:
+
+\`\`\`bash
+pnpm w1:validate --save --run=${context.runId} --iteration=${context.iteration} --result=<path-to-result.json>
+\`\`\`
+
+Write the result to: \`data/w1-artifacts/${context.runId}/iteration-${context.iteration}/metrics-evaluation.json\`
+`;
+
+  return prompt;
+}
+
+export interface ChapterReviewPromptContext {
+  runId: string;
+  bookSlug: string;
+  chapterPaths: string[];
+  chapterIds: string[];
+}
+
+export function generateChapterReviewPrompt(context: ChapterReviewPromptContext): string {
+  const chaptersContent = context.chapterPaths.map((p, i) => {
+    const content = existsSync(p) ? readFileSync(p, 'utf-8') : '_File not found_';
+    return `### ${context.chapterIds[i]} (${p})
+\`\`\`markdown
+${content}
+\`\`\``;
+  }).join('\n\n');
+
+  return `# W1 Chapter Review Task
+
+You are the Chapter Reviewer agent for W1 workflow run \`${context.runId}\`.
+
+## Context
+
+- **Book:** ${context.bookSlug}
+- **Workflow Run:** ${context.runId}
+- **Chapters:** ${context.chapterIds.join(', ')}
+
+## Chapters to Review
+
+${chaptersContent}
+
+## Task
+
+Review each chapter and generate metrics for:
+- clarity_readability (1-10): How clear and readable is the content?
+- rules_accuracy (1-10): Are the rules presented accurately?
+- persona_fit (1-10): How well does the content fit different reader personas?
+- practical_usability (1-10): How usable is the content during actual play?
+
+Also identify:
+- Key themes in the content
+- Areas that excel
+- Areas that need improvement
+
+## Output Requirements
+
+Return a JSON object with the following structure for each chapter:
+
+\`\`\`json
+{
+  "chapter_metrics": [
+    {
+      "chapter_id": "chapter-id",
+      "chapter_name": "Chapter Name",
+      "metrics": {
+        "clarity_readability": 7.5,
+        "rules_accuracy": 8.0,
+        "persona_fit": 7.0,
+        "practical_usability": 7.2,
+        "overall_score": 7.4
+      },
+      "themes": ["theme1", "theme2"],
+      "strengths": ["strength1"],
+      "improvements_needed": ["improvement1"]
+    }
+  ],
+  "aggregate_metrics": {
+    "clarity_readability": 7.5,
+    "rules_accuracy": 8.0,
+    "persona_fit": 7.0,
+    "practical_usability": 7.2,
+    "overall_score": 7.4
+  }
+}
+\`\`\`
+
+After generating the review, save the result:
+
+\`\`\`bash
+pnpm w1:validate-chapters --save --run=${context.runId} --result=<path-to-result.json>
+\`\`\`
+
+Write the result to: \`data/w1-artifacts/${context.runId}/chapter-review.json\`
+`;
+}
+
+export interface ReleaseNotesPromptContext {
+  runId: string;
+  bookSlug: string;
+  bookTitle: string;
+  planPath?: string;
+  changelogPath?: string;
+  metricsPath?: string;
+}
+
+export function generateReleaseNotesPrompt(context: ReleaseNotesPromptContext): string {
+  // Load release notes prompt template
+  const promptPath = join(process.cwd(), 'src/tooling/agents/prompts/release-notes-gen.md');
+  const promptTemplate = existsSync(promptPath)
+    ? readFileSync(promptPath, 'utf-8')
+    : '';
+
+  // Load plan if available
+  let planContent = '_No improvement plan available_';
+  if (context.planPath && existsSync(context.planPath)) {
+    planContent = readFileSync(context.planPath, 'utf-8');
+  }
+
+  // Load changelog if available
+  let changelogContent = '_No changelog available_';
+  if (context.changelogPath && existsSync(context.changelogPath)) {
+    changelogContent = readFileSync(context.changelogPath, 'utf-8');
+  }
+
+  // Load metrics if available
+  let metricsContent = '_No metrics available_';
+  if (context.metricsPath && existsSync(context.metricsPath)) {
+    metricsContent = readFileSync(context.metricsPath, 'utf-8');
+  }
+
+  return `# W1 Release Notes Generation Task
+
+You are the Release Notes Agent for W1 workflow run \`${context.runId}\`.
+
+## Context
+
+- **Book:** ${context.bookTitle} (${context.bookSlug})
+- **Workflow Run:** ${context.runId}
+
+## Reference Documentation
+
+${promptTemplate}
+
+## Improvement Plan
+
+\`\`\`json
+${planContent}
+\`\`\`
+
+## Change Log
+
+\`\`\`json
+${changelogContent}
+\`\`\`
+
+## Metrics Report
+
+\`\`\`json
+${metricsContent}
+\`\`\`
+
+## Task
+
+Generate comprehensive release notes following the guidelines in the reference documentation.
+Return ONLY a JSON object conforming to the ReleaseNotesOutput schema.
+
+## Output Requirements
+
+After generating the release notes, save the result:
+
+\`\`\`bash
+pnpm w1:finalize --save-release-notes --run=${context.runId} --result=<path-to-result.json>
+\`\`\`
+
+Write the result to: \`data/w1-artifacts/${context.runId}/release-notes.json\`
+`;
+}

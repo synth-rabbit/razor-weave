@@ -5,13 +5,22 @@
  * Runs chapter reviews, compares metrics to baseline, and determines approval.
  *
  * Usage:
- *   pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list> [--baseline <metrics-file>]
+ *   Generate mode (default):
+ *     pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list> [--baseline <metrics-file>]
+ *
+ *   Save mode:
+ *     pnpm w1:validate --save --run <workflow-run-id> --iteration <number> --result <path-to-result.json>
  *
  * Workflow:
- *   1. Run chapter reviews (uses T4.1 logic)
- *   2. Compare metrics to baseline (uses T4.2)
- *   3. If rejected: output feedback, update status to "validation_failed"
- *   4. If approved: register artifact, update status to "validation_passed"
+ *   Generate mode:
+ *     1. Load chapter content and baseline metrics
+ *     2. Generate prompt for PM metrics evaluation
+ *     3. Output prompt and next step instructions
+ *
+ *   Save mode:
+ *     1. Load evaluation result from file
+ *     2. Register artifact, update workflow status
+ *     3. Output final status
  */
 
 import { parseArgs } from 'node:util';
@@ -26,11 +35,15 @@ import { ArtifactRegistry } from '../workflows/artifact-registry.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
 import {
-  PMMetricsInvoker,
   evaluateMetricsLocally,
   type MetricsData,
   type MetricsEvaluationResult,
 } from '../agents/invoker-pm-metrics.js';
+import {
+  generateMetricsEvalPrompt,
+  W1PromptWriter,
+  W1ResultSaver,
+} from '../w1/index.js';
 import type {
   ChapterValidationResult,
   ChapterReviewMetrics,
@@ -55,7 +68,13 @@ const { values } = parseArgs({
     output: { type: 'string', short: 'o', default: 'data/w1-artifacts' },
     db: { type: 'string', default: 'data/project.db' },
     'workflow-run': { type: 'string', short: 'w' },
-    'use-llm': { type: 'boolean', default: false },
+    run: { type: 'string', short: 'r' },
+    // Mode flags
+    generate: { type: 'boolean', default: false },
+    save: { type: 'boolean', default: false },
+    result: { type: 'string' },
+    // Legacy flag for local evaluation (no LLM)
+    'use-local': { type: 'boolean', default: false },
   },
 });
 
@@ -66,62 +85,104 @@ const chaptersArg = values.chapters;
 const baselinePath = values.baseline;
 const outputDir = resolve(projectRoot, values.output!);
 const dbPath = resolve(projectRoot, values.db!);
-const workflowRunIdArg = values['workflow-run'];
-const useLLM = values['use-llm'];
+const workflowRunIdArg = values['workflow-run'] || values.run;
+const generateMode = values.generate;
+const saveMode = values.save;
+const resultPath = values.result;
+const useLocal = values['use-local'];
 
-// Validate required arguments
-if (!bookIdOrSlug) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --book <book-id>',
-      status: [{ label: 'Book ID is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list>',
-        '',
-        'List available books:',
-        '  pnpm book:list',
-      ],
-    })
-  );
-  process.exit(1);
+// Determine mode
+const isGenerateMode = generateMode || (!saveMode && !resultPath);
+const isSaveMode = saveMode || !!resultPath;
+
+// Validate for save mode
+if (isSaveMode) {
+  if (!workflowRunIdArg) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --run <workflow-run-id>',
+        status: [{ label: 'Workflow run ID is required in save mode', success: false }],
+        nextStep: [
+          'Usage (save mode):',
+          '  pnpm w1:validate --save --run <workflow-run-id> --iteration <number> --result <path>',
+        ],
+      })
+    );
+    process.exit(1);
+  }
+
+  if (!resultPath) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --result <path-to-result.json>',
+        status: [{ label: 'Result path is required in save mode', success: false }],
+        nextStep: [
+          'Usage (save mode):',
+          '  pnpm w1:validate --save --run <workflow-run-id> --iteration <number> --result <path>',
+        ],
+      })
+    );
+    process.exit(1);
+  }
 }
 
-if (!iterationStr) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --iteration <number>',
-      status: [{ label: 'Iteration number is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list>',
-      ],
-    })
-  );
-  process.exit(1);
+// Validate for generate mode
+if (isGenerateMode) {
+  if (!bookIdOrSlug) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --book <book-id>',
+        status: [{ label: 'Book ID is required', success: false }],
+        nextStep: [
+          'Usage:',
+          '  pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list>',
+          '',
+          'List available books:',
+          '  pnpm book:list',
+        ],
+      })
+    );
+    process.exit(1);
+  }
+
+  if (!iterationStr) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --iteration <number>',
+        status: [{ label: 'Iteration number is required', success: false }],
+        nextStep: [
+          'Usage:',
+          '  pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list>',
+        ],
+      })
+    );
+    process.exit(1);
+  }
+
+  if (!chaptersArg) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --chapters <chapter-list>',
+        status: [{ label: 'Chapter list is required', success: false }],
+        nextStep: [
+          'Usage:',
+          '  pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list>',
+          '',
+          'Example:',
+          '  pnpm w1:validate --book core-rulebook --iteration 1 --chapters 06-character-creation,08-actions',
+        ],
+      })
+    );
+    process.exit(1);
+  }
 }
 
-if (!chaptersArg) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --chapters <chapter-list>',
-      status: [{ label: 'Chapter list is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:validate --book <book-id> --iteration <number> --chapters <chapter-list>',
-        '',
-        'Example:',
-        '  pnpm w1:validate --book core-rulebook --iteration 1 --chapters 06-character-creation,08-actions',
-      ],
-    })
-  );
-  process.exit(1);
-}
-
-const iteration = parseInt(iterationStr, 10);
+const iteration = parseInt(iterationStr || '1', 10);
 if (isNaN(iteration) || iteration < 1) {
   console.error(
     CLIFormatter.format({
@@ -135,9 +196,9 @@ if (isNaN(iteration) || iteration < 1) {
 }
 
 // Parse chapters list
-const chapterIds = chaptersArg.split(',').map((id) => id.trim()).filter((id) => id.length > 0);
+const chapterIds = chaptersArg ? chaptersArg.split(',').map((id) => id.trim()).filter((id) => id.length > 0) : [];
 
-if (chapterIds.length === 0) {
+if (isGenerateMode && chapterIds.length === 0) {
   console.error(
     CLIFormatter.format({
       title: 'ERROR',
@@ -154,9 +215,16 @@ if (chapterIds.length === 0) {
 
 // Print header
 console.log(CLIFormatter.header(`W1 VALIDATION PIPELINE - Iteration ${iteration}`));
-console.log(`Book: ${bookIdOrSlug}`);
-console.log(`Chapters: ${chapterIds.join(', ')}`);
-console.log(`Baseline: ${baselinePath || '(auto-generate)'}`);
+if (isGenerateMode) {
+  console.log(`Mode: Generate prompt`);
+  console.log(`Book: ${bookIdOrSlug}`);
+  console.log(`Chapters: ${chapterIds.join(', ')}`);
+  console.log(`Baseline: ${baselinePath || '(auto-generate)'}`);
+} else {
+  console.log(`Mode: Save result`);
+  console.log(`Workflow Run: ${workflowRunIdArg}`);
+  console.log(`Result: ${resultPath}`);
+}
 console.log(`Output: ${outputDir}`);
 console.log('');
 
@@ -361,7 +429,7 @@ function formatDelta(delta: number): string {
   return `${sign}${delta.toFixed(1)}`;
 }
 
-async function main(): Promise<void> {
+async function runGenerateMode(): Promise<void> {
   // Initialize database
   const db = new Database(dbPath);
   db.pragma('journal_mode = WAL');
@@ -380,7 +448,6 @@ async function main(): Promise<void> {
   // Create repositories
   const bookRepo = new BookRepository(db);
   const workflowRepo = new WorkflowRepository(db);
-  const artifactRegistry = new ArtifactRegistry(db);
 
   try {
     // 1. Verify book exists
@@ -410,11 +477,19 @@ async function main(): Promise<void> {
       if (workflows.length > 0) {
         workflowRunId = workflows[workflows.length - 1].id;
         console.log(`  OK Using workflow run: ${workflowRunId}`);
+      } else {
+        // Create a new workflow run
+        const workflowRun = workflowRepo.create({
+          workflow_type: 'w1_editing',
+          book_id: book.id,
+        });
+        workflowRunId = workflowRun.id;
+        console.log(`  OK Created workflow run: ${workflowRunId}`);
       }
     }
 
-    // 3. Get chapter paths and run reviews
-    console.log('Step 2: Running chapter reviews...');
+    // 3. Get chapter paths and generate metrics
+    console.log('Step 2: Gathering chapter metrics...');
     const bookDir = resolve(projectRoot, book.source_path);
     const chapterPaths = getChapterPaths(bookDir, chapterIds);
     const existingChapters = chapterPaths.filter((p) => existsSync(p));
@@ -427,7 +502,7 @@ async function main(): Promise<void> {
 
     const chapterMetrics = generateChapterMetrics(existingChapters, existingChapterIds);
     const newAggregateMetrics = calculateAggregateMetrics(chapterMetrics);
-    console.log(`  OK Reviewed ${chapterMetrics.length} chapters`);
+    console.log(`  OK Collected metrics for ${chapterMetrics.length} chapters`);
     console.log(`  OK New overall score: ${newAggregateMetrics.overall_score}`);
 
     // 4. Load or generate baseline
@@ -436,8 +511,7 @@ async function main(): Promise<void> {
     console.log(`  OK Baseline source: ${baselineMetrics.source || 'provided'}`);
     console.log(`  OK Baseline overall score: ${baselineMetrics.aggregate_metrics.overall_score}`);
 
-    // 5. Compare metrics
-    console.log('Step 4: Evaluating metrics...');
+    // 5. Build new metrics object
     const newMetrics: MetricsData = {
       source: 'post-modification',
       reviewed_at: new Date().toISOString(),
@@ -448,134 +522,113 @@ async function main(): Promise<void> {
       })),
     };
 
-    let evaluationResult: MetricsEvaluationResult;
-    if (useLLM) {
-      const invoker = new PMMetricsInvoker();
-      evaluationResult = await invoker.invoke({
+    // 6. If --use-local, evaluate locally and output result
+    if (useLocal) {
+      console.log('Step 4: Evaluating metrics locally...');
+      const evaluationResult = evaluateMetricsLocally({
         baselineMetrics,
         newMetrics,
       });
-    } else {
-      evaluationResult = evaluateMetricsLocally({
-        baselineMetrics,
-        newMetrics,
-      });
+
+      console.log(`  OK Evaluation complete: ${evaluationResult.approved ? 'APPROVED' : 'REJECTED'}`);
+      console.log(`  OK Confidence: ${evaluationResult.confidence}`);
+
+      // Save result
+      const iterationDir = join(outputDir, workflowRunId, `iteration-${iteration}`);
+      if (!existsSync(iterationDir)) {
+        mkdirSync(iterationDir, { recursive: true });
+      }
+
+      const validationPath = join(iterationDir, 'validation-result.json');
+      const validationOutput = {
+        book_id: book.id,
+        book_slug: book.slug,
+        iteration,
+        validated_at: new Date().toISOString(),
+        workflow_run_id: workflowRunId,
+        baseline_metrics: baselineMetrics,
+        new_metrics: newMetrics,
+        evaluation: evaluationResult,
+        status: evaluationResult.approved ? 'validation_passed' : 'validation_failed',
+      };
+      writeFileSync(validationPath, JSON.stringify(validationOutput, null, 2));
+
+      // Output result
+      outputValidationResult(book, evaluationResult, validationPath, chapterMetrics);
+      return;
     }
 
-    console.log(`  OK Evaluation complete: ${evaluationResult.approved ? 'APPROVED' : 'REJECTED'}`);
-    console.log(`  OK Confidence: ${evaluationResult.confidence}`);
+    // 7. Generate prompt for LLM evaluation
+    console.log('Step 4: Generating evaluation prompt...');
+    const promptWriter = new W1PromptWriter({ runId: workflowRunId });
 
-    // 6. Create output directory and save results
-    if (!existsSync(outputDir)) {
-      mkdirSync(outputDir, { recursive: true });
-    }
+    const prompt = generateMetricsEvalPrompt({
+      runId: workflowRunId,
+      iteration,
+      bookSlug: book.slug,
+      baselineMetrics: {
+        aggregate_metrics: baselineMetrics.aggregate_metrics as unknown as Record<string, number>,
+        chapter_metrics: baselineMetrics.chapter_metrics?.map((c) => ({
+          chapter_id: c.chapter_id,
+          metrics: c.metrics as unknown as Record<string, number>,
+        })),
+      },
+      newMetrics: {
+        aggregate_metrics: newMetrics.aggregate_metrics as unknown as Record<string, number>,
+        chapter_metrics: newMetrics.chapter_metrics?.map((c) => ({
+          chapter_id: c.chapter_id,
+          metrics: c.metrics as unknown as Record<string, number>,
+        })),
+      },
+    });
 
-    const iterationDir = workflowRunId
-      ? join(outputDir, workflowRunId, `iteration-${iteration}`)
-      : join(outputDir, `validation-${Date.now().toString(36)}`);
+    const promptPath = promptWriter.writeMetricsPrompt(prompt);
+    console.log(`  OK Prompt saved: ${promptPath}`);
 
+    // Save baseline and new metrics for reference
+    const iterationDir = join(outputDir, workflowRunId, `iteration-${iteration}`);
     if (!existsSync(iterationDir)) {
       mkdirSync(iterationDir, { recursive: true });
     }
 
-    // Save validation result
-    const validationOutput = {
-      book_id: book.id,
-      book_slug: book.slug,
-      iteration,
-      validated_at: new Date().toISOString(),
-      workflow_run_id: workflowRunId || null,
+    const metricsInputPath = join(iterationDir, 'metrics-input.json');
+    writeFileSync(metricsInputPath, JSON.stringify({
       baseline_metrics: baselineMetrics,
       new_metrics: newMetrics,
-      evaluation: evaluationResult,
-      status: evaluationResult.approved ? 'validation_passed' : 'validation_failed',
-    };
+    }, null, 2));
+    console.log(`  OK Metrics saved: ${metricsInputPath}`);
 
-    const validationPath = join(iterationDir, 'validation-result.json');
-    writeFileSync(validationPath, JSON.stringify(validationOutput, null, 2));
-    console.log(`  OK Results saved: ${validationPath}`);
-
-    // 7. Update workflow status if we have a workflow run
-    if (workflowRunId) {
-      // Register the validation artifact
-      artifactRegistry.register({
-        workflowRunId,
-        artifactType: 'qa_report',
-        artifactPath: validationPath,
-        metadata: {
-          iteration,
-          agent: 'pm_metrics',
-          approved: evaluationResult.approved,
-          confidence: evaluationResult.confidence,
-        },
-      });
-      console.log('  OK Artifact registered');
-    }
-
-    // 8. Print results
+    // Print next step instructions
     console.log('');
-
-    const comparison = evaluationResult.metrics_comparison;
-    const deltaRows = [
-      { key: 'Clarity/Readability', value: `${comparison.by_dimension.clarity_readability.baseline} -> ${comparison.by_dimension.clarity_readability.new} (${formatDelta(comparison.by_dimension.clarity_readability.delta)})` },
-      { key: 'Rules Accuracy', value: `${comparison.by_dimension.rules_accuracy.baseline} -> ${comparison.by_dimension.rules_accuracy.new} (${formatDelta(comparison.by_dimension.rules_accuracy.delta)})` },
-      { key: 'Persona Fit', value: `${comparison.by_dimension.persona_fit.baseline} -> ${comparison.by_dimension.persona_fit.new} (${formatDelta(comparison.by_dimension.persona_fit.delta)})` },
-      { key: 'Practical Usability', value: `${comparison.by_dimension.practical_usability.baseline} -> ${comparison.by_dimension.practical_usability.new} (${formatDelta(comparison.by_dimension.practical_usability.delta)})` },
-      { key: '', value: '' },
-      { key: 'OVERALL', value: `${comparison.overall.baseline} -> ${comparison.overall.new} (${formatDelta(comparison.overall.delta)})` },
-    ];
-
-    if (evaluationResult.approved) {
-      console.log(
-        CLIFormatter.format({
-          title: 'VALIDATION PASSED',
-          content: [
-            evaluationResult.reasoning,
-            '',
-            'Metrics Comparison:',
-            CLIFormatter.table(deltaRows),
-          ],
-          status: [
-            { label: `Reviewed ${chapterMetrics.length} chapters`, success: true },
-            { label: `Overall improvement: ${formatDelta(comparison.overall.delta)}`, success: true },
-            { label: `Confidence: ${evaluationResult.confidence}`, success: true },
-          ],
-          nextStep: [
-            'Next step - Human gate review:',
-            `  Review validation results: ${validationPath}`,
-            '',
-            'Recommendations:',
-            ...evaluationResult.recommendations.map((r) => `  - ${r}`),
-          ],
-        })
-      );
-    } else {
-      console.log(
-        CLIFormatter.format({
-          title: 'VALIDATION FAILED',
-          content: [
-            evaluationResult.reasoning,
-            '',
-            'Metrics Comparison:',
-            CLIFormatter.table(deltaRows),
-          ],
-          status: [
-            { label: `Reviewed ${chapterMetrics.length} chapters`, success: true },
-            { label: `Overall change: ${formatDelta(comparison.overall.delta)}`, success: false },
-            { label: 'Validation criteria not met', success: false },
-          ],
-          nextStep: [
-            'Next steps:',
-            ...evaluationResult.recommendations.map((r) => `  - ${r}`),
-            '',
-            'Re-run content modification:',
-            `  pnpm w1:content-modify --book ${book.slug} --plan <plan-path> --iteration ${iteration + 1}`,
-          ],
-        })
-      );
-
-      process.exit(1);
-    }
+    console.log(
+      CLIFormatter.format({
+        title: 'PROMPT GENERATED',
+        content: [
+          'The metrics evaluation prompt has been generated.',
+          '',
+          `Prompt file: ${promptPath}`,
+          `Metrics input: ${metricsInputPath}`,
+        ],
+        status: [
+          { label: `Book verified: ${book.slug}`, success: true },
+          { label: `Collected metrics for ${chapterMetrics.length} chapters`, success: true },
+          { label: `Baseline loaded (${baselineMetrics.source || 'provided'})`, success: true },
+          { label: 'Prompt generated', success: true },
+        ],
+        nextStep: [
+          'Next steps:',
+          '',
+          '1. Run the prompt with Claude to evaluate metrics:',
+          `   cat "${promptPath}" | claude`,
+          '',
+          '2. Save the evaluation result to:',
+          `   ${join(iterationDir, 'metrics-evaluation.json')}`,
+          '',
+          '3. Then run:',
+          `   pnpm w1:validate --save --run=${workflowRunId} --iteration=${iteration} --result=${join(iterationDir, 'metrics-evaluation.json')}`,
+        ],
+      })
+    );
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(
@@ -592,6 +645,189 @@ async function main(): Promise<void> {
     process.exit(1);
   } finally {
     db.close();
+  }
+}
+
+async function runSaveMode(): Promise<void> {
+  // Validate result file exists
+  const resolvedResultPath = resolve(projectRoot, resultPath!);
+  if (!existsSync(resolvedResultPath)) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: `Result file not found: ${resolvedResultPath}`,
+        status: [{ label: 'Result file does not exist', success: false }],
+        nextStep: [
+          'Ensure you have saved the evaluation result to the specified path.',
+          'The result should be a JSON file with the MetricsEvaluationResult schema.',
+        ],
+      })
+    );
+    process.exit(1);
+  }
+
+  // Initialize database
+  const db = new Database(dbPath);
+  db.pragma('journal_mode = WAL');
+  db.pragma('busy_timeout = 5000');
+  db.pragma('synchronous = NORMAL');
+
+  createTables(db);
+
+  // Run migrations
+  try {
+    runMigrations(dbPath);
+  } catch {
+    // Migrations might already be applied
+  }
+
+  // Create repositories
+  const bookRepo = new BookRepository(db);
+  const workflowRepo = new WorkflowRepository(db);
+
+  try {
+    // 1. Load and validate result
+    console.log('Step 1: Loading evaluation result...');
+    const resultContent = readFileSync(resolvedResultPath, 'utf-8');
+    const evaluationResult = JSON.parse(resultContent) as MetricsEvaluationResult;
+
+    if (typeof evaluationResult.approved !== 'boolean') {
+      throw new Error('Invalid result: missing "approved" field');
+    }
+
+    console.log(`  OK Result loaded: ${evaluationResult.approved ? 'APPROVED' : 'REJECTED'}`);
+    console.log(`  OK Confidence: ${evaluationResult.confidence}`);
+
+    // 2. Get workflow run info
+    console.log('Step 2: Verifying workflow run...');
+    const workflowRun = workflowRepo.getById(workflowRunIdArg!);
+    if (!workflowRun) {
+      console.error(
+        CLIFormatter.format({
+          title: 'ERROR',
+          content: `Workflow run not found: ${workflowRunIdArg}`,
+          status: [{ label: 'Workflow run does not exist', success: false }],
+          nextStep: ['List workflow runs:', '  pnpm workflow:list'],
+        })
+      );
+      process.exit(1);
+    }
+    console.log(`  OK Workflow run verified: ${workflowRun.id}`);
+
+    // Get book info
+    const book = bookRepo.getById(workflowRun.book_id);
+    if (!book) {
+      throw new Error(`Book not found for workflow run: ${workflowRun.book_id}`);
+    }
+
+    // 3. Save result using W1ResultSaver
+    console.log('Step 3: Saving result...');
+    const resultSaver = new W1ResultSaver(db, workflowRunIdArg!);
+    const outputPath = join(outputDir, workflowRunIdArg!, `iteration-${iteration}`, 'validation-result.json');
+    resultSaver.saveMetricsEvaluationResult(
+      evaluationResult as unknown as Record<string, unknown>,
+      outputPath,
+      iteration
+    );
+    console.log(`  OK Result saved: ${outputPath}`);
+
+    // 4. Output final result
+    outputValidationResult(book, evaluationResult, outputPath, []);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: `Save failed: ${errorMessage}`,
+        status: [{ label: 'Save operation failed', success: false }],
+        nextStep: [
+          'Check the error message above for details.',
+          'Ensure the result file is valid JSON.',
+        ],
+      })
+    );
+    process.exit(1);
+  } finally {
+    db.close();
+  }
+}
+
+function outputValidationResult(
+  book: { id: string; slug: string; title: string },
+  evaluationResult: MetricsEvaluationResult,
+  validationPath: string,
+  chapterMetrics: ChapterReviewMetrics[]
+): void {
+  const comparison = evaluationResult.metrics_comparison;
+  const deltaRows = [
+    { key: 'Clarity/Readability', value: `${comparison.by_dimension.clarity_readability.baseline} -> ${comparison.by_dimension.clarity_readability.new} (${formatDelta(comparison.by_dimension.clarity_readability.delta)})` },
+    { key: 'Rules Accuracy', value: `${comparison.by_dimension.rules_accuracy.baseline} -> ${comparison.by_dimension.rules_accuracy.new} (${formatDelta(comparison.by_dimension.rules_accuracy.delta)})` },
+    { key: 'Persona Fit', value: `${comparison.by_dimension.persona_fit.baseline} -> ${comparison.by_dimension.persona_fit.new} (${formatDelta(comparison.by_dimension.persona_fit.delta)})` },
+    { key: 'Practical Usability', value: `${comparison.by_dimension.practical_usability.baseline} -> ${comparison.by_dimension.practical_usability.new} (${formatDelta(comparison.by_dimension.practical_usability.delta)})` },
+    { key: '', value: '' },
+    { key: 'OVERALL', value: `${comparison.overall.baseline} -> ${comparison.overall.new} (${formatDelta(comparison.overall.delta)})` },
+  ];
+
+  if (evaluationResult.approved) {
+    console.log('');
+    console.log(
+      CLIFormatter.format({
+        title: 'VALIDATION PASSED',
+        content: [
+          evaluationResult.reasoning,
+          '',
+          'Metrics Comparison:',
+          CLIFormatter.table(deltaRows),
+        ],
+        status: [
+          { label: chapterMetrics.length > 0 ? `Reviewed ${chapterMetrics.length} chapters` : 'Result verified', success: true },
+          { label: `Overall improvement: ${formatDelta(comparison.overall.delta)}`, success: true },
+          { label: `Confidence: ${evaluationResult.confidence}`, success: true },
+        ],
+        nextStep: [
+          'Next step - Human gate review:',
+          `  Review validation results: ${validationPath}`,
+          '',
+          'Recommendations:',
+          ...evaluationResult.recommendations.map((r) => `  - ${r}`),
+        ],
+      })
+    );
+  } else {
+    console.log('');
+    console.log(
+      CLIFormatter.format({
+        title: 'VALIDATION FAILED',
+        content: [
+          evaluationResult.reasoning,
+          '',
+          'Metrics Comparison:',
+          CLIFormatter.table(deltaRows),
+        ],
+        status: [
+          { label: chapterMetrics.length > 0 ? `Reviewed ${chapterMetrics.length} chapters` : 'Result verified', success: true },
+          { label: `Overall change: ${formatDelta(comparison.overall.delta)}`, success: false },
+          { label: 'Validation criteria not met', success: false },
+        ],
+        nextStep: [
+          'Next steps:',
+          ...evaluationResult.recommendations.map((r) => `  - ${r}`),
+          '',
+          'Re-run content modification:',
+          `  pnpm w1:content-modify --book ${book.slug} --plan <plan-path> --iteration ${iteration + 1}`,
+        ],
+      })
+    );
+
+    process.exit(1);
+  }
+}
+
+async function main(): Promise<void> {
+  if (isSaveMode) {
+    await runSaveMode();
+  } else {
+    await runGenerateMode();
   }
 }
 
