@@ -1,6 +1,6 @@
 // src/tooling/w1/prompt-writer.ts
 import { mkdirSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
 
 export interface PromptWriterOptions {
   runId: string;
@@ -55,5 +55,12 @@ export class W1PromptWriter {
 
   getPromptsDir(): string {
     return this.promptsDir;
+  }
+
+  writeSharedContext(content: string): string {
+    const path = join(this.promptsDir, 'shared-context.md');
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, content, 'utf-8');
+    return path;
   }
 }
