@@ -29,6 +29,9 @@ import {
   generateWriterPrompt,
   generateEditorPrompt,
   generateDomainExpertPrompt,
+  generateSharedContext,
+  generateOrchestratorPrompt,
+  type ChapterAssignment,
 } from '../w1/prompt-generator.js';
 import { W1PromptWriter } from '../w1/prompt-writer.js';
 import { W1ResultSaver, type ReviewResult } from '../w1/result-saver.js';
@@ -257,20 +260,83 @@ async function handleGenerateWriterPrompt(
   }
   console.log(`  OK Chapters to modify: ${chapterPaths.length}`);
 
-  // Generate prompt
+  // Load style guides (with fallbacks if not found)
+  const contentStyleGuidePath = resolve(projectRoot, 'docs/style_guides/content.md');
+  const mechanicsStyleGuidePath = resolve(projectRoot, 'docs/style_guides/mechanics.md');
+
+  const contentStyleGuide = existsSync(contentStyleGuidePath)
+    ? readFileSync(contentStyleGuidePath, 'utf-8')
+    : '(No content style guide found)';
+  const mechanicsStyleGuide = existsSync(mechanicsStyleGuidePath)
+    ? readFileSync(mechanicsStyleGuidePath, 'utf-8')
+    : '(No mechanics style guide found)';
+  console.log(`  OK Style guides loaded`);
+
+  // Generate shared context
+  const sharedContext = generateSharedContext({
+    runId,
+    bookTitle: book.title,
+    bookSlug: book.slug,
+    chapterCount: plan.chapter_modifications.length,
+    plan: {
+      plan_id: plan.plan_id,
+      summary: plan.summary,
+      target_issues: plan.target_issues.map(i => ({
+        issue_id: i.issue_id,
+        severity: i.severity,
+        description: i.description,
+      })),
+      constraints: {
+        max_chapters_modified: plan.constraints.max_chapters_modified,
+        preserve_structure: plan.constraints.preserve_structure,
+        word_count_target: 'maintain current',
+      },
+    },
+    contentStyleGuide,
+    mechanicsStyleGuide,
+  });
+
+  // Write shared context
+  const promptWriter = new W1PromptWriter({ runId });
+  const sharedContextPath = promptWriter.writeSharedContext(sharedContext);
+  console.log(`  OK Shared context written: ${sharedContextPath}`);
+
+  // Build chapter assignments from plan
+  const outputDir = resolve(projectRoot, `data/w1-artifacts/${runId}/chapters`);
+  const chapterAssignments: ChapterAssignment[] = plan.chapter_modifications.map((mod) => {
+    // Find source path for this chapter
+    const sourcePath = chapterPaths.find(p => p.includes(mod.chapter_id)) || '';
+    return {
+      chapterId: mod.chapter_id,
+      sourcePath,
+      outputPath: join(outputDir, `${mod.chapter_id}.md`),
+      modifications: mod.modifications.map(m => `${m.type}: ${m.instruction}`),
+    };
+  });
+
+  // Generate orchestrator prompt
+  const orchestratorPrompt = generateOrchestratorPrompt({
+    runId,
+    sharedContextPath,
+    chapters: chapterAssignments,
+    batchSize: 5,
+  });
+
+  // Write orchestrator prompt (as the main writer prompt)
+  const promptPath = promptWriter.writeWriterPrompt(orchestratorPrompt);
+  console.log(`  OK Orchestrator prompt written: ${promptPath}`);
+
+  // Also generate legacy single-file prompt for fallback
   const styleGuidesDir = resolve(projectRoot, 'docs/style_guides');
   const planPath = resolve(projectRoot, `data/w1-artifacts/${runId}/plan.json`);
-  const prompt = generateWriterPrompt({
+  const legacyPrompt = generateWriterPrompt({
     runId,
     planPath,
     chapterPaths,
     styleGuidesDir,
   });
-
-  // Write prompt
-  const promptWriter = new W1PromptWriter({ runId });
-  const promptPath = promptWriter.writeWriterPrompt(prompt);
-  console.log(`  OK Prompt written: ${promptPath}`);
+  const legacyPromptPath = promptWriter.writeWriterPrompt(legacyPrompt, 'legacy');
+  console.log(`  OK Legacy prompt written: ${legacyPromptPath}`);
 
   // Update workflow status
   workflowRepo.updateStatus(runId, 'running');
@@ -281,10 +347,12 @@ async function handleGenerateWriterPrompt(
   console.log('NEXT STEPS');
   console.log(SINGLE_LINE);
   console.log('');
-  console.log(`1. Read the prompt: ${promptPath}`);
-  console.log('2. Write modified chapters to:');
-  console.log(`   data/w1-artifacts/${runId}/chapters/`);
-  console.log('3. Save results:');
+  console.log(`1. Read the shared context: ${sharedContextPath}`);
+  console.log(`2. Read the orchestrator prompt: ${promptPath}`);
+  console.log('3. Dispatch subagents using Task() calls as described in the prompt');
+  console.log('   - Each subagent will modify one chapter');
+  console.log(`   - Chapters will be written to: data/w1-artifacts/${runId}/chapters/`);
+  console.log('4. After all subagents complete, save results:');
   console.log(`   pnpm w1:content-modify --save-writer --run=${runId} --chapters=data/w1-artifacts/${runId}/chapters/`);
   console.log('');
   console.log(DOUBLE_LINE);
