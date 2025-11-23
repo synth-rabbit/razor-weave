@@ -589,7 +589,221 @@ pnpm w1:start --book setting-noir
 
 ---
 
-## 12. Success Criteria
+## 12. Session 0 Prework (Bootstrap)
+
+Session 0 builds the Boardroom system itself. Unlike later sessions that USE the Boardroom, we must bootstrap it.
+
+### Tier 1: Database Foundation
+- [ ] Create boardroom schema migration
+  - boardroom_sessions, vp_plans, phases, milestones
+  - engineering_tasks, ceo_feedback
+  - TypeScript types for all tables
+- [ ] Create boardroom database client
+  - CRUD operations for sessions and plans
+  - Query helpers for VP agents to read prior context
+
+### Tier 2: CLI Infrastructure
+- [ ] Create CLI output formatter utility
+  - Consistent header/status/next-step formatting
+  - Reusable across all boardroom and workflow commands
+- [ ] Create session management utilities
+  - Generate session IDs
+  - Track session state
+  - Load/save session context
+
+### Tier 3: VP Agent Foundations
+- [ ] Create VP agent prompt templates
+  - VP Product prompt
+  - VP Engineering prompt
+  - VP Operations prompt
+  - Stored in src/tooling/agents/ or data/agents/
+- [ ] Create VP agent invoker
+  - Loads prompt + context
+  - Invokes Claude subagent via Task tool pattern
+  - Parses structured output to DB
+
+### Tier 4: Boardroom CLI Commands
+- [ ] `pnpm boardroom:vp-product --proposal <path>`
+- [ ] `pnpm boardroom:vp-engineering --session <id>`
+- [ ] `pnpm boardroom:vp-ops --session <id>`
+- [ ] `pnpm boardroom:approve --session <id>`
+- [ ] `pnpm boardroom:status --session <id>`
+
+### Tier 5: Plan Generation
+- [ ] DB → Markdown generator for VP plans
+  - Reads structured data from DB
+  - Produces human-readable markdown
+  - Saves to docs/plans/vp-{type}/
+
+---
+
+## 13. Brainstorm Step Mechanics
+
+### 13.1 VP Operations Participates in Brainstorm
+
+The brainstorm step uses a modified `superpowers:brainstorming` flow where VP Ops provides operational perspective on each question.
+
+**Flow:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Boardroom Brainstorm (via /boardroom-brainstorm)            │
+│                                                             │
+│ Claude: formulates question with options                    │
+│    ↓                                                        │
+│ VP Ops subagent runs with question context                  │
+│    ↓                                                        │
+│ Claude presents to CEO:                                     │
+│   • Question and options                                    │
+│   • VP Ops perspective (blockers highlighted)               │
+│    ↓                                                        │
+│ CEO answers with full context                               │
+│    ↓                                                        │
+│ If CEO overrides blocker → record reasoning                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 13.2 VP Ops Authority Level
+
+**Weighted Advisory:**
+- VP Ops gives perspective on all options
+- Flags operational blockers (timeline, dependencies, resources)
+- Blockers should be respected unless CEO explicitly overrides with reasoning
+
+### 13.3 Brainstorm Opinion Persistence
+
+**Database Table:**
+```sql
+brainstorm_opinions (
+  id TEXT PRIMARY KEY,
+  session_id TEXT REFERENCES boardroom_sessions,
+  question TEXT NOT NULL,
+  options TEXT,           -- JSON array of options presented
+  vp_ops_perspective TEXT,
+  blockers TEXT,          -- JSON array of flagged blockers
+  ceo_decision TEXT,
+  override_reasoning TEXT, -- populated if CEO overrode blocker
+  created_at TIMESTAMP
+)
+```
+
+**Design Document:**
+- Key Tradeoffs section for important decisions with reasoning
+- Overrides section when CEO went against VP Ops blockers
+
+---
+
+## 14. Document Types
+
+### 14.1 Build Mode (Now → Workflows Complete)
+
+| Type | Analogy | Owner | Content |
+|------|---------|-------|---------|
+| **Design Plan** | Architecture Doc | Brainstorm output | Architecture, decisions, key tradeoffs |
+| **Phase Plan** | Epic | VP Product + other VP insight | Scope, milestones, acceptance criteria |
+| **Task Plan** | Story | VP Engineering | Technical tasks, 1-2 context windows |
+
+```
+Design Plan (brainstorm)
+    ↓
+Phase Plan (VP Product)
+    ↓
+Task Plan (VP Engineering)
+```
+
+### 14.2 Operational Mode (After Workflows Built)
+
+| Type | Analogy | Owner | Content |
+|------|---------|-------|---------|
+| **Design Plan** | Architecture Doc | Brainstorm + VP Ops/Product prioritization | Architecture + priority sequencing |
+| **Phase Plan** | Epic | VP Engineering | Technical epic breakdown |
+| **Task Plan** | Story | Manager Agents (PM, Product Mgr, Release Mgr) | Workflow-specific tasks |
+
+```
+Design Plan (brainstorm + prioritization)
+    ↓
+Phase Plan (VP Engineering)
+    ↓
+Task Plan (Manager Agents)
+```
+
+### 14.3 Sprint Definition
+
+- **Duration:** 1-2 context windows
+- **Compaction:** Planned at ~5% threshold
+- **State:** Saved before compact
+
+---
+
+## 15. VP Sprint Oversight
+
+### 15.1 Build Mode: On-Demand Consultation
+
+```
+Sprint execution in progress
+    │
+    ├── Normal work: Claude executes tasks
+    │
+    └── Stuck or need guidance?
+            ↓
+        pnpm vp:engineering:consult --question "..."
+            ↓
+        VP subagent runs with context
+            ↓
+        Returns guidance, Claude continues
+```
+
+**CLI Commands:**
+```bash
+pnpm vp:product:consult --question "Should we prioritize X or Y?"
+pnpm vp:engineering:consult --question "How should we architect this?"
+pnpm vp:ops:consult --question "Is this blocking anything downstream?"
+```
+
+### 15.2 Operational Mode: State + Prompt with Escalation
+
+```
+Sprint session starts
+    │
+    ├── VP context loaded into prompt:
+    │   • VP's plan summary
+    │   • Current phase goals
+    │   • Success criteria
+    │   • Known constraints
+    │
+    ├── Manager agents execute tasks
+    │   (Claude operates "as if" VP is overseeing)
+    │
+    └── Manager agent stuck?
+            │
+            ├── Needs human? → Escalate to CEO
+            │
+            └── Doesn't need human?
+                    ↓
+                pnpm vp:{type}:consult --question "..."
+```
+
+### 15.3 Consultation Tracking
+
+**Database Table:**
+```sql
+vp_consultations (
+  id TEXT PRIMARY KEY,
+  session_id TEXT REFERENCES boardroom_sessions,
+  sprint_id TEXT,
+  vp_type TEXT NOT NULL,         -- product | engineering | ops
+  question TEXT NOT NULL,
+  context TEXT,                  -- JSON: situation when asked
+  response TEXT NOT NULL,
+  outcome TEXT,                  -- what was done with advice
+  created_at TIMESTAMP
+)
+```
+
+**Sprint Log File:** `data/sprints/{sprint-id}/consultation-log.md`
+
+---
+
+## 16. Success Criteria
 
 **Phase 0 Complete When:**
 - [ ] All DB tables created and tested
@@ -636,6 +850,12 @@ pnpm boardroom:vp-product --proposal <path>
 pnpm boardroom:vp-engineering --session <id>
 pnpm boardroom:vp-ops --session <id>
 pnpm boardroom:approve --session <id>
+pnpm boardroom:status --session <id>
+
+# VP consultation (on-demand guidance)
+pnpm vp:product:consult --question "..."
+pnpm vp:engineering:consult --question "..."
+pnpm vp:ops:consult --question "..."
 
 # Book management
 pnpm book:register --slug <slug> --title <title> --type <type> --source <path>
