@@ -52,11 +52,17 @@ export class Materializer {
         const config = this.tables.get(tableName);
         if (!config) continue;
 
-        // Infer schema from INSERT events
-        const insertEvent = tableEventList.find(e => e.op === 'INSERT') as InsertEvent | undefined;
-        if (!insertEvent) continue;
+        // Infer schema from ALL INSERT events (collect union of all columns)
+        const insertEvents = tableEventList.filter(e => e.op === 'INSERT') as InsertEvent[];
+        if (insertEvents.length === 0) continue;
 
-        const columns = Object.keys(insertEvent.data);
+        const allColumns = new Set<string>();
+        for (const insertEvent of insertEvents) {
+          for (const col of Object.keys(insertEvent.data)) {
+            allColumns.add(col);
+          }
+        }
+        const columns = Array.from(allColumns);
         const createSql = `CREATE TABLE IF NOT EXISTS ${tableName} (${columns.map(c => `${c} TEXT`).join(', ')})`;
         db.exec(createSql);
 
