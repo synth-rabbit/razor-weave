@@ -100,4 +100,25 @@ describe('db:materialize CLI', () => {
     expect((rows[0] as Record<string, unknown>).id).toBe('min_1');
     expect((rows[0] as Record<string, unknown>).content).toBe('Meeting minutes content');
   });
+
+  it('should materialize session_checkpoints table', () => {
+    writeFileSync(
+      `${TEST_EVENTS_DIR}/2024-11-22-test.jsonl`,
+      '{"id":"evt_1","ts":"2024-11-22T00:00:00Z","worktree":"main","table":"session_checkpoints","op":"INSERT","data":{"id":"chk_1","session_id":"sess_123","vp_type":"vp_product","reference_id":"plan_123","description":"Completed initial review","created_at":"2024-11-22T00:00:00Z"}}\n'
+    );
+
+    execSync(`npx tsx src/tooling/cli-commands/db-materialize.ts --events ${TEST_EVENTS_DIR} --db ${TEST_DB}`, {
+      encoding: 'utf-8'
+    });
+
+    expect(existsSync(TEST_DB)).toBe(true);
+    const db = new Database(TEST_DB);
+    const rows = db.prepare('SELECT * FROM session_checkpoints').all();
+    db.close();
+
+    expect(rows).toHaveLength(1);
+    expect((rows[0] as Record<string, unknown>).id).toBe('chk_1');
+    expect((rows[0] as Record<string, unknown>).vp_type).toBe('vp_product');
+    expect((rows[0] as Record<string, unknown>).description).toBe('Completed initial review');
+  });
 });

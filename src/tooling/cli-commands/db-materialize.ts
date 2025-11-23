@@ -36,6 +36,9 @@ materializer.registerTable('execution_batches', 'id');
 materializer.registerTable('operational_risks', 'id');
 materializer.registerTable('boardroom_minutes', 'id');
 
+// Register checkpoint table
+materializer.registerTable('session_checkpoints', 'id');
+
 try {
   materializer.materialize();
   console.log('───────────────────────────────────────────────────────────');
