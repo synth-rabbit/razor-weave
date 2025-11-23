@@ -64,7 +64,7 @@
     "w1:content-modify": "tsx src/tooling/cli-commands/w1-content-modify.ts",
     "w1:validate-chapters": "tsx src/tooling/cli-commands/w1-validate-chapters.ts",
     "w1:validate": "tsx src/tooling/cli-commands/w1-validate.ts",
-    "w1:finalize-pdf": "tsx src/tooling/cli-commands/w1-finalize-pdf.ts"
+    "w1:finalize-web-html": "tsx src/tooling/cli-commands/w1-finalize-web-html.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
