@@ -21,16 +21,86 @@ The system is designed to:
 
 ---
 
-## 2. System Architecture
+## 2. Project-Wide Invariants
 
-### 2.1 Two-Tier Coordination Model
+These requirements apply to **EVERY plan, sprint, and task** across the entire system. VPs must enforce these. Tasks cannot be marked complete without satisfying them.
+
+### 2.1 Testing Requirements
+
+- Tests created for all new functionality
+- **80% minimum test coverage**
+- Tests must pass before task completion
+- Test types: unit, integration, e2e as appropriate
+
+### 2.2 Documentation Requirements
+
+All documentation lives in `docs/`:
+
+```
+docs/
+├── workflows/      # Workflow documentation
+├── developers/     # Developer guides
+├── agents/         # Agent documentation (prompts, interfaces, behaviors)
+├── plans/          # All planning documents
+└── api/            # CLI and API reference
+```
+
+### 2.3 Database Integrity (HIGH PRIORITY)
+
+**Event Sourcing Model for Parallel Worktree Safety:**
+
+```
+data/
+├── events/                      # Append-only event logs (git-tracked)
+│   ├── 2024-11-22-abc123.jsonl  # Events from session abc123
+│   ├── 2024-11-22-def456.jsonl  # Events from session def456
+│   └── ...
+├── project.db                   # Materialized state (gitignored)
+└── project.db.backup            # Auto-backup before materialize
+```
+
+**Event Format:**
+```jsonl
+{"ts":"2024-11-22T10:00:00Z","worktree":"feature-x","table":"vp_plans","op":"INSERT","data":{...}}
+{"ts":"2024-11-22T10:01:00Z","worktree":"feature-x","table":"phases","op":"INSERT","data":{...}}
+```
+
+**Rules:**
+1. **All writes go to event files** - never directly to DB during parallel work
+2. **Event files are git-tracked** - merge cleanly (append-only)
+3. **`pnpm db:materialize`** - replays all events to rebuild project.db
+4. **Run after merges** - reconcile state from all worktrees
+5. **Backup before materialize** - automatic safety net
+
+**Benefits:**
+- No concurrent write conflicts
+- Git handles merge (append-only)
+- Full audit trail
+- Recoverable (replay events from scratch)
+- Parallel execution safe across worktrees
+
+### 2.4 VP Enforcement
+
+Each VP must verify invariants in their domain:
+
+| VP | Enforces |
+|----|----------|
+| VP Product | Documentation exists for user-facing features |
+| VP Engineering | 80% test coverage, tests pass, code documented |
+| VP Operations | DB integrity maintained, events logged, backups exist |
+
+---
+
+## 3. System Architecture
+
+### 3.1 Two-Tier Coordination Model
 
 | Tier | Model | Frequency | Purpose |
 |------|-------|-----------|---------|
 | **Strategic** (Boardroom) | DB-mediated, sequential with human gates | Infrequent | Plan sprints, set priorities, approve work |
 | **Workflow** (W1/W2/W3) | Event-driven with smart routing | Continuous during sprints | Execute approved plans with iteration loops |
 
-### 2.2 Execution Model
+### 3.2 Execution Model
 
 All agents are Claude subagents invoked via the Task tool, orchestrated by CLI commands that Claude Code runs and interprets.
 
@@ -39,7 +109,7 @@ All agents are Claude subagents invoked via the Task tool, orchestrated by CLI c
 - Work happens in git worktrees created via `superpowers:using-git-worktrees`
 - Merge back to main when approved/complete
 
-### 2.3 Data Flow
+### 3.3 Data Flow
 
 - `project.db` is the single source of truth
 - VPs write structured data to DB tables
@@ -593,13 +663,26 @@ pnpm w1:start --book setting-noir
 
 Session 0 builds the Boardroom system itself. Unlike later sessions that USE the Boardroom, we must bootstrap it.
 
+### Tier 0: Event Sourcing Infrastructure (HIGH PRIORITY)
+- [ ] Create event writer utility
+  - Writes JSONL to `data/events/{date}-{session-id}.jsonl`
+  - Includes timestamp, worktree ID, table, operation, data
+- [ ] Create `pnpm db:materialize` command
+  - Reads all event files in order
+  - Replays to build/rebuild project.db
+  - Auto-backup before materialize
+- [ ] Create event replay tests
+  - Verify idempotent replay
+  - Verify order preservation
+
 ### Tier 1: Database Foundation
 - [ ] Create boardroom schema migration
   - boardroom_sessions, vp_plans, phases, milestones
   - engineering_tasks, ceo_feedback
+  - brainstorm_opinions, vp_consultations
   - TypeScript types for all tables
 - [ ] Create boardroom database client
-  - CRUD operations for sessions and plans
+  - CRUD operations (writes via event log)
   - Query helpers for VP agents to read prior context
 
 ### Tier 2: CLI Infrastructure
