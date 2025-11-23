@@ -66,6 +66,29 @@ pnpm w1:content-modify --generate-domain --run=<runId>
 pnpm w1:content-modify --save-domain --run=<runId> --result=<path>
 ```
 
+### Parallel Chapter Writing
+
+When modifying multiple chapters, the writer phase uses parallel subagents:
+
+1. CLI generates `shared-context.md` with plan summary and style guides
+2. CLI generates an orchestrator prompt listing chapter batches
+3. Claude Code dispatches Task() subagents (up to 5 per batch)
+4. Each subagent reads shared context, modifies one chapter
+5. After batch completes, next batch starts
+6. Save all results with `--save-writer`
+
+This pattern matches the review system's parallel execution approach.
+
+#### Generated Files
+
+The CLI generates these files in `data/w1-prompts/{runId}/`:
+
+| File | Purpose |
+|------|---------|
+| `shared-context.md` | Plan summary, style guides, consistency notes for subagents |
+| `writer.txt` | Orchestrator prompt with batch assignments and Task() template |
+| `writer-legacy.txt` | Single-file prompt for sequential execution (fallback) |
+
 ### Phase 3: Validation
 
 **Command:** `pnpm w1:validate`
