@@ -31,21 +31,17 @@ import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
 import { WorkflowRepository } from '../workflows/repository.js';
-import { ArtifactRegistry } from '../workflows/artifact-registry.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
-import {
-  evaluateMetricsLocally,
-  type MetricsData,
-  type MetricsEvaluationResult,
-} from '../agents/invoker-pm-metrics.js';
 import {
   generateMetricsEvalPrompt,
   W1PromptWriter,
   W1ResultSaver,
+  evaluateMetricsLocally,
+  type MetricsData,
+  type MetricsEvaluationResult,
 } from '../w1/index.js';
 import type {
-  ChapterValidationResult,
   ChapterReviewMetrics,
 } from './w1-validate-chapters.js';
 

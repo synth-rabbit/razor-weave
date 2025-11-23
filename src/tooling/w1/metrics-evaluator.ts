@@ -1,7 +1,5 @@
-// src/tooling/agents/invoker-pm-metrics.ts
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import Anthropic from '@anthropic-ai/sdk';
+// src/tooling/w1/metrics-evaluator.ts
+// Metrics evaluation logic moved from invoker-pm-metrics.ts
 
 /**
  * Dimension assessment categories based on delta values
@@ -101,9 +99,9 @@ export interface MetricsData {
 }
 
 /**
- * Options for invoking the PM metrics evaluator
+ * Options for local metrics evaluation
  */
-export interface PMMetricsInvokerOptions {
+export interface MetricsEvaluationOptions {
   baselineMetrics: MetricsData;
   newMetrics: MetricsData;
   improvementPlanContext?: string;
@@ -136,7 +134,7 @@ function calculateDimensionComparison(baseline: number, newValue: number): Dimen
 /**
  * Evaluate metrics without calling the LLM (for simple cases)
  */
-export function evaluateMetricsLocally(options: PMMetricsInvokerOptions): MetricsEvaluationResult {
+export function evaluateMetricsLocally(options: MetricsEvaluationOptions): MetricsEvaluationResult {
   const { baselineMetrics, newMetrics } = options;
   const baseline = baselineMetrics.aggregate_metrics;
   const newAgg = newMetrics.aggregate_metrics;
@@ -289,95 +287,4 @@ function findDimensionName(
     if (dim === comparison) return name;
   }
   return 'unknown';
-}
-
-/**
- * PM Metrics Evaluator Invoker
- *
- * Evaluates whether content modifications improved metrics by comparing
- * baseline metrics with new chapter review metrics.
- *
- * Usage:
- * ```typescript
- * const invoker = new PMMetricsInvoker();
- * const result = await invoker.invoke({
- *   baselineMetrics: { aggregate_metrics: {...} },
- *   newMetrics: { aggregate_metrics: {...} },
- * });
- *
- * if (result.approved) {
- *   console.log('Modifications approved:', result.reasoning);
- * }
- * ```
- */
-export class PMMetricsInvoker {
-  private client: Anthropic;
-  private promptPath: string;
-
-  constructor() {
-    this.client = new Anthropic();
-    this.promptPath = join(__dirname, 'prompts/pm-metrics-eval.md');
-  }
-
-  /**
-   * Invoke the metrics evaluator
-   *
-   * For simple cases, uses local evaluation logic.
-   * For complex cases or when improvement plan context is provided,
-   * calls the LLM for more nuanced analysis.
-   */
-  async invoke(options: PMMetricsInvokerOptions): Promise<MetricsEvaluationResult> {
-    // For simple cases without plan context, use local evaluation
-    if (!options.improvementPlanContext) {
-      return evaluateMetricsLocally(options);
-    }
-
-    // For complex cases with plan context, use LLM
-    return this.invokeWithLLM(options);
-  }
-
-  /**
-   * Invoke the LLM for complex metric evaluation
-   */
-  private async invokeWithLLM(options: PMMetricsInvokerOptions): Promise<MetricsEvaluationResult> {
-    // Load prompt template
-    const promptTemplate = readFileSync(this.promptPath, 'utf-8');
-
-    // Format baseline metrics
-    const baselineJson = JSON.stringify(options.baselineMetrics, null, 2);
-
-    // Format new metrics
-    const newMetricsJson = JSON.stringify(options.newMetrics, null, 2);
-
-    // Build the full prompt
-    let fullPrompt = `${promptTemplate}\n\n## Baseline Metrics\n\`\`\`json\n${baselineJson}\n\`\`\`\n\n## New Metrics\n\`\`\`json\n${newMetricsJson}\n\`\`\``;
-
-    if (options.improvementPlanContext) {
-      fullPrompt += `\n\n## Improvement Plan Context\n${options.improvementPlanContext}`;
-    }
-
-    fullPrompt += '\n\nEvaluate the metrics now. Return ONLY the JSON object, no other text.';
-
-    // Call Claude
-    const response = await this.client.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 4096,
-      messages: [{ role: 'user', content: fullPrompt }],
-    });
-
-    // Parse response
-    const content = response.content[0];
-    if (content.type !== 'text') {
-      throw new Error('Unexpected response type');
-    }
-
-    // Extract JSON from response
-    const jsonMatch = content.text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      throw new Error('No JSON found in response');
-    }
-
-    const result = JSON.parse(jsonMatch[0]) as MetricsEvaluationResult;
-    return result;
-  }
 }
