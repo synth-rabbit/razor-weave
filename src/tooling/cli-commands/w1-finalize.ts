@@ -6,17 +6,21 @@
  *   1. Promote print HTML (w1:finalize-print-html)
  *   2. Generate PDF (w1:finalize-pdf)
  *   3. Generate web HTML (w1:finalize-web-html)
- *   4. Generate release notes (ReleaseNotesInvoker)
+ *   4. Generate release notes (prompt-based)
  *   5. Update workflow status to "completed"
  *   6. Register all artifacts
  *   7. Output completion summary
  *
  * Usage:
- *   pnpm w1:finalize --book <book-id> --workflow <run-id>
+ *   Full mode (default):
+ *     pnpm w1:finalize --book <book-id> --workflow <run-id>
+ *
+ *   Save release notes mode:
+ *     pnpm w1:finalize --save-release-notes --run <workflow-run-id> --result <path-to-result.json>
  */
 
 import { parseArgs } from 'node:util';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 import Database from 'better-sqlite3';
@@ -30,7 +34,11 @@ import { buildPrintHtml, type BuildResult } from '../html-gen/print/build.js';
 import { promotePrintBuild, type PromoteResult } from '../html-gen/print/promote.js';
 import { generatePDF } from '../pdf-gen/pipeline.js';
 import { buildWebReader, promoteWebBuild } from '../html-gen/web/index.js';
-import { ReleaseNotesInvoker, type ReleaseNotesOutput } from '../agents/invoker-release-notes.js';
+import {
+  generateReleaseNotesPrompt,
+  W1PromptWriter,
+  W1ResultSaver,
+} from '../w1/index.js';
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {
@@ -60,68 +68,124 @@ const { values } = parseArgs({
   options: {
     book: { type: 'string', short: 'b' },
     workflow: { type: 'string', short: 'w' },
+    run: { type: 'string', short: 'r' },
     db: { type: 'string', default: 'data/project.db' },
     'skip-release-notes': { type: 'boolean', default: false },
     'plan-path': { type: 'string' },
     'changelog-path': { type: 'string' },
     'metrics-path': { type: 'string' },
+    // Mode flags
+    'save-release-notes': { type: 'boolean', default: false },
+    result: { type: 'string' },
+    // Legacy flag for generating placeholder release notes
+    'use-placeholder': { type: 'boolean', default: false },
   },
 });
 
 const projectRoot = getProjectRoot();
 const bookIdOrSlug = values.book;
-const workflowRunId = values.workflow;
+const workflowRunId = values.workflow || values.run;
 const dbPath = resolve(projectRoot, values.db!);
 const skipReleaseNotes = values['skip-release-notes'];
 const planPath = values['plan-path'];
 const changelogPath = values['changelog-path'];
 const metricsPath = values['metrics-path'];
+const saveReleaseNotesMode = values['save-release-notes'];
+const resultPath = values.result;
+const usePlaceholder = values['use-placeholder'];
 
-// Validate required arguments
-if (!bookIdOrSlug) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --book <book-id>',
-      status: [{ label: 'Book ID is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:finalize --book <book-id> --workflow <run-id>',
-        '',
-        'List available books:',
-        '  pnpm book:list',
-      ],
-    })
-  );
-  process.exit(1);
+// Determine mode
+const isSaveReleaseNotesMode = saveReleaseNotesMode || !!resultPath;
+
+// Validate for save release notes mode
+if (isSaveReleaseNotesMode) {
+  if (!workflowRunId) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --run <workflow-run-id>',
+        status: [{ label: 'Workflow run ID is required in save mode', success: false }],
+        nextStep: [
+          'Usage (save release notes mode):',
+          '  pnpm w1:finalize --save-release-notes --run <workflow-run-id> --result <path>',
+        ],
+      })
+    );
+    process.exit(1);
+  }
+
+  if (!resultPath) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --result <path-to-result.json>',
+        status: [{ label: 'Result path is required in save mode', success: false }],
+        nextStep: [
+          'Usage (save release notes mode):',
+          '  pnpm w1:finalize --save-release-notes --run <workflow-run-id> --result <path>',
+        ],
+      })
+    );
+    process.exit(1);
+  }
 }
 
-if (!workflowRunId) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --workflow <run-id>',
-      status: [{ label: 'Workflow run ID is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:finalize --book <book-id> --workflow <run-id>',
-        '',
-        'List workflow runs:',
-        '  pnpm workflow:list',
-      ],
-    })
-  );
-  process.exit(1);
+// Validate for full finalization mode
+if (!isSaveReleaseNotesMode) {
+  if (!bookIdOrSlug) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --book <book-id>',
+        status: [{ label: 'Book ID is required', success: false }],
+        nextStep: [
+          'Usage:',
+          '  pnpm w1:finalize --book <book-id> --workflow <run-id>',
+          '',
+          'List available books:',
+          '  pnpm book:list',
+        ],
+      })
+    );
+    process.exit(1);
+  }
+
+  if (!workflowRunId) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --workflow <run-id>',
+        status: [{ label: 'Workflow run ID is required', success: false }],
+        nextStep: [
+          'Usage:',
+          '  pnpm w1:finalize --book <book-id> --workflow <run-id>',
+          '',
+          'List workflow runs:',
+          '  pnpm workflow:list',
+        ],
+      })
+    );
+    process.exit(1);
+  }
 }
 
 // Print header
 console.log('');
-console.log('═══════════════════════════════════════════════════════════');
-console.log('W1 FINALIZATION');
-console.log('═══════════════════════════════════════════════════════════');
+console.log('-----------------------------------------------------------');
+if (isSaveReleaseNotesMode) {
+  console.log('W1 FINALIZATION - Save Release Notes');
+} else {
+  console.log('W1 FINALIZATION');
+}
+console.log('-----------------------------------------------------------');
 console.log('');
-console.log(`Book: ${bookIdOrSlug}`);
+if (!isSaveReleaseNotesMode) {
+  console.log(`Book: ${bookIdOrSlug}`);
+}
 console.log(`Workflow: ${workflowRunId}`);
+if (isSaveReleaseNotesMode) {
+  console.log(`Result: ${resultPath}`);
+}
 console.log('');
 
 /**
@@ -193,7 +257,7 @@ async function stepPrintHtml(
       },
     });
 
-    console.log(`  ✓ Generated: ${activeOutputPath}`);
+    console.log(`  OK Generated: ${activeOutputPath}`);
 
     return {
       success: true,
@@ -264,7 +328,7 @@ async function stepPdf(
       },
     });
 
-    console.log(`  ✓ Generated: ${outputPath}`);
+    console.log(`  OK Generated: ${outputPath}`);
 
     return {
       success: true,
@@ -339,7 +403,7 @@ async function stepWebHtml(
       },
     });
 
-    console.log(`  ✓ Generated: ${targetPath}`);
+    console.log(`  OK Generated: ${targetPath}`);
 
     return {
       success: true,
@@ -357,7 +421,7 @@ async function stepWebHtml(
 }
 
 /**
- * Step 4: Generate release notes
+ * Step 4: Generate release notes (prompt-based)
  */
 async function stepReleaseNotes(
   book: { id: string; slug: string; title: string },
@@ -389,7 +453,7 @@ async function stepReleaseNotes(
     ? resolve(projectRoot, metricsPathArg)
     : resolve(projectRoot, `data/w1-artifacts/${workflowRunId}/metrics.json`);
 
-  // Check if required files exist - if not, generate placeholder release notes
+  // Check if required files exist
   const planExists = existsSync(resolvedPlanPath);
   const changelogExists = existsSync(resolvedChangelogPath);
   const metricsExists = existsSync(resolvedMetricsPath);
@@ -398,10 +462,12 @@ async function stepReleaseNotes(
   const version = `v1.0.0-${timestamp.replace(/-/g, '')}`;
   const outputPath = join(outputDir, `release-notes-${version}.md`);
 
-  if (!planExists || !changelogExists || !metricsExists) {
-    // Generate placeholder release notes
-    console.log('  (!) Missing source files for release notes generation');
-    console.log('  (!) Generating placeholder release notes...');
+  // If using placeholder mode or missing files, generate placeholder
+  if (usePlaceholder || (!planExists || !changelogExists || !metricsExists)) {
+    if (!planExists || !changelogExists || !metricsExists) {
+      console.log('  (!) Missing source files for release notes generation');
+    }
+    console.log('  Generating placeholder release notes...');
 
     const placeholderContent = `# Release Notes - ${book.title}
 
@@ -446,7 +512,7 @@ None at this time.
       },
     });
 
-    console.log(`  ✓ Generated: ${outputPath} (placeholder)`);
+    console.log(`  OK Generated: ${outputPath} (placeholder)`);
 
     return {
       success: true,
@@ -455,52 +521,32 @@ None at this time.
     };
   }
 
-  try {
-    // Use ReleaseNotesInvoker to generate release notes
-    const invoker = new ReleaseNotesInvoker();
-    const releaseNotes: ReleaseNotesOutput = await invoker.invoke({
-      planPath: resolvedPlanPath,
-      changelogPath: resolvedChangelogPath,
-      metricsPath: resolvedMetricsPath,
-    });
+  // Generate prompt for LLM-based release notes
+  console.log('  Generating release notes prompt...');
+  const promptWriter = new W1PromptWriter({ runId: workflowRunId! });
 
-    // Write markdown to file
-    writeFileSync(outputPath, releaseNotes.markdown);
+  const prompt = generateReleaseNotesPrompt({
+    runId: workflowRunId!,
+    bookSlug: book.slug,
+    bookTitle: book.title,
+    planPath: resolvedPlanPath,
+    changelogPath: resolvedChangelogPath,
+    metricsPath: resolvedMetricsPath,
+  });
 
-    // Also write JSON version
-    const jsonOutputPath = join(outputDir, `release-notes-${version}.json`);
-    writeFileSync(jsonOutputPath, JSON.stringify(releaseNotes, null, 2));
+  const promptPath = promptWriter.writeReleaseNotesPrompt(prompt);
+  console.log(`  OK Prompt saved: ${promptPath}`);
 
-    // Register artifact
-    artifactRegistry.register({
-      workflowRunId: workflowRunId!,
-      artifactType: 'release_notes',
-      artifactPath: outputPath,
-      metadata: {
-        book_id: book.id,
-        book_slug: book.slug,
-        version: releaseNotes.version,
-        generated_at: new Date().toISOString(),
-        highlights_count: releaseNotes.highlights.length,
-        changes_count: releaseNotes.changes.length,
-      },
-    });
-
-    console.log(`  ✓ Generated: ${outputPath}`);
-
-    return {
-      success: true,
-      outputPath,
-      metadata: {
-        version: releaseNotes.version,
-        highlightsCount: releaseNotes.highlights.length,
-        changesCount: releaseNotes.changes.length,
-      },
-    };
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    return { success: false, error: errorMessage };
-  }
+  // Return with instructions for next step
+  return {
+    success: true,
+    outputPath: promptPath,
+    metadata: {
+      promptBased: true,
+      version,
+      nextStep: `pnpm w1:finalize --save-release-notes --run=${workflowRunId} --result=<path-to-result.json>`,
+    },
+  };
 }
 
 /**
@@ -514,7 +560,7 @@ function handleFailure(
   results: FinalizationResult
 ): never {
   console.log('');
-  console.log(`  ✗ ${stepName} failed: ${error}`);
+  console.log(`  ERROR ${stepName} failed: ${error}`);
 
   // Update workflow status to failed
   try {
@@ -548,7 +594,7 @@ function handleFailure(
   process.exit(1);
 }
 
-async function main(): Promise<void> {
+async function runFullFinalization(): Promise<void> {
   // Initialize database
   const db = new Database(dbPath);
   db.pragma('journal_mode = WAL');
@@ -633,6 +679,42 @@ async function main(): Promise<void> {
       if (!results.releaseNotes.success) {
         handleFailure(db, workflowRepo, 'Release Notes', results.releaseNotes.error!, results);
       }
+
+      // Check if prompt-based (needs manual LLM step)
+      if (results.releaseNotes.metadata?.promptBased) {
+        console.log('');
+        console.log(
+          CLIFormatter.format({
+            title: 'RELEASE NOTES PROMPT GENERATED',
+            content: [
+              'A prompt has been generated for release notes.',
+              'Run the prompt with Claude and save the result.',
+              '',
+              `Prompt file: ${results.releaseNotes.outputPath}`,
+            ],
+            status: [
+              { label: 'Print HTML generated', success: true },
+              { label: 'PDF generated', success: true },
+              { label: 'Web HTML generated', success: true },
+              { label: 'Release Notes prompt ready', success: true },
+            ],
+            nextStep: [
+              'Next steps:',
+              '',
+              '1. Run the prompt with Claude:',
+              `   cat "${results.releaseNotes.outputPath}" | claude`,
+              '',
+              '2. Save the result to:',
+              `   data/w1-artifacts/${workflowRunId}/release-notes.json`,
+              '',
+              '3. Complete finalization:',
+              `   pnpm w1:finalize --save-release-notes --run=${workflowRunId} --result=data/w1-artifacts/${workflowRunId}/release-notes.json`,
+            ],
+          })
+        );
+        db.close();
+        return;
+      }
     } else {
       console.log('');
       console.log('Step 4: Release Notes');
@@ -644,7 +726,7 @@ async function main(): Promise<void> {
     console.log('Step 5: Updating workflow status...');
     try {
       workflowRepo.updateStatus(workflowRunId!, 'completed');
-      console.log(`  ✓ Workflow ${workflowRunId} marked as completed`);
+      console.log(`  OK Workflow ${workflowRunId} marked as completed`);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.log(`  (!) Could not update workflow status: ${errorMessage}`);
@@ -652,21 +734,21 @@ async function main(): Promise<void> {
 
     // Print completion summary
     console.log('');
-    console.log('───────────────────────────────────────────────────────────');
+    console.log('-----------------------------------------------------------');
     console.log('W1 WORKFLOW COMPLETE');
-    console.log('───────────────────────────────────────────────────────────');
+    console.log('-----------------------------------------------------------');
     console.log('');
     console.log('Artifacts:');
     console.log(`  - Print HTML: ${results.printHtml.outputPath}`);
     console.log(`  - PDF: ${results.pdf.outputPath}`);
     console.log(`  - Web HTML: ${results.webHtml.outputPath}`);
-    if (results.releaseNotes) {
+    if (results.releaseNotes && !results.releaseNotes.metadata?.promptBased) {
       console.log(`  - Release Notes: ${results.releaseNotes.outputPath}`);
     }
     console.log('');
     console.log(`Workflow run ${workflowRunId} marked as completed.`);
     console.log('');
-    console.log('═══════════════════════════════════════════════════════════');
+    console.log('-----------------------------------------------------------');
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(
@@ -683,6 +765,149 @@ async function main(): Promise<void> {
     process.exit(1);
   } finally {
     db.close();
+  }
+}
+
+async function runSaveReleaseNotesMode(): Promise<void> {
+  // Validate result file exists
+  const resolvedResultPath = resolve(projectRoot, resultPath!);
+  if (!existsSync(resolvedResultPath)) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: `Result file not found: ${resolvedResultPath}`,
+        status: [{ label: 'Result file does not exist', success: false }],
+        nextStep: [
+          'Ensure you have saved the release notes result to the specified path.',
+          'The result should be a JSON file with the ReleaseNotesOutput schema.',
+        ],
+      })
+    );
+    process.exit(1);
+  }
+
+  // Initialize database
+  const db = new Database(dbPath);
+  db.pragma('journal_mode = WAL');
+  db.pragma('busy_timeout = 5000');
+  db.pragma('synchronous = NORMAL');
+
+  createTables(db);
+
+  // Run migrations
+  try {
+    runMigrations(dbPath);
+  } catch {
+    // Migrations might already be applied
+  }
+
+  // Create repositories
+  const bookRepo = new BookRepository(db);
+  const workflowRepo = new WorkflowRepository(db);
+
+  try {
+    // 1. Load and validate result
+    console.log('Step 1: Loading release notes result...');
+    const resultContent = readFileSync(resolvedResultPath, 'utf-8');
+    const releaseNotes = JSON.parse(resultContent);
+
+    if (!releaseNotes.markdown) {
+      throw new Error('Invalid result: missing "markdown" field');
+    }
+
+    console.log(`  OK Result loaded: ${releaseNotes.title || 'Release Notes'}`);
+    console.log(`  OK Version: ${releaseNotes.version || 'N/A'}`);
+
+    // 2. Get workflow run info
+    console.log('Step 2: Verifying workflow run...');
+    const workflowRun = workflowRepo.getById(workflowRunId!);
+    if (!workflowRun) {
+      console.error(
+        CLIFormatter.format({
+          title: 'ERROR',
+          content: `Workflow run not found: ${workflowRunId}`,
+          status: [{ label: 'Workflow run does not exist', success: false }],
+          nextStep: ['List workflow runs:', '  pnpm workflow:list'],
+        })
+      );
+      process.exit(1);
+    }
+    console.log(`  OK Workflow run verified: ${workflowRun.id}`);
+
+    // Get book info
+    const book = bookRepo.getById(workflowRun.book_id);
+    if (!book) {
+      throw new Error(`Book not found for workflow run: ${workflowRun.book_id}`);
+    }
+
+    // 3. Save result using W1ResultSaver
+    console.log('Step 3: Saving release notes...');
+    const resultSaver = new W1ResultSaver(db, workflowRunId!);
+    const outputPath = join(resolve(projectRoot, 'data/w1-artifacts'), workflowRunId!, 'release-notes.json');
+    resultSaver.saveReleaseNotesResult(
+      releaseNotes as unknown as Record<string, unknown>,
+      outputPath
+    );
+    console.log(`  OK Result saved: ${outputPath}`);
+
+    // 4. Update workflow status to completed
+    console.log('Step 4: Updating workflow status...');
+    try {
+      workflowRepo.updateStatus(workflowRunId!, 'completed');
+      console.log(`  OK Workflow ${workflowRunId} marked as completed`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.log(`  (!) Could not update workflow status: ${errorMessage}`);
+    }
+
+    // 5. Output final result
+    console.log('');
+    console.log(
+      CLIFormatter.format({
+        title: 'RELEASE NOTES SAVED',
+        content: [
+          `Title: ${releaseNotes.title || 'Release Notes'}`,
+          `Version: ${releaseNotes.version || 'N/A'}`,
+          `Output: ${outputPath}`,
+        ],
+        status: [
+          { label: `Book: ${book.slug}`, success: true },
+          { label: 'Release notes saved', success: true },
+          { label: 'Workflow completed', success: true },
+        ],
+        nextStep: [
+          'W1 workflow is now complete.',
+          '',
+          'Artifacts:',
+          `  - Release Notes: ${outputPath}`,
+          `  - Markdown: ${outputPath.replace(/\.json$/, '.md')}`,
+        ],
+      })
+    );
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: `Save failed: ${errorMessage}`,
+        status: [{ label: 'Save operation failed', success: false }],
+        nextStep: [
+          'Check the error message above for details.',
+          'Ensure the result file is valid JSON.',
+        ],
+      })
+    );
+    process.exit(1);
+  } finally {
+    db.close();
+  }
+}
+
+async function main(): Promise<void> {
+  if (isSaveReleaseNotesMode) {
+    await runSaveReleaseNotesMode();
+  } else {
+    await runFullFinalization();
   }
 }
 
