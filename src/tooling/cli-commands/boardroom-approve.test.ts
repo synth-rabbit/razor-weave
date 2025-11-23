@@ -2,8 +2,10 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { execSync } from 'child_process';
 import { existsSync, mkdirSync, rmSync, writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
+import Database from 'better-sqlite3';
 
 const TEST_EVENTS_DIR = 'data/test-approve-events';
+const TEST_DB = 'data/project.db';
 
 describe('boardroom:approve CLI', () => {
   beforeEach(() => {
@@ -48,6 +50,8 @@ describe('boardroom:approve CLI', () => {
 
   afterEach(() => {
     if (existsSync(TEST_EVENTS_DIR)) rmSync(TEST_EVENTS_DIR, { recursive: true });
+    if (existsSync(TEST_DB)) rmSync(TEST_DB);
+    if (existsSync(`${TEST_DB}.backup`)) rmSync(`${TEST_DB}.backup`);
   });
 
   it('should approve session and mark complete', () => {
@@ -79,5 +83,24 @@ describe('boardroom:approve CLI', () => {
         { encoding: 'utf-8', stdio: 'pipe' }
       );
     }).toThrow();
+  });
+
+  it('should auto-materialize database after approval', () => {
+    execSync(
+      `npx tsx src/tooling/cli-commands/boardroom-approve.ts --session sess_approve_test --events ${TEST_EVENTS_DIR}`,
+      { encoding: 'utf-8' }
+    );
+
+    expect(existsSync(TEST_DB)).toBe(true);
+
+    const db = new Database(TEST_DB);
+    const sessions = db.prepare('SELECT * FROM boardroom_sessions').all();
+    const plans = db.prepare('SELECT * FROM vp_plans').all();
+    db.close();
+
+    expect(sessions).toHaveLength(1);
+    expect(plans).toHaveLength(1);
+    // Verify approval status was materialized
+    expect((plans[0] as Record<string, unknown>).status).toBe('approved');
   });
 });

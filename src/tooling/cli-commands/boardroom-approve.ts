@@ -14,6 +14,7 @@ import { CLIFormatter } from '../cli/formatter';
 import { SessionManager } from '../cli/session-manager';
 import { EventWriter } from '../events/writer';
 import { EventReader } from '../events/reader';
+import { Materializer } from '../events/materializer';
 import type { InsertEvent } from '../events/types';
 
 // Get project root (git root or fallback to cwd)
@@ -115,6 +116,30 @@ for (const planEvent of vpPlanEvents) {
 // Complete session
 sessionManager.completeSession(sessionId);
 
+// Auto-materialize database
+const dbPath = resolveFromRoot('data/project.db');
+const materializer = new Materializer(eventsDir, dbPath);
+
+// Register all boardroom tables
+materializer.registerTable('boardroom_sessions', 'id');
+materializer.registerTable('vp_plans', 'id');
+materializer.registerTable('phases', 'id');
+materializer.registerTable('milestones', 'id');
+materializer.registerTable('engineering_tasks', 'id');
+materializer.registerTable('ceo_feedback', 'id');
+materializer.registerTable('brainstorm_opinions', 'id');
+materializer.registerTable('vp_consultations', 'id');
+
+// Register VP Ops tables
+materializer.registerTable('execution_batches', 'id');
+materializer.registerTable('operational_risks', 'id');
+materializer.registerTable('boardroom_minutes', 'id');
+
+// Register checkpoint table
+materializer.registerTable('session_checkpoints', 'id');
+
+materializer.materialize();
+
 // Output formatted CLI response
 const output = CLIFormatter.format({
   title: 'BOARDROOM SESSION APPROVED',
@@ -132,6 +157,7 @@ const output = CLIFormatter.format({
   status: [
     ...approvedPlans.map((p) => ({ label: `Approved: ${p}`, success: true })),
     { label: 'Session marked complete', success: true },
+    { label: 'Database materialized', success: true },
   ],
   nextStep: [
     'All VP plans have been approved and the session is complete.',
