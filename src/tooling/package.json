@@ -33,7 +33,8 @@
     "boardroom:vp-engineering": "tsx cli-commands/boardroom-vp-engineering.ts",
     "boardroom:vp-ops": "tsx cli-commands/boardroom-vp-ops.ts",
     "boardroom:approve": "tsx cli-commands/boardroom-approve.ts",
-    "boardroom:status": "tsx cli-commands/boardroom-status.ts"
+    "boardroom:status": "tsx cli-commands/boardroom-status.ts",
+    "boardroom:generate": "tsx cli-commands/boardroom-generate.ts"
   },
   "dependencies": {
     "@razorweave/shared": "workspace:*",
