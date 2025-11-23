@@ -293,8 +293,111 @@ pnpm workflow:resume --run wfrun_abc123_xyz789
 pnpm workflow:cancel --run wfrun_abc123_xyz789 --reason "Scope changed"
 ```
 
+## Event System Integration
+
+The workflow system integrates with the event sourcing architecture to provide reliable, auditable state management across git worktrees.
+
+### How Events Flow
+
+Workflow actions are captured as events that flow through the event sourcing pipeline:
+
+```
+┌─────────────────────┐
+│   Workflow Action   │
+│  (state change,     │
+│   artifact create,  │
+│   escalation)       │
+└─────────┬───────────┘
+          │
+          v
+┌─────────────────────┐
+│    EventWriter      │
+│  - Generates ID     │
+│  - Adds timestamp   │
+│  - Records worktree │
+└─────────┬───────────┘
+          │
+          v
+┌─────────────────────┐
+│    JSONL Files      │
+│  data/events/       │
+│  YYYY-MM-DD-sess.   │
+│  jsonl              │
+└─────────┬───────────┘
+          │
+          │ pnpm db:materialize
+          v
+┌─────────────────────┐
+│  Materialization    │
+│  - Reads all events │
+│  - Replays in order │
+│  - Applies INS/UPD/ │
+│    DEL operations   │
+└─────────┬───────────┘
+          │
+          v
+┌─────────────────────┐
+│      SQLite         │
+│   data/project.db   │
+│  (queryable state)  │
+└─────────────────────┘
+```
+
+### Key Integration Points
+
+Workflow actions map to event tables as follows:
+
+| Workflow Action | Event Table | Operation |
+|-----------------|-------------|-----------|
+| Start workflow | `workflow_runs` | INSERT |
+| Update workflow status | `workflow_runs` | UPDATE |
+| Create artifact | `artifacts` | INSERT |
+| Update artifact | `artifacts` | UPDATE |
+| Record workflow event | `workflow_events` | INSERT |
+| Create escalation | `escalations` | INSERT |
+| Update escalation status | `escalations` | UPDATE |
+| Start boardroom session | `boardroom_sessions` | INSERT |
+| Create VP plan | `vp_plans` | INSERT |
+| Update VP plan status | `vp_plans` | UPDATE |
+| Create phase | `phases` | INSERT |
+| Create milestone | `milestones` | INSERT |
+| Create engineering task | `engineering_tasks` | INSERT |
+| Record CEO feedback | `ceo_feedback` | INSERT |
+
+### Materializing Events
+
+After working in a git worktree or after merging branches, materialize events to update the SQLite database:
+
+```bash
+# Rebuild database from all events
+pnpm db:materialize
+
+# With custom paths
+pnpm db:materialize --events data/events --db data/project.db
+```
+
+**When to materialize:**
+- After completing work in a worktree
+- After merging branches
+- When switching between worktrees
+- If the database becomes out of sync
+
+### Benefits for Workflows
+
+1. **Worktree Isolation**: Each worktree writes to its own event files, preventing SQLite lock conflicts during parallel development
+
+2. **Auditability**: Complete history of all workflow actions is preserved in event files
+
+3. **Recovery**: If the database becomes corrupted, it can be rebuilt from events
+
+4. **Merge Safety**: JSONL event files merge cleanly in git (append-only, one event per line)
+
+5. **Debugging**: Events provide a detailed timeline for troubleshooting workflow issues
+
 ## See Also
 
 - [Developer Guide: Prework System](../developers/prework.md) - Technical implementation details
 - [PDF Generation Workflow](./pdf-gen.md) - Detailed W2 documentation
 - [Review System](./REVIEW_SYSTEM.md) - Content review architecture
+- [Event System Developer Guide](../developers/event-system.md) - Event sourcing architecture details
+- [Boardroom Workflow Guide](./boardroom.md) - Boardroom planning workflow
