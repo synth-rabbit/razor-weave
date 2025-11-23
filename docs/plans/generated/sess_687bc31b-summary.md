@@ -1,40 +1,75 @@
+---
+status: ACTIVE
+created: 2024-11-23
+session_id: sess_687bc31b
+approved: 2024-11-23
+---
+
 # Boardroom Session Summary
 
 **Session ID:** sess_687bc31b
-**Status:** active
+**Status:** APPROVED
 **Proposal:** /Users/pandorz/Documents/razorweave/docs/plans/proposals/prework.md
 **Created:** 2025-11-23T10:45:41.615Z
+**Approved:** 2025-11-23 (CEO approval after schema unification brainstorm)
 
 ---
 
 ## Phases
 
-### Book Registry Foundation
+### Phase 0: Schema Unification & Foundation (NEW)
+
+Establish unified database infrastructure before building workflow features. Consolidate existing databases, add proper book registry with version linking, and implement plan lifecycle automation.
+
+**Acceptance Criteria:**
+- Single `data/project.db` contains all tables
+- `books` table exists with Core Rulebook registered
+- `book_versions` has `book_id` FK to `books`
+- `workflow_runs` table ready with input/output version references
+- All existing data preserved and verified
+- `docs/plans/` has clear status indicators via frontmatter
+- Plan lifecycle hooks functional (auto-complete on boardroom:approve)
+
+**Milestones:**
+- M0.1 Schema Audit: Document all existing tables and data
+- M0.2 Unified Schema Design: Final schema approved by CEO
+- M0.3 Migration Scripts: Create and test migration scripts
+- M0.4 Data Migration: Execute migration, verify data integrity
+- M0.5 Tool Updates: Update any scripts referencing old paths/schemas
+- M0.6 Plan Cleanup: Archive completed plans, add status headers
+- M0.7 Plan Lifecycle Automation: Build hooks for automatic plan state management
+
+**Human Gate:** CEO Review #0 after M0.2 (approve schema before migration)
+
+---
+
+### Phase 1: Book Registry Foundation
 
 Establish the book registry system that all workflows depend on. This is the critical first step - without knowing what books exist and where their content lives, no workflow can operate.
 
 **Acceptance Criteria:**
-- Database tables books and settings are created and functional
 - CLI commands book:register, book:list, book:info work correctly
 - Core Rulebook is registered as first entry with correct paths
 - Book lookup by slug returns complete book info
-- Settings can optionally group books by genre
 
 **Milestones:**
-- Schema Definition: Book and settings tables created in SQLite
 - Book CRUD Operations: Core book operations work programmatically
 - Book CLI Complete: All book CLI commands functional
 - Core Book Registered: First book entry validates the system
 
-### Workflow Lifecycle Engine
+*Note: Schema tasks moved to Phase 0*
+
+---
+
+### Phase 2: Workflow Lifecycle Engine
 
 Build the core workflow execution tracking that enables all four workflows (W1-W4) to track their state consistently. This is the runtime foundation.
 
 **Acceptance Criteria:**
 - Database table workflow_runs tracks execution state
-- State machine enforces valid transitions: pending to running to paused to completed to failed
+- State machine enforces valid transitions: pending → running → paused → completed → failed
 - CLI commands workflow:start, workflow:status, workflow:pause, workflow:resume, workflow:cancel, workflow:list all function
-- Each workflow run links to a book and optional boardroom session
+- Each workflow run links to a book and has input/output version references
 - Current agent tracking shows which step is active
 
 **Milestones:**
@@ -43,7 +78,9 @@ Build the core workflow execution tracking that enables all four workflows (W1-W
 - Workflow CLI Complete: All workflow lifecycle commands functional
 - Integration Test: Start-to-complete workflow runs successfully
 
-### Event System & Smart Routing
+---
+
+### Phase 3: Event System & Smart Routing
 
 Enable agents to emit events during workflow execution and implement smart routing for rejections.
 
@@ -62,7 +99,9 @@ Enable agents to emit events during workflow execution and implement smart routi
 - Smart Routing Logic: Routing rules based on rejection type work
 - Escalation Trigger: Auto-escalation after retry limit
 
-### Artifact Sharing Layer
+---
+
+### Phase 4: Artifact Sharing Layer
 
 Enable workflows to register and share outputs. W1 chapter edits feed W2 PDF generation, W2 artifacts feed W3 publication, W4 feedback feeds W1.
 
@@ -79,7 +118,11 @@ Enable workflows to register and share outputs. W1 chapter edits feed W2 PDF gen
 - Artifact Query: Lookup by run ID and cross-workflow
 - Type Definitions: Artifact types for W1/W2/W3/W4 defined
 
-### Integration & Documentation
+**Human Gate:** CEO Review #1 - Demo book registry + workflow CLI
+
+---
+
+### Phase 5: Integration & Documentation
 
 Wire all components together, ensure they work cohesively, add workflow triggers for cross-workflow automation, and complete user-facing documentation.
 
@@ -97,51 +140,102 @@ Wire all components together, ensure they work cohesively, add workflow triggers
 - Test Coverage: 80% coverage achieved
 - Documentation: All docs written and reviewed
 
+**Human Gate:** CEO Review #2 - Final prework acceptance, approve W1 start
+
+---
+
+## Human Gates Summary
+
+| Gate | After | Criteria |
+|------|-------|----------|
+| CEO Review #0 | Phase 0, M0.2 | Approve unified schema before migration |
+| CEO Review #1 | Phase 4 | Demo book registry + workflow CLI |
+| CEO Review #2 | Phase 5 | Final acceptance, approve W1 start |
+
+---
+
 ## Engineering Tasks
 
-Total tasks: 22
+**Phase 0 Tasks (NEW):** 7 tasks
+- Schema audit and documentation
+- Migration script development
+- Data migration execution
+- Tool updates for new paths
+- Plan cleanup and archival
+- Plan lifecycle CLI commands
+- Boardroom hook for plan status
 
-- **Create Database Schema for Books and Settings - Define SQLite schema with books and settings tables**
-  - Files: src/tooling/database/schema/books.sql, src/tooling/database/migrations/001_books_and_settings.sql
-- **Implement Book Repository - Create TypeScript repository class with CRUD operations for books and settings**
+**Phases 1-5 Tasks:** 22 tasks (see detailed list below)
+
+### Phase 1 Tasks
+- **Implement Book Repository** - Create TypeScript repository class with CRUD operations
   - Files: src/tooling/books/repository.ts, src/tooling/books/types.ts, src/tooling/books/repository.test.ts
-- **Build Book CLI Commands - Implement book:register, book:list, book:info CLI commands**
-  - Files: src/tooling/cli-commands/book-register.ts, src/tooling/cli-commands/book-list.ts, src/tooling/cli-commands/book-info.ts, src/tooling/cli-commands/book.test.ts
-- **Register Core Rulebook as First Entry - Create seed script that registers the Core Rulebook with correct paths**
-  - Files: src/tooling/books/seed.ts, data/books/core-rulebook.json
-- **Create Workflow Schema - Define workflow_runs table with status enum constraint and foreign keys**
-  - Files: src/tooling/database/schema/workflows.sql, src/tooling/database/migrations/002_workflow_runs.sql
-- **Implement State Machine Logic - Create WorkflowStateMachine class that enforces valid transitions**
-  - Files: src/tooling/workflows/state-machine.ts, src/tooling/workflows/types.ts, src/tooling/workflows/state-machine.test.ts
-- **Implement Workflow Repository - Create WorkflowRepository with start, status, pause, resume, cancel, list operations**
-  - Files: src/tooling/workflows/repository.ts, src/tooling/workflows/repository.test.ts
-- **Build Workflow CLI Commands - Implement all workflow lifecycle CLI commands with consistent output formatting**
-  - Files: src/tooling/cli-commands/workflow-start.ts, src/tooling/cli-commands/workflow-status.ts, src/tooling/cli-commands/workflow-pause.ts, src/tooling/cli-commands/workflow-resume.ts, src/tooling/cli-commands/workflow-cancel.ts, src/tooling/cli-commands/workflow-list.ts, src/tooling/cli-commands/workflow.test.ts
-- **Workflow Integration Test - End-to-end test that starts a workflow, transitions through states, and completes**
+- **Build Book CLI Commands** - Implement book:register, book:list, book:info CLI commands
+  - Files: src/tooling/cli-commands/book-register.ts, src/tooling/cli-commands/book-list.ts, src/tooling/cli-commands/book-info.ts
+- **Register Core Rulebook** - Seed script for Core Rulebook with correct paths
+  - Files: src/tooling/books/seed.ts
+
+### Phase 2 Tasks
+- **Implement State Machine Logic** - WorkflowStateMachine class enforcing valid transitions
+  - Files: src/tooling/workflows/state-machine.ts, src/tooling/workflows/types.ts
+- **Implement Workflow Repository** - CRUD operations for workflow runs
+  - Files: src/tooling/workflows/repository.ts
+- **Build Workflow CLI Commands** - All workflow lifecycle commands
+  - Files: src/tooling/cli-commands/workflow-*.ts
+- **Workflow Integration Test** - End-to-end lifecycle test
   - Files: src/tooling/workflows/integration.test.ts
-- **Create Event and Rejection Schema - Define workflow_events and rejections tables with proper indices**
-  - Files: src/tooling/database/schema/workflow-events.sql, src/tooling/database/migrations/003_workflow_events_rejections.sql
-- **Implement Event Emitter - Create WorkflowEventEmitter class for agents to emit events**
-  - Files: src/tooling/workflows/event-emitter.ts, src/tooling/workflows/event-emitter.test.ts
-- **Implement Rejection Tracker - Create RejectionTracker that logs rejections and increments retry counters**
-  - Files: src/tooling/workflows/rejection-tracker.ts, src/tooling/workflows/rejection-tracker.test.ts
-- **Implement Smart Router - Create SmartRouter that maps rejection types to handler agents**
-  - Files: src/tooling/workflows/smart-router.ts, src/tooling/workflows/routing-config.ts, src/tooling/workflows/smart-router.test.ts
-- **Implement Escalation Trigger - Integrate escalation into rejection flow with retry limit**
-  - Files: src/tooling/workflows/escalation.ts, src/tooling/workflows/escalation.test.ts
-- **Create Artifact Schema - Define workflow_artifacts table with run_id reference**
-  - Files: src/tooling/database/schema/artifacts.sql, src/tooling/database/migrations/004_workflow_artifacts.sql
-- **Implement Artifact Registry - Create ArtifactRegistry class for registering and querying artifacts**
-  - Files: src/tooling/workflows/artifact-registry.ts, src/tooling/workflows/artifact-registry.test.ts
-- **Implement Cross-Workflow Artifact Query - Add methods to query artifacts from other workflow runs**
-  - Files: src/tooling/workflows/artifact-query.ts, src/tooling/workflows/artifact-query.test.ts
-- **Define Artifact Type Enum - Define artifact types for each workflow**
+
+### Phase 3 Tasks
+- **Create Event and Rejection Schema** - Tables with proper indices
+  - Files: src/tooling/database/migrations/003_workflow_events_rejections.sql
+- **Implement Event Emitter** - WorkflowEventEmitter class
+  - Files: src/tooling/workflows/event-emitter.ts
+- **Implement Rejection Tracker** - Logging and retry counting
+  - Files: src/tooling/workflows/rejection-tracker.ts
+- **Implement Smart Router** - Rejection type to handler mapping
+  - Files: src/tooling/workflows/smart-router.ts, src/tooling/workflows/routing-config.ts
+- **Implement Escalation Trigger** - Auto-escalation after retry limit
+  - Files: src/tooling/workflows/escalation.ts
+
+### Phase 4 Tasks
+- **Create Artifact Schema** - workflow_artifacts table
+  - Files: src/tooling/database/migrations/004_workflow_artifacts.sql
+- **Implement Artifact Registry** - Registration and querying
+  - Files: src/tooling/workflows/artifact-registry.ts
+- **Implement Cross-Workflow Artifact Query** - Cross-workflow lookups
+  - Files: src/tooling/workflows/artifact-query.ts
+- **Define Artifact Type Enum** - Types for W1/W2/W3/W4
   - Files: src/tooling/workflows/artifact-types.ts
-- **Create Workflow Triggers Schema - Define workflow_triggers table for cross-workflow automation**
-  - Files: src/tooling/database/schema/triggers.sql, src/tooling/database/migrations/005_workflow_triggers.sql
-- **Implement Trigger Engine - Create TriggerEngine that watches for workflow completions and fires triggers**
-  - Files: src/tooling/workflows/trigger-engine.ts, src/tooling/workflows/trigger-engine.test.ts
-- **Add Test Coverage - Review and add missing tests to reach 80% coverage**
-  - Files: src/tooling/workflows/*.test.ts, vitest.config.ts
-- **Write Documentation - Create workflow lifecycle docs and developer guide**
+
+### Phase 5 Tasks
+- **Create Workflow Triggers Schema** - Cross-workflow automation table
+  - Files: src/tooling/database/migrations/005_workflow_triggers.sql
+- **Implement Trigger Engine** - Watch completions, fire triggers
+  - Files: src/tooling/workflows/trigger-engine.ts
+- **Add Test Coverage** - Reach 80% coverage
+  - Files: src/tooling/workflows/*.test.ts
+- **Write Documentation** - Lifecycle docs and developer guide
   - Files: docs/workflows/lifecycle.md, docs/developers/prework.md
+
+---
+
+## Key Design Decisions
+
+| Decision | Choice |
+|----------|--------|
+| Book identity | Slug (stable) + path (updatable) |
+| Version linking | workflow_runs has input_version_id, output_version_id |
+| Database location | `data/project.db` (consolidate all) |
+| Plan lifecycle | Frontmatter status + hooks + CLI commands |
+
+---
+
+## Related Documents
+
+- [Unified Schema Design](../2024-11-23-prework-unified-schema-design.md) - Detailed schema and migration plan
+- [Original Proposal](../proposals/prework.md) - Initial prework proposal
+- [Boardroom Design](../2024-11-22-phase0-boardroom-design.md) - Phase 0 boardroom system design
+
+---
+
+*Session approved by CEO on 2024-11-23 after schema unification brainstorming session.*
