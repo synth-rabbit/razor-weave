@@ -42,7 +42,8 @@
     "site:build": "pnpm --filter razorweave-site build",
     "site:test": "pnpm --filter razorweave-site test",
     "site:test:visual": "pnpm --filter razorweave-site test:visual",
-    "site:deploy": "pnpm --filter razorweave-site deploy"
+    "site:deploy": "pnpm --filter razorweave-site deploy",
+    "db:materialize": "tsx src/tooling/cli-commands/db-materialize.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
