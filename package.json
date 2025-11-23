@@ -58,7 +58,8 @@
     "workflow:list": "tsx src/tooling/cli-commands/workflow-list.ts",
     "workflow:pause": "tsx src/tooling/cli-commands/workflow-pause.ts",
     "workflow:resume": "tsx src/tooling/cli-commands/workflow-resume.ts",
-    "workflow:cancel": "tsx src/tooling/cli-commands/workflow-cancel.ts"
+    "workflow:cancel": "tsx src/tooling/cli-commands/workflow-cancel.ts",
+    "w1:verify-foundation": "tsx src/tooling/cli-commands/w1-verify-foundation.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
