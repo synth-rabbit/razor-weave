@@ -48,7 +48,10 @@
     "db:migrate:dry-run": "tsx src/tooling/database/migrate.ts data/project.db --dry-run",
     "db:verify": "tsx src/tooling/database/verify.ts",
     "plans:archive": "tsx src/tooling/cli-commands/plans-archive.ts",
-    "plans:index": "tsx src/tooling/cli-commands/plans-index.ts"
+    "plans:index": "tsx src/tooling/cli-commands/plans-index.ts",
+    "book:register": "tsx src/tooling/cli-commands/book-register.ts",
+    "book:list": "tsx src/tooling/cli-commands/book-list.ts",
+    "book:info": "tsx src/tooling/cli-commands/book-info.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
