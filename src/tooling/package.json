@@ -28,7 +28,8 @@
     "html:print:list": "tsx cli-commands/run.ts html print list",
     "html:print:diff": "tsx cli-commands/run.ts html print diff",
     "html:print:promote": "tsx cli-commands/run.ts html print promote",
-    "pdf:build": "tsx pdf-gen/cli.ts build"
+    "pdf:build": "tsx pdf-gen/cli.ts build",
+    "boardroom:vp-product": "tsx cli-commands/boardroom-vp-product.ts"
   },
   "dependencies": {
     "@razorweave/shared": "workspace:*",
