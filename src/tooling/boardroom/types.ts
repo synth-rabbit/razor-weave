@@ -85,3 +85,40 @@ export interface SessionCheckpoint {
   description: string;
   created_at: string;
 }
+
+// VP Ops specific types
+export interface ExecutionBatch {
+  id: string;
+  plan_id: string;
+  batch_number: number;
+  name: string;
+  tasks: string; // JSON array of task descriptions
+  parallel_safe: boolean;
+  checkpoint: string;
+  human_gate: boolean;
+  human_gate_criteria: string | null;
+}
+
+export interface OperationalRisk {
+  id: string;
+  plan_id: string;
+  description: string;
+  mitigation: string;
+  severity: 'high' | 'medium' | 'low';
+}
+
+export interface BoardroomMinutes {
+  id: string;
+  session_id: string;
+  date: string;
+  attendees: string; // JSON array
+  agenda: string; // JSON array
+  vp_product_summary: string;
+  vp_engineering_summary: string;
+  vp_ops_summary: string;
+  decisions: string; // JSON array
+  action_items: string; // JSON array
+  blockers: string; // JSON array
+  next_steps: string;
+  created_at: string;
+}

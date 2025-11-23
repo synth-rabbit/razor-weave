@@ -11,7 +11,10 @@ import type {
   BrainstormOpinion,
   VPConsultation,
   SessionCheckpoint,
-  VPType
+  VPType,
+  ExecutionBatch,
+  OperationalRisk,
+  BoardroomMinutes
 } from './types';
 
 export class BoardroomClient {
@@ -188,5 +191,85 @@ export class BoardroomClient {
 
     this.writer.write('session_checkpoints', 'INSERT', checkpoint as unknown as Record<string, unknown>);
     return checkpoint;
+  }
+
+  // VP Ops specific methods
+  createExecutionBatch(
+    planId: string,
+    batchNumber: number,
+    name: string,
+    tasks: string[],
+    parallelSafe: boolean,
+    checkpoint: string,
+    humanGate: boolean,
+    humanGateCriteria: string | null
+  ): ExecutionBatch {
+    const batch: ExecutionBatch = {
+      id: this.generateId('batch'),
+      plan_id: planId,
+      batch_number: batchNumber,
+      name,
+      tasks: JSON.stringify(tasks),
+      parallel_safe: parallelSafe,
+      checkpoint,
+      human_gate: humanGate,
+      human_gate_criteria: humanGateCriteria
+    };
+
+    this.writer.write('execution_batches', 'INSERT', batch as unknown as Record<string, unknown>);
+    return batch;
+  }
+
+  createOperationalRisk(
+    planId: string,
+    description: string,
+    mitigation: string,
+    severity: 'high' | 'medium' | 'low'
+  ): OperationalRisk {
+    const risk: OperationalRisk = {
+      id: this.generateId('risk'),
+      plan_id: planId,
+      description,
+      mitigation,
+      severity
+    };
+
+    this.writer.write('operational_risks', 'INSERT', risk as unknown as Record<string, unknown>);
+    return risk;
+  }
+
+  // Board Minutes
+  createBoardroomMinutes(
+    sessionId: string,
+    data: {
+      attendees: string[];
+      agenda: string[];
+      vpProductSummary: string;
+      vpEngineeringSummary: string;
+      vpOpsSummary: string;
+      decisions: string[];
+      actionItems: string[];
+      blockers: string[];
+      nextSteps: string;
+    }
+  ): BoardroomMinutes {
+    const minutes: BoardroomMinutes = {
+      id: this.generateId('min'),
+      session_id: sessionId,
+      date: new Date().toISOString().split('T')[0],
+      attendees: JSON.stringify(data.attendees),
+      agenda: JSON.stringify(data.agenda),
+      vp_product_summary: data.vpProductSummary,
+      vp_engineering_summary: data.vpEngineeringSummary,
+      vp_ops_summary: data.vpOpsSummary,
+      decisions: JSON.stringify(data.decisions),
+      action_items: JSON.stringify(data.actionItems),
+      blockers: JSON.stringify(data.blockers),
+      next_steps: data.nextSteps,
+      created_at: new Date().toISOString()
+    };
+
+    this.writer.write('boardroom_minutes', 'INSERT', minutes as unknown as Record<string, unknown>);
+    return minutes;
   }
 }
