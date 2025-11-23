@@ -28,7 +28,13 @@
     "html:print:list": "tsx cli-commands/run.ts html print list",
     "html:print:diff": "tsx cli-commands/run.ts html print diff",
     "html:print:promote": "tsx cli-commands/run.ts html print promote",
-    "pdf:build": "tsx pdf-gen/cli.ts build"
+    "pdf:build": "tsx pdf-gen/cli.ts build",
+    "boardroom:vp-product": "tsx cli-commands/boardroom-vp-product.ts",
+    "boardroom:vp-engineering": "tsx cli-commands/boardroom-vp-engineering.ts",
+    "boardroom:vp-ops": "tsx cli-commands/boardroom-vp-ops.ts",
+    "boardroom:approve": "tsx cli-commands/boardroom-approve.ts",
+    "boardroom:status": "tsx cli-commands/boardroom-status.ts",
+    "boardroom:generate": "tsx cli-commands/boardroom-generate.ts"
   },
   "dependencies": {
     "@razorweave/shared": "workspace:*",
