@@ -10,13 +10,16 @@ import type {
   CEOFeedback,
   BrainstormOpinion,
   VPConsultation,
+  SessionCheckpoint,
   VPType
 } from './types';
 
 export class BoardroomClient {
   private writer: EventWriter;
+  private sessionId: string;
 
   constructor(eventsDir: string, sessionId: string, worktree: string) {
+    this.sessionId = sessionId;
     this.writer = new EventWriter(eventsDir, sessionId, worktree);
   }
 
@@ -171,5 +174,19 @@ export class BoardroomClient {
 
     this.writer.write('vp_consultations', 'INSERT', consultation as unknown as Record<string, unknown>);
     return consultation;
+  }
+
+  emitCheckpoint(vpType: string, referenceId: string, description: string): SessionCheckpoint {
+    const checkpoint: SessionCheckpoint = {
+      id: this.generateId('chk'),
+      session_id: this.sessionId,
+      vp_type: vpType,
+      reference_id: referenceId,
+      description,
+      created_at: new Date().toISOString()
+    };
+
+    this.writer.write('session_checkpoints', 'INSERT', checkpoint as unknown as Record<string, unknown>);
+    return checkpoint;
   }
 }

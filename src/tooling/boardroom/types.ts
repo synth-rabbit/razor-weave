@@ -76,3 +76,12 @@ export interface VPConsultation {
   outcome: string | null;
   created_at: string;
 }
+
+export interface SessionCheckpoint {
+  id: string;
+  session_id: string;
+  vp_type: string;
+  reference_id: string;
+  description: string;
+  created_at: string;
+}
