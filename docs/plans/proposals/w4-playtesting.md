@@ -86,7 +86,14 @@ flowchart TD
 
 ## Agents
 
+All agents follow the **prompt-based pattern** (see `docs/developers/agent-architecture.md`):
+1. CLI generates prompt files with full context
+2. Claude Code reads prompts and executes tasks
+3. Results saved via `--save` subcommands
+
 ### GM Agent (Track B)
+
+**Prompt Generator:** `generateGmPrompt(context)`
 
 **Inputs:**
 - Core book content
@@ -94,39 +101,44 @@ flowchart TD
 - Session parameters (scenario type, difficulty)
 
 **Outputs:**
-- Prepared scenario
+- Prepared scenario JSON
 - Session narrative
 - GM observations
 
-**Responsibilities:**
-- Create engaging scenario
-- Adjudicate rules
-- Track narrative flow
-- Note rule ambiguities or friction points
+**CLI:**
+```bash
+pnpm w4:run-session --book=<slug> --setting=<slug>  # Generate GM prompt
+pnpm w4:run-session --save-gm --session=<id> --scenario=<path>  # Save scenario
+```
 
 ---
 
 ### Player Agents (Track B)
 
+**Prompt Generator:** `generatePlayerPrompt(context, playerIndex)`
+
 **Inputs:**
 - Core book (character creation, rules)
 - Setting information
-- GM prompts
+- GM scenario and prompts
 
 **Outputs:**
-- Character sheets
+- Character sheet JSON
 - Player actions
 - In-character responses
 
-**Responsibilities:**
-- Create diverse characters using different archetypes
-- Make in-character decisions
-- Engage with mechanics naturally
-- Report confusion or friction points
+**CLI:**
+```bash
+# Player prompts generated as part of session
+pnpm w4:run-session --generate-players --session=<id>
+pnpm w4:run-session --save-player --session=<id> --player=1 --actions=<path>
+```
 
 ---
 
 ### Playtest Analysis Agent (Both Tracks)
+
+**Prompt Generator:** `generateAnalysisPrompt(context)`
 
 **Inputs:**
 - Session transcript
@@ -134,32 +146,35 @@ flowchart TD
 - Previous feedback history
 
 **Outputs:**
-- Playtest analysis report
+- Playtest analysis report JSON
 - Categorized feedback items
 - Severity ratings
 
-**Responsibilities:**
-- Identify rule ambiguities
-- Note mechanical friction
-- Highlight narrative successes
-- Categorize issues (clarity, balance, fun)
+**CLI:**
+```bash
+pnpm w4:analyze --session=<id>         # Generate analysis prompt
+pnpm w4:analyze --save --session=<id> --report=<path>  # Save result
+```
 
 ---
 
 ### Feedback Generator Agent (Both Tracks)
+
+**Prompt Generator:** `generateFeedbackPrompt(context)`
 
 **Inputs:**
 - Playtest analysis
 - Existing W1 backlog
 
 **Outputs:**
-- W1 feedback artifact
+- W1 feedback artifact JSON
 - Prioritized improvement suggestions
 
-**Responsibilities:**
-- Convert analysis into actionable W1 input
-- De-duplicate with existing feedback
-- Prioritize by severity and frequency
+**CLI:**
+```bash
+pnpm w4:generate-feedback --session=<id>  # Generate prompt
+pnpm w4:generate-feedback --save --session=<id> --feedback=<path>  # Save result
+```
 
 ---
 
@@ -279,6 +294,43 @@ pnpm w4:list [--status <status>]
 ## Build Order Note
 
 W4 is built **after** the core book completes its first full W1→W2→W3 cycle. The workflow is designed to provide ongoing improvement feedback for subsequent iterations.
+
+---
+
+## Implementation Notes
+
+### Module Structure
+
+```
+src/tooling/w4/
+├── prompt-generator.ts    # All W4 prompt generators
+├── prompt-writer.ts       # W4PromptWriter class
+├── result-saver.ts        # W4ResultSaver class
+└── index.ts               # Exports
+
+src/tooling/cli-commands/
+├── w4-import-session.ts   # Import GPT session (Track A)
+├── w4-run-session.ts      # Run agentic session (Track B)
+├── w4-analyze.ts          # Analysis CLI
+├── w4-generate-feedback.ts # Feedback generation CLI
+└── w4-list.ts             # List sessions CLI
+```
+
+### Prompt Files Location
+
+```
+data/w4-prompts/{sessionId}/
+├── gm-scenario.txt        # GM scenario prompt
+├── player-1.txt           # Player 1 prompt
+├── player-2.txt           # Player 2 prompt
+├── player-3.txt           # Player 3 prompt
+├── analysis.txt           # Analysis prompt
+└── feedback.txt           # Feedback generation prompt
+```
+
+### Reference
+
+See `docs/developers/agent-architecture.md` for the complete prompt-based agent pattern.
 
 ---
 

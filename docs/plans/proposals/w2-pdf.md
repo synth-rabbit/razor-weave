@@ -70,58 +70,103 @@ flowchart TD
 
 ## Agents
 
+All agents follow the **prompt-based pattern** (see `docs/developers/agent-architecture.md`):
+1. CLI generates prompt files with full context
+2. Claude Code reads prompts and executes tasks
+3. Results saved via `--save` subcommands
+
 ### Product Manager Agent
 
+**Prompt Generator:** `generatePdfPmPrompt(context)`
+
 **Inputs:**
-- Draft PDF
+- Draft PDF path
 - Release notes from W1
 
 **Outputs:**
-- PDF improvement plan
+- PDF improvement plan JSON
+
+**CLI:**
+```bash
+pnpm w2:pm-review --run=<id>           # Generate prompt
+pnpm w2:pm-review --save --run=<id> --plan=<path>  # Save result
+```
 
 ---
 
 ### PDF Layout Agent
 
+**Prompt Generator:** `generateLayoutPrompt(context)`
+
 **Inputs:**
 - Improvement plan
 
 **Outputs:**
-- Structural layout plan
+- Structural layout plan JSON
+
+**CLI:**
+```bash
+pnpm w2:layout --run=<id>              # Generate prompt
+pnpm w2:layout --save --run=<id> --plan=<path>     # Save result
+```
 
 ---
 
 ### Design Agent
 
+**Prompt Generator:** `generateDesignPrompt(context)`
+
 **Inputs:**
 - Layout plan
 
 **Outputs:**
-- Design plan
+- Design plan JSON
 - Image asset prompts
+
+**CLI:**
+```bash
+pnpm w2:design --run=<id>              # Generate prompt
+pnpm w2:design --save --run=<id> --plan=<path>     # Save result
+```
 
 ---
 
 ### PDF Creator Agent
 
+**Prompt Generator:** `generatePdfCreatorPrompt(context)`
+
 **Inputs:**
 - Layout plan
 - Design plan
-- Assets folder
+- Assets folder path
 
 **Outputs:**
-- New generated PDF
+- New generated PDF path
+
+**CLI:**
+```bash
+pnpm w2:create-pdf --run=<id>          # Generate prompt
+pnpm w2:create-pdf --save --run=<id> --pdf=<path>  # Save result
+```
 
 ---
 
 ### PDF Editor Agent
 
+**Prompt Generator:** `generatePdfEditorPrompt(context)`
+
 **Inputs:**
-- PDF document
+- PDF document path
 
 **Outputs:**
-- Approval report
-- Screenshots (for review)
+- Approval report JSON
+- Screenshots paths
+
+**CLI:**
+```bash
+pnpm w2:editor-review --run=<id>       # Generate prompt
+pnpm w2:editor-review --save --run=<id> --result=<path>  # Save result
+```
 
 ---
 
@@ -172,6 +217,43 @@ flowchart TD
 
 3. **Version mismatch** - Digital vs print versions diverge
    - Mitigation: Both versions from same source, sequential processing
+
+---
+
+## Implementation Notes
+
+### Module Structure
+
+```
+src/tooling/w2/
+├── prompt-generator.ts    # All W2 prompt generators
+├── prompt-writer.ts       # W2PromptWriter class
+├── result-saver.ts        # W2ResultSaver class
+└── index.ts               # Exports
+
+src/tooling/cli-commands/
+├── w2-pm-review.ts        # PM review CLI
+├── w2-layout.ts           # Layout planning CLI
+├── w2-design.ts           # Design planning CLI
+├── w2-create-pdf.ts       # PDF creation CLI
+├── w2-editor-review.ts    # Editor review CLI
+└── w2-finalize.ts         # Finalization orchestrator
+```
+
+### Prompt Files Location
+
+```
+data/w2-prompts/{runId}/
+├── pm-review.txt          # PM review prompt
+├── layout-plan.txt        # Layout planning prompt
+├── design-plan.txt        # Design planning prompt
+├── pdf-creator.txt        # PDF creator prompt
+└── editor-review.txt      # Editor review prompt
+```
+
+### Reference
+
+See `docs/developers/agent-architecture.md` for the complete prompt-based agent pattern.
 
 ---
 

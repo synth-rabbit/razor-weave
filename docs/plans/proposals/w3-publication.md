@@ -68,7 +68,14 @@ flowchart TD
 
 ## Agents
 
+All agents follow the **prompt-based pattern** (see `docs/developers/agent-architecture.md`):
+1. CLI generates prompt files with full context
+2. Claude Code reads prompts and executes tasks
+3. Results saved via `--save` subcommands
+
 ### Release Manager Agent
+
+**Prompt Generator:** `generateReleaseManagerPrompt(context)`
 
 **Inputs:**
 - W1 artifacts (web HTML, release notes)
@@ -76,33 +83,41 @@ flowchart TD
 - Current production versions
 
 **Outputs:**
-- Version alignment report
+- Version alignment report JSON
 - Release readiness status
 
-**Responsibilities:**
-- Validate version alignment
-- Check release readiness
+**CLI:**
+```bash
+pnpm w3:release-check --run=<id>       # Generate prompt
+pnpm w3:release-check --save --run=<id> --report=<path>  # Save result
+```
 
 ---
 
 ### QA Agent
+
+**Prompt Generator:** `generateQaPrompt(context)`
 
 **Inputs:**
 - PDFs (digital and print)
 - Web HTML
 
 **Outputs:**
-- QA report
+- QA report JSON
 - Pass/fail status
 - Defect list (if any)
 
-**Responsibilities:**
-- Check PDFs for structure and errors
-- Check web HTML for issues
+**CLI:**
+```bash
+pnpm w3:qa --run=<id>                  # Generate prompt
+pnpm w3:qa --save --run=<id> --report=<path>  # Save result
+```
 
 ---
 
 ### Marketing Agent
+
+**Prompt Generator:** `generateMarketingPrompt(context)`
 
 **Inputs:**
 - Release notes
@@ -112,27 +127,32 @@ flowchart TD
 - Updated website copy
 - Social media announcements
 
-**Responsibilities:**
-- Update website content
-- Write release announcements
+**CLI:**
+```bash
+pnpm w3:marketing --run=<id>           # Generate prompt
+pnpm w3:marketing --save --run=<id> --content=<path>  # Save result
+```
 
 ---
 
 ### Deploy Agent
 
+**Prompt Generator:** `generateDeployPrompt(context)`
+
 **Inputs:**
 - Approved PDFs
 - Approved web HTML
-- Deployment credentials
+- Deployment manifest
 
 **Outputs:**
-- Deployment status
+- Deployment status JSON
 - Published URLs
 
-**Responsibilities:**
-- Deploy to razorweave.com
-- Deploy to itch.io
-- Deploy to DriveThruRPG
+**CLI:**
+```bash
+pnpm w3:deploy --run=<id>              # Generate prompt
+pnpm w3:deploy --save --run=<id> --status=<path>  # Save result
+```
 
 ---
 
@@ -192,6 +212,41 @@ flowchart TD
 
 3. **Rollback complexity** - Hard to undo multi-platform release
    - Mitigation: Human approval gate before deploy, version tracking
+
+---
+
+## Implementation Notes
+
+### Module Structure
+
+```
+src/tooling/w3/
+├── prompt-generator.ts    # All W3 prompt generators
+├── prompt-writer.ts       # W3PromptWriter class
+├── result-saver.ts        # W3ResultSaver class
+└── index.ts               # Exports
+
+src/tooling/cli-commands/
+├── w3-release-check.ts    # Release manager CLI
+├── w3-qa.ts               # QA review CLI
+├── w3-marketing.ts        # Marketing content CLI
+├── w3-deploy.ts           # Deployment CLI
+└── w3-finalize.ts         # Finalization orchestrator
+```
+
+### Prompt Files Location
+
+```
+data/w3-prompts/{runId}/
+├── release-check.txt      # Release manager prompt
+├── qa-review.txt          # QA review prompt
+├── marketing.txt          # Marketing content prompt
+└── deploy.txt             # Deployment prompt
+```
+
+### Reference
+
+See `docs/developers/agent-architecture.md` for the complete prompt-based agent pattern.
 
 ---
 
