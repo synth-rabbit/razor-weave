@@ -603,11 +603,183 @@ pnpm w1:start --book setting-noir
 └─────────────────────────────────────────────────────────────┘
           ↓
 ┌─────────────────────────────────────────────────────────────┐
+│ CORE BOOK PUBLISHED                                         │
+│ • First publication milestone achieved                      │
+│ • Ready to gather real-world feedback                       │
+└─────────────────────────────────────────────────────────────┘
+          ↓
+┌─────────────────────────────────────────────────────────────┐
+│ W4: Playtesting Workflow                                    │
+│ • Human playtesting via custom GPT                          │
+│ • Agentic playtesting (GM + 3 Players)                      │
+│ • Feedback analysis → W1 inputs                             │
+└─────────────────────────────────────────────────────────────┘
+          ↓
+┌─────────────────────────────────────────────────────────────┐
 │ OPERATIONAL CYCLE ESTABLISHED                               │
 │ • System proven on core book                                │
+│ • W1 → W2 → W3 → W4 loop for ongoing improvement            │
 │ • Ready for rapid settings book iteration                   │
 │ • Boardroom plans ongoing work                              │
 └─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 10.1 W4: Playtesting Workflow
+
+### Goal
+
+Gather real-world playtest feedback from two sources and convert it into actionable W1 inputs.
+
+### Dual-Track Playtesting
+
+```
+┌─────────────────────────────────────┐    ┌─────────────────────────────────────┐
+│ HUMAN PLAYTESTING                   │    │ AGENTIC PLAYTESTING                 │
+│                                     │    │                                     │
+│ Custom GPT with:                    │    │ Virtual Session Group:              │
+│ • Core book access                  │    │ • 1 GM Agent                        │
+│ • All settings basic info           │    │ • 3 Player Agents                   │
+│                                     │    │                                     │
+│ CEO runs sessions manually          │    │ Runs sessions autonomously          │
+│ Copies save data for analysis       │    │ Core book → Core + Setting          │
+└─────────────────────────────────────┘    └─────────────────────────────────────┘
+              │                                         │
+              └──────────────┬──────────────────────────┘
+                             ↓
+              ┌─────────────────────────────────────┐
+              │ PLAYTEST ANALYSIS AGENT             │
+              │                                     │
+              │ • Rules clarity issues              │
+              │ • Balance problems                  │
+              │ • Confusion points                  │
+              │ • Fun factor feedback               │
+              │ • Missing content gaps              │
+              └─────────────────────────────────────┘
+                             ↓
+              ┌─────────────────────────────────────┐
+              │ W1: ITERATIVE EDITING               │
+              │                                     │
+              │ Playtest feedback → PM plan         │
+              │ → Writer → Editor → Domain Expert   │
+              └─────────────────────────────────────┘
+```
+
+### Human Playtesting Track
+
+**Tool:** Custom GPT with core book + settings overview access
+
+**Process:**
+1. CEO runs playtesting sessions with the GPT
+2. GPT simulates game scenarios, player decisions, GM rulings
+3. CEO exports/copies session save data
+4. Save data submitted for analysis
+
+**Output:** Raw session transcripts with rules used, questions raised, confusion points
+
+### Agentic Playtesting Track
+
+**Agents:**
+
+| Agent | Role | Behavior |
+|-------|------|----------|
+| **GM Agent** | Runs scenarios | Presents situations, adjudicates rules, tracks events |
+| **Player 1: Optimizer** | Min-maxer | Tests mechanical boundaries, finds exploits |
+| **Player 2: Storyteller** | Narrative-focused | Tests fiction-first flow, immersion breaks |
+| **Player 3: Casual** | Newcomer perspective | Surfaces confusion, learning curve issues |
+
+**Process:**
+1. GM loads scenario from corebook (later: corebook + setting)
+2. Players create characters, make decisions
+3. GM adjudicates using rules, notes questions
+4. Session runs for defined scope (encounter, scene, short adventure)
+5. Session log exported for analysis
+
+**Output per Session:**
+- Full session transcript
+- Rules referenced (with page numbers)
+- Rules questions that arose
+- Mechanics used vs. unused
+- Points of confusion
+- "Fun" moments vs. friction points
+
+### Playtest Analysis
+
+**Playtest Analysis Agent Inputs:**
+- Human session transcripts
+- Agentic session logs
+- Current corebook rules reference
+
+**Analysis Categories:**
+- **Clarity:** Rules that were misunderstood or unclear
+- **Balance:** Mechanics that felt too strong/weak
+- **Engagement:** What created fun vs. friction
+- **Gaps:** Missing rules or guidance
+- **Conflicts:** Rules that contradicted each other
+
+**Output:** Structured improvement recommendations for W1 PM
+
+### Benefits of Dual-Track
+
+| Human Playtesting | Agentic Playtesting |
+|-------------------|---------------------|
+| Real human intuition | High volume (many sessions) |
+| Creative edge cases | Systematic rules coverage |
+| "Feel" and fun feedback | Stress-test mechanics |
+| Limited sessions | Can run overnight/in parallel |
+| Catches UX issues | Catches rules issues |
+
+### CLI Commands (W4)
+
+```bash
+# Import human playtest session
+pnpm w4:import-session --source <path> --type human
+
+# Run agentic playtest
+pnpm w4:run-session --scenario <scenario-id> --book <book-slug>
+
+# Run analysis on collected sessions
+pnpm w4:analyze --run <run-id>
+
+# Generate W1 input from analysis
+pnpm w4:generate-feedback --run <run-id>
+```
+
+### Database Tables (W4)
+
+```sql
+-- Playtest sessions
+playtest_sessions (
+  id TEXT PRIMARY KEY,
+  book_id TEXT REFERENCES books,
+  session_type TEXT NOT NULL,  -- human | agentic
+  scenario TEXT,
+  transcript TEXT,             -- full session log
+  source_path TEXT,            -- original file location
+  created_at TIMESTAMP
+)
+
+-- Playtest analysis results
+playtest_analysis (
+  id TEXT PRIMARY KEY,
+  session_id TEXT REFERENCES playtest_sessions,
+  category TEXT NOT NULL,      -- clarity | balance | engagement | gaps | conflicts
+  description TEXT NOT NULL,
+  severity TEXT,               -- high | medium | low
+  suggested_action TEXT,
+  created_at TIMESTAMP
+)
+
+-- Aggregated feedback for W1
+playtest_feedback (
+  id TEXT PRIMARY KEY,
+  run_id TEXT REFERENCES workflow_runs,
+  analysis_ids TEXT,           -- JSON array of playtest_analysis IDs
+  summary TEXT,
+  priority_items TEXT,         -- JSON array of top issues
+  created_at TIMESTAMP
+)
 ```
 
 ---
@@ -949,6 +1121,12 @@ pnpm w1:start --book <slug>
 pnpm w1:writer --run <id> --feedback-from <agent>
 pnpm w2:start --from-w1 <run-id>
 pnpm w3:start --from-w2 <run-id>
+
+# Playtesting (built in W4 phase, after core book published)
+pnpm w4:import-session --source <path> --type human
+pnpm w4:run-session --scenario <id> --book <slug>
+pnpm w4:analyze --run <run-id>
+pnpm w4:generate-feedback --run <run-id>
 ```
 
 ---
