@@ -7,6 +7,7 @@ import {
   generatePlanningPrompt,
   generateWriterPrompt,
   generateEditorPrompt,
+  generateSharedContext,
 } from './prompt-generator.js';
 
 describe('W1 Prompt Generator', () => {
@@ -210,6 +211,86 @@ describe('W1 Prompt Generator', () => {
 
       expect(prompt).toContain('pnpm w1:content-modify --save-editor');
       expect(prompt).toContain('--run=run-123');
+    });
+  });
+
+  describe('generateSharedContext', () => {
+    it('includes workflow run info', () => {
+      const context = generateSharedContext({
+        runId: 'wfrun_test123',
+        bookTitle: 'Test Book',
+        bookSlug: 'test-book',
+        chapterCount: 4,
+        plan: {
+          plan_id: 'plan-123',
+          summary: 'Test improvement plan',
+          target_issues: [
+            { issue_id: 'issue-001', severity: 'high', description: 'Test issue' }
+          ],
+          constraints: {
+            max_chapters_modified: 5,
+            preserve_structure: true,
+            word_count_target: 'maintain_or_reduce'
+          }
+        },
+        contentStyleGuide: '# Content Style Guide\nTest content.',
+        mechanicsStyleGuide: '# Mechanics Style Guide\nTest mechanics.'
+      });
+
+      expect(context).toContain('wfrun_test123');
+      expect(context).toContain('Test Book');
+      expect(context).toContain('test-book');
+      expect(context).toContain('4');
+    });
+
+    it('includes plan summary and target issues', () => {
+      const context = generateSharedContext({
+        runId: 'wfrun_test123',
+        bookTitle: 'Test Book',
+        bookSlug: 'test-book',
+        chapterCount: 4,
+        plan: {
+          plan_id: 'plan-123',
+          summary: 'Test improvement plan',
+          target_issues: [
+            { issue_id: 'issue-001', severity: 'high', description: 'Test issue' }
+          ],
+          constraints: {
+            max_chapters_modified: 5,
+            preserve_structure: true,
+            word_count_target: 'maintain_or_reduce'
+          }
+        },
+        contentStyleGuide: '# Content Style Guide',
+        mechanicsStyleGuide: '# Mechanics Style Guide'
+      });
+
+      expect(context).toContain('Test improvement plan');
+      expect(context).toContain('issue-001');
+      expect(context).toContain('high');
+      expect(context).toContain('Test issue');
+    });
+
+    it('includes both style guides', () => {
+      const context = generateSharedContext({
+        runId: 'wfrun_test123',
+        bookTitle: 'Test Book',
+        bookSlug: 'test-book',
+        chapterCount: 2,
+        plan: {
+          plan_id: 'plan-123',
+          summary: 'Summary',
+          target_issues: [],
+          constraints: { max_chapters_modified: 5, preserve_structure: true, word_count_target: 'maintain_or_reduce' }
+        },
+        contentStyleGuide: '# Content Style Guide\nUse second person.',
+        mechanicsStyleGuide: '# Mechanics Style Guide\nUse 4d6.'
+      });
+
+      expect(context).toContain('# Content Style Guide');
+      expect(context).toContain('Use second person.');
+      expect(context).toContain('# Mechanics Style Guide');
+      expect(context).toContain('Use 4d6.');
     });
   });
 });

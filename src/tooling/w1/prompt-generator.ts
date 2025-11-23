@@ -506,3 +506,64 @@ pnpm w1:finalize --save-release-notes --run=${context.runId} --result=<path-to-r
 Write the result to: \`data/w1-artifacts/${context.runId}/release-notes.json\`
 `;
 }
+
+export interface SharedContextInput {
+  runId: string;
+  bookTitle: string;
+  bookSlug: string;
+  chapterCount: number;
+  plan: {
+    plan_id: string;
+    summary: string;
+    target_issues: Array<{ issue_id: string; severity: string; description: string }>;
+    constraints: {
+      max_chapters_modified: number;
+      preserve_structure: boolean;
+      word_count_target: string;
+    };
+  };
+  contentStyleGuide: string;
+  mechanicsStyleGuide: string;
+}
+
+export function generateSharedContext(input: SharedContextInput): string {
+  const { runId, bookTitle, bookSlug, chapterCount, plan, contentStyleGuide, mechanicsStyleGuide } = input;
+
+  const issuesTable = plan.target_issues.length > 0
+    ? plan.target_issues.map(i => `| ${i.issue_id} | ${i.severity} | ${i.description} |`).join('\n')
+    : '| (none) | - | - |';
+
+  return `# W1 Writer Shared Context
+
+## Workflow Run
+- Run ID: ${runId}
+- Book: ${bookTitle} (${bookSlug})
+- Chapters to modify: ${chapterCount}
+
+## Improvement Plan Summary
+${plan.summary}
+
+### Target Issues
+| ID | Severity | Description |
+|----|----------|-------------|
+${issuesTable}
+
+### Constraints
+- Max chapters: ${plan.constraints.max_chapters_modified}
+- Preserve structure: ${plan.constraints.preserve_structure ? 'yes' : 'no'}
+- Word count target: ${plan.constraints.word_count_target}
+
+## Style Guides
+
+### Content Style Guide
+${contentStyleGuide}
+
+### Mechanics Style Guide
+${mechanicsStyleGuide}
+
+## Cross-Chapter Consistency Notes
+- Use consistent terminology (see style guide tables)
+- Example characters referenced across chapters should match
+- Quick-reference table formatting should be uniform
+`;
+}
