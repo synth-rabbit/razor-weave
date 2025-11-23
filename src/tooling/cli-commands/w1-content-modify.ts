@@ -2,28 +2,76 @@
  * w1:content-modify CLI Command
  *
  * Orchestrates the writer/editor/domain expert loop for content modification.
- * Invokes agents in sequence and handles approvals/rejections with tracking.
+ * Uses prompt-based flow: generates prompts for Claude Code to execute,
+ * then saves results via --save-* subcommands.
  *
  * Usage:
- *   pnpm w1:content-modify --book <book-id> --plan <path> --iteration <number> [--output <dir>]
+ *   pnpm w1:content-modify --run=<id>                        # Generate writer prompt
+ *   pnpm w1:content-modify --save-writer --run=<id> --chapters=<dir>  # Save writer output
+ *   pnpm w1:content-modify --generate-editor --run=<id>      # Generate editor prompt
+ *   pnpm w1:content-modify --save-editor --run=<id> --result=<path>   # Save editor result
+ *   pnpm w1:content-modify --generate-domain --run=<id>      # Generate domain expert prompt
+ *   pnpm w1:content-modify --save-domain --run=<id> --result=<path>   # Save domain expert result
+ *   pnpm w1:content-modify --help                            # Show help
  */
 
-import { parseArgs } from 'node:util';
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join, resolve, basename } from 'node:path';
 import { execSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
-import { WriterInvoker, type WriterOutput } from '../agents/invoker-writer.js';
-import { EditorInvoker, type EditorReviewResult } from '../agents/invoker-editor.js';
-import { DomainExpertInvoker, type DomainExpertReviewResult } from '../agents/invoker-domain-expert.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { ArtifactRegistry } from '../workflows/artifact-registry.js';
-import { RejectionTracker, type RejectionType, DEFAULT_ESCALATION_THRESHOLD } from '../workflows/rejection-tracker.js';
 import { BookRepository } from '../books/repository.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
-import type { ImprovementPlan } from '../agents/invoker-pm.js';
+import {
+  generateWriterPrompt,
+  generateEditorPrompt,
+  generateDomainExpertPrompt,
+} from '../w1/prompt-generator.js';
+import { W1PromptWriter } from '../w1/prompt-writer.js';
+import { W1ResultSaver, type ReviewResult } from '../w1/result-saver.js';
+
+// Type definitions (moved from invoker-pm.ts since we're removing that dependency)
+interface ImprovementPlan {
+  plan_id: string;
+  created_at: string;
+  summary: string;
+  target_issues: Array<{
+    issue_id: string;
+    description: string;
+    severity: 'high' | 'medium' | 'low';
+    affected_chapters: string[];
+    improvement: string;
+    success_metric: string;
+    priority: number;
+  }>;
+  chapter_modifications: Array<{
+    chapter_id: string;
+    chapter_name: string;
+    issues_addressed: string[];
+    modifications: Array<{
+      type: 'clarify' | 'expand' | 'restructure' | 'fix_mechanics' | 'improve_examples';
+      target: string;
+      instruction: string;
+    }>;
+  }>;
+  constraints: {
+    max_chapters_modified: number;
+    preserve_structure: boolean;
+    follow_style_guides: boolean;
+  };
+  estimated_impact: string;
+}
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+const BOX_WIDTH = 59;
+const DOUBLE_LINE = '='.repeat(BOX_WIDTH);
+const SINGLE_LINE = '-'.repeat(BOX_WIDTH);
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {
@@ -34,178 +82,559 @@ function getProjectRoot(): string {
   }
 }
 
-// Parse command line arguments
-const { values } = parseArgs({
-  options: {
-    book: { type: 'string', short: 'b' },
-    plan: { type: 'string', short: 'p' },
-    iteration: { type: 'string', short: 'i' },
-    output: { type: 'string', short: 'o', default: 'data/w1-artifacts' },
-    db: { type: 'string', default: 'data/project.db' },
-    'workflow-run': { type: 'string', short: 'w' },
-  },
-});
+// ============================================================================
+// Argument Parsing
+// ============================================================================
 
-const projectRoot = getProjectRoot();
-const bookIdOrSlug = values.book;
-const planPath = values.plan;
-const iterationStr = values.iteration;
-const outputDir = resolve(projectRoot, values.output!);
-const dbPath = resolve(projectRoot, values.db!);
-const workflowRunIdArg = values['workflow-run'];
-
-// Validate required arguments
-if (!bookIdOrSlug) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --book <book-id>',
-      status: [{ label: 'Book ID is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:content-modify --book <book-id> --plan <path> --iteration <number>',
-        '',
-        'List available books:',
-        '  pnpm book:list',
-      ],
-    })
-  );
-  process.exit(1);
+interface Args {
+  run?: string;
+  chapters?: string;
+  result?: string;
+  saveWriter?: boolean;
+  generateEditor?: boolean;
+  saveEditor?: boolean;
+  generateDomain?: boolean;
+  saveDomain?: boolean;
+  help?: boolean;
+  db?: string;
 }
 
-if (!planPath) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --plan <path-to-plan>',
-      status: [{ label: 'Plan path is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:content-modify --book <book-id> --plan <path> --iteration <number>',
-        '',
-        'Run planning first:',
-        '  pnpm w1:planning --book <book-id> --analysis <path>',
-      ],
-    })
-  );
-  process.exit(1);
+function parseArgs(argv: string[]): Args {
+  const args: Args = {};
+  for (const arg of argv) {
+    if (arg.startsWith('--run=')) args.run = arg.split('=')[1];
+    else if (arg.startsWith('--chapters=')) args.chapters = arg.split('=')[1];
+    else if (arg.startsWith('--result=')) args.result = arg.split('=')[1];
+    else if (arg === '--save-writer') args.saveWriter = true;
+    else if (arg === '--generate-editor') args.generateEditor = true;
+    else if (arg === '--save-editor') args.saveEditor = true;
+    else if (arg === '--generate-domain') args.generateDomain = true;
+    else if (arg === '--save-domain') args.saveDomain = true;
+    else if (arg === '--help' || arg === '-h') args.help = true;
+    else if (arg.startsWith('--db=')) args.db = arg.split('=')[1];
+  }
+  return args;
 }
 
-if (!iterationStr) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: 'Missing required argument: --iteration <number>',
-      status: [{ label: 'Iteration number is required', success: false }],
-      nextStep: [
-        'Usage:',
-        '  pnpm w1:content-modify --book <book-id> --plan <path> --iteration <number>',
-        '',
-        'Example:',
-        '  pnpm w1:content-modify --book core-rulebook --plan data/w1-artifacts/plan.json --iteration 1',
-      ],
-    })
-  );
-  process.exit(1);
+function showHelp(): void {
+  console.log(CLIFormatter.header('W1 CONTENT MODIFY - HELP'));
+  console.log(`
+Usage: pnpm w1:content-modify [options]
+
+Modes:
+  --run=<id>                         Generate writer prompt for workflow run
+  --save-writer --run=<id> --chapters=<dir>
+                                     Save writer output from chapters directory
+  --generate-editor --run=<id>       Generate editor review prompt
+  --save-editor --run=<id> --result=<path>
+                                     Save editor review result
+  --generate-domain --run=<id>       Generate domain expert review prompt
+  --save-domain --run=<id> --result=<path>
+                                     Save domain expert review result
+  --help, -h                         Show this help message
+
+Options:
+  --db=<path>                        Database path (default: data/project.db)
+
+Examples:
+  # Step 1: Generate writer prompt
+  pnpm w1:content-modify --run=wfrun_abc123
+
+  # Step 2: After writing chapters, save writer output
+  pnpm w1:content-modify --save-writer --run=wfrun_abc123 --chapters=data/w1-artifacts/wfrun_abc123/chapters/
+
+  # Step 3: Generate editor prompt
+  pnpm w1:content-modify --generate-editor --run=wfrun_abc123
+
+  # Step 4: After editor review, save result
+  pnpm w1:content-modify --save-editor --run=wfrun_abc123 --result=data/w1-artifacts/wfrun_abc123/editor-review.json
+
+  # Step 5: Generate domain expert prompt
+  pnpm w1:content-modify --generate-domain --run=wfrun_abc123
+
+  # Step 6: After domain expert review, save result
+  pnpm w1:content-modify --save-domain --run=wfrun_abc123 --result=data/w1-artifacts/wfrun_abc123/domain-review.json
+`);
 }
 
-const iteration = parseInt(iterationStr, 10);
-if (isNaN(iteration) || iteration < 1) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: `Invalid iteration number: ${iterationStr}`,
-      status: [{ label: 'Iteration must be a positive integer', success: false }],
-      nextStep: ['Example: --iteration 1'],
-    })
-  );
-  process.exit(1);
-}
-
-// Resolve plan path
-const resolvedPlanPath = resolve(projectRoot, planPath);
-
-// Verify plan file exists
-if (!existsSync(resolvedPlanPath)) {
-  console.error(
-    CLIFormatter.format({
-      title: 'ERROR',
-      content: `Plan file not found: ${resolvedPlanPath}`,
-      status: [{ label: 'Plan file does not exist', success: false }],
-      nextStep: [
-        'Run planning first:',
-        '  pnpm w1:planning --book <book-id> --analysis <path>',
-      ],
-    })
-  );
-  process.exit(1);
-}
-
-// Print header
-console.log(CLIFormatter.header(`W1 CONTENT MODIFICATION - Iteration ${iteration}`));
-console.log(`Book: ${bookIdOrSlug}`);
-console.log(`Plan: ${resolvedPlanPath}`);
-console.log(`Output: ${outputDir}`);
-console.log('');
+// ============================================================================
+// Helper Functions
+// ============================================================================
 
 /**
- * Extract workflow run ID from plan path if not provided
+ * Load improvement plan from artifacts
  */
-function extractWorkflowRunIdFromPlan(path: string): string | null {
-  // Plan paths are typically like: data/w1-artifacts/wfrun_xxx_yyy-improvement-plan.json
-  const filename = path.split('/').pop() || '';
-  const match = filename.match(/^(wfrun_[a-z0-9_]+)-improvement-plan\.json$/);
-  return match ? match[1] : null;
+function loadPlanForRun(projectRoot: string, runId: string): ImprovementPlan | null {
+  const planPath = resolve(projectRoot, `data/w1-artifacts/${runId}/plan.json`);
+  if (existsSync(planPath)) {
+    return JSON.parse(readFileSync(planPath, 'utf-8')) as ImprovementPlan;
+  }
+  return null;
 }
 
 /**
- * Get chapter paths from the book directory based on the plan
+ * Get chapter paths for the workflow run
  */
-function getChapterPaths(bookDir: string, plan: ImprovementPlan): string[] {
-  const chaptersDir = join(bookDir, 'chapters');
+function getChapterPathsForRun(projectRoot: string, runId: string): string[] {
+  const chaptersDir = resolve(projectRoot, `data/w1-artifacts/${runId}/chapters`);
+  if (!existsSync(chaptersDir)) {
+    return [];
+  }
+  return readdirSync(chaptersDir)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => join(chaptersDir, f));
+}
+
+/**
+ * Get original chapter paths from book based on plan
+ */
+function getOriginalChapterPaths(
+  projectRoot: string,
+  bookSourcePath: string,
+  plan: ImprovementPlan
+): string[] {
+  const chaptersDir = join(resolve(projectRoot, bookSourcePath), 'chapters');
   const chapterIds = plan.chapter_modifications.map((mod) => mod.chapter_id);
 
   return chapterIds.map((chapterId) => {
-    // Try common extensions
     for (const ext of ['.md', '.markdown']) {
       const path = join(chaptersDir, `${chapterId}${ext}`);
       if (existsSync(path)) {
         return path;
       }
     }
-    // Fallback to .md
     return join(chaptersDir, `${chapterId}.md`);
-  });
+  }).filter((p) => existsSync(p));
 }
 
-/**
- * Map editor/domain rejection to RejectionType
- */
-function mapToRejectionType(feedback: EditorReviewResult | DomainExpertReviewResult): RejectionType {
-  // Analyze feedback to determine rejection type
-  if ('feedback' in feedback) {
-    // Editor feedback
-    const hasStyleIssue = feedback.feedback.some(
-      (f) => f.issue.toLowerCase().includes('style') || f.issue.toLowerCase().includes('voice')
-    );
-    const hasClarityIssue = feedback.feedback.some(
-      (f) => f.issue.toLowerCase().includes('clarity') || f.issue.toLowerCase().includes('unclear')
-    );
-    if (hasStyleIssue) return 'style';
-    if (hasClarityIssue) return 'clarity';
-    return 'style'; // Default for editor
-  } else {
-    // Domain expert feedback
-    const hasMechanicsIssue = feedback.issues.some(
-      (i) => i.type === 'rules_contradiction' || i.type === 'balance_concern'
-    );
-    if (hasMechanicsIssue) return 'mechanics';
-    return 'scope'; // Default for domain expert
+// ============================================================================
+// Mode Handlers
+// ============================================================================
+
+async function handleGenerateWriterPrompt(
+  db: Database.Database,
+  projectRoot: string,
+  runId: string
+): Promise<void> {
+  console.log(DOUBLE_LINE);
+  console.log('W1 CONTENT MODIFY - GENERATE WRITER PROMPT');
+  console.log(DOUBLE_LINE);
+  console.log('');
+
+  const workflowRepo = new WorkflowRepository(db);
+  const bookRepo = new BookRepository(db);
+
+  // Verify workflow run exists
+  const workflowRun = workflowRepo.getById(runId);
+  if (!workflowRun) {
+    console.error(`  ERROR: Workflow run not found: ${runId}`);
+    process.exit(1);
   }
+  console.log(`  OK Workflow run: ${runId}`);
+
+  // Get book info
+  const book = bookRepo.getById(workflowRun.book_id);
+  if (!book) {
+    console.error(`  ERROR: Book not found: ${workflowRun.book_id}`);
+    process.exit(1);
+  }
+  console.log(`  OK Book: ${book.title} (${book.slug})`);
+
+  // Load plan
+  const plan = loadPlanForRun(projectRoot, runId);
+  if (!plan) {
+    console.error(`  ERROR: Plan not found for run ${runId}`);
+    console.error(`  Expected: data/w1-artifacts/${runId}/plan.json`);
+    process.exit(1);
+  }
+  console.log(`  OK Plan loaded: ${plan.plan_id}`);
+
+  // Get chapter paths
+  const chapterPaths = getOriginalChapterPaths(projectRoot, book.source_path, plan);
+  if (chapterPaths.length === 0) {
+    console.error(`  ERROR: No chapters found for modification`);
+    process.exit(1);
+  }
+  console.log(`  OK Chapters to modify: ${chapterPaths.length}`);
+
+  // Generate prompt
+  const styleGuidesDir = resolve(projectRoot, 'docs/style_guides');
+  const planPath = resolve(projectRoot, `data/w1-artifacts/${runId}/plan.json`);
+  const prompt = generateWriterPrompt({
+    runId,
+    planPath,
+    chapterPaths,
+    styleGuidesDir,
+  });
+
+  // Write prompt
+  const promptWriter = new W1PromptWriter({ runId });
+  const promptPath = promptWriter.writeWriterPrompt(prompt);
+  console.log(`  OK Prompt written: ${promptPath}`);
+
+  // Update workflow status
+  workflowRepo.updateStatus(runId, 'running');
+  workflowRepo.setCurrentAgent(runId, 'writer');
+
+  console.log('');
+  console.log(SINGLE_LINE);
+  console.log('NEXT STEPS');
+  console.log(SINGLE_LINE);
+  console.log('');
+  console.log(`1. Read the prompt: ${promptPath}`);
+  console.log('2. Write modified chapters to:');
+  console.log(`   data/w1-artifacts/${runId}/chapters/`);
+  console.log('3. Save results:');
+  console.log(`   pnpm w1:content-modify --save-writer --run=${runId} --chapters=data/w1-artifacts/${runId}/chapters/`);
+  console.log('');
+  console.log(DOUBLE_LINE);
 }
+
+async function handleSaveWriterOutput(
+  db: Database.Database,
+  projectRoot: string,
+  runId: string,
+  chaptersDir: string
+): Promise<void> {
+  console.log(DOUBLE_LINE);
+  console.log('W1 CONTENT MODIFY - SAVE WRITER OUTPUT');
+  console.log(DOUBLE_LINE);
+  console.log('');
+
+  const workflowRepo = new WorkflowRepository(db);
+  const artifactRegistry = new ArtifactRegistry(db);
+
+  // Verify workflow run exists
+  const workflowRun = workflowRepo.getById(runId);
+  if (!workflowRun) {
+    console.error(`  ERROR: Workflow run not found: ${runId}`);
+    process.exit(1);
+  }
+  console.log(`  OK Workflow run: ${runId}`);
+
+  // Verify chapters directory exists
+  const resolvedChaptersDir = resolve(projectRoot, chaptersDir);
+  if (!existsSync(resolvedChaptersDir)) {
+    console.error(`  ERROR: Chapters directory not found: ${resolvedChaptersDir}`);
+    process.exit(1);
+  }
+
+  // Get chapter files
+  const chapterFiles = readdirSync(resolvedChaptersDir).filter((f) => f.endsWith('.md'));
+  if (chapterFiles.length === 0) {
+    console.error(`  ERROR: No chapter files found in: ${resolvedChaptersDir}`);
+    process.exit(1);
+  }
+  console.log(`  OK Chapters saved: ${chapterFiles.length}`);
+
+  // Register artifacts
+  const chapterPaths: string[] = [];
+  for (const file of chapterFiles) {
+    const chapterPath = join(resolvedChaptersDir, file);
+    chapterPaths.push(chapterPath);
+    artifactRegistry.register({
+      workflowRunId: runId,
+      artifactType: 'chapter',
+      artifactPath: chapterPath,
+      metadata: {
+        w1_type: 'modified_chapter',
+        chapter_id: basename(file, '.md'),
+      },
+    });
+  }
+  console.log(`  OK Artifacts registered`);
+
+  // Update workflow
+  workflowRepo.setCurrentAgent(runId, null);
+
+  console.log('');
+  console.log(SINGLE_LINE);
+  console.log('NEXT STEP');
+  console.log(SINGLE_LINE);
+  console.log('');
+  console.log(`pnpm w1:content-modify --generate-editor --run=${runId}`);
+  console.log('');
+  console.log(DOUBLE_LINE);
+}
+
+async function handleGenerateEditorPrompt(
+  db: Database.Database,
+  projectRoot: string,
+  runId: string
+): Promise<void> {
+  console.log(DOUBLE_LINE);
+  console.log('W1 CONTENT MODIFY - GENERATE EDITOR PROMPT');
+  console.log(DOUBLE_LINE);
+  console.log('');
+
+  const workflowRepo = new WorkflowRepository(db);
+
+  // Verify workflow run exists
+  const workflowRun = workflowRepo.getById(runId);
+  if (!workflowRun) {
+    console.error(`  ERROR: Workflow run not found: ${runId}`);
+    process.exit(1);
+  }
+  console.log(`  OK Workflow run: ${runId}`);
+
+  // Get modified chapter paths
+  const chapterPaths = getChapterPathsForRun(projectRoot, runId);
+  if (chapterPaths.length === 0) {
+    console.error(`  ERROR: No modified chapters found for run ${runId}`);
+    console.error(`  Expected: data/w1-artifacts/${runId}/chapters/*.md`);
+    process.exit(1);
+  }
+  console.log(`  OK Chapters to review: ${chapterPaths.length}`);
+
+  // Generate prompt
+  const styleGuidesDir = resolve(projectRoot, 'docs/style_guides');
+  const prompt = generateEditorPrompt({
+    runId,
+    chapterPaths,
+    styleGuidesDir,
+  });
+
+  // Write prompt
+  const promptWriter = new W1PromptWriter({ runId });
+  const promptPath = promptWriter.writeEditorPrompt(prompt);
+  console.log(`  OK Prompt written: ${promptPath}`);
+
+  // Update workflow
+  workflowRepo.setCurrentAgent(runId, 'editor');
+
+  console.log('');
+  console.log(SINGLE_LINE);
+  console.log('NEXT STEPS');
+  console.log(SINGLE_LINE);
+  console.log('');
+  console.log(`1. Read the prompt: ${promptPath}`);
+  console.log('2. Perform editor review');
+  console.log('3. Save result JSON to:');
+  console.log(`   data/w1-artifacts/${runId}/editor-review.json`);
+  console.log('4. Run:');
+  console.log(`   pnpm w1:content-modify --save-editor --run=${runId} --result=data/w1-artifacts/${runId}/editor-review.json`);
+  console.log('');
+  console.log(DOUBLE_LINE);
+}
+
+async function handleSaveEditorResult(
+  db: Database.Database,
+  projectRoot: string,
+  runId: string,
+  resultPath: string
+): Promise<void> {
+  console.log(DOUBLE_LINE);
+  console.log('W1 CONTENT MODIFY - SAVE EDITOR RESULT');
+  console.log(DOUBLE_LINE);
+  console.log('');
+
+  const workflowRepo = new WorkflowRepository(db);
+
+  // Verify workflow run exists
+  const workflowRun = workflowRepo.getById(runId);
+  if (!workflowRun) {
+    console.error(`  ERROR: Workflow run not found: ${runId}`);
+    process.exit(1);
+  }
+  console.log(`  OK Workflow run: ${runId}`);
+
+  // Load result
+  const resolvedResultPath = resolve(projectRoot, resultPath);
+  if (!existsSync(resolvedResultPath)) {
+    console.error(`  ERROR: Result file not found: ${resolvedResultPath}`);
+    process.exit(1);
+  }
+
+  const result = JSON.parse(readFileSync(resolvedResultPath, 'utf-8')) as ReviewResult;
+  console.log(`  OK Result loaded: approved=${result.approved}`);
+
+  // Save result
+  const saver = new W1ResultSaver(db, runId);
+  const outputPath = resolve(projectRoot, `data/w1-artifacts/${runId}/editor-review.json`);
+  saver.saveEditorResult(result, outputPath);
+  console.log(`  OK Result saved to: ${outputPath}`);
+
+  // Update workflow
+  workflowRepo.setCurrentAgent(runId, null);
+
+  console.log('');
+  console.log(SINGLE_LINE);
+
+  if (!result.approved) {
+    console.log('RESULT: EDITOR REJECTED');
+    console.log(SINGLE_LINE);
+    console.log('');
+    console.log(`Summary: ${result.summary}`);
+    console.log('');
+    console.log('Next steps:');
+    console.log('1. Review feedback in editor-review.json');
+    console.log('2. Update chapters based on feedback');
+    console.log(`3. Re-run: pnpm w1:content-modify --generate-editor --run=${runId}`);
+  } else {
+    console.log('RESULT: EDITOR APPROVED');
+    console.log(SINGLE_LINE);
+    console.log('');
+    console.log('NEXT STEP');
+    console.log('');
+    console.log(`pnpm w1:content-modify --generate-domain --run=${runId}`);
+  }
+
+  console.log('');
+  console.log(DOUBLE_LINE);
+}
+
+async function handleGenerateDomainPrompt(
+  db: Database.Database,
+  projectRoot: string,
+  runId: string
+): Promise<void> {
+  console.log(DOUBLE_LINE);
+  console.log('W1 CONTENT MODIFY - GENERATE DOMAIN EXPERT PROMPT');
+  console.log(DOUBLE_LINE);
+  console.log('');
+
+  const workflowRepo = new WorkflowRepository(db);
+
+  // Verify workflow run exists
+  const workflowRun = workflowRepo.getById(runId);
+  if (!workflowRun) {
+    console.error(`  ERROR: Workflow run not found: ${runId}`);
+    process.exit(1);
+  }
+  console.log(`  OK Workflow run: ${runId}`);
+
+  // Get modified chapter paths
+  const chapterPaths = getChapterPathsForRun(projectRoot, runId);
+  if (chapterPaths.length === 0) {
+    console.error(`  ERROR: No modified chapters found for run ${runId}`);
+    console.error(`  Expected: data/w1-artifacts/${runId}/chapters/*.md`);
+    process.exit(1);
+  }
+  console.log(`  OK Chapters to review: ${chapterPaths.length}`);
+
+  // Generate prompt
+  const mechanicsGuidePath = resolve(projectRoot, 'docs/style_guides/mechanics.md');
+  const prompt = generateDomainExpertPrompt({
+    runId,
+    chapterPaths,
+    mechanicsGuidePath,
+  });
+
+  // Write prompt
+  const promptWriter = new W1PromptWriter({ runId });
+  const promptPath = promptWriter.writeDomainExpertPrompt(prompt);
+  console.log(`  OK Prompt written: ${promptPath}`);
+
+  // Update workflow
+  workflowRepo.setCurrentAgent(runId, 'domain_expert');
+
+  console.log('');
+  console.log(SINGLE_LINE);
+  console.log('NEXT STEPS');
+  console.log(SINGLE_LINE);
+  console.log('');
+  console.log(`1. Read the prompt: ${promptPath}`);
+  console.log('2. Perform domain expert review');
+  console.log('3. Save result JSON to:');
+  console.log(`   data/w1-artifacts/${runId}/domain-review.json`);
+  console.log('4. Run:');
+  console.log(`   pnpm w1:content-modify --save-domain --run=${runId} --result=data/w1-artifacts/${runId}/domain-review.json`);
+  console.log('');
+  console.log(DOUBLE_LINE);
+}
+
+async function handleSaveDomainResult(
+  db: Database.Database,
+  projectRoot: string,
+  runId: string,
+  resultPath: string
+): Promise<void> {
+  console.log(DOUBLE_LINE);
+  console.log('W1 CONTENT MODIFY - SAVE DOMAIN EXPERT RESULT');
+  console.log(DOUBLE_LINE);
+  console.log('');
+
+  const workflowRepo = new WorkflowRepository(db);
+  const bookRepo = new BookRepository(db);
+
+  // Verify workflow run exists
+  const workflowRun = workflowRepo.getById(runId);
+  if (!workflowRun) {
+    console.error(`  ERROR: Workflow run not found: ${runId}`);
+    process.exit(1);
+  }
+  console.log(`  OK Workflow run: ${runId}`);
+
+  // Load result
+  const resolvedResultPath = resolve(projectRoot, resultPath);
+  if (!existsSync(resolvedResultPath)) {
+    console.error(`  ERROR: Result file not found: ${resolvedResultPath}`);
+    process.exit(1);
+  }
+
+  const result = JSON.parse(readFileSync(resolvedResultPath, 'utf-8')) as ReviewResult;
+  console.log(`  OK Result loaded: approved=${result.approved}`);
+
+  // Save result
+  const saver = new W1ResultSaver(db, runId);
+  const outputPath = resolve(projectRoot, `data/w1-artifacts/${runId}/domain-review.json`);
+  saver.saveDomainExpertResult(result, outputPath);
+  console.log(`  OK Result saved to: ${outputPath}`);
+
+  // Update workflow
+  workflowRepo.setCurrentAgent(runId, null);
+
+  // Get book info for next step
+  const book = bookRepo.getById(workflowRun.book_id);
+
+  console.log('');
+  console.log(SINGLE_LINE);
+
+  if (!result.approved) {
+    console.log('RESULT: DOMAIN EXPERT REJECTED');
+    console.log(SINGLE_LINE);
+    console.log('');
+    console.log(`Summary: ${result.summary}`);
+    console.log('');
+    console.log('Next steps:');
+    console.log('1. Review feedback in domain-review.json');
+    console.log('2. Update chapters based on feedback');
+    console.log(`3. Re-run: pnpm w1:content-modify --generate-domain --run=${runId}`);
+  } else {
+    console.log('RESULT: ALL REVIEWS APPROVED');
+    console.log(SINGLE_LINE);
+    console.log('');
+    console.log('Both editor and domain expert have approved the content!');
+    console.log('');
+    console.log('NEXT STEP');
+    console.log('');
+    if (book) {
+      console.log(`pnpm w1:validate --book=${book.slug} --run=${runId}`);
+    } else {
+      console.log(`pnpm w1:validate --run=${runId}`);
+    }
+  }
+
+  console.log('');
+  console.log(DOUBLE_LINE);
+}
+
+// ============================================================================
+// Main
+// ============================================================================
 
 async function main(): Promise<void> {
+  const projectRoot = getProjectRoot();
+  const args = parseArgs(process.argv.slice(2));
+
+  // Handle help
+  if (args.help) {
+    showHelp();
+    process.exit(0);
+  }
+
   // Initialize database
+  const dbPath = resolve(projectRoot, args.db || 'data/project.db');
   const db = new Database(dbPath);
   db.pragma('journal_mode = WAL');
   db.pragma('busy_timeout = 5000');
@@ -213,404 +642,52 @@ async function main(): Promise<void> {
 
   createTables(db);
 
-  // Run migrations
   try {
     runMigrations(dbPath);
   } catch {
     // Migrations might already be applied
   }
 
-  // Create repositories
-  const bookRepo = new BookRepository(db);
-  const workflowRepo = new WorkflowRepository(db);
-  const artifactRegistry = new ArtifactRegistry(db);
-  const rejectionTracker = new RejectionTracker(db);
-
   try {
-    // 1. Verify book exists and get book info
-    console.log('Writer Agent:');
-    let book = bookRepo.getBySlug(bookIdOrSlug!);
-    if (!book) {
-      book = bookRepo.getById(bookIdOrSlug!);
-    }
-    if (!book) {
-      console.error(
-        CLIFormatter.format({
-          title: 'ERROR',
-          content: `Book not found: ${bookIdOrSlug}`,
-          status: [{ label: 'Book does not exist', success: false }],
-          nextStep: ['List available books:', '  pnpm book:list'],
-        })
-      );
-      process.exit(1);
-    }
-
-    // 2. Load improvement plan
-    const planContent = readFileSync(resolvedPlanPath, 'utf-8');
-    const plan = JSON.parse(planContent) as ImprovementPlan;
-
-    // 3. Get or find workflow run ID
-    let workflowRunId = workflowRunIdArg || extractWorkflowRunIdFromPlan(resolvedPlanPath);
-
-    if (!workflowRunId) {
-      // Create a new workflow run if not provided
-      const workflowRun = workflowRepo.create({
-        workflow_type: 'w1_editing',
-        book_id: book.id,
-        plan_id: plan.plan_id,
-      });
-      workflowRunId = workflowRun.id;
-      console.log(`  Created workflow run: ${workflowRunId}`);
-    }
-
-    // Verify workflow run exists
-    const workflowRun = workflowRepo.getById(workflowRunId);
-    if (!workflowRun) {
-      console.error(`  ERROR: Workflow run not found: ${workflowRunId}`);
-      process.exit(1);
-    }
-
-    // Ensure output directory exists
-    if (!existsSync(outputDir)) {
-      mkdirSync(outputDir, { recursive: true });
-    }
-
-    // Create iteration-specific output directory
-    const iterationDir = join(outputDir, workflowRunId, `iteration-${iteration}`);
-    if (!existsSync(iterationDir)) {
-      mkdirSync(iterationDir, { recursive: true });
-    }
-
-    // Get chapter paths
-    const bookDir = resolve(projectRoot, book.source_path);
-    const chapterPaths = getChapterPaths(bookDir, plan);
-
-    // Check which chapters actually exist
-    const existingChapters = chapterPaths.filter((p) => existsSync(p));
-    if (existingChapters.length === 0) {
-      console.error('  ERROR: No chapter files found');
-      console.error(`  Expected paths: ${chapterPaths.join(', ')}`);
-      process.exit(1);
-    }
-
-    // 4. Update workflow status to running and set current agent
-    workflowRepo.updateStatus(workflowRunId, 'running');
-    workflowRepo.setCurrentAgent(workflowRunId, 'writer');
-
-    // 5. Invoke Writer agent
-    console.log('  Invoking writer agent...');
-    const writerInvoker = new WriterInvoker();
-    let writerOutput: WriterOutput;
-
-    try {
-      writerOutput = await writerInvoker.invoke({
-        planPath: resolvedPlanPath,
-        chapterPaths: existingChapters,
-        styleGuidesDir: resolve(projectRoot, 'docs/style_guides'),
-      });
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`  ERROR: Writer agent failed: ${errorMessage}`);
-      workflowRepo.setCurrentAgent(workflowRunId, null);
-      process.exit(1);
-    }
-
-    console.log(`  ✓ Modified ${writerOutput.updated_chapters.length} chapters`);
-
-    // 6. Save writer output as artifact
-    const writerOutputPath = join(iterationDir, 'writer-output.json');
-    writeFileSync(writerOutputPath, JSON.stringify(writerOutput, null, 2));
-    console.log(`  ✓ Changelog saved`);
-
-    // Save individual chapter files
-    for (const chapter of writerOutput.updated_chapters) {
-      const chapterOutputPath = join(iterationDir, `${chapter.chapter_id}.md`);
-      writeFileSync(chapterOutputPath, chapter.content);
-    }
-
-    // Register writer artifact
-    artifactRegistry.register({
-      workflowRunId,
-      artifactType: 'chapter',
-      artifactPath: writerOutputPath,
-      metadata: {
-        iteration,
-        agent: 'writer',
-        chapters_modified: writerOutput.updated_chapters.map((c) => c.chapter_id),
-      },
-    });
-
-    console.log('');
-
-    // 7. Invoke Editor agent
-    console.log('Editor Review:');
-    workflowRepo.setCurrentAgent(workflowRunId, 'editor');
-
-    const editorInvoker = new EditorInvoker();
-    let editorResult: EditorReviewResult;
-
-    // Get paths to writer-generated chapters for review
-    const writerChapterPaths = writerOutput.updated_chapters.map((c) =>
-      join(iterationDir, `${c.chapter_id}.md`)
-    );
-
-    try {
-      editorResult = await editorInvoker.invoke({
-        chapterPaths: writerChapterPaths,
-        styleGuidesDir: resolve(projectRoot, 'docs/style_guides'),
-      });
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`  ERROR: Editor agent failed: ${errorMessage}`);
-      workflowRepo.setCurrentAgent(workflowRunId, null);
-      process.exit(1);
-    }
-
-    // Save editor feedback
-    const editorFeedbackPath = join(iterationDir, 'editor-feedback.json');
-    writeFileSync(editorFeedbackPath, JSON.stringify(editorResult, null, 2));
-
-    // Register editor artifact
-    artifactRegistry.register({
-      workflowRunId,
-      artifactType: 'qa_report',
-      artifactPath: editorFeedbackPath,
-      metadata: {
-        iteration,
-        agent: 'editor',
-        approved: editorResult.approved,
-      },
-    });
-
-    // 8. Handle editor rejection
-    if (!editorResult.approved) {
-      const rejectionType = mapToRejectionType(editorResult);
-      const rejection = rejectionTracker.recordRejection({
-        workflowRunId,
-        rejectionType,
-        reason: editorResult.summary,
-      });
-
-      const suggestionCount = editorResult.feedback.filter((f) => f.severity === 'suggestion').length;
-      const warningCount = editorResult.feedback.filter((f) => f.severity === 'warning').length;
-      const errorCount = editorResult.feedback.filter((f) => f.severity === 'error').length;
-
-      console.log(`  ✗ Rejected (${errorCount} errors, ${warningCount} warnings, ${suggestionCount} suggestions)`);
-      console.log(`  Feedback saved: ${editorFeedbackPath}`);
-      console.log('');
-
-      // Check if escalation is needed
-      if (rejectionTracker.shouldEscalate(workflowRunId, rejectionType)) {
-        workflowRepo.updateStatus(workflowRunId, 'paused');
-        workflowRepo.setCurrentAgent(workflowRunId, null);
-
-        console.log(
-          CLIFormatter.format({
-            title: 'RESULT: ESCALATION REQUIRED',
-            content: [
-              `Rejection count for "${rejectionType}" has reached ${DEFAULT_ESCALATION_THRESHOLD}.`,
-              'Human review is required to proceed.',
-            ],
-            status: [
-              { label: `Writer agent modified ${writerOutput.updated_chapters.length} chapters`, success: true },
-              { label: 'Editor rejected content', success: false },
-              { label: `Escalation threshold reached (${rejection.retryCount}/${DEFAULT_ESCALATION_THRESHOLD})`, success: false },
-            ],
-            nextStep: [
-              'Review editor feedback:',
-              `  cat ${editorFeedbackPath}`,
-              '',
-              'After human review, resume workflow:',
-              `  pnpm workflow:resume --id ${workflowRunId}`,
-            ],
-          })
-        );
-        process.exit(2); // Exit code 2 indicates escalation
+    // Determine mode and dispatch
+    if (args.saveWriter) {
+      if (!args.run || !args.chapters) {
+        console.error('Usage: pnpm w1:content-modify --save-writer --run=<id> --chapters=<dir>');
+        process.exit(1);
       }
-
-      workflowRepo.setCurrentAgent(workflowRunId, null);
-
-      console.log(
-        CLIFormatter.format({
-          title: 'RESULT: EDITOR REJECTED',
-          content: editorResult.summary,
-          status: [
-            { label: `Writer agent modified ${writerOutput.updated_chapters.length} chapters`, success: true },
-            { label: 'Editor rejected content', success: false },
-            { label: `Retry count: ${rejection.retryCount}/${DEFAULT_ESCALATION_THRESHOLD}`, pending: true },
-          ],
-          nextStep: [
-            'Review editor feedback and re-run:',
-            `  cat ${editorFeedbackPath}`,
-            '',
-            `  pnpm w1:content-modify --book ${book.slug} --plan ${resolvedPlanPath} --iteration ${iteration + 1} --workflow-run ${workflowRunId}`,
-          ],
-        })
-      );
-      process.exit(1);
-    }
-
-    // Editor approved
-    const minorSuggestions = editorResult.feedback.filter((f) => f.severity === 'suggestion').length;
-    if (minorSuggestions > 0) {
-      console.log(`  ✓ Approved (${minorSuggestions} minor suggestions)`);
-    } else {
-      console.log('  ✓ Approved');
-    }
-    console.log('');
-
-    // 9. Invoke Domain Expert agent
-    console.log('Domain Expert Review:');
-    workflowRepo.setCurrentAgent(workflowRunId, 'domain_expert');
-
-    const domainExpertInvoker = new DomainExpertInvoker();
-    let domainExpertResult: DomainExpertReviewResult;
-
-    // Load mechanics guide
-    let mechanicsGuide = '';
-    const mechanicsGuidePath = resolve(projectRoot, 'docs/style_guides/mechanics.md');
-    if (existsSync(mechanicsGuidePath)) {
-      mechanicsGuide = readFileSync(mechanicsGuidePath, 'utf-8');
-    }
-
-    try {
-      domainExpertResult = await domainExpertInvoker.invoke({
-        chapterPaths: writerChapterPaths,
-        mechanicsGuide,
-        rulesDocPath: undefined, // Could be enhanced to accept rules doc path
-      });
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`  ERROR: Domain expert agent failed: ${errorMessage}`);
-      workflowRepo.setCurrentAgent(workflowRunId, null);
-      process.exit(1);
-    }
-
-    // Save domain expert feedback
-    const domainExpertFeedbackPath = join(iterationDir, 'domain-expert-feedback.json');
-    writeFileSync(domainExpertFeedbackPath, JSON.stringify(domainExpertResult, null, 2));
-
-    // Register domain expert artifact
-    artifactRegistry.register({
-      workflowRunId,
-      artifactType: 'qa_report',
-      artifactPath: domainExpertFeedbackPath,
-      metadata: {
-        iteration,
-        agent: 'domain_expert',
-        approved: domainExpertResult.approved,
-      },
-    });
-
-    // 10. Handle domain expert rejection
-    if (!domainExpertResult.approved) {
-      const rejectionType = mapToRejectionType(domainExpertResult);
-      const rejection = rejectionTracker.recordRejection({
-        workflowRunId,
-        rejectionType,
-        reason: domainExpertResult.summary,
-      });
-
-      const criticalCount = domainExpertResult.issues.filter((i) => i.impact === 'critical').length;
-      const majorCount = domainExpertResult.issues.filter((i) => i.impact === 'major').length;
-      const minorCount = domainExpertResult.issues.filter((i) => i.impact === 'minor').length;
-
-      console.log(`  ✗ Rejected (${criticalCount} critical, ${majorCount} major, ${minorCount} minor issues)`);
-      console.log(`  Feedback saved: ${domainExpertFeedbackPath}`);
-      console.log('');
-
-      // Check if escalation is needed
-      if (rejectionTracker.shouldEscalate(workflowRunId, rejectionType)) {
-        workflowRepo.updateStatus(workflowRunId, 'paused');
-        workflowRepo.setCurrentAgent(workflowRunId, null);
-
-        console.log(
-          CLIFormatter.format({
-            title: 'RESULT: ESCALATION REQUIRED',
-            content: [
-              `Rejection count for "${rejectionType}" has reached ${DEFAULT_ESCALATION_THRESHOLD}.`,
-              'Human review is required to proceed.',
-            ],
-            status: [
-              { label: `Writer agent modified ${writerOutput.updated_chapters.length} chapters`, success: true },
-              { label: 'Editor approved content', success: true },
-              { label: 'Domain expert rejected content', success: false },
-              { label: `Escalation threshold reached (${rejection.retryCount}/${DEFAULT_ESCALATION_THRESHOLD})`, success: false },
-            ],
-            nextStep: [
-              'Review domain expert feedback:',
-              `  cat ${domainExpertFeedbackPath}`,
-              '',
-              'After human review, resume workflow:',
-              `  pnpm workflow:resume --id ${workflowRunId}`,
-            ],
-          })
-        );
-        process.exit(2); // Exit code 2 indicates escalation
+      await handleSaveWriterOutput(db, projectRoot, args.run, args.chapters);
+    } else if (args.generateEditor) {
+      if (!args.run) {
+        console.error('Usage: pnpm w1:content-modify --generate-editor --run=<id>');
+        process.exit(1);
       }
-
-      workflowRepo.setCurrentAgent(workflowRunId, null);
-
-      console.log(
-        CLIFormatter.format({
-          title: 'RESULT: DOMAIN EXPERT REJECTED',
-          content: domainExpertResult.summary,
-          status: [
-            { label: `Writer agent modified ${writerOutput.updated_chapters.length} chapters`, success: true },
-            { label: 'Editor approved content', success: true },
-            { label: 'Domain expert rejected content', success: false },
-            { label: `Retry count: ${rejection.retryCount}/${DEFAULT_ESCALATION_THRESHOLD}`, pending: true },
-          ],
-          nextStep: [
-            'Review domain expert feedback and re-run:',
-            `  cat ${domainExpertFeedbackPath}`,
-            '',
-            `  pnpm w1:content-modify --book ${book.slug} --plan ${resolvedPlanPath} --iteration ${iteration + 1} --workflow-run ${workflowRunId}`,
-          ],
-        })
-      );
+      await handleGenerateEditorPrompt(db, projectRoot, args.run);
+    } else if (args.saveEditor) {
+      if (!args.run || !args.result) {
+        console.error('Usage: pnpm w1:content-modify --save-editor --run=<id> --result=<path>');
+        process.exit(1);
+      }
+      await handleSaveEditorResult(db, projectRoot, args.run, args.result);
+    } else if (args.generateDomain) {
+      if (!args.run) {
+        console.error('Usage: pnpm w1:content-modify --generate-domain --run=<id>');
+        process.exit(1);
+      }
+      await handleGenerateDomainPrompt(db, projectRoot, args.run);
+    } else if (args.saveDomain) {
+      if (!args.run || !args.result) {
+        console.error('Usage: pnpm w1:content-modify --save-domain --run=<id> --result=<path>');
+        process.exit(1);
+      }
+      await handleSaveDomainResult(db, projectRoot, args.run, args.result);
+    } else if (args.run) {
+      // Default: generate writer prompt
+      await handleGenerateWriterPrompt(db, projectRoot, args.run);
+    } else {
+      // No valid mode specified
+      showHelp();
       process.exit(1);
     }
-
-    // Domain expert approved
-    const minorIssues = domainExpertResult.issues.filter((i) => i.impact === 'minor').length;
-    if (minorIssues > 0) {
-      console.log(`  ✓ Approved (${minorIssues} minor issues noted)`);
-    } else {
-      console.log('  ✓ Approved (no mechanical issues)');
-    }
-    console.log('');
-
-    // 11. Both approved - update workflow status
-    workflowRepo.setCurrentAgent(workflowRunId, null);
-
-    // Get list of modified chapter IDs for next step command
-    const modifiedChapterIds = writerOutput.updated_chapters.map((c) => c.chapter_id).join(',');
-
-    // Print success output
-    const tableRows = [
-      { key: 'Workflow Run', value: workflowRunId },
-      { key: 'Book', value: `${book.title} (${book.slug})` },
-      { key: 'Iteration', value: String(iteration) },
-      { key: 'Chapters Modified', value: String(writerOutput.updated_chapters.length) },
-      { key: 'Output Directory', value: iterationDir },
-    ];
-
-    console.log(
-      CLIFormatter.format({
-        title: 'RESULT: APPROVED',
-        content: CLIFormatter.table(tableRows),
-        status: [
-          { label: `Writer agent modified ${writerOutput.updated_chapters.length} chapters`, success: true },
-          { label: `Editor approved${minorSuggestions > 0 ? ` (${minorSuggestions} minor suggestions)` : ''}`, success: true },
-          { label: `Domain expert approved${minorIssues > 0 ? ` (${minorIssues} minor issues noted)` : ' (no mechanical issues)'}`, success: true },
-        ],
-        nextStep: [
-          'Next step:',
-          `  pnpm w1:validate --book ${book.slug} --iteration ${iteration} --chapters ${modifiedChapterIds}`,
-        ],
-      })
-    );
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(
@@ -618,10 +695,7 @@ async function main(): Promise<void> {
         title: 'ERROR',
         content: `Content modification failed: ${errorMessage}`,
         status: [{ label: 'Content modification failed', success: false }],
-        nextStep: [
-          'Check the error message above for details.',
-          'Ensure the plan file is valid JSON.',
-        ],
+        nextStep: ['Check the error message above for details.'],
       })
     );
     process.exit(1);
