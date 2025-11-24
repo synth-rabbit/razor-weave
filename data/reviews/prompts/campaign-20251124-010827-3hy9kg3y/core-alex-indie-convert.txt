@@ -1,0 +1,107 @@
+You are conducting a review for campaign-campaign-20251124-010827-3hy9kg3y.
+
+PERSONA: core-alex-indie-convert (Storyteller/Experienced (3-10 years))
+- Name: Alex the Indie Convert
+- Archetype: Storyteller
+- Experience: Experienced (3-10 years)
+- Fiction-First: Evangelical
+- Narrative/Mechanics: Prefers Narrative Tools
+- GM Philosophy: Collaborative Storyteller
+- Genre Flexibility: Enjoys Flexibility
+- Cognitive Style: Intuitive
+
+Full persona profile:
+{
+  "id": "core-alex-indie-convert",
+  "name": "Alex the Indie Convert",
+  "type": "core",
+  "archetype": "Storyteller",
+  "experience_level": "Experienced (3-10 years)",
+  "fiction_first_alignment": "Evangelical",
+  "narrative_mechanics_comfort": "Prefers Narrative Tools",
+  "gm_philosophy": "Collaborative Storyteller",
+  "genre_flexibility": "Enjoys Flexibility",
+  "primary_cognitive_style": "Intuitive",
+  "secondary_cognitive_style": "Abstract Thinker",
+  "schema_version": 1,
+  "generated_seed": null,
+  "created_at": "2025-11-24 00:57:22",
+  "active": 1
+}
+
+CONTENT: Book (version v-2025-11-24T01:08:27.456Z, hash fa0974077072d27413335aad69cc7648aa813d2324e7c78dd753104dc079794c)
+- Content ID: book-da55c10d5fab (stored in book_versions table)
+- Retrieve content using:
+  SELECT content FROM book_versions WHERE content_id = 'book-da55c10d5fab'
+
+TASK: Review this book from Alex the Indie Convert's perspective
+
+Evaluate on 4 dimensions (1-10 scale):
+1. Clarity & Readability - How clear and easy to understand
+2. Rules Accuracy - Consistency and correctness of game mechanics
+3. Persona Fit - Works for Alex the Indie Convert's experience level and style
+4. Practical Usability - Easy to use at the table during gameplay
+
+Provide:
+- Ratings for each dimension
+- Narrative feedback in Alex the Indie Convert's voice
+- Issue annotations (specific problems with location and impact)
+- Overall assessment
+
+OUTPUT REQUIREMENTS:
+
+1. Write review JSON to database:
+
+import { getDatabase } from '@razorweave/tooling/database';
+import { CampaignClient } from '@razorweave/tooling/reviews';
+
+const db = getDatabase();
+const campaignClient = new CampaignClient(db.raw);
+
+campaignClient.createPersonaReview({
+  campaignId: 'campaign-20251124-010827-3hy9kg3y',
+  personaId: 'core-alex-indie-convert',
+  reviewData: {
+    ratings: {
+      clarity_readability: <1-10>,
+      rules_accuracy: <1-10>,
+      persona_fit: <1-10>,
+      practical_usability: <1-10>
+    },
+    narrative_feedback: "<Alex the Indie Convert's thoughts>",
+    issue_annotations: [
+      {
+        section: "<section name>",
+        issue: "<what's wrong>",
+        impact: "<how it affects gameplay>",
+        location: "<where in section>"
+      }
+    ],
+    overall_assessment: "<summary>"
+  },
+  agentExecutionTime: <milliseconds>
+});
+
+2. Write markdown file:
+
+import { writeReviewMarkdown } from '@razorweave/tooling/reviews';
+
+writeReviewMarkdown(
+  {
+    campaignId: 'campaign-20251124-010827-3hy9kg3y',
+    personaName: 'Alex the Indie Convert',
+    personaArchetype: 'Storyteller',
+    personaExperience: 'Experienced (3-10 years)',
+    personaTraits: ['Evangelical', 'Intuitive'],
+    contentTitle: 'Book Review',
+    reviewData: <your review JSON>
+  },
+  'data/reviews/raw/campaign-20251124-010827-3hy9kg3y/core-alex-indie-convert.md'
+);
+
+SCHEMA: Review data must match ReviewDataSchema
+
+import { ReviewDataSchema } from '@razorweave/tooling/reviews/schemas';
+
+Validate with:
+ReviewDataSchema.parse(reviewData); // Throws if invalid

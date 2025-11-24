@@ -101,6 +101,10 @@ export function generateWriterPrompt(context: WriterPromptContext): string {
 
 You are the Writer agent for W1 workflow run \`${context.runId}\`.
 
+> **⚠️ IMPORTANT: Source files are MARKDOWN (.md) in \`books/\` directories.**
+> **NEVER edit HTML files. HTML is generated output, not source.**
+> **The chapter paths below show the source markdown files to read and modify.**
+
 ## Improvement Plan
 
 \`\`\`json
@@ -772,6 +776,10 @@ ${resumeNote}
 ## Overview
 
 You are executing a strategic W1 editing workflow for **${bookTitle}** (${bookSlug}).
+
+> **⚠️ CRITICAL: Source files are MARKDOWN (.md) in \`books/\` directories.**
+> **NEVER edit HTML, PDF, or other generated output files.**
+> **The w1:content-modify command will tell you which markdown files to modify.**
 
 ## Setup
 
