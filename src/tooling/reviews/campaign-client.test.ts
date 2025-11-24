@@ -293,4 +293,93 @@ describe('CampaignClient', () => {
       expect(campaigns[0].campaign_name).toBe('Campaign 1');
     });
   });
+
+  describe('updatePersonaIds', () => {
+    it('updates persona IDs for an existing campaign', () => {
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 'book-test001',
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah'],
+      });
+
+      // Update persona IDs
+      client.updatePersonaIds(campaignId, ['core-sarah', 'core-alex', 'core-bob']);
+
+      // Verify update
+      const campaign = client.getCampaign(campaignId);
+      expect(campaign?.persona_ids).toBe(JSON.stringify(['core-sarah', 'core-alex', 'core-bob']));
+    });
+
+    it('returns the number of rows affected', () => {
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 'book-test001',
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah'],
+      });
+
+      const changes = client.updatePersonaIds(campaignId, ['core-sarah', 'core-alex']);
+      expect(changes).toBe(1);
+    });
+
+    it('returns 0 when campaign does not exist', () => {
+      const changes = client.updatePersonaIds('nonexistent-campaign', ['core-sarah']);
+      expect(changes).toBe(0);
+    });
+  });
+
+  describe('deleteAnalysis', () => {
+    it('deletes an existing campaign analysis', () => {
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 'book-test001',
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah'],
+      });
+
+      // Create analysis
+      client.createCampaignAnalysis({
+        campaignId,
+        analysisData: {
+          executive_summary: 'Overall good',
+          priority_rankings: [],
+          dimension_summaries: {
+            clarity_readability: { average: 8, themes: [] },
+            rules_accuracy: { average: 9, themes: [] },
+            persona_fit: { average: 7, themes: [] },
+            practical_usability: { average: 8, themes: [] },
+          },
+          persona_breakdowns: {},
+        },
+        markdownPath: 'data/reviews/analysis/test.md',
+      });
+
+      // Verify analysis exists
+      expect(client.getCampaignAnalysis(campaignId)).toBeDefined();
+
+      // Delete analysis
+      const deleted = client.deleteAnalysis(campaignId);
+      expect(deleted).toBe(true);
+
+      // Verify analysis is gone
+      expect(client.getCampaignAnalysis(campaignId)).toBeNull();
+    });
+
+    it('returns false when no analysis exists', () => {
+      const campaignId = client.createCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentId: 'book-test001',
+        personaSelectionStrategy: 'all_core',
+        personaIds: ['core-sarah'],
+      });
+
+      const deleted = client.deleteAnalysis(campaignId);
+      expect(deleted).toBe(false);
+    });
+  });
 });

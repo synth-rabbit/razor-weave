@@ -31,6 +31,8 @@ export interface Book {
   book_type: BookType;
   /** Relative path to book source files */
   source_path: string;
+  /** Current semantic version (e.g., '1.0.0') */
+  current_version: string;
   /** Current status in workflow */
   status: BookStatus;
   /** When the book record was created */

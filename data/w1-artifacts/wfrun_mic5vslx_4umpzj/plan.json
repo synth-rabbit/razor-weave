@@ -1,0 +1,259 @@
+{
+  "plan_id": "plan-20251123-wfrun_mic5vslx",
+  "created_at": "2025-11-23T20:20:00Z",
+  "source_campaign_id": "campaign-20251123-192801-j6p4e486",
+  "summary": "Address mechanical clarity gaps in core rules chapters, focusing on DC guidance, Check procedures, combat mechanics, and Character Creation flow to improve Persona Fit and Practical Usability scores from 6.2 to target 8.0.",
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "DC guidelines lack concrete number ranges and context-specific guidance, leaving GMs uncertain about difficulty assignment",
+      "severity": "high",
+      "source_category": "Chapter 8: Actions, Checks, and Outcomes",
+      "affected_chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "affected_personas": [
+        "gen-1763913096215-6l23ebgok",
+        "gen-1763913096216-x6k7lliwr",
+        "gen-1763913096236-4fgj5dv3p"
+      ],
+      "improvement_goal": "GMs can confidently assign DCs using concrete examples and decision trees",
+      "success_metric": "Add DC assignment flowchart and 10+ genre-varied worked examples with explicit DC reasoning",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-002",
+      "description": "Check resolution procedure lacks clear step-by-step breakdown; partial success outcomes leave too much to GM interpretation",
+      "severity": "high",
+      "source_category": "Chapter 8: Actions, Checks, and Outcomes",
+      "affected_chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "affected_personas": [
+        "gen-1763913096223-lk3uhugw4",
+        "gen-1763913096218-ijqqbqgtf"
+      ],
+      "improvement_goal": "Players and GMs can execute Checks using numbered procedural steps with clear outcome guidance",
+      "success_metric": "Add numbered Check procedure; include 3+ Partial Success examples per common scenario type",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-003",
+      "description": "Character creation optimization pathways unclear; attribute allocation guidance sparse for new players",
+      "severity": "high",
+      "source_category": "Chapter 6: Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "gen-1763913096216-x6k7lliwr",
+        "gen-1763913096219-6oqun1z2o"
+      ],
+      "improvement_goal": "Players can make informed character build choices without external optimization guides",
+      "success_metric": "Add attribute priority recommendations by archetype; include 'What This Means in Play' callouts",
+      "priority": 2
+    },
+    {
+      "issue_id": "issue-004",
+      "description": "Combat action economy described conceptually rather than procedurally; Resolve Clock advancement rates undefined",
+      "severity": "high",
+      "source_category": "Chapter 10: Combat Basics",
+      "affected_chapters": [
+        "10-combat-basics"
+      ],
+      "affected_personas": [
+        "gen-1763913096215-6l23ebgok",
+        "gen-1763913096216-x6k7lliwr"
+      ],
+      "improvement_goal": "Players can plan tactical sequences using clear action economy rules and Clock advancement guidelines",
+      "success_metric": "Add Turn Structure summary table; define standard Clock tick rates (1-2 for success, etc.)",
+      "priority": 2
+    },
+    {
+      "issue_id": "issue-005",
+      "description": "Tags, Conditions, and Clocks interactions unclear; mechanical effects need quick reference",
+      "severity": "medium",
+      "source_category": "Chapter 9: Tags, Conditions, and Clocks",
+      "affected_chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "affected_personas": [
+        "gen-1763913096215-6l23ebgok",
+        "gen-1763913096236-4fgj5dv3p"
+      ],
+      "improvement_goal": "Players can quickly look up Tag/Condition mechanical effects during play",
+      "success_metric": "Add consolidated quick-reference table showing Tag-to-modifier mappings and Condition effects",
+      "priority": 3
+    }
+  ],
+  "chapter_modifications": [
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks, and Outcomes",
+      "priority": 1,
+      "issues_addressed": [
+        "issue-001",
+        "issue-002"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "DC Setting section",
+          "instruction": "Add a 'DC Decision Flowchart' showing: 1) Is this fiction-trivial? (Don't roll), 2) What's the baseline difficulty? (Use DC ladder), 3) What modifiers apply? (Tags, tools, time). Include worked examples for each DC tier with specific genre scenarios.",
+          "success_criteria": "Flowchart answers 'What DC should I set?' in <30 seconds with clear decision points"
+        },
+        {
+          "type": "clarify",
+          "target": "Check Procedure section",
+          "instruction": "Replace narrative explanation with numbered procedure: 1) Declare Intent and Approach, 2) GM assesses if Check needed, 3) Determine Attribute and modifiers, 4) Set DC, 5) Roll 4d6, 6) Calculate Margin, 7) Interpret Outcome. Add a single-page quick-reference box.",
+          "success_criteria": "Check procedure fits on one page with numbered steps and margin calculation table"
+        },
+        {
+          "type": "expand",
+          "target": "Partial Success guidance",
+          "instruction": "Add a 'Partial Success Toolkit' section with 10+ example complications organized by scenario type: Combat (take damage but succeed), Social (succeed with obligation), Exploration (succeed with time cost), Investigation (succeed with false lead). Each example should show the fictional situation and mechanical resolution.",
+          "success_criteria": "GMs have concrete Partial Success options for 4+ scenario categories"
+        }
+      ]
+    },
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 2,
+      "issues_addressed": [
+        "issue-003"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Attribute Selection section",
+          "instruction": "Add 'Archetype Attribute Priorities' table showing recommended spreads for: Combatant (MIG/AGI), Face (PRE), Scholar (RSN), Generalist (balanced). Include 'What This Means in Play' callouts explaining how each priority affects gameplay.",
+          "success_criteria": "Table shows 4+ archetypes with attribute recommendations and gameplay implications"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Worked Example (Rella)",
+          "instruction": "Expand Rella example to include decision-point annotations: WHY each attribute was chosen, WHAT playstyle this enables, HOW this compares to alternative builds. Add a second worked example with different archetype (social/scholarly focus).",
+          "success_criteria": "Two complete examples with annotated decision rationale covering different playstyles"
+        },
+        {
+          "type": "clarify",
+          "target": "Skills and Proficiencies selection",
+          "instruction": "Add 'Starter Skill Packages' sidebar with 3-4 recommended skill combinations for common archetypes. Include guidance on when to use pre-built packages vs custom selection.",
+          "success_criteria": "Players can select skills in <5 minutes using provided packages"
+        }
+      ]
+    },
+    {
+      "chapter_id": "10-combat-basics",
+      "chapter_name": "Combat Basics",
+      "priority": 3,
+      "issues_addressed": [
+        "issue-004"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Action Economy section",
+          "instruction": "Add 'Turn Structure Summary' table showing: Action types (Strike, Maneuver, Set Up, Special), what each accomplishes, typical Attributes used, and Clock effects. Include turn order options (conversational, popcorn, initiative) with when to use each.",
+          "success_criteria": "Players can look up any action type and its effects in <10 seconds"
+        },
+        {
+          "type": "clarify",
+          "target": "Resolve Clock section",
+          "instruction": "Add explicit Clock advancement guidelines: 'Standard Strike ticks 1-2 segments on Full Success, 1 on Partial. Critical Success may tick 2-3. Clock size guidelines: 4-segment for mooks, 6-segment for standard threats, 8-segment for bosses.' Include sizing examples.",
+          "success_criteria": "GMs can size enemy Clocks and predict combat length within 1-2 rounds accuracy"
+        },
+        {
+          "type": "expand",
+          "target": "Tactical Examples section",
+          "instruction": "Add 2-3 complete combat encounter examples showing: initiative determination, action sequences across 3+ rounds, Clock progression, Tag/Condition application, and resolution. Annotate tactical decisions.",
+          "success_criteria": "Each example shows complete 3+ round combat with annotated tactical choices"
+        }
+      ]
+    },
+    {
+      "chapter_id": "09-tags-conditions-clocks",
+      "chapter_name": "Tags, Conditions, and Clocks",
+      "priority": 4,
+      "issues_addressed": [
+        "issue-005"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "End of chapter",
+          "instruction": "Add 'Quick Reference: Tags & Conditions' table with columns: Name | Type | Mechanical Effect | Common Sources | Clearing Method. Include 15+ most common Tags and Conditions with explicit Edge/Burden effects.",
+          "success_criteria": "Table covers 15+ Tags/Conditions with clear mechanical effects"
+        },
+        {
+          "type": "clarify",
+          "target": "Tag-to-Modifier mapping",
+          "instruction": "Add explicit guidance: 'Tags typically grant +1 Edge when favorable, -1 Burden when unfavorable. Multiple Tags stack up to +/-2 cap. GMs may also adjust DC by 2 instead of applying Edge/Burden.' Include worked examples.",
+          "success_criteria": "Tag mechanical effects are explicitly defined with stacking rules and DC alternative"
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "allow_growth"
+  },
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "rationale": "Highest priority issue affecting most personas; foundational for combat and other systems"
+    },
+    {
+      "phase": 2,
+      "chapters": [
+        "06-character-creation",
+        "10-combat-basics"
+      ],
+      "rationale": "Second-tier issues; character creation flows into actions/checks; combat builds on both"
+    },
+    {
+      "phase": 3,
+      "chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "rationale": "Reference material that supports chapters modified in phases 1-2"
+    }
+  ],
+  "estimated_impact": {
+    "primary_dimension": "practical_usability",
+    "expected_improvement": "+1.5 to +2.0 points average across all personas (6.2 → 8.0 target)",
+    "secondary_benefits": [
+      "Improved persona_fit for tactician and power gamer archetypes",
+      "Better clarity_readability through structured procedures",
+      "Enhanced rules_accuracy through explicit mechanical definitions"
+    ]
+  },
+  "review_cycle_recommendation": {
+    "re_review_personas": [
+      "gen-1763913096215-6l23ebgok",
+      "gen-1763913096216-x6k7lliwr",
+      "gen-1763913096231-vlg5uhdpa",
+      "gen-1763913096255-8452gb8ju"
+    ],
+    "focus_dimensions": [
+      "practical_usability",
+      "persona_fit"
+    ],
+    "skip_personas": [
+      "gen-1763913096259-goooz9ykd",
+      "gen-1763913096262-v9topcggq"
+    ],
+    "rationale": "Focus on personas who rated lowest on practical_usability and needed concrete numbers; skip high-fit storyteller personas"
+  }
+}

@@ -5,7 +5,7 @@ import { CampaignClient } from './campaign-client.js';
 import { generateReviewerPromptFile, generateAnalyzerPromptFile } from './prompt-generator.js';
 
 /**
- * Writes reviewer prompt files for all personas in a campaign.
+ * Writes reviewer prompt files for personas in a campaign.
  *
  * Creates one .txt file per persona in data/reviews/prompts/{campaignId}/
  * Each file contains a complete standalone prompt for the Claude Code reviewer agent,
@@ -13,6 +13,8 @@ import { generateReviewerPromptFile, generateAnalyzerPromptFile } from './prompt
  *
  * @param db - Database connection
  * @param campaignId - Campaign identifier (must exist in database)
+ * @param personaIdsFilter - Optional array of persona IDs to write prompts for.
+ *                          If not provided, writes prompts for all personas in campaign.
  * @returns Array of paths to written prompt files (relative to project root)
  * @throws Error if campaign not found
  * @throws Error if no personas configured for campaign
@@ -20,7 +22,8 @@ import { generateReviewerPromptFile, generateAnalyzerPromptFile } from './prompt
  */
 export function writePromptFiles(
   db: Database.Database,
-  campaignId: string
+  campaignId: string,
+  personaIdsFilter?: string[]
 ): string[] {
   const campaignClient = new CampaignClient(db);
 
@@ -29,8 +32,9 @@ export function writePromptFiles(
     throw new Error(`Campaign not found: ${campaignId}`);
   }
 
-  // Resolve persona IDs
-  const personaIds = JSON.parse(campaign.persona_ids || '[]') as string[];
+  // Resolve persona IDs - use filter if provided, otherwise all from campaign
+  const campaignPersonaIds = JSON.parse(campaign.persona_ids || '[]') as string[];
+  const personaIds = personaIdsFilter ?? campaignPersonaIds;
 
   // Validate personas exist
   if (personaIds.length === 0) {

@@ -1,0 +1,294 @@
+{
+  "plan_id": "plan-20251123-wfrun_micb9fyp_s7pths",
+  "created_at": "2025-11-23T23:15:00Z",
+  "source_campaign_id": "campaign-20251123-222404-g1zvdflh",
+  "summary": "Address critical usability gaps in combat, character creation, and mechanics chapters through concrete benchmarks, clarified terminology, and quick-reference elements to improve practical usability and persona fit.",
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "Resolve Clocks lack standardized benchmarks and concrete sizing guidelines, making combat feel too abstract for players accustomed to HP systems",
+      "severity": "high",
+      "source_category": "Chapter 10 - Combat Basics",
+      "affected_chapters": [
+        "10-combat-basics"
+      ],
+      "affected_personas": [
+        "gen-1763913096216-tivz62gzi",
+        "gen-1763913096218-jghfy9gpe",
+        "gen-1763913096222-5y9ikdivf",
+        "gen-1763913096228-9d4rpjum3"
+      ],
+      "improvement_goal": "Players can determine appropriate Resolve Clock sizes and understand damage scaling without GM interpretation",
+      "success_metric": "Add concrete Clock sizing table with enemy tier examples; include complete combat encounter example from start to resolution",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-002",
+      "description": "Skills vs Proficiencies distinction is initially confusing; no numeric Skill values specified during creation",
+      "severity": "high",
+      "source_category": "Chapter 6 - Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "gen-1763913096216-tivz62gzi",
+        "gen-1763913096233-obewzjpul",
+        "gen-1763913096243-xswijlurb"
+      ],
+      "improvement_goal": "New players clearly understand the difference between Skills and Proficiencies and how each affects play",
+      "success_metric": "Add comparison table distinguishing Skills from Proficiencies; include sidebar with plain-language explanation on first mention",
+      "priority": 2
+    },
+    {
+      "issue_id": "issue-003",
+      "description": "Three parallel tracking systems (Tags, Conditions, Clocks) create cumulative cognitive load during actual play",
+      "severity": "high",
+      "source_category": "Chapter 9 - Tags, Conditions, Clocks",
+      "affected_chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "affected_personas": [
+        "gen-1763913096222-5y9ikdivf",
+        "gen-1763913096226-gkiqrl058",
+        "gen-1763913096233-cl97sm0pi"
+      ],
+      "improvement_goal": "GMs and players can quickly distinguish which system to use and when, reducing decision paralysis",
+      "success_metric": "Add 'When to Use What' quick-reference table; include visual comparison showing Tags vs Conditions vs Clocks side-by-side",
+      "priority": 3
+    },
+    {
+      "issue_id": "issue-004",
+      "description": "Margin thresholds and outcome tiers require memorization; Edge/Burden stacking lacks worked examples",
+      "severity": "medium",
+      "source_category": "Chapter 8 - Actions, Checks, and Outcomes",
+      "affected_chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "affected_personas": [
+        "gen-1763913096216-tivz62gzi",
+        "gen-1763913096218-jghfy9gpe",
+        "gen-1763913096245-qjdnidk3m"
+      ],
+      "improvement_goal": "Players and GMs can quickly reference margin tiers and understand modifier stacking without flipping pages",
+      "success_metric": "Add quick-reference margin table at end of chapter; include worked example showing multiple Edge/Burden sources combining",
+      "priority": 4
+    },
+    {
+      "issue_id": "issue-005",
+      "description": "GMless, solo, and asynchronous play modes are mentioned but lack dedicated mechanical support or procedures",
+      "severity": "medium",
+      "source_category": "Chapter 5 - Ways to Play",
+      "affected_chapters": [
+        "05-ways-to-play"
+      ],
+      "affected_personas": [
+        "gen-1763913096222-5y9ikdivf",
+        "gen-1763913096233-cl97sm0pi",
+        "gen-1763913096264-7ah9suds4"
+      ],
+      "improvement_goal": "Players interested in GMless or solo play have actionable procedures to follow",
+      "success_metric": "Add GMless play procedure sidebar with 3-5 concrete steps; include solo play oracle table or reference",
+      "priority": 5
+    }
+  ],
+  "chapter_modifications": [
+    {
+      "chapter_id": "10-combat-basics",
+      "chapter_name": "Combat Basics",
+      "priority": 1,
+      "issues_addressed": [
+        "issue-001"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Resolve Clock section",
+          "instruction": "Add a 'Resolve Clock Sizing Guide' table with columns: Enemy Tier | Clock Size | Typical Threats | Example. Include rows for: Minion (4-segment, easily dispatched, single guard), Standard (6-segment, competent opposition, trained soldier), Elite (8-segment, dangerous foes, veteran warrior), Boss (8-segment + abilities, major threats, crime lord with guards). Note that PCs typically use 6-segment Resolve Clocks.",
+          "success_criteria": "Table provides concrete sizing guidance for 4+ enemy tiers with specific examples"
+        },
+        {
+          "type": "expand",
+          "target": "Combat example section",
+          "instruction": "Add a complete combat encounter example showing: 1) Scene setup with Tags, 2) Initiative/turn order establishment, 3) At least 3 rounds of combat with different action types (Strike, Maneuver, Set Up), 4) Clock advancement, 5) Combat resolution. Use the cross-genre format showing the same structure works for different settings.",
+          "success_criteria": "Example shows complete combat loop from initiation to resolution; reader can follow along and replicate"
+        },
+        {
+          "type": "clarify",
+          "target": "Opening paragraphs",
+          "instruction": "Add a brief comparison to traditional HP systems: 'If you are familiar with Hit Points from other games, think of Resolve Clocks as tracking momentum and composure rather than physical damage. A filled Clock does not mean death; it means the character can no longer continue fighting on their terms.' Follow with explanation of what filling a Clock means fictionally.",
+          "success_criteria": "Players familiar with HP systems understand the conceptual difference within first two paragraphs"
+        }
+      ]
+    },
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 2,
+      "issues_addressed": [
+        "issue-002"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Before Skills introduction",
+          "instruction": "Add a 'Skills vs Proficiencies at a Glance' comparison table with columns: Aspect | Skills | Proficiencies. Include rows for: What It Represents (actions you can take | knowledge and tool familiarity), When You Use It (when attempting checks | to justify approaches or gain Edge), Example (Stealth, Observation | Lockpicking Tools, Local History), How It Helps (may add to check results | enables approaches or provides Edge).",
+          "success_criteria": "Table clearly distinguishes the two systems in 4+ dimensions before detailed explanation"
+        },
+        {
+          "type": "clarify",
+          "target": "Skills section first paragraph",
+          "instruction": "Add a plain-language sidebar titled 'Understanding Skills': 'Skills describe what your character is good at doing. Unlike some games where skills have numeric ratings, Razorweave skills are descriptive. Having a skill means you are competent; not having it does not mean you cannot try, just that you lack specialized training. Think of skills as answering: What actions has my character practiced?'",
+          "success_criteria": "Sidebar explains skill concept without jargon; newcomers understand skills are descriptive not numeric"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Character creation walkthrough",
+          "instruction": "Annotate the existing character creation example with decision-point callouts explaining WHY each skill and proficiency was chosen. Add annotations like: 'Kira chose Stealth because her backstory as a thief means she practiced avoiding detection. She took Lockpicking Tools proficiency because it is a tool she uses, not an action she performs.'",
+          "success_criteria": "Example includes 3+ annotated decision points distinguishing skill vs proficiency choices"
+        }
+      ]
+    },
+    {
+      "chapter_id": "09-tags-conditions-clocks",
+      "chapter_name": "Tags, Conditions, and Clocks",
+      "priority": 3,
+      "issues_addressed": [
+        "issue-003"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Chapter opening, after introduction",
+          "instruction": "Add a 'When to Use What' quick-reference table with columns: System | What It Tracks | Who Controls It | Duration | Example. Rows: Tags (scene elements and circumstances | GM sets, players can change | until fiction changes | *Dim Light*, *Elevated*), Conditions (character states from events | applied by outcomes | until cleared by action/time | *Exhausted*, *Frightened*), Clocks (progress toward goals or threats | ticked by successes/failures | until filled | 'Escape the Building' 6-segment).",
+          "success_criteria": "Table distinguishes all three systems across 4+ dimensions with concrete examples"
+        },
+        {
+          "type": "expand",
+          "target": "After the quick-reference table",
+          "instruction": "Add a visual comparison example showing the same scene using all three systems: 'A character sneaks through a guarded warehouse at night. The scene has Tags: *Dim Light*, *Cluttered*. After a failed check, the character gains the Condition: *Spotted*. Meanwhile, an 'Alert Level' Clock ticks forward.' Show how each system serves a different narrative purpose.",
+          "success_criteria": "Single example demonstrates all three systems working together in one scene"
+        },
+        {
+          "type": "clarify",
+          "target": "Clocks section",
+          "instruction": "Add a simple visual representation of what a Clock looks like: a circle divided into segments with some filled in. Include caption: 'A 6-segment Clock with 2 segments filled. Three more successful actions will complete it.' This addresses feedback that Clocks are described but never shown visually.",
+          "success_criteria": "Visual Clock representation included; reader can picture the tracking tool"
+        }
+      ]
+    },
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks, and Outcomes",
+      "priority": 4,
+      "issues_addressed": [
+        "issue-004"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "End of Outcome Tiers section",
+          "instruction": "Add a 'Quick Reference: Margin and Outcomes' table with columns: Margin | Outcome | What Happens. Rows: +5 or more (Critical Success | Exceptional result, bonus effect), 0 to +4 (Full Success | You get what you wanted), -1 to -2 (Partial Success | Success with cost or complication), -3 to -6 (Failure | You do not achieve your goal), -7 or worse / all 1s (Critical Failure | Failure with additional consequence). Format for at-table reference.",
+          "success_criteria": "Table fits on one page and can be referenced in under 5 seconds"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Edge and Burden section",
+          "instruction": "Add a worked example showing multiple modifier sources combining: 'Kira attempts to pick a lock. She has: +1 Edge from her Lockpicking Tools proficiency, +1 Edge from an ally's Set Up action, -1 Burden from *Dim Light*. The modifiers stack: +1 +1 -1 = +1 Edge total. She rolls 5d6 and keeps the best 4.' Include note that Edge/Burden caps at +/-2.",
+          "success_criteria": "Example shows 3+ modifier sources combining with final calculation and cap reminder"
+        },
+        {
+          "type": "clarify",
+          "target": "DC Setting guidance",
+          "instruction": "Add a practical DC-setting sidebar with concrete scenarios: 'DC 12: Climbing a rough stone wall in good conditions. DC 14: Picking a standard commercial lock. DC 16: Persuading a suspicious guard to look the other way. DC 18: Disarming a trap while under fire. DC 20: Leaping between rooftops in a storm.' Ground each DC in specific, imaginable situations.",
+          "success_criteria": "Sidebar includes 5+ concrete scenarios mapped to DC values"
+        }
+      ]
+    },
+    {
+      "chapter_id": "05-ways-to-play",
+      "chapter_name": "Ways to Play",
+      "priority": 5,
+      "issues_addressed": [
+        "issue-005"
+      ],
+      "estimated_effort": "low",
+      "modifications": [
+        {
+          "type": "expand",
+          "target": "GMless Play section",
+          "instruction": "Add a 'GMless Play Procedure' sidebar with concrete steps: '1. Each scene, rotate who frames the situation. 2. When a character faces opposition, another player voices the obstacle. 3. For uncertain outcomes, the player to your left sets the DC based on the fiction. 4. Use Clocks to track group goals and external pressure. 5. When the fiction demands consequences, the group collaborates on what makes sense.'",
+          "success_criteria": "Sidebar provides 5 actionable steps for running GMless sessions"
+        },
+        {
+          "type": "expand",
+          "target": "Solo Play section",
+          "instruction": "Add a 'Solo Play Tools' sidebar: 'For solo play, you need a way to introduce uncertainty when no GM is present. Options: 1) Use a simple oracle: Roll 1d6 when asking yes/no questions (1-2: No and..., 3-4: No, 5: Yes, 6: Yes and...). 2) Draw from a deck of playing cards for random prompts. 3) Use published solo play supplements designed for fiction-first games.'",
+          "success_criteria": "Sidebar provides at least 2 concrete solo play tools/techniques"
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "allow_growth"
+  },
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": [
+        "10-combat-basics"
+      ],
+      "rationale": "Highest severity (10) and frequency (24/40); core gameplay system that affects all personas"
+    },
+    {
+      "phase": 2,
+      "chapters": [
+        "06-character-creation",
+        "08-actions-checks-outcomes"
+      ],
+      "rationale": "High-impact chapters that set foundation for understanding other systems; can be edited in parallel as they are independent"
+    },
+    {
+      "phase": 3,
+      "chapters": [
+        "09-tags-conditions-clocks",
+        "05-ways-to-play"
+      ],
+      "rationale": "Lower priority issues; Chapter 9 builds on concepts clarified in phase 2; Chapter 5 is lower frequency"
+    }
+  ],
+  "estimated_impact": {
+    "primary_dimension": "practical_usability",
+    "expected_improvement": "+1.0 to +1.5 points average across all personas, with largest gains in Practical Usability (currently 6.8) and Persona Fit (currently 6.7)",
+    "secondary_benefits": [
+      "Improved clarity_readability through concrete examples and quick-reference tables",
+      "Better rules_accuracy perception through explicit benchmarks and worked examples",
+      "Reduced cognitive load during play through visual aids and comparison tables"
+    ]
+  },
+  "review_cycle_recommendation": {
+    "re_review_personas": [
+      "gen-1763913096216-tivz62gzi",
+      "gen-1763913096222-5y9ikdivf",
+      "gen-1763913096233-cl97sm0pi",
+      "gen-1763913096243-xswijlurb",
+      "gen-1763913096264-7ah9suds4"
+    ],
+    "focus_dimensions": [
+      "practical_usability",
+      "persona_fit"
+    ],
+    "skip_personas": [
+      "gen-1763913096215-ojnj9oyej",
+      "gen-1763913096213-wmu00ukpy"
+    ],
+    "rationale": "Re-review personas who flagged the highest-frequency issues; skip personas who showed strong overall fit with minimal concerns"
+  }
+}

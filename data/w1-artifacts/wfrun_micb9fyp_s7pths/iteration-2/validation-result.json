@@ -1,0 +1,48 @@
+{
+  "evaluation_id": "eval-wfrun_micb9fyp_s7pths-iter2",
+  "workflow_run_id": "wfrun_micb9fyp_s7pths",
+  "iteration": 2,
+  "evaluated_at": "2025-11-23T23:50:00Z",
+  "approved": false,
+  "decision": "REJECT - THRESHOLD NOT MET",
+  "threshold": 1,
+  "metrics_comparison": {
+    "overall": {
+      "baseline": 6.9,
+      "new": 7.6,
+      "delta": 0.7
+    },
+    "by_dimension": {
+      "clarity_readability": {
+        "baseline": 6.7,
+        "new": 7.6,
+        "delta": 0.9
+      },
+      "rules_accuracy": {
+        "baseline": 7.6,
+        "new": 8.1,
+        "delta": 0.5
+      },
+      "persona_fit": {
+        "baseline": 6.3,
+        "new": 7.2,
+        "delta": 0.9
+      },
+      "practical_usability": {
+        "baseline": 7.1,
+        "new": 7.6,
+        "delta": 0.5
+      }
+    }
+  },
+  "rejection_reasons": [
+    "Delta threshold of 1.0 not met - highest delta is +0.9 (Clarity and Persona Fit)",
+    "Overall score improved by only +0.7 (from 6.9 to 7.6)"
+  ],
+  "critical_fixes_completed": [
+    "Skill bonus contradiction resolved - Chapter 6 now correctly states Skills add +1",
+    "All chapters improved, no regressions"
+  ],
+  "recommendation": "Present to human gate: The threshold of 1.0 was not achievable. All metrics improved +0.5 to +0.9. Human should decide whether to accept.",
+  "human_decision_needed": true
+}

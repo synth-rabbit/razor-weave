@@ -200,4 +200,55 @@ flowchart TD
 
 ---
 
+## Strategic Command (Implemented)
+
+The strategic command provides a single entry-point that orchestrates the entire workflow with persistent state:
+
+### Usage
+
+```bash
+# Full workflow with fresh reviews
+pnpm w1:strategic --book=core-rulebook --fresh
+
+# Use existing analysis
+pnpm w1:strategic --book=core-rulebook --analysis=data/reviews/analysis/campaign-xxx.md
+
+# Resume existing plan
+pnpm w1:strategic --resume=<plan-id>
+
+# List W1 strategic plans
+pnpm w1:strategic --list
+```
+
+### Behavior
+
+1. **Creates strategic plan** - Saves to database with unique ID (e.g., `strat_abc123`)
+2. **Saves state to artifacts** - `data/w1-strategic/{plan_id}/strategy.json` and `state.json`
+3. **Outputs orchestration prompt** - Claude Code reads and executes the workflow
+4. **Tracks progress** - State updated after each step for crash recovery
+5. **Iterative validation** - Cycles until metrics meet threshold or max cycles exceeded
+6. **Human gate** - Mandatory approval before finalization
+7. **Creates book version** - Finalization produces new semantic version (e.g., v1.1.0 → v1.2.0)
+
+### State Tracking
+
+```json
+{
+  "current_phase": "planning|iterating|validating|human_gate|finalizing|completed|failed",
+  "current_area_index": 0,
+  "areas_completed": ["area_001"],
+  "cumulative_delta": 0.5,
+  "current_cycle": 1,
+  "validation_cycles": [],
+  "last_updated": "2024-01-15T10:30:00Z",
+  "workflow_run_id": "wfrun_abc123"
+}
+```
+
+### Recovery
+
+If a session crashes, `--resume` generates a new prompt that reads saved state and continues from where it left off.
+
+---
+
 *This proposal is input for a W1 Boardroom session.*

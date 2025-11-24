@@ -1,0 +1,122 @@
+version: 1
+created: 2025-01-18
+
+# Quantity rules for each dimension
+quantity_rules:
+  archetypes:
+    min: 1
+    max: 1
+
+  playstyle_modifiers:
+    min: 1
+    max: 3
+
+  cognitive_styles:
+    primary: 1
+    secondary_min: 0
+    secondary_max: 1
+
+  social_emotional_traits:
+    min: 1
+    max: 3
+
+  experience_levels:
+    min: 1
+    max: 1
+
+  system_exposures:
+    min: 1
+    max: 3
+
+  life_contexts:
+    min: 1
+    max: 3
+
+  fiction_first_alignment:
+    min: 1
+    max: 1
+
+  narrative_mechanics_comfort:
+    min: 1
+    max: 1
+
+  gm_philosophy:
+    min: 1
+    max: 1
+
+  genre_flexibility:
+    min: 1
+    max: 1
+
+# Exclusion rules (incompatible combinations)
+exclusions:
+  # Within same dimension
+  - dimensions: [playstyle_modifiers]
+    incompatible:
+      - [Rule Minimalist, Rule Maximalist]
+      - [Mechanics First, Theme First]
+
+  - dimensions: [cognitive_styles]
+    incompatible:
+      - [Simplicity Seeker, Complexity Tolerant]
+
+  # Across dimensions
+  - dimensions: [experience_levels, gm_philosophy]
+    incompatible:
+      - ["Newbie (0-1 years)", Forever GM]
+      - ["Newbie (0-1 years)", Long-term GM]
+
+  - dimensions: [fiction_first_alignment]
+    incompatible:
+      - [Skeptical, Evangelical]
+
+  - dimensions: [narrative_mechanics_comfort]
+    incompatible:
+      - [Needs Concrete Numbers, Prefers Narrative Tools]
+      - [Needs Concrete Numbers, Narrative Purist]
+
+  - dimensions: [gm_philosophy]
+    incompatible:
+      - [GMless Advocate, Railroad Conductor]
+
+# Affinity weights (likely pairings)
+affinities:
+  - combination:
+      system_exposures: OSR-Enthusiast
+      playstyle_modifiers: Rule Minimalist
+      fiction_first_alignment: Native
+    weight: 0.7
+
+  - combination:
+      system_exposures: 5e-Native
+      playstyle_modifiers: Rule Maximalist
+      narrative_mechanics_comfort: Needs Concrete Numbers
+    weight: 0.6
+
+  - combination:
+      system_exposures: PbtA Player
+      fiction_first_alignment: Native
+      narrative_mechanics_comfort: Comfortable with Abstraction
+    weight: 0.8
+
+  - combination:
+      archetype: Tactician
+      cognitive_styles: Analytical
+      playstyle_modifiers: Mechanics First
+    weight: 0.7
+
+  - combination:
+      archetype: Method Actor
+      cognitive_styles: Intuitive
+      playstyle_modifiers: Theme First
+    weight: 0.7
+
+  - combination:
+      experience_levels: Forever GM
+      gm_philosophy: [Collaborative Storyteller, World Simulator]
+    weight: 0.9
+
+  - combination:
+      social_emotional_traits: [Anxious Newbie, Conflict-Averse]
+      experience_levels: "Newbie (0-1 years)"
+    weight: 0.6

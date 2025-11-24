@@ -1,0 +1,136 @@
+{
+  "workflow_run_id": "wfrun_mic6qjlc_jmdfg1",
+  "reviewed_at": "2025-11-23T20:55:00Z",
+  "review_type": "modified_chapters",
+  "baseline_source": "campaign-20251123-192801-j6p4e486",
+
+  "chapter_metrics": [
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks, and Outcomes",
+      "metrics": {
+        "clarity_readability": 8.5,
+        "rules_accuracy": 8.8,
+        "persona_fit": 8.0,
+        "practical_usability": 9.0,
+        "overall_score": 8.6
+      },
+      "themes": ["DC ladder with concrete examples", "Explicit margin ranges", "Full worked examples", "Strike outcome mechanics"],
+      "strengths": [
+        "Standard DC Ladder table with 6 tiers and 3 concrete examples per tier enables quick GM reference",
+        "Outcome Tier Margin Ranges table eliminates ambiguity about which tier applies",
+        "Three complete worked examples show full mechanical sequence (social, combat, skill contexts)",
+        "Strike outcomes now have explicit Clock tick values (Clear Strike = 2 ticks, Glancing = 1 tick)"
+      ],
+      "improvements_applied": [
+        "Added 'Standard DC Ladder' table with When to Use and Concrete Examples columns",
+        "Added 'Outcome Tier Margin Ranges' table with explicit numeric boundaries",
+        "Added 3 fully worked examples with dice math and outcome interpretation",
+        "Defined Strike outcomes mechanically with Clock tick rates"
+      ]
+    },
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "metrics": {
+        "clarity_readability": 8.2,
+        "rules_accuracy": 8.0,
+        "persona_fit": 8.5,
+        "practical_usability": 8.8,
+        "overall_score": 8.4
+      },
+      "themes": ["Self-contained checklist format", "Archetype guidance", "Decision rationale examples"],
+      "strengths": [
+        "Nine-step process now in numbered checklist format with inline guidance",
+        "Attribute Priorities by Archetype sidebar provides clear build guidance",
+        "Two complete worked examples show decision rationale at each step",
+        "No external chapter references required - fully self-contained"
+      ],
+      "improvements_applied": [
+        "Restructured to numbered checklist format with self-contained steps",
+        "Added 'Attribute Priorities by Archetype' sidebar (4 archetypes)",
+        "Added 2 complete worked examples with WHY annotations"
+      ]
+    },
+    {
+      "chapter_id": "10-combat-basics",
+      "chapter_name": "Combat Basics",
+      "metrics": {
+        "clarity_readability": 8.3,
+        "rules_accuracy": 8.5,
+        "persona_fit": 7.8,
+        "practical_usability": 9.0,
+        "overall_score": 8.4
+      },
+      "themes": ["Procedural combat structure", "Resolve Clock tick rates", "Action type quick reference"],
+      "strengths": [
+        "7-step Combat Round Procedure provides clear sequence for new GMs",
+        "Resolve Clock Tick Rates table with explicit values per outcome tier",
+        "Clock sizing guidelines (4/6/8 segments by threat level)",
+        "Action Types Quick Reference table enables at-a-glance decisions"
+      ],
+      "improvements_applied": [
+        "Added numbered 'Combat Round Procedure' (7 steps)",
+        "Added 'Resolve Clock Tick Rates' table with outcome -> tick mapping",
+        "Added 'Resolve Clock Sizing Guidelines' table",
+        "Added 'Action Types Quick Reference' table"
+      ]
+    },
+    {
+      "chapter_id": "09-tags-conditions-clocks",
+      "chapter_name": "Tags, Conditions, and Clocks",
+      "metrics": {
+        "clarity_readability": 8.4,
+        "rules_accuracy": 8.2,
+        "persona_fit": 8.0,
+        "practical_usability": 8.8,
+        "overall_score": 8.4
+      },
+      "themes": ["Clock advancement mechanics", "Tag Edge/Burden mapping", "Condition quick reference"],
+      "strengths": [
+        "Clock Advancement by Check Outcome table provides default tick rates",
+        "Common Tag Effects summary with 6 Tags showing Edge/Burden mapping",
+        "Condition Quick Reference table with mechanical effects and clearing methods",
+        "Multi-Clock guidance flowchart for complex scenarios"
+      ],
+      "improvements_applied": [
+        "Added 'Clock Advancement by Check Outcome' table",
+        "Added 'Common Tag Effects' summary with 6 Tag examples",
+        "Added 'Condition Quick Reference' table (5 conditions)"
+      ]
+    }
+  ],
+
+  "aggregate_metrics": {
+    "clarity_readability": 8.4,
+    "rules_accuracy": 8.4,
+    "persona_fit": 8.1,
+    "practical_usability": 8.9,
+    "overall_score": 8.5
+  },
+
+  "baseline_comparison": {
+    "baseline_metrics": {
+      "clarity_readability": 7.4,
+      "rules_accuracy": 7.2,
+      "persona_fit": 6.2,
+      "practical_usability": 6.2,
+      "overall_score": 6.75
+    },
+    "delta": {
+      "clarity_readability": 1.0,
+      "rules_accuracy": 1.2,
+      "persona_fit": 1.9,
+      "practical_usability": 2.7,
+      "overall_score": 1.75
+    }
+  },
+
+  "validation_result": {
+    "metric_threshold": 8.0,
+    "delta_threshold": 1.0,
+    "overall_score_met": true,
+    "delta_met": true,
+    "recommendation": "APPROVE - Changes meet both thresholds"
+  }
+}

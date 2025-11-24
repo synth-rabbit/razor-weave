@@ -1,0 +1,16 @@
+{
+  "book_id": "book_core",
+  "book_slug": "core-rulebook",
+  "chapters": [
+    "08-actions-checks-outcomes",
+    "06-character-creation",
+    "10-combat-basics",
+    "09-tags-conditions-clocks"
+  ],
+  "chapter_paths": [
+    "/Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/08-actions-checks-outcomes.md",
+    "/Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/06-character-creation.md",
+    "/Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/10-combat-basics.md",
+    "/Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/09-tags-conditions-clocks.md"
+  ]
+}

@@ -26,6 +26,8 @@
     "review:list": "tsx src/tooling/cli-commands/run.ts review list",
     "review:view": "tsx src/tooling/cli-commands/run.ts review view",
     "review:analyze": "tsx src/tooling/cli-commands/run.ts review analyze",
+    "review:add-reviewers": "tsx src/tooling/cli-commands/run.ts review add-reviewers",
+    "review:reanalyze": "tsx src/tooling/cli-commands/run.ts review reanalyze",
     "personas:hydrate": "tsx src/tooling/cli-commands/run.ts hydrate-core",
     "personas:generate": "tsx src/tooling/cli-commands/run.ts generate",
     "personas:stats": "tsx src/tooling/cli-commands/run.ts stats",
@@ -53,6 +55,7 @@
     "book:register": "tsx src/tooling/cli-commands/book-register.ts",
     "book:list": "tsx src/tooling/cli-commands/book-list.ts",
     "book:info": "tsx src/tooling/cli-commands/book-info.ts",
+    "build:book": "tsx src/tooling/cli-commands/build-book.ts",
     "workflow:start": "tsx src/tooling/cli-commands/workflow-start.ts",
     "workflow:status": "tsx src/tooling/cli-commands/workflow-status.ts",
     "workflow:list": "tsx src/tooling/cli-commands/workflow-list.ts",
@@ -65,7 +68,9 @@
     "w1:validate-chapters": "tsx src/tooling/cli-commands/w1-validate-chapters.ts",
     "w1:validate": "tsx src/tooling/cli-commands/w1-validate.ts",
     "w1:finalize-web-html": "tsx src/tooling/cli-commands/w1-finalize-web-html.ts",
-    "w1:finalize": "tsx src/tooling/cli-commands/w1-finalize.ts"
+    "w1:human-gate": "tsx src/tooling/cli-commands/w1-human-gate.ts",
+    "w1:finalize": "tsx src/tooling/cli-commands/w1-finalize.ts",
+    "w1:strategic": "tsx src/tooling/cli-commands/w1-strategic.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",

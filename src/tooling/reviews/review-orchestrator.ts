@@ -21,6 +21,20 @@ export interface InitializeCampaignParams {
   focus?: FocusCategory;   // Override inferred focus
 }
 
+export interface AddReviewersParams {
+  core?: boolean;          // Add all core personas not already in campaign
+  plus?: number;           // Add N sampled generated personas
+  personaIds?: string[];   // Add specific persona IDs
+  focus?: FocusCategory;   // Focus for sampling (if using plus)
+}
+
+export interface AddReviewersResult {
+  addedCount: number;
+  skippedCount: number;
+  newPersonaIds: string[];
+  promptFiles: string[];
+}
+
 export class ReviewOrchestrator {
   constructor(
     private db: Database.Database,
@@ -96,6 +110,13 @@ export class ReviewOrchestrator {
     if (params.personaSelectionStrategy === 'all_core') {
       const allPersonas = personaClient.getAll();
       coreIds = allPersonas.filter((p) => p.type === 'core').map((p) => p.id);
+
+      // Provide helpful error if no core personas found
+      if (coreIds.length === 0) {
+        throw new Error(
+          'No core personas found in database. Run "pnpm personas:hydrate" to load core personas first.'
+        );
+      }
     } else if (params.personaSelectionStrategy === 'manual' && params.personaIds) {
       coreIds = params.personaIds;
     }
@@ -211,5 +232,107 @@ export class ReviewOrchestrator {
     log.info(`  Reviews: ${reviews.length}`);
     log.info(`  Analysis: ${analysis ? 'Generated' : 'Not found'}`);
     log.info(`  Status: completed`);
+  }
+
+  /**
+   * Adds reviewers to an existing campaign.
+   * Only works for campaigns in 'in_progress' or 'completed' status.
+   * Deduplicates personas already in the campaign.
+   *
+   * @param campaignId - Campaign to add reviewers to
+   * @param params - Options for selecting personas
+   * @returns Result with counts and list of new persona IDs
+   */
+  addReviewers(campaignId: string, params: AddReviewersParams): AddReviewersResult {
+    const campaign = this.campaignClient.getCampaign(campaignId);
+    if (!campaign) {
+      throw new Error(`Campaign not found: ${campaignId}`);
+    }
+
+    if (campaign.status !== 'in_progress' && campaign.status !== 'completed') {
+      throw new Error('Campaign must be in in_progress or completed status to add reviewers');
+    }
+
+    // Get existing persona IDs
+    const existingPersonaIds = new Set(JSON.parse(campaign.persona_ids || '[]') as string[]);
+
+    // Resolve new persona IDs based on params
+    const candidatePersonaIds = this.resolveAddReviewersPersonaIds(params, campaign.content_id);
+
+    // Deduplicate - only add personas not already in campaign
+    const newPersonaIds = candidatePersonaIds.filter(id => !existingPersonaIds.has(id));
+    const skippedCount = candidatePersonaIds.length - newPersonaIds.length;
+
+    // If no new personas, return early
+    if (newPersonaIds.length === 0) {
+      return {
+        addedCount: 0,
+        skippedCount,
+        newPersonaIds: [],
+        promptFiles: [],
+      };
+    }
+
+    // Update campaign persona_ids
+    const allPersonaIds = [...existingPersonaIds, ...newPersonaIds];
+    this.campaignClient.updatePersonaIds(campaignId, allPersonaIds);
+
+    // Set status to in_progress (in case it was completed)
+    if (campaign.status === 'completed') {
+      this.campaignClient.updateStatus(campaignId, 'in_progress');
+    }
+
+    // Generate prompts only for new reviewers
+    const promptFiles = writePromptFiles(this.db, campaignId, newPersonaIds);
+
+    // Log results
+    log.info(`\n✅ Added ${newPersonaIds.length} reviewers to campaign ${campaignId}`);
+    if (skippedCount > 0) {
+      log.info(`⏭️  Skipped ${skippedCount} reviewers (already in campaign)`);
+    }
+    log.info(`\n📁 New prompts: data/reviews/prompts/${campaignId}/`);
+    log.info(`\nNew reviewers:`);
+    for (const id of newPersonaIds) {
+      log.info(`  - ${id}`);
+    }
+    log.info('\nNext: Execute the new reviewer agents\n');
+
+    return {
+      addedCount: newPersonaIds.length,
+      skippedCount,
+      newPersonaIds,
+      promptFiles,
+    };
+  }
+
+  /**
+   * Resolves persona IDs for addReviewers based on params.
+   */
+  private resolveAddReviewersPersonaIds(params: AddReviewersParams, contentId: string | number): string[] {
+    const personaClient = new PersonaClient(this.db);
+    const result: string[] = [];
+
+    // Add specific persona IDs if provided
+    if (params.personaIds && params.personaIds.length > 0) {
+      result.push(...params.personaIds);
+    }
+
+    // Add all core personas if requested
+    if (params.core) {
+      const allPersonas = personaClient.getAll();
+      const coreIds = allPersonas.filter(p => p.type === 'core').map(p => p.id);
+      result.push(...coreIds);
+    }
+
+    // Add sampled generated personas if requested
+    if (params.plus && params.plus > 0) {
+      // Use focus if provided, otherwise infer from content ID (best effort)
+      const focus = params.focus ?? inferFocus(String(contentId));
+      const sampledIds = samplePersonas(this.db, params.plus, focus);
+      result.push(...sampledIds);
+    }
+
+    // Deduplicate within the result (in case core + personaIds overlap)
+    return [...new Set(result)];
   }
 }

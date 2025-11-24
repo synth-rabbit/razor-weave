@@ -79,8 +79,41 @@ const { values } = parseArgs({
     result: { type: 'string' },
     // Legacy flag for generating placeholder release notes
     'use-placeholder': { type: 'boolean', default: false },
+    // Version bump flags
+    patch: { type: 'boolean', default: false },
+    minor: { type: 'boolean', default: false },
+    major: { type: 'boolean', default: false },
+    help: { type: 'boolean', short: 'h' },
   },
 });
+
+// Show help
+if (values.help) {
+  console.log(
+    CLIFormatter.format({
+      title: 'W1 FINALIZE',
+      content: 'Complete the W1 editing workflow by generating artifacts and updating versions.',
+      nextStep: [
+        'Usage:',
+        '  pnpm w1:finalize --run <workflow-run-id>              # Auto-detect book',
+        '  pnpm w1:finalize --book <slug> --run <id>             # Explicit book',
+        '  pnpm w1:finalize --save-release-notes --run <id> --result <path>',
+        '',
+        'Options:',
+        '  --run, -r             Workflow run ID (required)',
+        '  --book, -b            Book slug (optional, auto-detected from workflow)',
+        '  --skip-release-notes  Skip release notes generation',
+        '  --use-placeholder     Generate placeholder release notes',
+        '  --patch/--minor/--major  Version bump type (default: minor)',
+        '',
+        'Save Mode:',
+        '  --save-release-notes  Save release notes from JSON result',
+        '  --result              Path to release notes JSON file',
+      ],
+    })
+  );
+  process.exit(0);
+}
 
 const projectRoot = getProjectRoot();
 const bookIdOrSlug = values.book;
@@ -93,6 +126,29 @@ const metricsPath = values['metrics-path'];
 const saveReleaseNotesMode = values['save-release-notes'];
 const resultPath = values.result;
 const usePlaceholder = values['use-placeholder'];
+const bumpPatch = values.patch;
+const bumpMinor = values.minor;
+const bumpMajor = values.major;
+
+// Determine version bump type (default to minor for W1 content edits)
+type VersionBumpType = 'patch' | 'minor' | 'major';
+function getVersionBumpType(): VersionBumpType {
+  if (bumpMajor) return 'major';
+  if (bumpPatch) return 'patch';
+  return 'minor'; // default for W1 content modifications
+}
+
+function bumpVersion(current: string, bumpType: VersionBumpType): { version: string; major: number; minor: number; patch: number } {
+  const [major, minor, patch] = current.split('.').map(Number);
+  switch (bumpType) {
+    case 'major':
+      return { version: `${major + 1}.0.0`, major: major + 1, minor: 0, patch: 0 };
+    case 'minor':
+      return { version: `${major}.${minor + 1}.0`, major, minor: minor + 1, patch: 0 };
+    case 'patch':
+      return { version: `${major}.${minor}.${patch + 1}`, major, minor, patch: patch + 1 };
+  }
+}
 
 // Determine mode
 const isSaveReleaseNotesMode = saveReleaseNotesMode || !!resultPath;
@@ -132,33 +188,16 @@ if (isSaveReleaseNotesMode) {
 
 // Validate for full finalization mode
 if (!isSaveReleaseNotesMode) {
-  if (!bookIdOrSlug) {
-    console.error(
-      CLIFormatter.format({
-        title: 'ERROR',
-        content: 'Missing required argument: --book <book-id>',
-        status: [{ label: 'Book ID is required', success: false }],
-        nextStep: [
-          'Usage:',
-          '  pnpm w1:finalize --book <book-id> --workflow <run-id>',
-          '',
-          'List available books:',
-          '  pnpm book:list',
-        ],
-      })
-    );
-    process.exit(1);
-  }
-
   if (!workflowRunId) {
     console.error(
       CLIFormatter.format({
         title: 'ERROR',
-        content: 'Missing required argument: --workflow <run-id>',
+        content: 'Missing required argument: --run <workflow-run-id>',
         status: [{ label: 'Workflow run ID is required', success: false }],
         nextStep: [
           'Usage:',
-          '  pnpm w1:finalize --book <book-id> --workflow <run-id>',
+          '  pnpm w1:finalize --run <workflow-run-id>',
+          '  pnpm w1:finalize --book <book-id> --run <workflow-run-id>',
           '',
           'List workflow runs:',
           '  pnpm workflow:list',
@@ -167,6 +206,7 @@ if (!isSaveReleaseNotesMode) {
     );
     process.exit(1);
   }
+  // Note: --book is optional - will be looked up from workflow run if not provided
 }
 
 // Print header
@@ -179,7 +219,7 @@ if (isSaveReleaseNotesMode) {
 }
 console.log('-----------------------------------------------------------');
 console.log('');
-if (!isSaveReleaseNotesMode) {
+if (!isSaveReleaseNotesMode && bookIdOrSlug) {
   console.log(`Book: ${bookIdOrSlug}`);
 }
 console.log(`Workflow: ${workflowRunId}`);
@@ -618,24 +658,7 @@ async function runFullFinalization(): Promise<void> {
   const results: FinalizationResult = {};
 
   try {
-    // Verify book exists
-    let book = bookRepo.getBySlug(bookIdOrSlug!);
-    if (!book) {
-      book = bookRepo.getById(bookIdOrSlug!);
-    }
-    if (!book) {
-      console.error(
-        CLIFormatter.format({
-          title: 'ERROR',
-          content: `Book not found: ${bookIdOrSlug}`,
-          status: [{ label: 'Book does not exist', success: false }],
-          nextStep: ['List available books:', '  pnpm book:list'],
-        })
-      );
-      process.exit(1);
-    }
-
-    // Verify workflow run exists
+    // Verify workflow run exists first
     const workflowRun = workflowRepo.getById(workflowRunId!);
     if (!workflowRun) {
       console.error(
@@ -648,6 +671,156 @@ async function runFullFinalization(): Promise<void> {
       );
       process.exit(1);
     }
+
+    // Get book - either from CLI arg or from workflow run
+    let book;
+    if (bookIdOrSlug) {
+      book = bookRepo.getBySlug(bookIdOrSlug);
+      if (!book) {
+        book = bookRepo.getById(bookIdOrSlug);
+      }
+      if (!book) {
+        console.error(
+          CLIFormatter.format({
+            title: 'ERROR',
+            content: `Book not found: ${bookIdOrSlug}`,
+            status: [{ label: 'Book does not exist', success: false }],
+            nextStep: ['List available books:', '  pnpm book:list'],
+          })
+        );
+        process.exit(1);
+      }
+    } else {
+      // Look up book from workflow run
+      book = bookRepo.getById(workflowRun.book_id);
+      if (!book) {
+        console.error(
+          CLIFormatter.format({
+            title: 'ERROR',
+            content: `Book not found for workflow run: ${workflowRun.book_id}`,
+            status: [{ label: 'Book does not exist', success: false }],
+            nextStep: ['Specify book explicitly:', `  pnpm w1:finalize --book <book-slug> --run ${workflowRunId}`],
+          })
+        );
+        process.exit(1);
+      }
+      console.log(`  Auto-detected book: ${book.title} (${book.slug})`);
+    }
+
+    // Check for human gate approval
+    const humanGatePath = resolve(projectRoot, `data/w1-artifacts/${workflowRunId}/human-gate.json`);
+    if (!existsSync(humanGatePath)) {
+      console.error(
+        CLIFormatter.format({
+          title: 'HUMAN GATE REQUIRED',
+          content: `No human gate approval found for workflow run ${workflowRunId}`,
+          status: [
+            { label: 'Book verified', success: true },
+            { label: 'Workflow run verified', success: true },
+            { label: 'Human gate approval', success: false },
+          ],
+          nextStep: [
+            'Human review is required before finalization.',
+            '',
+            'To approve, run:',
+            `  pnpm w1:human-gate --approve --run=${workflowRunId}`,
+            '',
+            'To review first:',
+            `  pnpm w1:human-gate --run=${workflowRunId}`,
+          ],
+        })
+      );
+      db.close();
+      process.exit(1);
+    }
+
+    // Verify human gate was approved
+    const humanGateData = JSON.parse(readFileSync(humanGatePath, 'utf-8'));
+    if (!humanGateData.approved) {
+      console.error(
+        CLIFormatter.format({
+          title: 'HUMAN GATE NOT APPROVED',
+          content: `Human gate was recorded but not approved for workflow run ${workflowRunId}`,
+          status: [
+            { label: 'Book verified', success: true },
+            { label: 'Workflow run verified', success: true },
+            { label: 'Human gate approval', success: false },
+          ],
+          nextStep: [
+            'The human gate review was not approved.',
+            humanGateData.reason ? `Reason: ${humanGateData.reason}` : '',
+            '',
+            'To approve:',
+            `  pnpm w1:human-gate --approve --run=${workflowRunId}`,
+          ],
+        })
+      );
+      db.close();
+      process.exit(1);
+    }
+
+    console.log(`  OK Human gate approved by ${humanGateData.reviewer || 'unknown'} at ${humanGateData.approved_at || 'unknown time'}`);
+    console.log('');
+
+    // Step 0: Create new book version
+    console.log('Step 0: Creating new book version');
+    const versionBumpType = getVersionBumpType();
+    const currentVersion = book.current_version || '1.0.0';
+    const newVersionInfo = bumpVersion(currentVersion, versionBumpType);
+    const newVersion = newVersionInfo.version;
+
+    // Parse current source path to get base path
+    const currentSourcePath = book.source_path; // e.g., books/core/v1.0.0
+    const baseBookPath = currentSourcePath.replace(/\/v[\d.]+$/, ''); // e.g., books/core
+    const newSourcePath = `${baseBookPath}/v${newVersion}`; // e.g., books/core/v1.1.0
+
+    const currentDir = resolve(projectRoot, currentSourcePath);
+    const newDir = resolve(projectRoot, newSourcePath);
+    const artifactChaptersDir = resolve(projectRoot, `data/w1-artifacts/${workflowRunId}/chapters`);
+
+    console.log(`  Version bump: ${currentVersion} → ${newVersion} (${versionBumpType})`);
+
+    // Copy current version to new version directory
+    if (!existsSync(newDir)) {
+      const { cpSync } = await import('node:fs');
+      cpSync(currentDir, newDir, { recursive: true });
+      console.log(`  OK Created: ${newSourcePath}`);
+
+      // Apply modified chapters from artifacts
+      if (existsSync(artifactChaptersDir)) {
+        const { readdirSync } = await import('node:fs');
+        const modifiedChapters = readdirSync(artifactChaptersDir).filter(f => f.endsWith('.md'));
+        const newChaptersDir = join(newDir, 'chapters');
+
+        for (const chapter of modifiedChapters) {
+          const srcPath = join(artifactChaptersDir, chapter);
+          const destPath = join(newChaptersDir, chapter);
+          const { copyFileSync } = await import('node:fs');
+          copyFileSync(srcPath, destPath);
+        }
+        console.log(`  OK Applied ${modifiedChapters.length} modified chapters`);
+      }
+
+      // Update database
+      db.prepare(`UPDATE books SET current_version = ?, source_path = ? WHERE id = ?`)
+        .run(newVersion, newSourcePath, book.id);
+
+      // Record release
+      const releaseId = `bkr_${Date.now().toString(36)}`;
+      db.prepare(`
+        INSERT INTO book_releases (id, book_id, version, version_major, version_minor, version_patch, source_path, created_from_workflow, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+      `).run(releaseId, book.id, newVersion, newVersionInfo.major, newVersionInfo.minor, newVersionInfo.patch, newSourcePath, workflowRunId);
+
+      console.log(`  OK Database updated`);
+
+      // Update book object for subsequent steps
+      book.source_path = newSourcePath;
+      book.current_version = newVersion;
+    } else {
+      console.log(`  (!) Version ${newVersion} already exists, skipping creation`);
+    }
+    console.log('');
 
     // Step 1: Print HTML
     results.printHtml = await stepPrintHtml(db, book, artifactRegistry);

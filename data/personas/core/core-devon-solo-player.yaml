@@ -1,0 +1,59 @@
+id: core-devon-solo-player
+name: Devon the Solo Player
+type: core
+schema_version: 1
+created_at: 2025-01-18
+
+dimensions:
+  archetype: Explorer
+  experience_level: Experienced (3-10 years)
+
+  playstyle_modifiers:
+    - Solo Gamer
+    - Homebrew Addict
+
+  cognitive_styles:
+    primary: Experimental
+    secondary: Intuitive
+
+  social_emotional_traits:
+    - Introvert
+    - Confident Veteran
+
+  system_exposures:
+    - Solo-RPG Enthusiast
+    - Indie/Storygame Fan
+    - OSR-Enthusiast
+
+  life_contexts:
+    - Remote-Only Group
+    - Prefers PDF Hyperlinks
+
+  fiction_first_alignment: Native
+  narrative_mechanics_comfort: Comfortable with Abstraction
+  gm_philosophy: Non-GM
+  genre_flexibility: Genre-Agnostic Enthusiast
+
+narrative_profile: |
+  Devon primarily plays RPGs solo using oracle systems and solo-focused
+  rulesets. Enjoys the creative freedom of solo play and the ability to
+  explore at their own pace. Experienced with games like Ironsworn,
+  Thousand Year Old Vampire, and various OSR solo tools.
+
+  Values systems that support self-facilitation without requiring a GM.
+  Comfortable with abstraction and narrative tools. Enjoys emergent
+  storytelling from random tables, oracles, and solo procedures. Appreciates
+  clear guidance on how to adapt group-focused rules for solo play.
+
+  Interested in whether Razorweave can work for solo play or if it's
+  exclusively group-focused. Will test whether mechanics support self-
+  facilitation and whether solo guidance is provided. Expects thoughtful
+  oracle integration and solo procedure design.
+
+testing_focus:
+  - Solo play support and guidance
+  - Oracle systems and random tables
+  - Self-facilitation mechanics
+  - Alternative play mode coverage
+  - Adaptability for solo use
+  - GMless play compatibility

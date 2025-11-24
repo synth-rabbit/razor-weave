@@ -249,9 +249,89 @@ describe('generatePlanningPrompt', () => {
 4. Run the save command with your result
 5. Verify workflow state updated correctly
 
+## Strategic Workflow Pattern
+
+For complex multi-phase workflows, the **strategic command** pattern provides a single entry point with state persistence:
+
+### Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  pnpm w1:strategic --book X --analysis Y                   │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────┐
+│  1. Create strategic plan (DB + files)                      │
+│  2. Generate orchestration prompt                           │
+│  3. Output prompt for Claude Code                           │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────┐
+│  Claude Code executes full workflow:                        │
+│  - Planning → Content mod → Validation → Human gate         │
+│  - Updates state.json after each step                       │
+│  - Stops at human gate for approval                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Key Components
+
+1. **Strategic Plan** - Stored in DB (`strategic_plans` table) and files:
+   - `data/w1-strategic/{plan_id}/strategy.json` - Goal, areas, configuration
+   - `data/w1-strategic/{plan_id}/state.json` - Current progress
+
+2. **Orchestration Prompt** - Single prompt that guides Claude Code through all phases with:
+   - Explicit phase instructions
+   - State update requirements
+   - Decision points (iterate vs proceed)
+   - Human gate checkpoints
+
+3. **Resume Capability** - If session crashes:
+   ```bash
+   pnpm w1:strategic --resume=strat_abc123
+   ```
+   Generates new prompt that reads saved state and continues.
+
+### Implementation Pattern
+
+```typescript
+// src/tooling/w1/prompt-generator.ts
+
+export function generateStrategyPrompt(context: StrategyPromptContext): string {
+  return `# Strategic Workflow: ${context.planId}
+
+## Files to Read First
+1. Strategy: ${context.artifactsDir}/strategy.json
+2. State: ${context.artifactsDir}/state.json
+
+## Phase 1: Planning
+[Instructions with CLI commands]
+
+## Phase 2: Content Modification
+[Instructions with CLI commands]
+
+## Phase 3: Validation (MANDATORY)
+[Instructions - critical checkpoints emphasized]
+
+## Phase 4: Human Gate
+[Stop and wait for approval]
+
+## State Management
+Update state.json after EVERY step.
+`;
+}
+```
+
+### Reference Implementation
+
+- **W1 Strategic:** `src/tooling/cli-commands/w1-strategic.ts`, `src/tooling/w1/strategy-*.ts`
+
 ## Reference Implementations
 
 - **Review System:** `src/tooling/reviews/prompt-generator.ts`, `prompt-writer.ts`
 - **W1 Editing:** `src/tooling/w1/prompt-generator.ts`, `prompt-writer.ts`, `result-saver.ts`
+- **W1 Strategic:** `src/tooling/w1/strategy-types.ts`, `strategy-repository.ts`
 
-Both follow the same pattern and can be used as templates for new workflows.
+All follow the prompt-based pattern and can be used as templates for new workflows.

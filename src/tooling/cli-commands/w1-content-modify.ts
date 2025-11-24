@@ -338,8 +338,10 @@ async function handleGenerateWriterPrompt(
   const legacyPromptPath = promptWriter.writeWriterPrompt(legacyPrompt, 'legacy');
   console.log(`  OK Legacy prompt written: ${legacyPromptPath}`);
 
-  // Update workflow status
-  workflowRepo.updateStatus(runId, 'running');
+  // Update workflow status (only if not already running)
+  if (workflowRun.status !== 'running') {
+    workflowRepo.updateStatus(runId, 'running');
+  }
   workflowRepo.setCurrentAgent(runId, 'writer');
 
   console.log('');

@@ -27,5 +27,5 @@ export {
 
 // Re-export types
 export type { CampaignStatus, ContentType } from './campaign-client.js';
-export type { InitializeCampaignParams } from './review-orchestrator.js';
+export type { InitializeCampaignParams, AddReviewersParams, AddReviewersResult } from './review-orchestrator.js';
 export type { FocusCategory, PersonaForScoring } from './persona-sampler.js';

@@ -31,6 +31,7 @@ import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
 import { WorkflowRepository } from '../workflows/repository.js';
+import { StrategyRepository } from '../w1/strategy-repository.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
 import {
@@ -558,6 +559,20 @@ async function runGenerateMode(): Promise<void> {
     console.log('Step 4: Generating evaluation prompt...');
     const promptWriter = new W1PromptWriter({ runId: workflowRunId });
 
+    // Look up strategic plan for this book to get thresholds
+    const strategyRepo = new StrategyRepository(db);
+    const strategicPlan = strategyRepo.getActiveForBook(book.id);
+    let deltaThreshold: number | undefined;
+    let metricThreshold: number | undefined;
+
+    if (strategicPlan) {
+      deltaThreshold = strategicPlan.goal.delta_threshold_for_validation;
+      metricThreshold = strategicPlan.goal.metric_threshold;
+      console.log(`  OK Using strategic plan thresholds: delta >= ${deltaThreshold}, target >= ${metricThreshold}`);
+    } else {
+      console.log(`  INFO: No active strategic plan found, using default thresholds`);
+    }
+
     const prompt = generateMetricsEvalPrompt({
       runId: workflowRunId,
       iteration,
@@ -576,6 +591,8 @@ async function runGenerateMode(): Promise<void> {
           metrics: c.metrics as unknown as Record<string, number>,
         })),
       },
+      deltaThreshold,
+      metricThreshold,
     });
 
     const promptPath = promptWriter.writeMetricsPrompt(prompt);
@@ -685,10 +702,57 @@ async function runSaveMode(): Promise<void> {
     // 1. Load and validate result
     console.log('Step 1: Loading evaluation result...');
     const resultContent = readFileSync(resolvedResultPath, 'utf-8');
-    const evaluationResult = JSON.parse(resultContent) as MetricsEvaluationResult;
+    let evaluationResult: MetricsEvaluationResult;
+
+    try {
+      evaluationResult = JSON.parse(resultContent) as MetricsEvaluationResult;
+    } catch (parseError) {
+      throw new Error(
+        `Invalid JSON in result file: ${parseError instanceof Error ? parseError.message : String(parseError)}\n` +
+        `File content preview: ${resultContent.substring(0, 200)}...`
+      );
+    }
 
     if (typeof evaluationResult.approved !== 'boolean') {
-      throw new Error('Invalid result: missing "approved" field');
+      const receivedKeys = Object.keys(evaluationResult).join(', ');
+      throw new Error(
+        `Invalid result: missing "approved" field.\n` +
+        `Expected: { approved: boolean, reasoning: string, metrics_comparison: {...}, recommendations: [...], confidence: "high"|"medium"|"low" }\n` +
+        `Received keys: ${receivedKeys || '(empty object)'}\n` +
+        `See the MetricsEvaluationResult schema in: src/tooling/agents/prompts/pm-metrics-eval.md`
+      );
+    }
+
+    if (!evaluationResult.metrics_comparison) {
+      throw new Error(
+        `Invalid result: missing "metrics_comparison" field.\n` +
+        `The result must include metrics_comparison with overall and by_dimension comparisons.`
+      );
+    }
+
+    if (!evaluationResult.metrics_comparison.by_dimension) {
+      throw new Error(
+        `Invalid result: missing "metrics_comparison.by_dimension" field.\n` +
+        `The by_dimension object must include: clarity_readability, rules_accuracy, persona_fit, practical_usability`
+      );
+    }
+
+    if (!evaluationResult.metrics_comparison.overall) {
+      throw new Error(
+        `Invalid result: missing "metrics_comparison.overall" field.\n` +
+        `The overall object must include: baseline, new, delta, assessment`
+      );
+    }
+
+    const requiredDimensions = ['clarity_readability', 'rules_accuracy', 'persona_fit', 'practical_usability'];
+    const missingDimensions = requiredDimensions.filter(
+      d => !evaluationResult.metrics_comparison.by_dimension[d]
+    );
+    if (missingDimensions.length > 0) {
+      throw new Error(
+        `Invalid result: missing dimensions in by_dimension: ${missingDimensions.join(', ')}\n` +
+        `Each dimension must have: { baseline: number, new: number, delta: number, assessment: string }`
+      );
     }
 
     console.log(`  OK Result loaded: ${evaluationResult.approved ? 'APPROVED' : 'REJECTED'}`);

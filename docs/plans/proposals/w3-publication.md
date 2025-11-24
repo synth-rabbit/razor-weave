@@ -215,6 +215,48 @@ pnpm w3:deploy --save --run=<id> --status=<path>  # Save result
 
 ---
 
+## Strategic Command
+
+Once all individual W3 commands are implemented, create a single entry-point command that orchestrates the entire workflow with persistent state:
+
+### Usage
+
+```bash
+# Start new W3 workflow from W1+W2 artifacts
+pnpm w3:strategic --book=core-rulebook --from-w2=<w2-plan-id>
+
+# Resume existing W3 workflow
+pnpm w3:strategic --resume=<plan-id>
+
+# List W3 strategic plans
+pnpm w3:strategic --list
+```
+
+### Behavior
+
+1. **Creates strategic plan** - Saves to database with unique ID (e.g., `strat_w3_abc123`)
+2. **Saves state to artifacts** - `data/w3-strategic/{plan_id}/strategy.json` and `state.json`
+3. **Outputs orchestration prompt** - Claude Code reads and executes the workflow
+4. **Tracks progress** - State updated after each step for crash recovery
+5. **Human gate** - Stops for final approval before deployment to all platforms
+
+### State Tracking
+
+```json
+{
+  "current_phase": "release_check|qa|marketing|human_gate|deploy|announce|complete",
+  "platforms_deployed": [],
+  "qa_passed": false,
+  "last_updated": "2024-01-15T10:30:00Z"
+}
+```
+
+### Recovery
+
+If a session crashes, `--resume` generates a new prompt that reads saved state and continues from where it left off. Critical for W3 since partial deployments need careful handling.
+
+---
+
 ## Implementation Notes
 
 ### Module Structure

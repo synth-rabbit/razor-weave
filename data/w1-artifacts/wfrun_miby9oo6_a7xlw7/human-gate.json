@@ -1,0 +1,12 @@
+{
+  "workflow_run_id": "wfrun_miby9oo6_a7xlw7",
+  "book_id": "book_core",
+  "book_slug": "core-rulebook",
+  "approved": true,
+  "rejected": false,
+  "reason": null,
+  "reviewer": "pandorz",
+  "approved_at": "2025-11-23T18:14:10.151Z",
+  "rejected_at": null,
+  "recorded_at": "2025-11-23T18:14:10.151Z"
+}

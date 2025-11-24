@@ -1,0 +1,47 @@
+# W1 Writer Orchestrator
+
+You are coordinating parallel chapter modifications for workflow run `wfrun_mic6qjlc_jmdfg1`.
+
+## Instructions
+
+1. Read the shared context: `data/w1-prompts/wfrun_mic6qjlc_jmdfg1/shared-context.md`
+2. Dispatch chapter writers in batches (max 5 parallel)
+3. Wait for each batch to complete before starting the next
+4. After all chapters are written, confirm completion
+
+## Chapter Assignments
+
+### Batch 1
+Dispatch these Task() calls in a single message:
+
+| Chapter | Source | Output | Modifications |
+|---------|--------|--------|---------------|
+| 08-actions-checks-outcomes | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/08-actions-checks-outcomes.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic6qjlc_jmdfg1/chapters/08-actions-checks-outcomes.md | add_reference: Add a 'Standard DC Ladder' table with 6 tiers: Easy (DC 12), Routine (DC 14), Tough (DC 16), Hard (DC 18), Heroic (DC 20), Legendary (DC 22). Include a 'When to Use' column with concrete examples for each tier.; clarify: Rewrite outcome tiers with explicit margin ranges: Critical Success (+5 or more), Full Success (0 to +4), Partial Success (-1 to -2), Failure (-3 to -6), Critical Failure (-7 or worse). Add a table summarizing these ranges.; improve_examples: Add 3 fully worked examples showing: 1) A social check with Partial Success cost negotiation, 2) A combat check with Clear Strike outcome and Clock ticks, 3) A skill check with Edge/Burden modifiers. Show dice rolled, math, outcome tier, and narrative result.; expand: Define Strike outcomes mechanically: Clear Strike (Full Success) ticks target Resolve Clock by 2; Glancing Strike (Partial Success) ticks by 1 with counterattack opportunity; Miss advances threat Clock or grants enemy positioning. |
+| 06-character-creation | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/06-character-creation.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic6qjlc_jmdfg1/chapters/06-character-creation.md | restructure: Convert the prose description into a numbered checklist format. Each step should be self-contained with inline guidance. Remove references to 'see Chapter X' and incorporate essential information directly.; expand: Add an 'Attribute Priorities by Archetype' sidebar showing common builds: Physical (MIG primary), Agile (AGI primary), Social (PRE primary), Analytical (RSN primary). Include recommended secondary attributes and example character concepts for each.; improve_examples: Expand to include 2 complete worked examples: one combat-focused character (MIG/AGI), one social/investigative character (PRE/RSN). Show decision rationale at each step, not just final choices. |
+| 10-combat-basics | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/10-combat-basics.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic6qjlc_jmdfg1/chapters/10-combat-basics.md | restructure: Add a numbered 'Combat Round Procedure' with clear steps: 1) Establish turn order, 2) Active character declares intent and approach, 3) GM sets DC and modifiers, 4) Resolve Check, 5) Apply outcomes (damage, Clock ticks, Conditions), 6) Update fiction, 7) Next character.; add_reference: Add 'Resolve Clock Tick Rates' table: Critical Success (2-3 ticks), Full Success (2 ticks), Partial Success (1 tick + complication), Failure (0 ticks, may tick threat Clock). Include Resolve Clock size guidelines: Minor threat (4-segment), Standard (6-segment), Major (8-segment).; add_reference: Add 'Action Types Quick Reference' table listing Strike, Maneuver, Set Up, Defend, and other actions with: Primary Attribute, Typical DC, Success Effect, Partial Effect. Keep to one-line summaries. |
+| 09-tags-conditions-clocks | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/09-tags-conditions-clocks.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic6qjlc_jmdfg1/chapters/09-tags-conditions-clocks.md | add_reference: Add 'Clock Advancement by Check Outcome' table: Critical Success (2-3 segments), Full Success (1-2 segments), Partial Success (1 segment + complication), Failure (0 segments or tick opposing Clock). Note that specific actions may override these defaults.; clarify: Clarify how Tags mechanically affect Checks. Add a 'Common Tag Effects' summary: Environmental Tags typically grant Edge or impose Burden based on relevance (e.g., *Dim Light* imposes Burden on sight-based Checks, grants Edge on Stealth). Provide 5-6 common Tag examples.; add_reference: Add 'Condition Quick Reference' table listing common Conditions with: Mechanical Effect (Edge/Burden/specific penalty), Clearing Method, Example Source. Include: *Exhausted*, *Bleeding*, *Frightened*, *Disarmed*, *Prone*. |
+
+
+## Subagent Prompt Template
+
+For each Task(), use subagent_type="general-purpose" and this prompt:
+
+```
+Read `data/w1-prompts/wfrun_mic6qjlc_jmdfg1/shared-context.md` for style guides and plan context.
+
+Modify chapter: {source_path}
+Write output to: {output_path}
+
+Modifications to apply:
+{list of modifications}
+
+Follow all style guide conventions. Preserve existing structure where not explicitly modified.
+Write the complete modified chapter to the output path.
+```
+
+## Output Requirements
+
+After all chapters are written, save results:
+```bash
+pnpm w1:content-modify --save-writer --run=wfrun_mic6qjlc_jmdfg1 --chapters=data/w1-artifacts/wfrun_mic6qjlc_jmdfg1/chapters/
+```

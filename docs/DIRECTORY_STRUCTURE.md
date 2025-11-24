@@ -78,7 +78,7 @@ Slices include cozy, fantasy, horror_mystery, modern, and sci_fi.
 
 ## data Directory
 
-Stores persona data, review results, play session logs, and metric history.
+Stores persona data, review results, play session logs, metric history, and generated artifacts.
 
 ```
 data/
@@ -95,6 +95,13 @@ data/
     metrics/
         quality_gates/
         history/
+    html/
+        print/           # Print-ready HTML builds
+        web/             # Web reader HTML builds
+        review/          # Review HTML builds (pnpm build:book output)
+    w1-artifacts/        # W1 workflow artifacts (plans, changelogs, etc.)
+    w1-prompts/          # W1 generated prompts
+    w1-strategic/        # Strategic plan state and configuration
 ```
 
 ## docs Directory

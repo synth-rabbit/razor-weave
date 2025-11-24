@@ -10,11 +10,64 @@
 
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 import { hydrateCore, generate, stats } from './personas.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '../../..');
 import { log } from '../logging/logger.js';
+import Database from 'better-sqlite3';
+import { BookRepository } from '../books/repository.js';
+
+/**
+ * Resolve a book slug or path to an actual HTML file path.
+ * If input looks like a slug (no / or . characters), look up in database.
+ * Otherwise, treat as a file path.
+ */
+function resolveBookPath(input: string): string {
+  // If it looks like a file path, use it directly
+  if (input.includes('/') || input.includes('.')) {
+    return input;
+  }
+
+  // Looks like a slug - try to resolve from database
+  const dbPath = resolve(REPO_ROOT, 'data/project.db');
+  if (!existsSync(dbPath)) {
+    log.warn(`Database not found at ${dbPath}, treating input as path`);
+    return input;
+  }
+
+  const db = new Database(dbPath);
+  const bookRepo = new BookRepository(db);
+  const book = bookRepo.getBySlug(input);
+  db.close();
+
+  if (!book) {
+    log.warn(`Book with slug "${input}" not found in database, treating as path`);
+    return input;
+  }
+
+  // Resolve to HTML file path - try common locations
+  const possiblePaths = [
+    resolve(REPO_ROOT, 'data/html/promoted', `${book.slug}.html`),
+    resolve(REPO_ROOT, 'data/html/print/promoted', `${book.slug}.html`),
+    resolve(REPO_ROOT, 'src/site', `${book.slug.replace(/-/g, '_')}.html`),
+    resolve(REPO_ROOT, 'src/site', `${book.slug.replace(/-/g, '_')}_web.html`),
+    resolve(REPO_ROOT, 'src/site', 'core_rulebook.html'), // fallback for core-rulebook
+  ];
+
+  for (const path of possiblePaths) {
+    if (existsSync(path)) {
+      log.info(`Resolved book slug "${input}" to: ${path}`);
+      return path;
+    }
+  }
+
+  // Last resort - use the source_path from database
+  const sourcePath = resolve(REPO_ROOT, book.source_path);
+  log.warn(`Could not find HTML file for "${input}", using source_path: ${sourcePath}`);
+  return sourcePath;
+}
 import {
   reviewBook,
   reviewChapter,
@@ -22,6 +75,8 @@ import {
   viewCampaign,
   statusCampaign,
   analyzeCampaign,
+  addReviewers,
+  reanalyzeCampaign,
   type ListCampaignsFilters,
 } from './review.js';
 import {
@@ -83,8 +138,11 @@ async function main(): Promise<void> {
       } else if (subcommand === 'book') {
         const bookPath = args[2];
         if (!bookPath) {
-          log.error('Error: Please provide a book path');
-          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review book <path> [--personas=...] [--plus=N] [--generated=N] [--focus=...]');
+          log.error('Error: Please provide a book slug or path');
+          log.error('Usage: pnpm review:book <slug-or-path> [--personas=...] [--plus=N] [--generated=N] [--focus=...]');
+          log.error('Examples:');
+          log.error('  pnpm review:book core-rulebook');
+          log.error('  pnpm review:book src/site/core_rulebook_web.html');
           process.exit(1);
         }
 
@@ -101,7 +159,8 @@ async function main(): Promise<void> {
           }
         }
 
-        reviewBook(bookPath, options);
+        const resolvedPath = resolveBookPath(bookPath);
+        reviewBook(resolvedPath, options);
       } else if (subcommand === 'chapter') {
         const chapterPath = args[2];
         if (!chapterPath) {
@@ -162,9 +221,39 @@ async function main(): Promise<void> {
           process.exit(1);
         }
         analyzeCampaign(campaignId);
+      } else if (subcommand === 'add-reviewers') {
+        const campaignId = args[2];
+        if (!campaignId) {
+          log.error('Error: Please provide a campaign ID');
+          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review add-reviewers <campaign-id> [--core] [--plus=N] [--personas=...] [--focus=...]');
+          process.exit(1);
+        }
+
+        const options: { core?: boolean; plus?: number; personas?: string; focus?: string } = {};
+        for (let i = 3; i < args.length; i++) {
+          if (args[i] === '--core') {
+            options.core = true;
+          } else if (args[i].startsWith('--plus=')) {
+            options.plus = parseInt(args[i].split('=')[1], 10);
+          } else if (args[i].startsWith('--personas=')) {
+            options.personas = args[i].split('=')[1];
+          } else if (args[i].startsWith('--focus=')) {
+            options.focus = args[i].split('=')[1];
+          }
+        }
+
+        addReviewers(campaignId, options);
+      } else if (subcommand === 'reanalyze') {
+        const campaignId = args[2];
+        if (!campaignId) {
+          log.error('Error: Please provide a campaign ID');
+          log.error('Usage: pnpm tsx src/tooling/cli-commands/run.ts review reanalyze <campaign-id>');
+          process.exit(1);
+        }
+        reanalyzeCampaign(campaignId);
       } else {
         log.error(`Unknown review subcommand: ${subcommand}`);
-        log.error('Available subcommands: book, chapter, list, view, status, analyze');
+        log.error('Available subcommands: book, chapter, list, view, status, analyze, add-reviewers, reanalyze');
         process.exit(1);
       }
     } else if (command === 'html' && args[1] === 'print') {
@@ -286,6 +375,9 @@ async function main(): Promise<void> {
       log.error('  review view <id> [--format=text|json]    - View campaign details');
       log.error('  review status <id>                        - Check campaign status');
       log.error('  review analyze <id>                       - Analyze campaign reviews');
+      log.error('  review add-reviewers <id> [options]       - Add reviewers to campaign');
+      log.error('    Options: --core, --plus=N, --personas=..., --focus=<category>');
+      log.error('  review reanalyze <id>                     - Rerun analysis (overwrites existing)');
       log.error('  html print build                          - Build print-design HTML');
       log.error('  html print list                           - List print builds');
       log.error('  html print diff <build-id>                - Diff vs latest build');

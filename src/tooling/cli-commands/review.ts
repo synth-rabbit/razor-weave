@@ -9,7 +9,9 @@ import {
   type CampaignStatus,
   type ContentType,
   type FocusCategory,
+  type AddReviewersParams,
 } from '../reviews/index.js';
+import { unlinkSync, existsSync } from 'fs';
 
 export interface ReviewBookOptions {
   personas?: string;
@@ -445,6 +447,278 @@ export function analyzeCampaign(campaignId: string): void {
   campaignClient.updateStatus(campaignId, 'completed');
 
   log.info('Analysis complete!\n');
+  log.info(`Dimension Averages:`);
+  log.info(`  Clarity & Readability: ${avg(clarityScores)}/10`);
+  log.info(`  Rules Accuracy: ${avg(accuracyScores)}/10`);
+  log.info(`  Persona Fit: ${avg(fitScores)}/10`);
+  log.info(`  Practical Usability: ${avg(usabilityScores)}/10`);
+  log.info(`\nTop Issues (${priorityRankings.length}):`);
+  for (const ranking of priorityRankings.slice(0, 5)) {
+    log.info(`  - ${ranking.category} (${ranking.frequency} mentions)`);
+  }
+  log.info(`\nOutputs:`);
+  log.info(`  Database: campaign_analyses table`);
+  log.info(`  Markdown: ${markdownPath}`);
+}
+
+export interface AddReviewersOptions {
+  core?: boolean;
+  plus?: number;
+  personas?: string;
+  focus?: string;
+}
+
+/**
+ * Command: review add-reviewers <campaign-id>
+ * Adds reviewers to an existing campaign and generates prompts for them
+ */
+export function addReviewers(
+  campaignId: string,
+  options?: AddReviewersOptions
+): void {
+  log.info(`\nAdding reviewers to campaign: ${campaignId}\n`);
+
+  const db = getDatabase();
+  const rawDb = db.getDb();
+  const campaignClient = new CampaignClient(rawDb);
+  const orchestrator = new ReviewOrchestrator(rawDb, campaignClient);
+
+  // Validate focus if provided
+  const validFocuses = ['general', 'gm-content', 'combat', 'narrative', 'character-creation', 'quickstart'];
+  if (options?.focus && !validFocuses.includes(options.focus)) {
+    log.error(`Error: Invalid focus '${options.focus}'. Valid options: ${validFocuses.join(', ')}`);
+    process.exit(1);
+  }
+
+  // Build params
+  const params: AddReviewersParams = {
+    core: options?.core,
+    plus: options?.plus,
+    focus: options?.focus as FocusCategory | undefined,
+  };
+
+  // Parse persona IDs if provided
+  if (options?.personas) {
+    params.personaIds = options.personas.split(',').map(id => id.trim());
+  }
+
+  // Validate at least one option provided
+  if (!params.core && !params.plus && (!params.personaIds || params.personaIds.length === 0)) {
+    log.error('Error: Must specify at least one of --core, --plus=N, or --personas=...');
+    process.exit(1);
+  }
+
+  try {
+    const result = orchestrator.addReviewers(campaignId, params);
+
+    if (result.addedCount === 0) {
+      log.info('\nNo new reviewers added (all specified personas already in campaign)');
+    }
+  } catch (error) {
+    log.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(1);
+  }
+}
+
+/**
+ * Command: review reanalyze <campaign-id>
+ * Reruns analysis for a campaign, overwriting any existing analysis
+ */
+export function reanalyzeCampaign(campaignId: string): void {
+  const db = getDatabase();
+  const rawDb = db.getDb();
+  const campaignClient = new CampaignClient(rawDb);
+
+  // Get campaign
+  const campaign = campaignClient.getCampaign(campaignId);
+  if (!campaign) {
+    log.error(`Campaign not found: ${campaignId}`);
+    process.exit(1);
+  }
+
+  // Check if analysis exists and delete it
+  const existingAnalysis = campaignClient.getCampaignAnalysis(campaignId);
+  if (existingAnalysis) {
+    log.info(`\nDeleting existing analysis for campaign ${campaignId}...`);
+
+    // Delete the markdown file if it exists
+    if (existsSync(existingAnalysis.markdown_path)) {
+      unlinkSync(existingAnalysis.markdown_path);
+      log.info(`  Deleted: ${existingAnalysis.markdown_path}`);
+    }
+
+    // Delete the database record
+    campaignClient.deleteAnalysis(campaignId);
+    log.info(`  Deleted database record`);
+  }
+
+  // Get all reviews
+  const reviews = campaignClient.getCampaignReviews(campaignId);
+  if (reviews.length === 0) {
+    log.error(`No reviews found for campaign ${campaignId}`);
+    process.exit(1);
+  }
+
+  log.info(`\nReanalyzing ${reviews.length} reviews for campaign: ${campaignId}\n`);
+
+  // Get persona profiles
+  const personaIds = reviews.map((r) => r.persona_id);
+  const placeholders = personaIds.map(() => '?').join(',');
+  const personas = rawDb
+    .prepare(`SELECT id, name, archetype, experience_level FROM personas WHERE id IN (${placeholders})`)
+    .all(...personaIds) as PersonaProfile[];
+
+  const personaMap = new Map(personas.map((p) => [p.id, p]));
+
+  // Parse all review data
+  const parsedReviews = reviews.map((r) => ({
+    personaId: r.persona_id,
+    data: JSON.parse(r.review_data) as ParsedReviewData,
+  }));
+
+  // Calculate dimension averages
+  const clarityScores = parsedReviews.map((r) => r.data.ratings.clarity_readability);
+  const accuracyScores = parsedReviews.map((r) => r.data.ratings.rules_accuracy);
+  const fitScores = parsedReviews.map((r) => r.data.ratings.persona_fit);
+  const usabilityScores = parsedReviews.map((r) => r.data.ratings.practical_usability);
+
+  const avg = (arr: number[]) => Math.round((arr.reduce((a, b) => a + b, 0) / arr.length) * 10) / 10;
+
+  // Collect all issues and count frequency
+  const issuesByCategory = new Map<string, { count: number; personas: string[]; descriptions: string[] }>();
+
+  for (const review of parsedReviews) {
+    for (const issue of review.data.issue_annotations) {
+      const category = issue.section;
+      const existing = issuesByCategory.get(category) || { count: 0, personas: [], descriptions: [] };
+      existing.count++;
+      existing.personas.push(review.personaId);
+      if (!existing.descriptions.includes(issue.issue)) {
+        existing.descriptions.push(issue.issue);
+      }
+      issuesByCategory.set(category, existing);
+    }
+  }
+
+  // Sort issues by frequency for priority rankings
+  const priorityRankings = Array.from(issuesByCategory.entries())
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 10)
+    .map(([category, data], idx) => ({
+      category,
+      severity: Math.max(1, Math.min(10, 10 - idx)),
+      frequency: data.count,
+      affected_personas: [...new Set(data.personas)],
+      description: data.descriptions.slice(0, 3).join('; '),
+    }));
+
+  // Group personas by archetype for breakdowns
+  const archetypeGroups = new Map<string, { strengths: string[]; struggles: string[] }>();
+
+  for (const review of parsedReviews) {
+    const persona = personaMap.get(review.personaId);
+    if (!persona) continue;
+
+    const archetype = persona.archetype;
+    const group = archetypeGroups.get(archetype) || { strengths: [], struggles: [] };
+
+    const avgScore =
+      (review.data.ratings.clarity_readability +
+        review.data.ratings.rules_accuracy +
+        review.data.ratings.persona_fit +
+        review.data.ratings.practical_usability) /
+      4;
+
+    if (avgScore >= 7) {
+      group.strengths.push(`${persona.name}: Strong overall fit`);
+    } else if (avgScore < 6) {
+      group.struggles.push(`${persona.name}: ${review.data.issue_annotations[0]?.issue || 'Low overall fit'}`);
+    }
+
+    archetypeGroups.set(archetype, group);
+  }
+
+  // Build persona_breakdowns object
+  const personaBreakdowns: Record<string, { strengths: string[]; struggles: string[] }> = {};
+  for (const [archetype, data] of archetypeGroups) {
+    personaBreakdowns[archetype] = {
+      strengths: data.strengths.length > 0 ? data.strengths.slice(0, 5) : ['Generally positive reception'],
+      struggles: data.struggles.length > 0 ? data.struggles.slice(0, 5) : ['No major issues identified'],
+    };
+  }
+
+  // Extract common themes from feedback
+  const extractThemes = (reviews: typeof parsedReviews, dimension: keyof ParsedReviewData['ratings']) => {
+    const themes: string[] = [];
+    const highScorers = reviews.filter((r) => r.data.ratings[dimension] >= 7);
+    const lowScorers = reviews.filter((r) => r.data.ratings[dimension] < 6);
+
+    if (highScorers.length > lowScorers.length) {
+      themes.push('Generally well-received');
+    } else if (lowScorers.length > highScorers.length) {
+      themes.push('Needs improvement');
+    } else {
+      themes.push('Mixed reception');
+    }
+
+    return themes;
+  };
+
+  // Build analysis data
+  const analysisData = {
+    executive_summary: `Reanalysis of ${reviews.length} persona reviews for campaign ${campaignId}. Average scores: Clarity ${avg(clarityScores)}/10, Rules Accuracy ${avg(accuracyScores)}/10, Persona Fit ${avg(fitScores)}/10, Usability ${avg(usabilityScores)}/10. Top issue categories: ${priorityRankings
+      .slice(0, 3)
+      .map((p) => p.category)
+      .join(', ')}.`,
+    priority_rankings: priorityRankings,
+    dimension_summaries: {
+      clarity_readability: {
+        average: avg(clarityScores),
+        themes: extractThemes(parsedReviews, 'clarity_readability'),
+      },
+      rules_accuracy: {
+        average: avg(accuracyScores),
+        themes: extractThemes(parsedReviews, 'rules_accuracy'),
+      },
+      persona_fit: {
+        average: avg(fitScores),
+        themes: extractThemes(parsedReviews, 'persona_fit'),
+      },
+      practical_usability: {
+        average: avg(usabilityScores),
+        themes: extractThemes(parsedReviews, 'practical_usability'),
+      },
+    },
+    persona_breakdowns: personaBreakdowns,
+  };
+
+  // Validate against schema
+  const validated = AnalysisDataSchema.parse(analysisData);
+
+  // Save to database
+  const markdownPath = `data/reviews/analysis/${campaignId}.md`;
+  campaignClient.createCampaignAnalysis({
+    campaignId,
+    analysisData: validated,
+    markdownPath,
+  });
+
+  // Write markdown
+  writeAnalysisMarkdown({
+    campaignId,
+    campaignName: campaign.campaign_name,
+    contentType: campaign.content_type as 'book' | 'chapter',
+    contentTitle: campaign.content_id,
+    personaCount: reviews.length,
+    analysisData: validated,
+    createdAt: new Date().toISOString(),
+    outputPath: markdownPath,
+  });
+
+  // Update campaign status
+  campaignClient.updateStatus(campaignId, 'completed');
+
+  log.info('Reanalysis complete!\n');
   log.info(`Dimension Averages:`);
   log.info(`  Clarity & Readability: ${avg(clarityScores)}/10`);
   log.info(`  Rules Accuracy: ${avg(accuracyScores)}/10`);

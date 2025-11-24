@@ -297,6 +297,64 @@ W4 is built **after** the core book completes its first full W1→W2→W3 cycle.
 
 ---
 
+## Strategic Command
+
+Once all individual W4 commands are implemented, create a single entry-point command that orchestrates the entire workflow with persistent state:
+
+### Usage
+
+```bash
+# Start new W4 workflow - run agentic playtesting session
+pnpm w4:strategic --book=core-rulebook --track=agentic [--setting=<slug>]
+
+# Start new W4 workflow - import human GPT session
+pnpm w4:strategic --book=core-rulebook --track=human --transcript=<path>
+
+# Resume existing W4 workflow
+pnpm w4:strategic --resume=<plan-id>
+
+# List W4 strategic plans
+pnpm w4:strategic --list
+```
+
+### Behavior
+
+1. **Creates strategic plan** - Saves to database with unique ID (e.g., `strat_w4_abc123`)
+2. **Saves state to artifacts** - `data/w4-strategic/{plan_id}/strategy.json` and `state.json`
+3. **Outputs orchestration prompt** - Claude Code reads and executes the workflow
+4. **Tracks progress** - State updated after each step for crash recovery
+5. **Produces W1 feedback** - Final output is feedback artifacts ready for W1 consumption
+
+### State Tracking
+
+```json
+{
+  "current_phase": "setup|session|analysis|feedback|complete",
+  "track": "agentic|human",
+  "session_complete": false,
+  "analysis_complete": false,
+  "feedback_generated": false,
+  "last_updated": "2024-01-15T10:30:00Z"
+}
+```
+
+### Recovery
+
+If a session crashes, `--resume` generates a new prompt that reads saved state and continues from where it left off. Particularly important for agentic sessions which may be long-running.
+
+### W1 Integration
+
+Generated feedback artifacts are automatically registered for W1 consumption:
+```bash
+# View generated feedback
+pnpm w4:list-feedback --plan=<plan-id>
+
+# Feedback appears in W1 planning input
+pnpm w1:strategic --book=core-rulebook --include-playtest-feedback
+```
+
+---
+
 ## Implementation Notes
 
 ### Module Structure

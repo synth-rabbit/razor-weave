@@ -389,4 +389,40 @@ export class CampaignClient {
     const rows = stmt.all(...params);
     return rows as Campaign[];
   }
+
+  /**
+   * Updates the persona IDs for a campaign.
+   * Used when adding new reviewers to an existing campaign.
+   *
+   * @param campaignId - The campaign ID to update
+   * @param personaIds - New array of persona IDs (replaces existing)
+   * @returns Number of rows affected (1 if campaign exists, 0 if not)
+   */
+  updatePersonaIds(campaignId: string, personaIds: string[]): number {
+    const stmt = this.db.prepare(`
+      UPDATE review_campaigns
+      SET persona_ids = ?
+      WHERE id = ?
+    `);
+
+    const result = stmt.run(JSON.stringify(personaIds), campaignId);
+    return result.changes;
+  }
+
+  /**
+   * Deletes the analysis for a campaign.
+   * Used when rerunning analysis to overwrite existing results.
+   *
+   * @param campaignId - The campaign ID whose analysis to delete
+   * @returns true if analysis was deleted, false if no analysis existed
+   */
+  deleteAnalysis(campaignId: string): boolean {
+    const stmt = this.db.prepare(`
+      DELETE FROM campaign_analyses
+      WHERE campaign_id = ?
+    `);
+
+    const result = stmt.run(campaignId);
+    return result.changes > 0;
+  }
 }

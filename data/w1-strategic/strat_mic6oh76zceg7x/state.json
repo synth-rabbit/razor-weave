@@ -1,0 +1,21 @@
+{
+  "current_phase": "completed",
+  "current_area_index": 0,
+  "areas_completed": ["area_001"],
+  "cumulative_delta": 1.75,
+  "current_cycle": 1,
+  "validation_cycles": [
+    {
+      "cycle": 1,
+      "overall_score": 8.5,
+      "delta": 1.75,
+      "metrics_met": true,
+      "delta_met": true,
+      "validated_at": "2025-11-23T20:55:00.000Z"
+    }
+  ],
+  "last_updated": "2025-11-23T20:55:00.000Z",
+  "workflow_run_id": "wfrun_mic6qjlc_jmdfg1",
+  "plan_id": "plan-20251123-mic6qjlc",
+  "chapters_modified": ["08-actions-checks-outcomes", "06-character-creation", "10-combat-basics", "09-tags-conditions-clocks"]
+}

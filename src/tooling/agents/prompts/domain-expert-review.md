@@ -143,8 +143,17 @@ Use these types to categorize mechanical issues:
 
 ## Severity Levels
 
-- **blocking**: Must be fixed before approval. The content is mechanically incorrect.
+- **critical**: AUTOMATIC REJECTION. A fundamental rules contradiction that would cause incorrect gameplay. Examples: wrong dice mechanics, contradictory rules statements, broken procedures.
+- **blocking**: Must be fixed before approval. The content is mechanically incorrect but not fundamentally game-breaking.
 - **minor**: Should be fixed but does not prevent approval. The content is technically correct but could be clearer or more consistent.
+
+### CRITICAL RULE - READ THIS CAREFULLY
+
+**ANY issue with severity "critical" or "blocking" = `approved: false`**
+
+You MUST set `approved: false` if there is even ONE critical or blocking issue. There are NO exceptions. Do not approve content with blocking issues even if you think the issue is "small" or "easily fixed". The approval gate exists to catch these issues.
+
+If you find yourself wanting to approve despite a blocking issue, you are making a mistake. Re-read this section.
 
 ## Guidelines
 
@@ -284,7 +293,7 @@ const IssueSchema = z.object({
     'missing_constraint',
     'balance_concern'
   ]),
-  severity: z.enum(['blocking', 'minor']),
+  severity: z.enum(['critical', 'blocking', 'minor']),  // critical = auto-reject
   chapter_id: z.string(),
   location: z.string().min(5),
   description: z.string().min(20),
@@ -320,19 +329,29 @@ const DomainExpertReviewSchema = z.object({
 
 ## Approval Criteria
 
-Set `approved: true` only when:
+### ⛔ AUTOMATIC REJECTION (approved: false)
 
-- [ ] **Zero blocking issues** exist
+You MUST set `approved: false` if ANY of these are true:
+
+1. **ANY critical severity issue exists** - Even one critical issue = rejection
+2. **ANY blocking severity issue exists** - Even one blocking issue = rejection
+3. **Unable to verify a critical mechanic** against rules reference
+4. **Example math doesn't check out** - Wrong calculations = rejection
+
+There are NO exceptions. Do not rationalize approving content with critical or blocking issues.
+
+### ✅ APPROVAL ALLOWED (approved: true)
+
+You may ONLY set `approved: true` when ALL of these are true:
+
+- [ ] **Zero critical issues** - None whatsoever
+- [ ] **Zero blocking issues** - None whatsoever
 - [ ] All mechanical statements verified against rules reference
 - [ ] All worked examples produce correct outcomes
 - [ ] No terminology conflicts detected
 - [ ] Cross-references are consistent
 
-Set `approved: false` when:
-
-- Any blocking issue is present (even one)
-- Unable to verify a critical mechanic against rules reference
-- Example math doesn't check out
+Minor issues do NOT prevent approval, but should still be listed for the Writer to address.
 
 ## Checklist Before Returning
 

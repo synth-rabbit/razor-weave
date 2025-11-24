@@ -1,0 +1,123 @@
+{
+  "baseline_metrics": {
+    "source": "synthetic",
+    "reviewed_at": "2025-11-22T23:35:47.025Z",
+    "aggregate_metrics": {
+      "clarity_readability": 6.7,
+      "rules_accuracy": 7.6,
+      "persona_fit": 6.3,
+      "practical_usability": 7.1,
+      "overall_score": 6.9
+    },
+    "chapter_metrics": [
+      {
+        "chapter_id": "05-ways-to-play",
+        "metrics": {
+          "clarity_readability": 6.7281843250576365,
+          "rules_accuracy": 7.329980002639252,
+          "persona_fit": 5.737324496448762,
+          "practical_usability": 6.697513492592134
+        }
+      },
+      {
+        "chapter_id": "06-character-creation",
+        "metrics": {
+          "clarity_readability": 6.442001368676701,
+          "rules_accuracy": 7.990524019024663,
+          "persona_fit": 6.612445656045328,
+          "practical_usability": 7.315466618033709
+        }
+      },
+      {
+        "chapter_id": "08-actions-checks-outcomes",
+        "metrics": {
+          "clarity_readability": 7.083825117587646,
+          "rules_accuracy": 7.4591648483805315,
+          "persona_fit": 5.6630024803887835,
+          "practical_usability": 7.321075421433421
+        }
+      },
+      {
+        "chapter_id": "09-tags-conditions-clocks",
+        "metrics": {
+          "clarity_readability": 6.601276494307935,
+          "rules_accuracy": 7.214520074069425,
+          "persona_fit": 6.798524102684123,
+          "practical_usability": 6.852183133559731
+        }
+      },
+      {
+        "chapter_id": "10-combat-basics",
+        "metrics": {
+          "clarity_readability": 6.864459177765838,
+          "rules_accuracy": 8.193632163784255,
+          "persona_fit": 6.8864788215198125,
+          "practical_usability": 7.105039967828787
+        }
+      }
+    ]
+  },
+  "new_metrics": {
+    "source": "post-modification",
+    "reviewed_at": "2025-11-23T23:35:47.026Z",
+    "aggregate_metrics": {
+      "clarity_readability": 7.6,
+      "rules_accuracy": 8.1,
+      "persona_fit": 7.2,
+      "practical_usability": 7.6,
+      "overall_score": 7.6
+    },
+    "chapter_metrics": [
+      {
+        "chapter_id": "05-ways-to-play",
+        "metrics": {
+          "clarity_readability": 7.6,
+          "rules_accuracy": 7.7,
+          "persona_fit": 6.6,
+          "practical_usability": 7.3,
+          "overall_score": 7.3
+        }
+      },
+      {
+        "chapter_id": "06-character-creation",
+        "metrics": {
+          "clarity_readability": 7.2,
+          "rules_accuracy": 8.4,
+          "persona_fit": 7.6,
+          "practical_usability": 8,
+          "overall_score": 7.8
+        }
+      },
+      {
+        "chapter_id": "08-actions-checks-outcomes",
+        "metrics": {
+          "clarity_readability": 8,
+          "rules_accuracy": 7.9,
+          "persona_fit": 6.7,
+          "practical_usability": 7.8,
+          "overall_score": 7.6
+        }
+      },
+      {
+        "chapter_id": "09-tags-conditions-clocks",
+        "metrics": {
+          "clarity_readability": 7.5,
+          "rules_accuracy": 7.7,
+          "persona_fit": 7.5,
+          "practical_usability": 7.4,
+          "overall_score": 7.5
+        }
+      },
+      {
+        "chapter_id": "10-combat-basics",
+        "metrics": {
+          "clarity_readability": 7.8,
+          "rules_accuracy": 8.6,
+          "persona_fit": 7.6,
+          "practical_usability": 7.7,
+          "overall_score": 7.9
+        }
+      }
+    ]
+  }
+}

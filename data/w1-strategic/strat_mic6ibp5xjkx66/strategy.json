@@ -1,0 +1,25 @@
+{
+  "id": "strat_mic6ibp5xjkx66",
+  "book_id": "book_core",
+  "book_slug": "core-rulebook",
+  "goal": {
+    "metric_threshold": 8,
+    "primary_dimension": "overall_score",
+    "max_cycles": 3,
+    "delta_threshold_for_validation": 1
+  },
+  "areas": [
+    {
+      "area_id": "area_001",
+      "name": "General Improvements",
+      "type": "issue_type",
+      "description": "Address issues identified in the analysis",
+      "target_chapters": [],
+      "target_issues": [],
+      "priority": 1,
+      "status": "pending"
+    }
+  ],
+  "source_analysis_path": "/Users/pandorz/Documents/razorweave/data/reviews/analysis/campaign-20251122-191126-1p7dhyj4.md",
+  "created_at": "2025-11-23T20:36:58.937Z"
+}

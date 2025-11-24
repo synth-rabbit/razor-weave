@@ -84,6 +84,15 @@ Analyze the metrics comparison and determine whether to approve the modification
 
 ## Approval Criteria
 
+### ⚠️ STRATEGIC PLAN THRESHOLDS TAKE PRECEDENCE
+
+If the prompt includes "STRATEGIC PLAN THRESHOLDS" section, those thresholds OVERRIDE the defaults below. You MUST check:
+
+1. **Does the delta meet the required threshold?** If the plan requires delta >= 1.0, and your best delta is +0.9, you MUST REJECT.
+2. **Is the target metric score achieved?** If the plan requires 8.0 and you're at 7.8, note this in recommendations.
+
+### Default Approval Criteria (used when no strategic thresholds provided)
+
 **APPROVE** if ANY of the following are true:
 - Overall score improved by 0.3 or more points
 - All targeted dimensions improved (even if overall is flat)
@@ -93,10 +102,18 @@ Analyze the metrics comparison and determine whether to approve the modification
 - Any dimension degraded by more than 1.0 point
 - Overall score degraded by more than 0.3 points
 - Multiple dimensions (2+) degraded by more than 0.5 points
+- **Strategic plan delta threshold not met** (if specified)
 
 **BORDERLINE** (approve with notes) if:
 - Mixed results with small improvements and small regressions
 - Overall score is roughly flat but targeted improvements were achieved
+
+### CRITICAL: Threshold Enforcement
+
+Do NOT rationalize approving when thresholds are not met. If the strategic plan says "delta >= 1.0" and you have +0.9:
+- This is NOT "close enough"
+- This is NOT "good improvement"
+- This is a REJECTION with recommendation for another iteration
 
 ## Output Format
 

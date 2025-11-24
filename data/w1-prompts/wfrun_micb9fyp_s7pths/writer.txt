@@ -1,0 +1,48 @@
+# W1 Writer Orchestrator
+
+You are coordinating parallel chapter modifications for workflow run `wfrun_micb9fyp_s7pths`.
+
+## Instructions
+
+1. Read the shared context: `data/w1-prompts/wfrun_micb9fyp_s7pths/shared-context.md`
+2. Dispatch chapter writers in batches (max 5 parallel)
+3. Wait for each batch to complete before starting the next
+4. After all chapters are written, confirm completion
+
+## Chapter Assignments
+
+### Batch 1
+Dispatch these Task() calls in a single message:
+
+| Chapter | Source | Output | Modifications |
+|---------|--------|--------|---------------|
+| 10-combat-basics | /Users/pandorz/Documents/razorweave/books/core/v1.2.0/chapters/10-combat-basics.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_micb9fyp_s7pths/chapters/10-combat-basics.md | add_reference: Add a 'Resolve Clock Sizing Guide' table with columns: Enemy Tier | Clock Size | Typical Threats | Example. Include rows for: Minion (4-segment, easily dispatched, single guard), Standard (6-segment, competent opposition, trained soldier), Elite (8-segment, dangerous foes, veteran warrior), Boss (8-segment + abilities, major threats, crime lord with guards). Note that PCs typically use 6-segment Resolve Clocks.; expand: Add a complete combat encounter example showing: 1) Scene setup with Tags, 2) Initiative/turn order establishment, 3) At least 3 rounds of combat with different action types (Strike, Maneuver, Set Up), 4) Clock advancement, 5) Combat resolution. Use the cross-genre format showing the same structure works for different settings.; clarify: Add a brief comparison to traditional HP systems: 'If you are familiar with Hit Points from other games, think of Resolve Clocks as tracking momentum and composure rather than physical damage. A filled Clock does not mean death; it means the character can no longer continue fighting on their terms.' Follow with explanation of what filling a Clock means fictionally. |
+| 06-character-creation | /Users/pandorz/Documents/razorweave/books/core/v1.2.0/chapters/06-character-creation.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_micb9fyp_s7pths/chapters/06-character-creation.md | add_reference: Add a 'Skills vs Proficiencies at a Glance' comparison table with columns: Aspect | Skills | Proficiencies. Include rows for: What It Represents (actions you can take | knowledge and tool familiarity), When You Use It (when attempting checks | to justify approaches or gain Edge), Example (Stealth, Observation | Lockpicking Tools, Local History), How It Helps (may add to check results | enables approaches or provides Edge).; clarify: Add a plain-language sidebar titled 'Understanding Skills': 'Skills describe what your character is good at doing. Unlike some games where skills have numeric ratings, Razorweave skills are descriptive. Having a skill means you are competent; not having it does not mean you cannot try, just that you lack specialized training. Think of skills as answering: What actions has my character practiced?'; improve_examples: Annotate the existing character creation example with decision-point callouts explaining WHY each skill and proficiency was chosen. Add annotations like: 'Kira chose Stealth because her backstory as a thief means she practiced avoiding detection. She took Lockpicking Tools proficiency because it is a tool she uses, not an action she performs.' |
+| 09-tags-conditions-clocks | /Users/pandorz/Documents/razorweave/books/core/v1.2.0/chapters/09-tags-conditions-clocks.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_micb9fyp_s7pths/chapters/09-tags-conditions-clocks.md | add_reference: Add a 'When to Use What' quick-reference table with columns: System | What It Tracks | Who Controls It | Duration | Example. Rows: Tags (scene elements and circumstances | GM sets, players can change | until fiction changes | *Dim Light*, *Elevated*), Conditions (character states from events | applied by outcomes | until cleared by action/time | *Exhausted*, *Frightened*), Clocks (progress toward goals or threats | ticked by successes/failures | until filled | 'Escape the Building' 6-segment).; expand: Add a visual comparison example showing the same scene using all three systems: 'A character sneaks through a guarded warehouse at night. The scene has Tags: *Dim Light*, *Cluttered*. After a failed check, the character gains the Condition: *Spotted*. Meanwhile, an 'Alert Level' Clock ticks forward.' Show how each system serves a different narrative purpose.; clarify: Add a simple visual representation of what a Clock looks like: a circle divided into segments with some filled in. Include caption: 'A 6-segment Clock with 2 segments filled. Three more successful actions will complete it.' This addresses feedback that Clocks are described but never shown visually. |
+| 08-actions-checks-outcomes | /Users/pandorz/Documents/razorweave/books/core/v1.2.0/chapters/08-actions-checks-outcomes.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_micb9fyp_s7pths/chapters/08-actions-checks-outcomes.md | add_reference: Add a 'Quick Reference: Margin and Outcomes' table with columns: Margin | Outcome | What Happens. Rows: +5 or more (Critical Success | Exceptional result, bonus effect), 0 to +4 (Full Success | You get what you wanted), -1 to -2 (Partial Success | Success with cost or complication), -3 to -6 (Failure | You do not achieve your goal), -7 or worse / all 1s (Critical Failure | Failure with additional consequence). Format for at-table reference.; improve_examples: Add a worked example showing multiple modifier sources combining: 'Kira attempts to pick a lock. She has: +1 Edge from her Lockpicking Tools proficiency, +1 Edge from an ally's Set Up action, -1 Burden from *Dim Light*. The modifiers stack: +1 +1 -1 = +1 Edge total. She rolls 5d6 and keeps the best 4.' Include note that Edge/Burden caps at +/-2.; clarify: Add a practical DC-setting sidebar with concrete scenarios: 'DC 12: Climbing a rough stone wall in good conditions. DC 14: Picking a standard commercial lock. DC 16: Persuading a suspicious guard to look the other way. DC 18: Disarming a trap while under fire. DC 20: Leaping between rooftops in a storm.' Ground each DC in specific, imaginable situations. |
+| 05-ways-to-play | /Users/pandorz/Documents/razorweave/books/core/v1.2.0/chapters/05-ways-to-play.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_micb9fyp_s7pths/chapters/05-ways-to-play.md | expand: Add a 'GMless Play Procedure' sidebar with concrete steps: '1. Each scene, rotate who frames the situation. 2. When a character faces opposition, another player voices the obstacle. 3. For uncertain outcomes, the player to your left sets the DC based on the fiction. 4. Use Clocks to track group goals and external pressure. 5. When the fiction demands consequences, the group collaborates on what makes sense.'; expand: Add a 'Solo Play Tools' sidebar: 'For solo play, you need a way to introduce uncertainty when no GM is present. Options: 1) Use a simple oracle: Roll 1d6 when asking yes/no questions (1-2: No and..., 3-4: No, 5: Yes, 6: Yes and...). 2) Draw from a deck of playing cards for random prompts. 3) Use published solo play supplements designed for fiction-first games.' |
+
+
+## Subagent Prompt Template
+
+For each Task(), use subagent_type="general-purpose" and this prompt:
+
+```
+Read `data/w1-prompts/wfrun_micb9fyp_s7pths/shared-context.md` for style guides and plan context.
+
+Modify chapter: {source_path}
+Write output to: {output_path}
+
+Modifications to apply:
+{list of modifications}
+
+Follow all style guide conventions. Preserve existing structure where not explicitly modified.
+Write the complete modified chapter to the output path.
+```
+
+## Output Requirements
+
+After all chapters are written, save results:
+```bash
+pnpm w1:content-modify --save-writer --run=wfrun_micb9fyp_s7pths --chapters=data/w1-artifacts/wfrun_micb9fyp_s7pths/chapters/
+```

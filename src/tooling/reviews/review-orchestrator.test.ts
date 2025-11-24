@@ -394,4 +394,246 @@ describe('ReviewOrchestrator', () => {
       expect(uniqueIds.size).toBe(personaIds.length);
     });
   });
+
+  describe('addReviewers', () => {
+    beforeEach(() => {
+      // Add additional core personas for testing
+      for (let i = 2; i <= 5; i++) {
+        personaClient.create({
+          id: `core-persona-${i}`,
+          name: `Core Persona ${i}`,
+          type: 'core',
+          archetype: 'Explorer',
+          experience_level: 'Veteran',
+          fiction_first_alignment: 'Medium',
+          narrative_mechanics_comfort: 'Neutral',
+          gm_philosophy: 'Traditional',
+          genre_flexibility: 'Neutral',
+          primary_cognitive_style: 'Analytical',
+        });
+      }
+      // Add generated personas for plus tests
+      for (let i = 0; i < 10; i++) {
+        personaClient.create({
+          id: `gen-persona-${i}`,
+          name: `Generated ${i}`,
+          type: 'generated',
+          archetype: i % 2 === 0 ? 'Tactician' : 'Explorer',
+          experience_level: i < 5 ? 'Newbie' : 'Intermediate',
+          fiction_first_alignment: 'Medium',
+          narrative_mechanics_comfort: 'Neutral',
+          gm_philosophy: 'Hybrid',
+          genre_flexibility: 'Neutral',
+          primary_cognitive_style: 'Analytical',
+        });
+      }
+    });
+
+    it('throws error if campaign is in pending status', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      expect(() => {
+        orchestrator.addReviewers(campaignId, { core: true });
+      }).toThrow('Campaign must be in in_progress or completed status');
+    });
+
+    it('allows adding reviewers to in_progress campaign', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+
+      const result = orchestrator.addReviewers(campaignId, {
+        personaIds: ['core-persona-2'],
+      });
+
+      expect(result.addedCount).toBe(1);
+      expect(result.newPersonaIds).toContain('core-persona-2');
+    });
+
+    it('allows adding reviewers to completed campaign', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+      campaignClient.createPersonaReview({
+        campaignId,
+        personaId: 'test-persona-1',
+        reviewData: {
+          ratings: { clarity_readability: 8, rules_accuracy: 9, persona_fit: 7, practical_usability: 8 },
+          narrative_feedback: 'Test',
+          issue_annotations: [],
+          overall_assessment: 'Good',
+        },
+      });
+      orchestrator.executeAnalysis(campaignId);
+      orchestrator.completeCampaign(campaignId);
+
+      const result = orchestrator.addReviewers(campaignId, {
+        personaIds: ['core-persona-2'],
+      });
+
+      expect(result.addedCount).toBe(1);
+      const campaign = campaignClient.getCampaign(campaignId);
+      expect(campaign?.status).toBe('in_progress');
+    });
+
+    it('adds all core personas with core option', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+
+      const result = orchestrator.addReviewers(campaignId, { core: true });
+
+      // Should add core-persona-2 through core-persona-5 (4 new ones)
+      // test-persona-1 is already in campaign
+      expect(result.addedCount).toBe(4);
+      expect(result.newPersonaIds).toContain('core-persona-2');
+    });
+
+    it('deduplicates existing personas', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1', 'core-persona-2'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+
+      const result = orchestrator.addReviewers(campaignId, {
+        personaIds: ['test-persona-1', 'core-persona-2', 'core-persona-3'],
+      });
+
+      // Only core-persona-3 should be added
+      expect(result.addedCount).toBe(1);
+      expect(result.newPersonaIds).toEqual(['core-persona-3']);
+      expect(result.skippedCount).toBe(2);
+    });
+
+    it('adds sampled personas with plus option', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+
+      const result = orchestrator.addReviewers(campaignId, { plus: 5 });
+
+      expect(result.addedCount).toBe(5);
+      expect(result.newPersonaIds.every((id: string) => id.startsWith('gen-persona-'))).toBe(true);
+    });
+
+    it('updates persona_ids in database', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+      orchestrator.addReviewers(campaignId, { personaIds: ['core-persona-2', 'core-persona-3'] });
+
+      const campaign = campaignClient.getCampaign(campaignId);
+      const personaIds = JSON.parse(campaign!.persona_ids);
+      expect(personaIds).toContain('test-persona-1');
+      expect(personaIds).toContain('core-persona-2');
+      expect(personaIds).toContain('core-persona-3');
+    });
+
+    it('generates prompts only for new reviewers', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+      const result = orchestrator.addReviewers(campaignId, { personaIds: ['core-persona-2'] });
+
+      expect(result.promptFiles).toHaveLength(1);
+      expect(result.promptFiles[0]).toContain('core-persona-2');
+    });
+
+    it('sets status to in_progress when adding to completed campaign', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+      campaignClient.createPersonaReview({
+        campaignId,
+        personaId: 'test-persona-1',
+        reviewData: {
+          ratings: { clarity_readability: 8, rules_accuracy: 9, persona_fit: 7, practical_usability: 8 },
+          narrative_feedback: 'Test',
+          issue_annotations: [],
+          overall_assessment: 'Good',
+        },
+      });
+      orchestrator.executeAnalysis(campaignId);
+      orchestrator.completeCampaign(campaignId);
+
+      expect(campaignClient.getCampaign(campaignId)?.status).toBe('completed');
+
+      orchestrator.addReviewers(campaignId, { personaIds: ['core-persona-2'] });
+
+      expect(campaignClient.getCampaign(campaignId)?.status).toBe('in_progress');
+    });
+
+    it('returns empty result when no new personas to add', () => {
+      const campaignId = orchestrator.initializeCampaign({
+        campaignName: 'Test Campaign',
+        contentType: 'book',
+        contentPath: testBookPath,
+        personaSelectionStrategy: 'manual',
+        personaIds: ['test-persona-1'],
+      });
+
+      orchestrator.executeReviews(campaignId);
+
+      const result = orchestrator.addReviewers(campaignId, {
+        personaIds: ['test-persona-1'], // Already in campaign
+      });
+
+      expect(result.addedCount).toBe(0);
+      expect(result.newPersonaIds).toEqual([]);
+      expect(result.skippedCount).toBe(1);
+    });
+  });
 });

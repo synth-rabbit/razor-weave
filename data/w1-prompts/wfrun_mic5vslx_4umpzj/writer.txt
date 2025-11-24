@@ -1,0 +1,47 @@
+# W1 Writer Orchestrator
+
+You are coordinating parallel chapter modifications for workflow run `wfrun_mic5vslx_4umpzj`.
+
+## Instructions
+
+1. Read the shared context: `data/w1-prompts/wfrun_mic5vslx_4umpzj/shared-context.md`
+2. Dispatch chapter writers in batches (max 5 parallel)
+3. Wait for each batch to complete before starting the next
+4. After all chapters are written, confirm completion
+
+## Chapter Assignments
+
+### Batch 1
+Dispatch these Task() calls in a single message:
+
+| Chapter | Source | Output | Modifications |
+|---------|--------|--------|---------------|
+| 08-actions-checks-outcomes | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/08-actions-checks-outcomes.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic5vslx_4umpzj/chapters/08-actions-checks-outcomes.md | add_reference: Add a 'DC Decision Flowchart' showing: 1) Is this fiction-trivial? (Don't roll), 2) What's the baseline difficulty? (Use DC ladder), 3) What modifiers apply? (Tags, tools, time). Include worked examples for each DC tier with specific genre scenarios.; clarify: Replace narrative explanation with numbered procedure: 1) Declare Intent and Approach, 2) GM assesses if Check needed, 3) Determine Attribute and modifiers, 4) Set DC, 5) Roll 4d6, 6) Calculate Margin, 7) Interpret Outcome. Add a single-page quick-reference box.; expand: Add a 'Partial Success Toolkit' section with 10+ example complications organized by scenario type: Combat (take damage but succeed), Social (succeed with obligation), Exploration (succeed with time cost), Investigation (succeed with false lead). Each example should show the fictional situation and mechanical resolution. |
+| 06-character-creation | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/06-character-creation.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic5vslx_4umpzj/chapters/06-character-creation.md | add_reference: Add 'Archetype Attribute Priorities' table showing recommended spreads for: Combatant (MIG/AGI), Face (PRE), Scholar (RSN), Generalist (balanced). Include 'What This Means in Play' callouts explaining how each priority affects gameplay.; improve_examples: Expand Rella example to include decision-point annotations: WHY each attribute was chosen, WHAT playstyle this enables, HOW this compares to alternative builds. Add a second worked example with different archetype (social/scholarly focus).; clarify: Add 'Starter Skill Packages' sidebar with 3-4 recommended skill combinations for common archetypes. Include guidance on when to use pre-built packages vs custom selection. |
+| 10-combat-basics | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/10-combat-basics.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic5vslx_4umpzj/chapters/10-combat-basics.md | add_reference: Add 'Turn Structure Summary' table showing: Action types (Strike, Maneuver, Set Up, Special), what each accomplishes, typical Attributes used, and Clock effects. Include turn order options (conversational, popcorn, initiative) with when to use each.; clarify: Add explicit Clock advancement guidelines: 'Standard Strike ticks 1-2 segments on Full Success, 1 on Partial. Critical Success may tick 2-3. Clock size guidelines: 4-segment for mooks, 6-segment for standard threats, 8-segment for bosses.' Include sizing examples.; expand: Add 2-3 complete combat encounter examples showing: initiative determination, action sequences across 3+ rounds, Clock progression, Tag/Condition application, and resolution. Annotate tactical decisions. |
+| 09-tags-conditions-clocks | /Users/pandorz/Documents/razorweave/books/core/v1.1.0/chapters/09-tags-conditions-clocks.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_mic5vslx_4umpzj/chapters/09-tags-conditions-clocks.md | add_reference: Add 'Quick Reference: Tags & Conditions' table with columns: Name | Type | Mechanical Effect | Common Sources | Clearing Method. Include 15+ most common Tags and Conditions with explicit Edge/Burden effects.; clarify: Add explicit guidance: 'Tags typically grant +1 Edge when favorable, -1 Burden when unfavorable. Multiple Tags stack up to +/-2 cap. GMs may also adjust DC by 2 instead of applying Edge/Burden.' Include worked examples. |
+
+
+## Subagent Prompt Template
+
+For each Task(), use subagent_type="general-purpose" and this prompt:
+
+```
+Read `data/w1-prompts/wfrun_mic5vslx_4umpzj/shared-context.md` for style guides and plan context.
+
+Modify chapter: {source_path}
+Write output to: {output_path}
+
+Modifications to apply:
+{list of modifications}
+
+Follow all style guide conventions. Preserve existing structure where not explicitly modified.
+Write the complete modified chapter to the output path.
+```
+
+## Output Requirements
+
+After all chapters are written, save results:
+```bash
+pnpm w1:content-modify --save-writer --run=wfrun_mic5vslx_4umpzj --chapters=data/w1-artifacts/wfrun_mic5vslx_4umpzj/chapters/
+```

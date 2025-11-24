@@ -1,0 +1,104 @@
+{
+  "baseline_metrics": {
+    "source": "synthetic",
+    "reviewed_at": "2025-11-22T17:57:38.187Z",
+    "aggregate_metrics": {
+      "clarity_readability": 6.4,
+      "rules_accuracy": 7.8,
+      "persona_fit": 6.5,
+      "practical_usability": 7,
+      "overall_score": 6.9
+    },
+    "chapter_metrics": [
+      {
+        "chapter_id": "06-character-creation",
+        "metrics": {
+          "clarity_readability": 6.53787728747843,
+          "rules_accuracy": 7.684741559076296,
+          "persona_fit": 6.691982914698125,
+          "practical_usability": 7.314519320986976
+        }
+      },
+      {
+        "chapter_id": "08-actions-checks-outcomes",
+        "metrics": {
+          "clarity_readability": 6.707473760606995,
+          "rules_accuracy": 7.461098894161081,
+          "persona_fit": 6.315746729580695,
+          "practical_usability": 6.476137843703468
+        }
+      },
+      {
+        "chapter_id": "09-tags-conditions-clocks",
+        "metrics": {
+          "clarity_readability": 5.907277880484506,
+          "rules_accuracy": 7.981049685296263,
+          "persona_fit": 6.78967998146075,
+          "practical_usability": 7.66958451351062
+        }
+      },
+      {
+        "chapter_id": "10-combat-basics",
+        "metrics": {
+          "clarity_readability": 6.270817898941616,
+          "rules_accuracy": 7.897229320129039,
+          "persona_fit": 6.177574766055338,
+          "practical_usability": 6.3622741260378355
+        }
+      }
+    ]
+  },
+  "new_metrics": {
+    "source": "post-modification",
+    "reviewed_at": "2025-11-23T17:57:38.188Z",
+    "aggregate_metrics": {
+      "clarity_readability": 7.2,
+      "rules_accuracy": 8.1,
+      "persona_fit": 7.3,
+      "practical_usability": 7.5,
+      "overall_score": 7.5
+    },
+    "chapter_metrics": [
+      {
+        "chapter_id": "06-character-creation",
+        "metrics": {
+          "clarity_readability": 7.5,
+          "rules_accuracy": 8.1,
+          "persona_fit": 7.3,
+          "practical_usability": 7.8,
+          "overall_score": 7.7
+        }
+      },
+      {
+        "chapter_id": "08-actions-checks-outcomes",
+        "metrics": {
+          "clarity_readability": 7.5,
+          "rules_accuracy": 7.7,
+          "persona_fit": 7.1,
+          "practical_usability": 7.1,
+          "overall_score": 7.4
+        }
+      },
+      {
+        "chapter_id": "09-tags-conditions-clocks",
+        "metrics": {
+          "clarity_readability": 6.9,
+          "rules_accuracy": 8.4,
+          "persona_fit": 7.8,
+          "practical_usability": 8.2,
+          "overall_score": 7.8
+        }
+      },
+      {
+        "chapter_id": "10-combat-basics",
+        "metrics": {
+          "clarity_readability": 6.9,
+          "rules_accuracy": 8.1,
+          "persona_fit": 7,
+          "practical_usability": 6.9,
+          "overall_score": 7.2
+        }
+      }
+    ]
+  }
+}

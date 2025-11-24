@@ -1,0 +1,1479 @@
+# W1 Writer Task
+
+You are the Writer agent for W1 workflow run `wfrun_miby9oo6_a7xlw7`.
+
+## Improvement Plan
+
+```json
+{
+  "plan_id": "plan-20251123-miby9oo6",
+  "created_at": "2025-11-23T12:00:00Z",
+  "source_campaign_id": "campaign-20251122-191126-1p7dhyj4",
+  "summary": "Address character creation accessibility and combat clarity through quick-start options, consolidated quick-reference materials, and improved Clock guidance to improve persona fit and practical usability scores.",
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "Character creation lacks quick-start option and has example characters scattered across chapters, creating barriers for one-shots and new players",
+      "severity": "high",
+      "source_category": "Chapter 6: Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-marcus-osr-veteran",
+        "core-casey-neurodivergent",
+        "core-morgan-method-actor",
+        "core-taylor-video-game-convert"
+      ],
+      "improvement_goal": "Players can create a functional character in under 15 minutes using a quick-start path, with consolidated example characters for reference",
+      "success_metric": "Quick-start sidebar added; at least 2 complete example characters consolidated in chapter; simplified attribute guidance provided",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-002",
+      "description": "Resolve Clocks replacing HP adds conceptual overhead without sufficient explanation; conversational initiative removes tactical consideration without alternatives",
+      "severity": "high",
+      "source_category": "Chapter 10: Combat Basics",
+      "affected_chapters": [
+        "10-combat-basics"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-marcus-osr-veteran",
+        "core-casey-neurodivergent",
+        "core-taylor-video-game-convert",
+        "core-sam-forever-gm"
+      ],
+      "improvement_goal": "Players understand Resolve Clocks as an intuitive alternative to HP with clear worked examples showing the fiction-first benefits",
+      "success_metric": "Side-by-side comparison table (HP vs Resolve Clocks); 2+ worked combat examples showing Clock usage; initiative options summary",
+      "priority": 2
+    },
+    {
+      "issue_id": "issue-003",
+      "description": "Outcome tier table and Edge/Burden reference only appear inline without dedicated quick-reference format; DC setting lacks objective benchmarks",
+      "severity": "medium",
+      "source_category": "Chapter 8: Actions, Checks, and Outcomes",
+      "affected_chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "affected_personas": [
+        "core-marcus-osr-veteran",
+        "core-casey-neurodivergent",
+        "core-taylor-video-game-convert"
+      ],
+      "improvement_goal": "GMs and players can reference outcome tiers, Edge/Burden effects, and DC guidance within 10 seconds during play",
+      "success_metric": "Outcome tier quick-reference table added; Edge/Burden summary table added; DC ladder with concrete examples added",
+      "priority": 3
+    },
+    {
+      "issue_id": "issue-004",
+      "description": "Large number of potential tags without consolidated reference; Clock advancement guidance is vague with insufficient criteria for multi-Clock scenarios",
+      "severity": "medium",
+      "source_category": "Chapter 9: Tags, Conditions, and Clocks",
+      "affected_chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-casey-neurodivergent"
+      ],
+      "improvement_goal": "GMs can quickly reference common tags and understand Clock advancement rules for complex scenarios",
+      "success_metric": "Tag quick-reference table with categories added; Clock advancement decision tree or flowchart added; multi-Clock guidance expanded with examples",
+      "priority": 4
+    },
+    {
+      "issue_id": "issue-005",
+      "description": "Open-ended Skills and Proficiencies lack guardrails and power differential guidance, overwhelming some players",
+      "severity": "medium",
+      "source_category": "Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "gen-1763838681210-9jf790nx4",
+        "gen-1763838681226-s3vgqnvw1",
+        "gen-1763838681218-x9vrpaife"
+      ],
+      "improvement_goal": "Players have clear guidance on Skill/Proficiency scope with example lists that prevent analysis paralysis",
+      "success_metric": "Example Skill list (15-20 suggestions) added; Proficiency scope guidance added; 'too broad/too narrow' examples provided",
+      "priority": 5
+    }
+  ],
+  "chapter_modifications": [
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 1,
+      "issues_addressed": [
+        "issue-001",
+        "issue-005"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Beginning of chapter, after introduction",
+          "instruction": "Add a 'Quick-Start: 10-Minute Character' callout box that provides a streamlined path: 1) Pick a concept in one sentence, 2) Use the suggested attribute array 2/1/1/0, 3) Choose 3 Skills from the provided list, 4) Pick 2 Proficiencies from examples, 5) Select starting gear from a short list. This path skips collaborative elements for one-shots or time-pressed sessions.",
+          "success_criteria": "Complete character can be created following only the quick-start box without reading full chapter"
+        },
+        {
+          "type": "expand",
+          "target": "Example characters section",
+          "instruction": "Consolidate and expand example characters into a dedicated subsection. Include at least 3 complete example characters covering different archetypes: a combat-focused character, a social/investigation character, and a skill-specialist character. Show the full character sheet for each with annotations explaining design choices.",
+          "success_criteria": "3 complete example characters with full sheets and decision annotations in one location"
+        },
+        {
+          "type": "add_reference",
+          "target": "Skills subsection",
+          "instruction": "Add a 'Suggested Skills' sidebar with 15-20 example Skills organized by category (Physical, Social, Mental, Technical). Include a brief note on scope: 'A Skill should be broad enough to apply in multiple situations but specific enough to feel distinct. Too broad: \"Good at everything physical.\" Too narrow: \"Tying sailor knots.\" Just right: \"Athletics\" or \"Acrobatics.\"'",
+          "success_criteria": "Players have concrete examples to choose from or use as inspiration; scope guidance prevents over-broad or over-narrow choices"
+        },
+        {
+          "type": "add_reference",
+          "target": "Proficiencies subsection",
+          "instruction": "Add a 'Suggested Proficiencies' sidebar with 10-15 examples organized by type (Tools, Knowledge Areas, Social Contexts). Include guidance: 'Proficiencies represent specialized knowledge or tool familiarity. They often allow automatic success or avoid Checks entirely for routine applications.'",
+          "success_criteria": "Players understand Proficiency scope with concrete examples; distinction from Skills is clear"
+        }
+      ]
+    },
+    {
+      "chapter_id": "10-combat-basics",
+      "chapter_name": "Combat Basics",
+      "priority": 2,
+      "issues_addressed": [
+        "issue-002"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "expand",
+          "target": "Resolve Clocks introduction",
+          "instruction": "Add a 'Why Resolve Clocks?' callout box that directly addresses the HP comparison: 'Traditional HP tracks a number that decreases. Resolve Clocks track fictional pressure that increases. Instead of asking \"how many hit points left?\" you ask \"how close is this character to being taken out of the fight?\" This keeps attention on the narrative stakes rather than arithmetic.' Include a side-by-side comparison table.",
+          "success_criteria": "Players understand the design intent; comparison table shows HP-equivalent scenarios translated to Resolve Clock terms"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Combat examples",
+          "instruction": "Add 2 complete worked combat examples showing Resolve Clock progression from fresh to filled. First example: a tense duel with back-and-forth momentum shifts. Second example: a group fight showing how multiple characters interact with Clocks. Annotate each step showing: fictional action, mechanical resolution, Clock advancement, and how the fiction changes.",
+          "success_criteria": "Two complete combat sequences (4-6 exchanges each) with full annotation showing Clock progression"
+        },
+        {
+          "type": "add_reference",
+          "target": "Initiative section",
+          "instruction": "Add an 'Initiative Options' quick-reference box summarizing all three modes: Conversational (when to use, how it works), Popcorn (when to use, how it works), Rolled (when to use, how it works). Include a 'GM Tip: Match initiative to scene tone' note explaining that tense standoffs suit conversational, chaotic melees suit popcorn, and tactical set-pieces suit rolled.",
+          "success_criteria": "All three initiative modes summarized in one reference; guidance on when to use each"
+        }
+      ]
+    },
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks, and Outcomes",
+      "priority": 3,
+      "issues_addressed": [
+        "issue-003"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "End of Outcome Tiers section",
+          "instruction": "Add a dedicated 'Outcome Tiers Quick Reference' table formatted for at-table use. Columns: Margin Range | Outcome Tier | Typical Result | Example. Include all five tiers (Critical Success, Full Success, Partial Success, Failure, Critical Failure) with the margin ranges and brief descriptions.",
+          "success_criteria": "Table fits on one page; includes all tiers with margins and examples; can be used without reading surrounding text"
+        },
+        {
+          "type": "add_reference",
+          "target": "Edge and Burden section",
+          "instruction": "Add an 'Edge and Burden Quick Reference' table. Columns: Modifier | Dice Change | Common Sources | Stacking Note. Show +1 Edge through +2 Edge and -1 Burden through -2 Burden with dice pool changes (e.g., '+1 Edge: Roll 5d6, keep best 4'). List 3-4 common sources for each.",
+          "success_criteria": "Complete Edge/Burden reference with dice mechanics and common sources in scannable format"
+        },
+        {
+          "type": "expand",
+          "target": "Setting DC section",
+          "instruction": "Expand the DC ladder with concrete examples for each tier. Format: 'DC 12 (Easy): Climbing a rough stone wall with handholds. DC 14 (Routine): Picking a standard lock with proper tools. DC 16 (Tough): Convincing a suspicious guard to let you pass. DC 18 (Hard): Disarming a complex trap under time pressure. DC 20 (Heroic): Leaping between rooftops in a thunderstorm. DC 22 (Legendary): Talking down a dragon mid-attack.' Include a note that DCs should reflect fictional positioning, not abstract difficulty.",
+          "success_criteria": "Each DC tier has 1-2 concrete examples; guidance connects DC to fictional circumstances"
+        }
+      ]
+    },
+    {
+      "chapter_id": "09-tags-conditions-clocks",
+      "chapter_name": "Tags, Conditions, and Clocks",
+      "priority": 4,
+      "issues_addressed": [
+        "issue-004"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Tags section",
+          "instruction": "Add a 'Common Tags Quick Reference' table organized by category. Categories: Environmental (Dim Light, Cramped, Elevated, etc.), Situational (Outnumbered, Flanked, Surprised, etc.), Atmospheric (Tense, Chaotic, Formal, etc.). For each Tag, show: Name | Typical Effect | Common Sources. Limit to 15-20 most common Tags.",
+          "success_criteria": "15-20 common Tags categorized with effects and sources; table scannable during play"
+        },
+        {
+          "type": "expand",
+          "target": "Clock advancement section",
+          "instruction": "Add a 'Clock Advancement Guide' subsection with explicit criteria. Include: 1) Standard advancement rates by outcome (Critical Success: 2-3 segments, Full Success: 1-2 segments, Partial Success: 1 segment, Failure: threat Clock may advance). 2) Multi-Clock guidance: 'When multiple Clocks are active, ask: Which Clock does this action most directly affect? Advance that Clock. If the action is loud, risky, or draws attention, also tick the most relevant threat Clock.' 3) A decision flowchart for 'Which Clock advances?'",
+          "success_criteria": "Explicit advancement rates documented; multi-Clock decision guidance with flowchart or decision tree"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Clock examples",
+          "instruction": "Add a worked example showing opposing Clocks in action: an investigation (6-segment 'Find the Evidence') racing against a cover-up (4-segment 'Destroy the Evidence'). Show 4-5 rounds of play with different outcomes, demonstrating when each Clock advances and how the GM decides which Clock is affected by ambiguous actions.",
+          "success_criteria": "Complete opposing Clock example with 4-5 decision points annotated"
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "allow_growth"
+  },
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": [
+        "06-character-creation"
+      ],
+      "rationale": "Highest severity issue (10) with highest frequency (9/41); foundational chapter that gates player entry into the game"
+    },
+    {
+      "phase": 2,
+      "chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "rationale": "Core resolution mechanics that Chapter 10 builds upon; quick-reference materials benefit all subsequent play"
+    },
+    {
+      "phase": 3,
+      "chapters": [
+        "09-tags-conditions-clocks",
+        "10-combat-basics"
+      ],
+      "rationale": "Combat chapter depends on Clock understanding from Chapter 9; can be modified in parallel once Chapter 8 reference materials exist"
+    }
+  ],
+  "estimated_impact": {
+    "primary_dimension": "practical_usability",
+    "expected_improvement": "+1.0 to +1.5 points through quick-reference additions and consolidated examples",
+    "secondary_benefits": [
+      "Improved persona_fit for busy/casual players through quick-start character creation",
+      "Better clarity_readability through worked examples and comparison tables",
+      "Reduced cognitive load for neurodivergent players through consolidated reference materials"
+    ]
+  },
+  "review_cycle_recommendation": {
+    "re_review_personas": [
+      "core-jordan-busy-parent",
+      "core-casey-neurodivergent",
+      "core-taylor-video-game-convert",
+      "core-marcus-osr-veteran"
+    ],
+    "focus_dimensions": [
+      "practical_usability",
+      "persona_fit"
+    ],
+    "skip_personas": [
+      "core-alex-indie-convert",
+      "core-morgan-method-actor",
+      "core-devon-solo-player"
+    ],
+    "rationale": "Changes target usability and accessibility; indie/method-actor/solo personas were already satisfied with narrative depth and flexibility"
+  }
+}
+```
+
+## Chapters to Modify
+
+### /Users/pandorz/Documents/razorweave/books/core/v1/chapters/06-character-creation.md
+```markdown
+## 6. Character Creation
+
+Character Creation is the process of turning an idea into a fully playable character. You begin with a
+        concept, shape it through narrative and mechanical choices, and finish with a complete sheet that
+        reflects who your character is and how they participate in the world. You do not need to know every rule
+        before you start. This chapter guides you step by step and tells you when to reference later chapters
+        for details.
+
+### Learning by Example
+
+Some players prefer to see a full character before reading detailed steps. If you want to follow a
+        character build from start to finish, you can skip ahead to the example character later in this chapter
+        and return to each step as needed.
+
+### The Creation Flow
+
+Character Creation follows a clear sequence. You begin with story driven questions, then add mechanical
+        structure, then return to fiction to finalize your concept. Each step builds on the previous one.
+
+1. Step One: Choose a Concept
+1. Step Two: Define Core Identity Elements
+1. Step Three: Assign Attributes
+1. Before You Choose Skills and Proficiencies
+1. Step Four: Choose Skills
+1. Step Five: Choose Proficiencies
+1. Step Six: Determine Starting Gear
+1. Step Seven: Establish Background and Relationships
+1. Step Eight: Define Goals, Drives, and Personal Threads
+1. Step Nine: Final Review and Campaign Fit
+
+### Step One: Choose a Concept
+
+Every character begins with a concept. A concept is the short answer to the question, who is this
+        person. It is the foundation for every choice you make later in the process. The concept does not depend
+        on mechanics. It does not require a long backstory. It is a clean expression of identity, role, and
+        theme.
+
+Strong concepts are specific enough to suggest habits and history, but open enough to leave room for
+        discovery. A concept like retired scout with a guilty conscience offers a clearer direction than simply
+        fighter. The first concept suggests relationships, regrets, and a way of moving through the world. The
+        second is mostly a job title.
+
+> **Example**
+> **Example**A player chooses the concept former telegraph engineer who searches for meaning in strange message
+>         patterns. This concept suggests a quiet, technical character whose life has been shaped by long hours,
+>         delicate tools, and unanswered questions.
+
+Your concept should tell you what kind of scenes you want to be in, what skills you might have learned,
+        and what challenges might matter to you. If you feel stuck, talk with the GM and the other players. The
+        group can help you find a concept that fits the tone of the campaign.
+
+### Step Two: Define Core Identity Elements
+
+Identity elements are the personal details that give your character depth. They are the details that
+        help you imagine how your character thinks, speaks, and reacts. You do not need to define everything at
+        once. The goal is to add enough information that the character feels real.
+
+Useful identity elements include:
+
+- Name and pronouns
+- Origin or home environment
+- Everyday role or profession before the story begins
+- Notable habits and mannerisms
+- First impressions and social style
+- One or two key experiences that shaped them
+
+These details are most helpful when they connect to your concept. If your concept involves quiet work
+        and technical skill, identity elements that reflect that focus will make the character feel grounded.
+
+> **Example**
+> **Example**The telegraph engineer concept becomes a character named Rella. She grew up in a narrow canyon settlement
+>         built around a relay hub. She is quiet, observant, and prefers to think before she speaks. Her clothes
+>         are practical and layered. Her hands are steady from years of fine repair work.
+
+You can expand or revise identity elements later if the story reveals new truths about your character.
+        For now, capture the parts that feel most important.
+
+### Step Three: Assign Attributes
+
+Attributes describe your character's natural capabilities. They reflect how your character tends to
+        approach challenges when there is no time to prepare a careful strategy. Attributes are not personality
+        traits. They are expressions of how your character acts when the moment demands action.
+
+The system uses four Attributes:
+
+- **Might (MIG)**: Physical strength, force, and raw endurance.
+- **Agility (AGI)**: Balance, coordination, stealth, and quick reaction.
+- **Presence (PRE)**: Social force, confidence, emotional expression, and leadership.
+- **Reason (RSN)**: Logic, analysis, memory, and structured thinking.
+
+New characters begin with the following Attribute spread.
+
+- One Attribute at 2
+- Two Attributes at 1
+- One Attribute at 0
+
+No Attribute may be negative during creation. This spread represents balanced capability. Characters
+        begin competent but not exceptional in every area. As the campaign progresses, advancement rules will
+        allow Attributes to grow.
+
+Assign these values based on your concept and identity elements. Ask yourself which Attribute your
+        character relies on most often, which areas they find challenging, and which weaknesses might create
+        interesting story moments.
+
+> **Example**
+> **Example**Rella is analytical and steady. Her player chooses Reason 2, Agility 1, Presence 1, Might 0. This
+>         emphasizes her careful thinking, modest coordination, quiet presence, and relative physical weakness.
+
+### Before You Choose Skills and Proficiencies
+
+This system does not rely on a fixed or exhaustive list of Skills or Proficiencies. The rulebook
+        provides examples and frameworks, but players are encouraged to work with their GM to define custom
+        entries that reflect their character's experiences, training, and background.
+
+Skills and Proficiencies serve different purposes.
+
+- **Skills**are action based competencies. They are used directly in Checks when your character attempts something under pressure or uncertainty.
+- **Proficiencies**are narrow domains of expertise. They describe tools, environments, or disciplines that your character understands well and that shape how the GM interprets the fiction.
+
+Open lists and collaboration allow the system to support many different genres and character concepts
+        without requiring constant balance adjustments. Because the resolution system and advantage rules keep
+        extremes in check, creative choices stay within a stable range.
+
+The GM has final approval over the scope of any custom Skill or Proficiency. A good entry is grounded in
+        the setting, clear in purpose, and neither so broad that it covers everything nor so narrow that it
+        rarely matters.
+
+### Step Four: Choose Skills
+
+Skills represent learned abilities and practiced competencies. They describe what your character has
+        done often enough to rely on in uncertain moments. Skills connect directly to action. When your
+        character makes a Check, a Skill often shapes their approach.
+
+Skills answer the question, what have you practiced enough to apply under stress. They cover actions
+        such as moving quietly, reading a room, patching an injury, climbing, or analyzing a pattern. Skills are
+        usually written as verbs or verb like phrases.
+
+During Character Creation, choose a small set of Skills that reflect your concept and background. These
+        are the actions your character knows how to perform with some confidence. Later chapters describe
+        Skills in more detail and provide example lists grouped by Attribute.
+
+> **Example**
+> **Example**Rella's life has involved careful observation, technical upkeep, and quiet movement. Her player chooses
+>         the Skills Observation, Stealth, Technical Work, and Machinery Handling. These Skills reflect actions
+>         she has performed many times in relay stations and narrow maintenance tunnels.
+
+You do not need to optimize your Skills. The best choices are the ones that support the kinds of scenes
+        you want to experience. If your group plans to focus on investigation, travel, or social tension, choose
+        Skills that will shine in those situations.
+
+### Step Five: Choose Proficiencies
+
+Proficiencies represent narrower areas of expertise that influence how the GM interprets the fiction.
+        They describe tools, technologies, environments, or disciplines that your character understands deeply.
+        Proficiencies often do not require a roll at all. Instead, they change what is reasonable, what is
+        obvious, or how serious a risk feels.
+
+Proficiencies answer the question, what have you studied or handled enough to use responsibly. They
+        often appear as nouns or domain labels, such as medical tools, survey equipment, or small boat
+        navigation.
+
+During Character Creation, choose a small number of Proficiencies that grow naturally out of your
+        concept and background. Work with the GM to make sure each Proficiency has a clear scope and fits the
+        setting.
+
+> **Example**
+> **Example**Rella learned to keep delicate instruments working in harsh conditions. Her player chooses the
+>         Proficiencies Telegraph Instruments and Precision Tools. These Proficiencies signal that she understands
+>         the internal workings of communication devices better than the average person.
+
+Proficiencies do not add numbers to Checks. Instead, they influence difficulty, consequences, and
+        access to information. A character with the correct Proficiency may identify a hazard more quickly,
+        avoid an unnecessary roll, or reduce the severity of a complication.
+
+### Step Six: Determine Starting Gear
+
+Your character begins play with a small set of equipment that fits their background, reflects their
+        concept, and supports the type of stories they are about to enter. Gear does not provide numerical
+        bonuses. It provides narrative capability, fictional positioning, and a sense of grounded reality.
+
+Starting gear should feel personal and practical. It represents what your character already knows how
+        to use. It also helps the GM understand what kind of situations your character is prepared for.
+
+#### Basic Gear Package
+
+New characters begin with the following items:
+
+- Clothing suited to their environment
+- A backpack or satchel
+- Basic travel supplies
+- A personal item that holds meaning
+
+These are the essentials that allow any character to operate in the world.
+
+#### Concept Driven Gear
+
+In addition to the basic gear, each character chooses up to three items that reflect their background or
+        profession. These items help define who they were before the story begins. They also give the GM material
+        to work with when shaping scenes.
+
+Examples include:
+
+- A well used toolkit
+- A compact field journal
+- A collection of reference notes
+- A handmade navigation compass
+- A signal mirror
+- A small medical pouch
+- A set of precision tools
+- A reliable lantern
+- A simple musical instrument
+- A deck of analysis cards
+- A set of rope and climbing spikes
+
+These items should feel directly connected to your concept and identity.
+
+> **Example**
+> **Example**Rella begins with a travel satchel, a compact set of communication tools, a notebook filled with cipher
+>         fragments, and a small insulated lantern used for nighttime relay work.
+
+#### Tools and Equipment as Fictional Authority
+
+Gear provides fictional authority. If your character carries the right tools for a task, the GM may:
+
+- Lower difficulty
+- Remove uncertainty
+- Change the stakes
+- Provide clearer approaches
+
+Gear does not guarantee success. It enables meaningful choices and supports your character’s expertise.
+
+If the character does not have suitable gear, the GM might increase difficulty or introduce
+        complications. Gear matters most when the environment or situation is demanding.
+
+#### Weapons and Dangerous Tools
+
+If the campaign tone allows for weapons or hazardous tools, characters may begin with one simple item
+        that fits their concept. This might be:
+
+- A pocket knife
+- A small baton
+- A bow with a few arrows
+- A sturdy multi tool
+- A simple sidearm, if the genre supports it
+
+Weapons should be grounded in the fiction of your setting. They are not meant to be superior mechanical
+        objects. They are narrative tools that help shape how your character approaches risk.
+
+If your world does not include weapons or includes them only sparingly, this section may be reduced or
+        removed based on GM preference.
+
+#### Custom Gear
+
+The player and GM may collaborate to create custom gear that supports the concept. The item should be:
+
+- Clear in purpose
+- Grounded in the setting
+- Useful in scenes
+- Not mechanically overwhelming
+
+Good custom gear is memorable and unique without dominating the story.
+
+### Step Seven: Establish Background and Relationships
+
+Every character comes from somewhere. They have lived a life before the story begins. They have
+        connections, memories, challenges, and unfinished business. Establishing background and relationships
+        gives the character emotional depth and provides the GM with narrative tools that will enrich scenes,
+        challenges, and future arcs.
+
+Background should answer simple questions about where you grew up, what kind of work you used to do,
+        which pressures shaped you, and who influenced your habits. You do not need a long timeline. Focus on
+        the few details that explain your current self.
+
+> **Example**
+> **Example**Rella grew up near a canyon relay hub, listening to coded traffic echo along the wires. Her days were
+>         spent checking connections, cleaning contacts, and logging patterns. The steady routine and quiet
+>         tension of relay work shaped her temperament and made her comfortable with long stretches of focused
+>         attention.
+
+In addition to background, define one or two meaningful relationships. These might be mentors, rivals,
+        family members, coworkers, or friends. The relationship does not need to be fully detailed. It only
+        needs to be important enough that it might matter later.
+
+> **Example**
+> **Example**Rella names a former coworker, Isten, who taught her how to keep unstable relay junctions from failing.
+>         Their relationship ended after an argument about unsafe repair methods. The disagreement left tension
+>         that has never been resolved.
+
+You do not need to define every relationship up front. Leave space for new connections to emerge in
+        play. When a new NPC feels important, you can add them to your relationship list.
+
+### Step Eight: Define Goals, Drives, and Personal Threads
+
+Goals and drives explain why your character keeps moving. They are the internal pressures that shape
+        choices and responses. A goal is something concrete your character wants to achieve. A drive is a deeper
+        motivation or fear that pushes them.
+
+Personal threads are unresolved elements in your character's life. They might be unanswered questions,
+        unfulfilled promises, or lingering tensions. These threads give the GM material to weave into future
+        scenes.
+
+> **Example**
+> **Example**Rella has a goal to decode an anomalous pattern she once intercepted and a drive to avoid causing harm
+>         through her work. A personal thread involves the mysterious origin of the pattern and who might have
+>         sent it.
+
+Try to define at least one short-term goal, one long-term goal, and one or two personal threads. You can
+        always revise these as the story unfolds.
+
+### Step Nine: Final Review and Campaign Fit
+
+Once you have completed the previous steps, review your character as a whole. Ask whether the concept,
+        identity elements, Attributes, Skills, Proficiencies, gear, background, relationships, goals, and
+        threads feel like parts of the same person.
+
+Talk with the GM and other players about how your character fits into the campaign. Look for natural
+        connections, shared history, or complementary goals. Adjust details where needed so that the group feels
+        like a cohesive cast.
+
+### Example Character Build: Rella
+
+This section presents Rella as a complete example character, summarizing the choices made in each step.
+        Use this example as a reference when creating your own characters.
+
+### Chapter Summary
+
+Character Creation turns an idea into a playable character who fits naturally into the world and the
+        campaign. By moving from concept to identity, Attributes, Skills, Proficiencies, gear, background,
+        relationships, and goals, you build a character who feels grounded and ready for play. Later chapters
+        explain how these elements interact with the core mechanics during sessions.
+```
+
+### /Users/pandorz/Documents/razorweave/books/core/v1/chapters/10-combat-basics.md
+```markdown
+## 10. Combat Basics
+
+Combat is one kind of scene the system supports. It uses the same resolution tools you have already
+        learned—Attributes, Skills, Checks, Tags, Conditions, and Clocks—focused on immediate danger and tactical
+        choices. This chapter introduces how combat scenes are framed, how turns work, and how to use the core
+        combat actions to shape the fiction.
+
+### Combat as a Scene
+
+Combat starts when violence breaks out and the moment‑to‑moment sequence of actions matters. The GM does
+        not call for “initiative” the first time someone raises a voice. They wait until it is important to know
+        who acts in what order and how threats respond.
+
+The table can always ask, “Is this a structured combat now, or are we still in free conversation?” Use
+        structured turns when:
+
+- Multiple combatants are acting and order matters.
+- Position, timing, and action economy are tactically significant.
+- Players benefit from clarity about who goes when.
+
+Stay in loose, conversational play when a moment can be resolved with a few Checks and clear narration.
+        Not every scuffle needs the full structure of a fight. Many tense scenes will move fluidly between free
+        narration, a short exchange of blows, and back again without ever feeling like a separate “combat mode.”
+
+### Resolve Instead of Hit Points
+
+The system does not track hit points. Instead, it uses Clocks and Conditions to represent how close
+        someone is to being taken out of a fight.
+
+- **Resolve Clocks**track how much pressure or harm a character, VPC, or enemy can absorb
+          before they are out of the scene.
+- **Conditions**such as*Bleeding*,*Exhausted*, or*Stunned*mark
+          lasting effects of blows, hazards, or fear.
+
+When you land solid Strikes or create meaningful pressure with Maneuvers and Set Ups, the GM ticks your
+        opponent’s Resolve Clock. When the Clock fills, they are out—fleeing, unconscious, captured, or worse,
+        depending on the fiction and the stakes the table agreed to.
+
+#### Why Clocks and Not Hit Points?
+
+Clocks keep combat aligned with the goals of this system:
+
+- **Fiction first**– A character is taken out when the story supports it, not at an
+          arbitrary number. A VPC might quit the field when they are cornered, not only at “0 HP.”
+- **Visible progress**– A Resolve Clock filling is easy to read at the table. Everyone
+          can feel that a fight is turning without tracking hidden totals.
+- **Flexible stakes**– Clocks can represent being driven off, captured, convinced, or
+          killed, depending on the stakes you set. Not every fight needs to end in death.
+- **Pacing control**– The GM can size clocks to match the scene: 2–3 segments for quick,
+          cinematic threats, more for major foes or climactic battles.
+
+Hit points tend to push every fight toward the same outcome—gradual depletion to zero. Resolve Clocks and
+        Conditions instead invite you to think in terms of moments: when does this opponent falter, when do they
+        become desperate, when do they finally break. That emphasis keeps combat tied to character, genre, and
+        story rather than pure attrition.
+
+> **Example**
+> **Example – Enemy Resolve**
+A dangerous VPC has a 6‑segment Resolve Clock. Each Full Success on a Strike or a particularly effective
+>         Maneuver ticks 2 segments; Partial successes tick 1 segment with a cost. As the Clock fills, the GM
+>         describes them becoming desperate, defensive, or reckless. When the sixth segment ticks, they are out of
+>         the fight in a way that fits the story.
+
+Player characters can be tracked in the same way. The GM will make it clear when you are close to being
+        taken out so you can decide whether to keep pressing or break contact and regroup.
+
+Before a fight begins, the table should briefly agree on what “taken out” means in this scene. Are you
+        trying to kill, rout, capture, or simply delay? The same Resolve Clock can represent different outcomes
+        depending on those stakes. This keeps combat aligned with the tone of your campaign and avoids surprises
+        about consequences.
+
+### Turns and Order
+
+Combat uses structured turns, but order does not have to be rigid. The GM chooses an ordering approach
+        that fits the scene:
+
+- **Conversational order**– The GM asks “Who acts next?” and rotates spotlight. Simple
+          and flexible for small skirmishes.
+- **Popcorn order**– After you resolve your turn, you choose who goes next. This keeps
+          attention moving and avoids predictable patterns.
+- **Initiative (optional)**– If the table prefers, you can use a simple initiative roll
+          or fiction‑based ordering for more structure.
+
+Whatever method you choose, keep it consistent within a given combat and make sure everyone understands
+        who is up next.
+
+> **Example**
+> **Example – Conversational vs. Structured Order**
+A heated argument with a gang in a market turns violent when someone draws a knife. The GM first handles
+>         a quick exchange in conversation: a shove here, a shouted warning there. When three different people all
+>         want to act at once—one flees, one attacks, one grabs a hostage—the GM says, “We’re in structured turns
+>         now,” and switches to popcorn order so everyone sees how the moment unfolds.
+
+### Your Turn: Structure and Options
+
+On your turn, you usually:
+
+- Describe what you do in the fiction.
+- Move within the space as needed (closing, retreating, repositioning).
+- Take one main action, such as Strike, Maneuver, Set Up, or Defend/Withdraw.
+
+If you want to do something small alongside your main action—call out a warning, kick over a chair, draw
+        a weapon—talk with the GM. If it feels reasonable and cinematic without overshadowing other characters,
+        it often fits into the same turn.
+
+Your turn is a spotlight, not a restriction. The structure exists to make sure everyone gets time to act
+        and react. Think about what your character cares about in the scene—who they are protecting, what they
+        are afraid of losing—and let that guide how you use your turn.
+
+### Core Combat Actions
+
+Combat does not introduce a separate rule set. It highlights a small group of common actions:
+
+- **Strike**– Directly attack a target.
+- **Maneuver**– Change position, create openings, or control space.
+- **Set Up**– Create Edge or helpful Tags for yourself or allies.
+- **Defend / Withdraw**– Protect yourself or break contact to recover.
+
+#### Strike
+
+Strike represents any direct attempt to harm or overpower an opponent: swinging a weapon, firing a shot,
+        hurling debris, or unleashing focused abilities. You describe your attack, the GM sets the DC based on
+        your opponent’s awareness, cover, and Tags, and you roll a Check.
+
+On a Full Success, you significantly advance their Resolve or impose serious pressure. On a Partial
+        Success, you still make progress but at a cost—perhaps you become*Exposed*, suffer a counterblow,
+        or worsen the environment. On a Failure, your attack misses or glances off, and the GM may give your
+        opponent a positional or narrative advantage.
+
+Strike is the most straightforward way to change the board, but not always the best first move. Against
+        tough opponents in strong positions, consider using Set Up or Maneuver to tilt the field before you
+        commit to repeated Strikes.
+
+#### Maneuver
+
+Maneuver covers tactical actions that change the situation rather than simply dealing harm: shoving an
+        enemy off high ground, tripping them, pulling an ally out of danger, seizing cover, or knocking aside
+        a weapon.
+
+Use Maneuver when position, Tags, or Conditions matter more than raw damage. A successful Maneuver can
+        create*Prone*, strip*Solid Cover*, or apply a useful Tag such as*Exposed*that
+        allies can exploit on later turns.
+
+Maneuvers are where you see genre shine. In cozy scenes, a Maneuver might be flipping a table to block a
+        doorway or herding people toward safety. In horror, it might be slamming a vault door shut or cutting a
+        rope bridge. In sci‑fi, venting a compartment or cycling gravity can change everything without a single
+        Strike.
+
+#### Set Up
+
+Set Up sacrifices immediate impact to create better opportunities: laying down suppressing fire, feinting
+        to draw attention, calling out weak points, or coordinating a flanking position. On a Full Success, you
+        grant Edge or establish a helpful Tag for yourself or allies; on a Partial, you still create the
+        opening but at some cost.
+
+Good use of Set Up can turn a desperate fight into a manageable one. It shines when your own Strike
+        chances are low or when an ally can capitalize more effectively on the Edge you create.
+
+As a rule of thumb, if the group is facing a higher‑tier threat (a dangerous VPC or major enemy), expect
+        the first rounds to involve more Set Ups and Maneuvers than Strikes. Once the table has created better
+        positions, cover, and Edge, Strikes become dramatically more effective.
+
+#### Defend / Withdraw
+
+Defend/Withdraw represents actively protecting yourself or pulling back from danger: diving behind cover,
+        blocking an attack, or breaking contact to regroup. On a Full Success, you avoid incoming harm or reach
+        a safer position. On a Partial, you mitigate the danger but pay a cost—perhaps taking a lesser Condition
+        or yielding ground.
+
+This action is how you buy time when Conditions stack up or your Resolve is nearly full. Using
+        Defend/Withdraw at the right moment is often the difference between a character being taken out or
+        surviving to fight another day.
+
+Defend/Withdraw is also how you signal a change in priorities. When multiple characters start using it,
+        the fiction is telling you the fight is shifting from “win here” to “escape, regroup, or change the
+        stakes.” Pay attention to those moments; they often mark turning points in a campaign.
+
+### Positioning and Environment
+
+Tags play a major role in combat.*Dim Light*,*Cramped*,*Elevated*,*Fragile Cover*,*Slick*, and similar Tags can make certain actions easier or harder, or
+        change what is possible at all. Manege position and Tags as carefully as you manage Checks.
+
+> **Example**
+> **Example – Using the Battlefield**
+In a rooftop fight marked as*Elevated*with scattered*Fragile Cover*, one character uses
+>         Maneuver to shove a foe toward the edge, threatening a fall. Another uses Set Up to flank, granting
+>         Edge on subsequent Strikes. The GM treats*Elevated*as granting Edge on ranged attacks
+>         from high ground and adds extra risk to any failed Checks near the edge.
+
+### Conditions in Combat
+
+Many combat consequences are expressed as Conditions: being*Stunned*by a concussive blast,*Bleeding*after a severe hit, or*Suppressed*by incoming fire. These Conditions modify
+        subsequent Checks and shape choices.
+
+Whenever a Condition is applied in combat, the GM should state how long it lasts and how it can be
+        cleared. For example,*Stunned*might end after you lose your next action, while*Exhausted*may persist until you rest between scenes.
+
+Multiple Conditions can stack in dangerous ways. A character who is both*Bleeding*and*Exhausted*is under pressure each round and rolling with Burden on many actions. Scenes
+        like this are signals to change tactics—seek cover, call for help, or end the fight on your own terms.
+
+### Putting It Together
+
+A typical combat turn might look like this:
+
+1. The GM describes the scene, including relevant Tags and visible threats.
+1. You state intent and approach, choosing a core combat action.
+1. The GM sets DC, notes any Edge/Burden, and clarifies stakes.
+1. You roll**4d6**, apply modifiers, and compare to DC.
+1. The group interprets the outcome tier, ticking Clocks and applying Tags or Conditions as needed.
+
+Across several rounds, you will see patterns emerge: early positioning and Set Ups, decisive Strikes when
+        Edge and Tags line up, Conditions and Clocks signaling rising danger, and Defend/Withdraw actions
+        when the tide turns. Treat each fight as a story with a beginning, middle, and end rather than as a
+        series of disconnected attacks.
+
+The rest of this book expands on combat by showing how Tags, Conditions, Skills, Proficiencies, NPCs,
+        VPCs, and GM tools combine to create varied, genre‑flexible fights. The goal is always the same: keep
+        the fiction moving, keep consequences meaningful, and let the battlefield tell part of the story.
+```
+
+### /Users/pandorz/Documents/razorweave/books/core/v1/chapters/08-actions-checks-outcomes.md
+```markdown
+## 8. Actions, Checks, and Outcomes
+
+This chapter describes the core resolution engine of the game. Whenever a character takes an action and
+        the outcome is uncertain, consequential, and within their reach to influence, the table may call for a
+        Check. Checks turn intent and approach into dice, and dice back into story beats. Understanding how to
+        call for, perform, and interpret Checks is essential for both players and the GM.
+
+### When to Roll (and When Not To)
+
+You roll when the GM calls for a Check. The GM should only do this when three conditions are all true:
+
+- **Uncertainty**: The outcome is not predetermined. A trained character performing a routine task in ideal
+          conditions does not roll.
+- **Consequence**: Failure or partial success would introduce tension, cost, or change. If failure just means
+          “try again until it works,” do not roll.
+- **Agency**: The character can meaningfully influence the result. Do not roll for things entirely outside
+          the characters’ control.
+
+If all three are present, a Check is appropriate. If one or more are missing, the GM either says “yes”
+        and narrates success, or “no” and explains why it is impossible or out of scope. Checks are tools for
+        focusing on interesting uncertainty, not a gate in front of every action.
+
+> **Example**
+> **Example – When to Roll**
+*Trigger:*A character wants to leap between rooftops during a chase in heavy rain. The gap is
+>         significant, the conditions are poor, and falling would be dangerous.
+*Assessment:*The outcome is uncertain, the stakes are serious, and the character’s choices
+>         matter. The GM calls for a Check.
+*Counter‑example:*The same character crossing a sturdy bridge in calm weather does not roll.
+>         Success is assumed; the story moves forward.
+
+### The Core Check Procedure
+
+Every Check follows the same basic loop:
+
+1. The player declares intent and approach.
+1. The GM decides whether a Check is needed.
+1. If needed, the GM selects an Attribute and relevant Skill, sets a DC, and notes any Tags,
+          Conditions, or Proficiencies that might grant Edge or Burden.
+1. The player rolls**4d6**, applies modifiers, and compares the total to the DC.
+1. The table interprets the outcome tier (critical success, full success, partial success, failure,
+          critical failure) and updates the fiction accordingly.
+
+### Declaring Intent and Approach
+
+When you declare an action, you state two things:
+
+- **Intent**: What you want to achieve in the fiction.
+- **Approach**: How you are trying to achieve it.
+
+Intent focuses the scene. Approach determines which Attribute, Skills, Proficiencies, Tags, and
+        Conditions are relevant. The more concrete and grounded your description, the easier it is for the GM to
+        set an appropriate DC and for the group to picture the moment.
+
+> **Example**
+> **Example – Intent and Approach**
+*Intent:*“I want to get the factory foreman to delay shipment of the crates.”
+*Approach:*“I speak with her in private, emphasize the safety risks, and show her evidence of the
+>         faulty wiring we found.”
+The GM recognizes this as a PRE‑based approach with a relevant social Skill and possibly a Proficiency
+>         related to safety procedures or technical documentation.
+
+### Setting DCs
+
+The GM sets a**Difficulty Class (DC)**to represent how hard the task is under current circumstances. The
+        system uses a standard ladder:
+
+- **DC 12**– Easy
+- **DC 14**– Routine
+- **DC 16**– Tough
+- **DC 18**– Hard
+- **DC 20**– Heroic
+- **DC 22**– Legendary
+
+Start by imagining what success would look like in the scene and how far it is from effortless. Use
+        lower DCs when characters have strong fictional positioning, good information, and safe conditions. Use
+        higher DCs when time is short, the environment is hostile, or the task is at the edge of what is
+        possible in the setting.
+
+### Edge, Burden, Tags, and Conditions
+
+Rather than constantly adjusting the DC, the game often represents favorable or unfavorable circumstances
+        through**Edge**and**Burden**.
+
+- **+1 Edge**: Roll 5d6, keep the best 4.
+- **+2 Edge**: Roll 6d6, keep the best 4.
+- **-1 Burden**: Roll 5d6, keep the worst 4.
+- **-2 Burden**: Roll 6d6, keep the worst 4.
+
+Edge and Burden usually come from Tags, Conditions, environment, tools, Proficiencies, or
+        prior setup actions. They represent the table’s shared sense that the character is favored or hindered in
+        this moment. Multiple sources combine into a single level of Edge or Burden and are capped at
+        ±2—several small edges do not create infinite Edge, and multiple problems do not push you below −2.
+        If a character would have both Edge and Burden, reduce them against each other (for example,
+        +2 and −1 becomes +1) until only one side remains, then apply the final level.
+
+Tags and Conditions described in earlier chapters provide a shared vocabulary for these modifiers:*Dim Light*,*Slick*, or*Exposed*might impose Burden;*Solid Cover*or*Marked*might grant Edge in specific contexts or to specific parties.
+
+### Rolling 4d6 and Calculating Margin
+
+When a Check is called for, follow this procedure:
+
+1. Roll**4d6**, adjusting the number of dice kept if Edge or Burden applies.
+1. Add the relevant Attribute rating and any bonuses from Skills or temporary effects.
+1. Compare the total to the DC to find the**margin**(Roll − DC).
+
+The margin determines the outcome tier:
+
+- **Critical Success**: Margin ≥ +5.
+- **Full Success**: Margin ≥ 0.
+- **Partial Success**: Margin −1 to −2.
+- **Failure**: Margin ≤ −3.
+- **Critical Failure**: Margin ≤ −7 or all 1s.
+
+### Interpreting Outcomes
+
+Every outcome tier should change the situation. The GM and players work together to describe what the
+        dice mean in the fiction.
+
+- **Critical Success**– You achieve more than you aimed for. Extra benefits, stronger
+          position, or accelerated progress.
+- **Full Success**– You get what you wanted with no significant cost. The scene moves
+          forward cleanly.
+- **Partial Success**– You succeed, but with a cost, complication, or reduced effect.
+          Momentum continues, tension rises.
+- **Failure**– You do not achieve your goal, and the situation complicates. Threats
+          advance, resources strain, or positions worsen.
+- **Critical Failure**– Things go significantly wrong. Use sparingly for dramatic beats:
+          broken tools, dangerous exposure, or major escalations.
+
+> **Example**
+> **Example – Cross‑Genre Check**
+*Trigger:*In a cozy town, a character tries to calm a panicked neighbor during a storm. In a
+>         sci‑fi station, a character tries to reassure a frightened technician during a systems failure.
+*Roll:*Both are PRE‑based Checks against DC 14 (Routine) with an appropriate social Skill. The
+>         cozy scene might grant Edge if the characters have a strong existing relationship.
+*Consequence:*Full success calms the NPC and stabilizes the scene. Partial success calms them but
+>         attaches a new obligation or rumor. Failure escalates the panic, spreading fear or misinformation.
+
+### Group Checks and Assistance
+
+Many actions involve more than one character. Rather than rolling for everyone separately every time, the
+        GM can use:
+
+- **Assistance**: One character leads the action, another assists. If the assistance is
+          credible in the fiction, the leader gains Edge or a small bonus.
+- **Representative Checks**: One Check stands in for a coordinated group effort. The
+          outcome tier describes how the whole group fares.
+- **Split Risks**: Two or more characters each roll, and the GM focuses on the most
+          interesting combination of results rather than tracking every detail.
+
+Pick the method that best fits the moment. Use single rolls when you want quick resolution. Use
+        individual rolls when it is important that different characters face different consequences.
+
+### Checks and Clocks
+
+Some obstacles are too big for a single Check. Instead, the GM creates a**Clock**with several segments.
+        Successful Checks tick the Clock forward; failures or partial successes may tick related threat Clocks.
+
+Use Clocks when:
+
+- Characters are working toward a long‑term goal, such as investigating a mystery or repairing a ship.
+- A danger is mounting over time, such as a collapsing tunnel, spreading fire, or advancing enemy force.
+- Two or more forces are racing toward different outcomes (opposing Clocks).
+
+> **Example**
+> **Example – Clock and Checks**
+*Trigger:*The group works to evacuate a district before floodwaters arrive.
+*Clocks:*“Evacuation Complete” (6 segments) and “Flood Waters Rise” (4 segments).
+*Rolls:*Each scene, characters make MIG, AGI, PRE, or RSN Checks based on their chosen
+>         contributions—lifting sandbags, coordinating crowds, analyzing routes. Successes advance the evacuation
+>         clock; failures or partials tick the flood clock or create new complications.
+*Outcome:*Which clock fills first determines whether the district is saved, partially saved, or
+>         overwhelmed.
+
+### Keeping Momentum
+
+Checks should move the story forward, not stall it. When in doubt:
+
+- Use Partial successes to trade progress for cost rather than stopping action.
+- Let Failures create new problems, reveal information, or shift the situation rather than blocking
+          all paths.
+- Allow retries only when the circumstances or approach meaningfully change.
+
+The goal is not to punish characters for rolling poorly. The goal is to discover what happens next when
+        risk meets intent. If the table keeps that in view, Checks will feel like natural beats in the story
+        rather than interruptions.
+```
+
+### /Users/pandorz/Documents/razorweave/books/core/v1/chapters/09-tags-conditions-clocks.md
+```markdown
+## 9. Tags, Conditions, and Clocks
+
+Tags, Conditions, and Clocks are the tools the game uses to make the world feel solid and responsive.
+        They connect description to mechanics so that rain, fear, injuries, crowds, and looming deadlines all
+        matter at the table. This chapter explains what each of these tools is for, how to use them, and how
+        they interact with Checks.
+
+### Tags vs. Conditions
+
+**Tags**describe**the environment or situation**. They belong to places, scenes, objects, or
+        circumstances:*Dim Light*,*Slick*,*Crowded*,*Fragile Cover*. Tags affect
+        what you can do in a space and how you do it.
+
+**Conditions**describe**your character's state**. They follow you from one location to the
+        next until cleared:*Exhausted*,*Bleeding*,*Frightened*,*Restrained*.
+        Conditions affect your actions wherever you go.
+
+Tags and Conditions are the shared vocabulary the table uses to talk about advantages, risks, and
+        lingering consequences. They are not extra subsystems to memorize. They are the names you give to
+        things you are already describing.
+
+### What Tags Do
+
+A Tag is a short descriptor applied to a scene, location, object, or situation. It becomes a flag:
+        “remember this when resolving actions here.” Tags typically:
+
+- Grant Edge or Burden on certain Checks.
+- Raise or lower DCs for specific actions.
+- Change position or effect (how risky an action feels or how big its impact is).
+
+You do not tag every detail. A room is just a room until its darkness, instability, crowd, or sacred
+        significance matters to what characters are attempting. Tag the things that will shape decisions.
+
+### Common Tag Categories
+
+While Chapter 18 provides an extended reference, this chapter introduces three broad categories:
+
+- **Environmental Tags**– Physical features of space:*Dim Light*,*Slick*,*Cramped*,*Elevated*,*Solid Cover*,*Fragile Cover*,*Unstable*.
+- **Situational Tags**– Circumstances and pressures:*Crowded*,*Alert*,*Hazardous*,*Obscured*,*Surveillance*,*Networked*.
+- **Atmospheric Tags**– Social or emotional tone:*Tense*,*Festive*,*Solemn*,*Suspicious*.
+
+You can invent new Tags that fit your setting. The important part is agreeing at the table what a Tag
+        does in practice: which actions it helps, which it hinders, and how it shapes consequences.
+
+> **Example**
+> **Example – Tags in a Warehouse Fight**
+The GM describes a warehouse full of stacked crates, narrow aisles, and oil-spotted floors. They assign
+>         the Tags*Cramped*,*Fragile Cover*, and*Slick*.
+*Cramped*makes wide swings and large weapons awkward.*Fragile Cover*means wooden crates
+>         can be shredded by fire, potentially stripping cover away.*Slick*imposes Burden on fast
+>         movement or acrobatic maneuvers. Every decision in this scene now has texture.
+
+### What Conditions Do
+
+Conditions represent persistent states that modify what a character can safely attempt. They are the
+        mechanical mark left by consequences. When something important happens to you—injury, fear, strain,
+        affliction—it often becomes a Condition.
+
+Conditions typically:
+
+- Impose Burden on certain actions.
+- Limit available options (cannot run, cannot act this turn, cannot speak clearly).
+- Threaten further harm if ignored (ongoing damage, ticking Clocks).
+
+### Examples of Common Conditions
+
+A full alphabetical list appears in the Glossary. Here are a few you will see often:
+
+- **Exhausted**– Burden on demanding physical actions until you rest or receive
+          meaningful aid.
+- **Bleeding**– Time pressure from an untreated wound. If not stabilized, it may tick a
+          personal Clock or escalate to worse states.
+- **Restrained**– You are held or pinned. You cannot move freely and must break free or
+          be helped.
+- **Dazed**– Disoriented; Burden on perception and reaction until you recover.
+- **Frightened**– Burden on actions while a specific threat is visible; clears when
+          you rally, escape, or defeat the source.
+
+> **Example**
+> **Example – From Event to Condition**
+A character fails a Check while crossing a compromised catwalk. Rather than simple damage, the GM
+>         describes how they slam into the railing and twist their knee. They gain the Condition*Exhausted*or*Weakened*, representing reduced stamina. Future physical actions are harder
+>         until they rest or receive treatment.
+
+### Using Tags and Conditions with Checks
+
+Tags and Conditions do not require new rules. They plug directly into the Check system:
+
+- Tags often grant Edge or Burden on Checks that interact with them.
+- Conditions usually impose Burden or limit which approaches are reasonable.
+- Some Tags shift DCs or change position and effect instead of modifying dice directly.
+
+When you are about to roll, quickly review which Tags and Conditions are relevant. Ask: “Does this make
+        the action easier, harder, or riskier?” Then adjust Edge/Burden, DC, or consequences
+        accordingly.
+
+> **Example**
+> **Example – Tag and Condition Interaction**
+In a horror‑tinged mystery, a character stalks through a foggy graveyard at night. The scene has Tags*Dim Light*and*Obscured*. The character is also*Frightened*from a previous
+>         encounter.
+When they attempt to sneak past patrolling figures,*Dim Light*and*Obscured*might grant
+>         Edge on Stealth, but*Frightened*could impose Burden on actions taken while the threat
+>         is visible. The GM weighs these factors, cancels opposing modifiers as needed, and describes how the
+>         character’s shaky nerves show up in the fiction.
+
+### Introducing and Clearing Conditions
+
+Conditions should follow naturally from events. A failed Check in a hazardous area might cause*Bleeding*or*Poisoned*. Exposure to overwhelming sights might cause*Frightened*.
+        Pushing beyond safe limits might cause*Exhausted*.
+
+When you introduce a Condition, state:
+
+- What it represents in the fiction.
+- How it affects actions (which Checks it modifies and how).
+- How it can be cleared (time, rest, treatment, facing a fear, or completing a Clock).
+
+Minor Conditions should clear quickly once addressed. Major Conditions may persist across several scenes
+        or form the basis for character‑driven goals.
+
+### What Clocks Are
+
+Clocks are segmented trackers that answer “how close are we?” for goals and threats. A Clock is a circle
+        or track divided into 4, 6, or 8 segments. As actions succeed, time passes, or events occur, segments
+        fill. When the Clock completes, something happens.
+
+Use Clocks to represent:
+
+- **Long‑term goals**– Research projects, faction plans, character endeavors.
+- **Mounting threats**– Approaching storms, advancing enemies, spreading plagues.
+- **Ticking dangers**– Rituals completing, bombs counting down, collapsing structures.
+- **Faction projects**– Off‑screen activities of NPCs and organizations.
+
+### Advancing Clocks
+
+Clocks advance in several ways:
+
+- **Success‑based**– Successful Checks tick a project Clock forward.
+- **Time‑based**– Segments fill as scenes pass or as in‑world time moves.
+- **Event‑based**– Specific narrative events advance background or faction Clocks.
+
+Partial successes often advance a Clock and introduce a complication. Exceptional successes may jump a
+        Clock by more than one segment. Failures might leave a Clock unchanged while pushing forward a related
+        threat Clock.
+
+> **Example**
+> **Example – Investigation and Cover‑Up Clocks**
+The group is investigating a corrupt official.
+
+The GM creates an “Expose the Official” Clock with 6 segments and a “Cover‑Up” Clock with 4 segments.
+        Successful RSN‑based investigation, social, or infiltration Checks advance the first Clock. Certain
+        failures, loud approaches, or conspicuous visits advance the second. Which Clock fills first determines
+        whether the truth comes out cleanly, is revealed with fallout, or is buried.
+
+### Combining Tags, Conditions, and Clocks
+
+These tools are most powerful when used together:
+
+- Tags set the stage: terrain, lighting, crowds, magical effects.
+- Conditions show how previous events cling to characters and shape their options.
+- Clocks track momentum toward outcomes that matter over time.
+
+A single scene might involve a*Hazardous*Tag, characters who are*Exhausted*, and a
+        “Structural Collapse” Clock. Every roll becomes a meaningful choice about risk, effort, and timing.
+
+> **GM Guidance**
+> **GM Guidance – Start Small**You do not need Tags, Conditions, and Clocks on every scene. Start with one or two Tags that matter, a
+>         few Conditions that arise naturally, and a single important Clock. Add more only when they clarify the
+>         fiction rather than clutter it. When in doubt, ask: “Does this tool make the situation clearer and more
+>         interesting?” If yes, use it.
+```
+
+## Style Guide
+
+# Content Style Guide
+
+This guide defines the voice, tone, and structural conventions for all Razorweave content. Writers and editors should reference this document to ensure consistency across all chapters, supplements, and reference materials.
+
+---
+
+## Voice and Tone
+
+### Second Person, Direct Address
+
+Address the reader directly using "you" and "your." This creates an instructive, conversational tone that invites participation.
+
+**Do:**
+- "You roll when the GM calls for a Check."
+- "Your character begins with a small set of equipment."
+- "When you declare an action, you state two things."
+
+**Avoid:**
+- "Players roll when the GM calls for a Check."
+- "Characters begin with a small set of equipment."
+- "When declaring an action, state two things."
+
+### Instructive but Not Prescriptive
+
+Explain how the system works while leaving room for table interpretation. Present mechanics as tools, not mandates.
+
+**Do:**
+- "The GM can use conversational order, popcorn order, or initiative rolls depending on the scene."
+- "You can expand or revise identity elements later if the story reveals new truths."
+
+**Avoid:**
+- "You must use popcorn order for all combat scenes."
+- "Never change identity elements after character creation."
+
+### Fiction-First Emphasis
+
+Always ground mechanical explanations in narrative context. Lead with what happens in the story, then explain how the system supports it.
+
+**Do:**
+- "Combat starts when violence breaks out and the moment-to-moment sequence of actions matters."
+- "A Check only occurs when the outcome is meaningfully uncertain, the stakes matter to the story, and failure would move the scene forward."
+
+**Avoid:**
+- "Roll initiative at the start of combat."
+- "Make a Check whenever attempting a difficult action."
+
+---
+
+## Terminology Consistency
+
+Use these terms consistently throughout all content:
+
+| Use This | Not This | Notes |
+|----------|----------|-------|
+| GM | DM, Referee, Narrator | Game Master is the standard term |
+| PC | Hero, Player, Adventurer | Player Character when referring to the character sheet entity |
+| Check | Roll, Test, Attempt | The resolution mechanic is always called a Check |
+| DC | TN, Target, Difficulty | Difficulty Class is the target number |
+| VPC | Major NPC, Boss | Vital Player Character for significant non-player characters |
+| Edge | Advantage, Bonus dice | The favorable circumstance modifier |
+| Burden | Disadvantage, Penalty dice | The unfavorable circumstance modifier |
+| Tag | Marker, Label, Status | Descriptors for environments and situations |
+| Condition | Status effect, Debuff | Persistent character states |
+| Clock | Progress track, Timer | Segmented trackers for goals and threats |
+| Attribute | Stat, Ability score | The four core capabilities (MIG, AGI, PRE, RSN) |
+| Skill | Ability, Talent | Action-based competencies |
+| Proficiency | Expertise, Specialty | Domain knowledge and tool familiarity |
+
+---
+
+## Section Structure
+
+### Standard Chapter Flow
+
+Chapters should follow this general structure:
+
+1. **Opening Hook** - A brief paragraph establishing what this chapter covers and why it matters to play
+2. **Core Concept** - Clear explanation of the central idea or mechanic
+3. **How It Works** - Step-by-step procedural guidance
+4. **Examples** - Concrete illustrations using blockquote callouts
+5. **GM Guidance** - Tips for running the content at the table (where applicable)
+6. **Chapter Summary** - Brief recap of key points (for longer chapters)
+
+### Section Openers
+
+Begin major sections with a grounding statement that connects to the reader's experience or the broader system.
+
+**Good opener:**
+> "Tags, Conditions, and Clocks are the tools the game uses to make the world feel solid and responsive."
+
+**Weak opener:**
+> "This section describes Tags."
+
+### Transitions Between Sections
+
+Use transitional sentences to connect sections and maintain reading flow.
+
+**Example:**
+> "The principles in this chapter describe how the table works together. The next chapter expands on these principles by showing how different modes of play shape the experience of the system."
+
+---
+
+## Tone Guidelines
+
+### Active Voice
+
+Prefer active constructions that clearly identify who performs the action.
+
+**Do:**
+- "The GM sets a Difficulty Class to represent how hard the task is."
+- "Players describe what their characters attempt."
+
+**Avoid:**
+- "A Difficulty Class is set to represent task difficulty."
+- "What characters attempt is described by players."
+
+### Concise Sentences
+
+Keep sentences focused on a single idea. Break complex explanations into multiple sentences.
+
+**Do:**
+> "Checks should move the story forward, not stall it. When in doubt, use partial successes to trade progress for cost rather than stopping action."
+
+**Avoid:**
+> "Checks should move the story forward rather than stalling it, which means that when in doubt you should use partial successes to trade progress for cost because this keeps the action moving."
+
+### Concrete Over Abstract
+
+Use specific examples rather than abstract descriptions when explaining concepts.
+
+**Do:**
+> "A concept like 'retired scout with a guilty conscience' offers a clearer direction than simply 'fighter.'"
+
+**Avoid:**
+> "More specific concepts provide better direction than generic ones."
+
+### Accessible Vocabulary
+
+Write for readers who may be new to tabletop RPGs. Avoid jargon without explanation. Define terms on first use.
+
+---
+
+## Using Examples
+
+### Example Blockquotes
+
+Use blockquote callouts for examples. Format with a bold label followed by the example content.
+
+```markdown
+> **Example**
+> A character wants to leap between rooftops during a chase in heavy rain. The gap is significant, the conditions are poor, and falling would be dangerous. The outcome is uncertain, the stakes are serious, and the character's choices matter. The GM calls for a Check.
+```
+
+### Example Types
+
+- **Narrative examples** - Short fiction snippets showing the mechanic in play
+- **Cross-genre examples** - Demonstrate how the same mechanic works across different settings
+- **Counter-examples** - Show what does not trigger a rule or mechanic
+
+### Example Labels
+
+Use descriptive labels when an example illustrates a specific concept:
+
+- `> **Example - When to Roll**`
+- `> **Example - Intent and Approach**`
+- `> **Example - Cross-Genre Check**`
+
+---
+
+## Writing Conventions
+
+### Numbers
+
+- Spell out numbers one through nine in prose: "choose three items," "roll four dice"
+- Use numerals for 10 and above: "a 12-segment Clock," "DC 16"
+- Always use numerals for game mechanics: "4d6," "DC 14," "+2 Edge"
+- Use numerals in tables and stat blocks
+
+### Lists
+
+Use **numbered lists** for sequential procedures:
+> 1. The player declares intent and approach.
+> 2. The GM decides whether a Check is needed.
+> 3. The GM sets DC and notes modifiers.
+
+Use **bulleted lists** for non-sequential items:
+> - Environmental Tags
+> - Situational Tags
+> - Atmospheric Tags
+
+### Emphasis
+
+- Use **bold** for game terms on first significant use in a section
+- Use **bold** for defined terms in explanatory text
+- Use *italics* for Tag and Condition names: *Dim Light*, *Exhausted*, *Bleeding*
+- Use *italics* for emphasis within sentences (sparingly)
+- Avoid ALL CAPS for emphasis
+
+### Contractions
+
+Use contractions sparingly. They are acceptable in conversational passages but should be avoided in formal rule explanations.
+
+**Acceptable:**
+> "You don't need to memorize the entire book before you play."
+
+**Preferred in rules text:**
+> "You do not need to optimize your Skills."
+
+---
+
+## Callout Types
+
+Use blockquote callouts consistently:
+
+### Example Callout
+```markdown
+> **Example**
+> [Example content here]
+```
+
+### GM Guidance Callout
+```markdown
+> **GM Guidance**
+> [Advice for running the game]
+```
+
+### Note Callout
+```markdown
+> **Note**
+> [Important clarification or reminder]
+```
+
+### Warning Callout
+```markdown
+> **Warning**
+> [Caution about common mistakes or edge cases]
+```
+
+---
+
+## Chapter Summary Pattern
+
+End longer chapters with a summary section that:
+1. Recaps the main concepts covered
+2. Connects to upcoming content
+3. Reinforces the fiction-first philosophy
+
+**Example:**
+> "Character Creation turns an idea into a playable character who fits naturally into the world and the campaign. By moving from concept to identity, Attributes, Skills, Proficiencies, gear, background, relationships, and goals, you build a character who feels grounded and ready for play. Later chapters explain how these elements interact with the core mechanics during sessions."
+
+
+## Task
+
+Implement the modifications specified in the plan. For each chapter:
+1. Apply the changes described in chapter_modifications
+2. Maintain the existing structure and voice
+3. Follow the style guide
+
+## Output Requirements
+
+For each modified chapter, write the updated content to:
+`data/w1-artifacts/wfrun_miby9oo6_a7xlw7/chapters/{chapter-id}.md`
+
+Then save results:
+```bash
+pnpm w1:content-modify --save --run=wfrun_miby9oo6_a7xlw7 --chapters=data/w1-artifacts/wfrun_miby9oo6_a7xlw7/chapters/
+```

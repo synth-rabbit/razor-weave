@@ -70,6 +70,10 @@ export class WorkflowStateMachine {
    * @returns true if the transition is valid, false otherwise
    */
   canTransitionTo(newState: WorkflowStatus): boolean {
+    // No-op transition (same state) is always valid
+    if (newState === this._currentState) {
+      return true;
+    }
     const validTransitions = VALID_TRANSITIONS[this._currentState];
     return validTransitions.includes(newState);
   }

@@ -1,0 +1,117 @@
+// Execute reviewer prompt for persona gen-1763913096264-963aghhsr
+// Tactician/Veteran (10-20 years) - "Generated Persona 609767"
+
+import { getDatabase } from '../../../src/tooling/database/client.js';
+import { CampaignClient } from '../../../src/tooling/reviews/campaign-client.js';
+import { writeReviewMarkdown } from '../../../src/tooling/reviews/markdown-writer.js';
+import { ReviewDataSchema } from '../../../src/tooling/reviews/schemas.js';
+
+const startTime = Date.now();
+
+// Connect to database
+const db = getDatabase();
+const campaignClient = new CampaignClient(db.getDb());
+
+// Review data from the perspective of a Tactician/Veteran persona
+// Traits: Curious about fiction-first, Needs Concrete Numbers, World Simulator GM, Genre-Specific Purist, Complexity Tolerant
+const reviewData = {
+  ratings: {
+    clarity_readability: 8,
+    rules_accuracy: 7,
+    persona_fit: 7,
+    practical_usability: 6
+  },
+  narrative_feedback: `As someone who has been running tactical games for over fifteen years, I approached this rulebook with both interest and skepticism. The fiction-first philosophy intrigued me—I've always emphasized world simulation, so the idea of letting the story guide mechanics resonated. However, my players need concrete numbers to plan their actions, and that's where my experience with Razorweave has been mixed.
+
+The core resolution system using 4d6 with Advantage/Disadvantage tiers is elegant and well-designed. The margin-based outcome tiers (critical success at +5, full success at 0, partial at -1 to -2, failure at -3 or less) provide clear decision points that my tactical players can work with. The DC ladder from 12 (Easy) through 22 (Legendary) is a solid reference, though I found myself wishing for more granular guidance on how to set DCs for complex tactical situations.
+
+What concerns me most is the Resolve Clock system replacing hit points. I understand the design intent—it keeps combat narrative and flexible—but after twenty years of systems with concrete damage values, my players will struggle with the ambiguity of "tick the clock based on the fiction." The book says a Full Success Strike ticks 2 segments, but what about glancing blows, heavy weapons, or environmental factors? The text is intentionally loose here, and while I respect that design choice, it creates uncertainty at the table for groups like mine who want to calculate optimal approaches.
+
+The Attribute/Skill/Proficiency structure is sound. Having four Attributes (MIG, AGI, PRE, RSN) keeps things simple while the Skills and Proficiencies add tactical depth. I particularly appreciate how Proficiencies can grant Advantage in specific contexts—this gives my players concrete mechanical hooks to pursue.
+
+The Tags, Conditions, and Clocks chapter is excellent for world simulation. Being able to tag a scene as "Cramped," "Slick," or "Elevated" and have that directly influence mechanical outcomes supports exactly the kind of environmental tactical play I enjoy running. The guidance on combining multiple Tags and Conditions is practical and clear.
+
+My recommendation: groups with tactical players should read Chapter 8 (Actions, Checks, and Outcomes) multiple times and establish house rules for common edge cases before play. The system has tactical depth, but it requires more GM arbitration than traditional games.`,
+  issue_annotations: [
+    {
+      section: "Combat Basics (Chapter 10)",
+      issue: "Resolve Clock segment advancement lacks concrete guidance for varying weapon effectiveness and situational modifiers",
+      impact: "Tactical players cannot reliably predict or plan attack sequences; GM must make frequent judgment calls that may feel arbitrary",
+      location: "Section 'Resolve Instead of Hit Points' and following subsections"
+    },
+    {
+      section: "Setting DCs (Chapter 8)",
+      issue: "DC ladder provides only six reference points (12-22) without guidance for tasks between these tiers or for complex multi-step tactical maneuvers",
+      impact: "GMs running tactical encounters must improvise DC values, potentially leading to inconsistent difficulty scaling across sessions",
+      location: "Section 'Setting DCs' under 'The Core Check Procedure'"
+    },
+    {
+      section: "Advantage/Disadvantage System (Chapter 8)",
+      issue: "The ±2 cap on Advantage/Disadvantage means stacking tactical advantages provides diminishing returns, which may frustrate players who invest heavily in setup actions",
+      impact: "Players who prefer elaborate tactical preparation may feel their extra efforts are mechanically unrewarded beyond a certain point",
+      location: "Section 'Advantage, Disadvantage, Tags, and Conditions'"
+    },
+    {
+      section: "Group Checks and Assistance (Chapter 8)",
+      issue: "Three different methods offered (Assistance, Representative Checks, Split Risks) without clear criteria for when to use each",
+      impact: "Different GMs will handle identical situations differently, making it harder for tactical players to develop reliable group coordination strategies",
+      location: "Section 'Group Checks and Assistance'"
+    },
+    {
+      section: "Skills and Proficiencies References (Chapters 14-17)",
+      issue: "References are mentioned but the full mechanical details are spread across multiple chapters, requiring significant page-flipping during character creation",
+      impact: "Players building tactically optimized characters must cross-reference extensively, slowing character creation and making synergy identification difficult",
+      location: "Introduction to Skills (Chapter 14) and Proficiencies (Chapter 16)"
+    }
+  ],
+  overall_assessment: `The Razorweave Core Rulebook presents a thoughtfully designed fiction-first system that offers genuine tactical depth beneath its narrative-focused surface. For veteran players like myself who appreciate complexity and world simulation, the core mechanics are sound—the 4d6 resolution, margin-based outcomes, and Tag/Condition/Clock integration provide a robust framework.
+
+However, the system requires a significant mindset shift for groups accustomed to traditional tactical games. The deliberate ambiguity around damage, the soft limits on mechanical optimization, and the heavy reliance on GM judgment will challenge players who prefer calculable outcomes.
+
+Rating Summary:
+- Clarity & Readability: 8/10 — Well-organized, clear prose, good use of examples
+- Rules Accuracy: 7/10 — Internally consistent but leaves many tactical edge cases undefined
+- Persona Fit: 7/10 — Curious tacticians will find depth here, but the fiction-first philosophy requires adaptation
+- Practical Usability: 6/10 — Excellent for narrative play, but tactical groups will need supplementary house rules
+
+Recommendation: Suitable for veteran groups willing to embrace narrative flexibility, but expect a learning curve and some table-time spent establishing conventions for tactical resolution.`
+};
+
+// Validate the review data
+ReviewDataSchema.parse(reviewData);
+
+// Write to database
+const reviewId = campaignClient.createPersonaReview({
+  campaignId: 'campaign-20251123-192801-j6p4e486',
+  personaId: 'gen-1763913096264-963aghhsr',
+  reviewData: reviewData,
+  agentExecutionTime: Date.now() - startTime
+});
+
+console.log(`Created persona review with ID: ${reviewId}`);
+
+// Write markdown file
+writeReviewMarkdown(
+  {
+    campaignId: 'campaign-20251123-192801-j6p4e486',
+    personaName: 'Generated Persona 609767',
+    personaArchetype: 'Tactician',
+    personaExperience: 'Veteran (10-20 years)',
+    personaTraits: ['Curious', 'Complexity Tolerant'],
+    contentTitle: 'Book Review',
+    reviewData: reviewData
+  },
+  'data/reviews/raw/campaign-20251123-192801-j6p4e486/gen-1763913096264-963aghhsr.md'
+);
+
+console.log('Wrote markdown review to: data/reviews/raw/campaign-20251123-192801-j6p4e486/gen-1763913096264-963aghhsr.md');
+
+// Close database
+db.close();
+
+console.log('\nReview Summary:');
+console.log('- Clarity & Readability: 8/10');
+console.log('- Rules Accuracy: 7/10');
+console.log('- Persona Fit: 7/10');
+console.log('- Practical Usability: 6/10');
+console.log(`\nExecution time: ${Date.now() - startTime}ms`);

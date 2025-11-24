@@ -1,0 +1,265 @@
+{
+  "plan_id": "plan-20251123-mic6qjlc",
+  "created_at": "2025-11-23T20:43:00Z",
+  "source_campaign_id": "campaign-20251123-192801-j6p4e486",
+  "summary": "Address mechanical clarity gaps in core rules chapters (Actions, Character Creation, Combat) by adding concrete DC ranges, procedural breakdowns, and Clock advancement rates to improve Persona Fit and Usability scores.",
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "DC guidelines lack concrete number ranges; Partial Success outcomes leave too much to GM interpretation; Strike outcomes lack specific mechanical definitions",
+      "severity": "high",
+      "source_category": "Chapter 8: Actions, Checks, and Outcomes",
+      "affected_chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "affected_personas": [
+        "gen-1763913096215-6l23ebgok",
+        "gen-1763913096216-x6k7lliwr",
+        "gen-1763913096216-to24ofm5l",
+        "gen-1763913096219-6oqun1z2o",
+        "gen-1763913096236-4fgj5dv3p"
+      ],
+      "improvement_goal": "Players and GMs can determine appropriate DC and interpret outcomes without ambiguity",
+      "success_metric": "DC ladder table with 6 tiers (12-22); Outcome tier definitions with margin ranges; 3+ worked examples showing resolution",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-002",
+      "description": "Character creation optimization pathways unclear; attribute allocation guidance sparse; creation flow requires cross-referencing other chapters",
+      "severity": "high",
+      "source_category": "Chapter 6: Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "gen-1763913096216-x6k7lliwr",
+        "gen-1763913096219-6oqun1z2o",
+        "gen-1763913096223-lk3uhugw4",
+        "gen-1763913096218-ijqqbqgtf"
+      ],
+      "improvement_goal": "New players can complete character creation without referencing other chapters",
+      "success_metric": "Self-contained attribute guidance; numbered checklist format; 2 complete worked examples with decision rationale",
+      "priority": 2
+    },
+    {
+      "issue_id": "issue-003",
+      "description": "Action economy described conceptually rather than procedurally; Resolve Clock advancement rates undefined; insufficient tactical depth",
+      "severity": "high",
+      "source_category": "Chapter 10: Combat Basics",
+      "affected_chapters": [
+        "10-combat-basics"
+      ],
+      "affected_personas": [
+        "gen-1763913096215-6l23ebgok",
+        "gen-1763913096216-x6k7lliwr",
+        "gen-1763913096216-to24ofm5l",
+        "gen-1763913096218-ijqqbqgtf"
+      ],
+      "improvement_goal": "Combat rounds have clear procedural structure with defined Clock tick rates",
+      "success_metric": "Step-by-step round procedure; Resolve Clock tick table (outcome -> ticks); Action type quick-reference",
+      "priority": 3
+    },
+    {
+      "issue_id": "issue-004",
+      "description": "Clock advancement triggers described narratively without mechanical specifics; Tag mechanical effects on Checks inconsistent; Condition effects need quick reference",
+      "severity": "medium",
+      "source_category": "Chapter 9: Tags, Conditions, and Clocks",
+      "affected_chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "affected_personas": [
+        "gen-1763913096215-6l23ebgok",
+        "gen-1763913096236-4fgj5dv3p",
+        "gen-1763913096238-o4c52vk1e"
+      ],
+      "improvement_goal": "Clear mechanical triggers for Clock advancement and Tag/Condition effects",
+      "success_metric": "Clock advancement table by outcome; Tag effect summary (Edge/Burden grants); Condition quick-reference with clearing methods",
+      "priority": 4
+    }
+  ],
+  "chapter_modifications": [
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks, and Outcomes",
+      "priority": 1,
+      "issues_addressed": [
+        "issue-001"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "DC Guidelines section",
+          "instruction": "Add a 'Standard DC Ladder' table with 6 tiers: Easy (DC 12), Routine (DC 14), Tough (DC 16), Hard (DC 18), Heroic (DC 20), Legendary (DC 22). Include a 'When to Use' column with concrete examples for each tier.",
+          "success_criteria": "Table includes all 6 DC tiers with situational examples; GM can select DC without interpretation"
+        },
+        {
+          "type": "clarify",
+          "target": "Outcome tier definitions",
+          "instruction": "Rewrite outcome tiers with explicit margin ranges: Critical Success (+5 or more), Full Success (0 to +4), Partial Success (-1 to -2), Failure (-3 to -6), Critical Failure (-7 or worse). Add a table summarizing these ranges.",
+          "success_criteria": "Each outcome tier has numeric margin range; no ambiguity about which tier applies"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Check resolution examples",
+          "instruction": "Add 3 fully worked examples showing: 1) A social check with Partial Success cost negotiation, 2) A combat check with Clear Strike outcome and Clock ticks, 3) A skill check with Edge/Burden modifiers. Show dice rolled, math, outcome tier, and narrative result.",
+          "success_criteria": "Each example shows full mechanical sequence: intent, DC, roll, margin, outcome, fiction"
+        },
+        {
+          "type": "expand",
+          "target": "Strike outcome section",
+          "instruction": "Define Strike outcomes mechanically: Clear Strike (Full Success) ticks target Resolve Clock by 2; Glancing Strike (Partial Success) ticks by 1 with counterattack opportunity; Miss advances threat Clock or grants enemy positioning.",
+          "success_criteria": "Strike outcomes have specific Clock tick values; consequences are mechanical not narrative"
+        }
+      ]
+    },
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 2,
+      "issues_addressed": [
+        "issue-002"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "restructure",
+          "target": "Nine-step creation process",
+          "instruction": "Convert the prose description into a numbered checklist format. Each step should be self-contained with inline guidance. Remove references to 'see Chapter X' and incorporate essential information directly.",
+          "success_criteria": "All 9 steps are numbered; each step can be completed without leaving the chapter"
+        },
+        {
+          "type": "expand",
+          "target": "Attribute allocation guidance",
+          "instruction": "Add an 'Attribute Priorities by Archetype' sidebar showing common builds: Physical (MIG primary), Agile (AGI primary), Social (PRE primary), Analytical (RSN primary). Include recommended secondary attributes and example character concepts for each.",
+          "success_criteria": "4 archetype examples with primary/secondary attribute recommendations; new players can select attributes confidently"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Worked example section",
+          "instruction": "Expand to include 2 complete worked examples: one combat-focused character (MIG/AGI), one social/investigative character (PRE/RSN). Show decision rationale at each step, not just final choices.",
+          "success_criteria": "2 distinct character examples with annotated decision points; rationale explains WHY not just WHAT"
+        }
+      ]
+    },
+    {
+      "chapter_id": "10-combat-basics",
+      "chapter_name": "Combat Basics",
+      "priority": 3,
+      "issues_addressed": [
+        "issue-003"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "restructure",
+          "target": "Combat round structure",
+          "instruction": "Add a numbered 'Combat Round Procedure' with clear steps: 1) Establish turn order, 2) Active character declares intent and approach, 3) GM sets DC and modifiers, 4) Resolve Check, 5) Apply outcomes (damage, Clock ticks, Conditions), 6) Update fiction, 7) Next character.",
+          "success_criteria": "7-step procedure with no ambiguity about sequence; new GMs can run combat following steps"
+        },
+        {
+          "type": "add_reference",
+          "target": "Resolve Clock section",
+          "instruction": "Add 'Resolve Clock Tick Rates' table: Critical Success (2-3 ticks), Full Success (2 ticks), Partial Success (1 tick + complication), Failure (0 ticks, may tick threat Clock). Include Resolve Clock size guidelines: Minor threat (4-segment), Standard (6-segment), Major (8-segment).",
+          "success_criteria": "Table covers all outcome tiers with tick values; Clock sizing has concrete guidelines"
+        },
+        {
+          "type": "add_reference",
+          "target": "Action types section",
+          "instruction": "Add 'Action Types Quick Reference' table listing Strike, Maneuver, Set Up, Defend, and other actions with: Primary Attribute, Typical DC, Success Effect, Partial Effect. Keep to one-line summaries.",
+          "success_criteria": "Table fits on one page; players can reference action options at-a-glance"
+        }
+      ]
+    },
+    {
+      "chapter_id": "09-tags-conditions-clocks",
+      "chapter_name": "Tags, Conditions, and Clocks",
+      "priority": 4,
+      "issues_addressed": [
+        "issue-004"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Clock advancement section",
+          "instruction": "Add 'Clock Advancement by Check Outcome' table: Critical Success (2-3 segments), Full Success (1-2 segments), Partial Success (1 segment + complication), Failure (0 segments or tick opposing Clock). Note that specific actions may override these defaults.",
+          "success_criteria": "Table provides default tick rates; GM has mechanical baseline before applying judgment"
+        },
+        {
+          "type": "clarify",
+          "target": "Tag mechanical effects",
+          "instruction": "Clarify how Tags mechanically affect Checks. Add a 'Common Tag Effects' summary: Environmental Tags typically grant Edge or impose Burden based on relevance (e.g., *Dim Light* imposes Burden on sight-based Checks, grants Edge on Stealth). Provide 5-6 common Tag examples.",
+          "success_criteria": "Clear Edge/Burden mapping for common Tags; players understand Tags as mechanical modifiers"
+        },
+        {
+          "type": "add_reference",
+          "target": "Condition effects section",
+          "instruction": "Add 'Condition Quick Reference' table listing common Conditions with: Mechanical Effect (Edge/Burden/specific penalty), Clearing Method, Example Source. Include: *Exhausted*, *Bleeding*, *Frightened*, *Disarmed*, *Prone*.",
+          "success_criteria": "5+ Conditions with mechanical effects and clearing methods in table format"
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "allow_growth"
+  },
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "rationale": "Highest severity issue (10); foundational mechanics referenced by other chapters; DC and outcome definitions needed before combat/creation improvements"
+    },
+    {
+      "phase": 2,
+      "chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "rationale": "Clock advancement rates needed before combat chapter modifications; Tag/Condition mechanics support both creation and combat"
+    },
+    {
+      "phase": 3,
+      "chapters": [
+        "10-combat-basics"
+      ],
+      "rationale": "Depends on Chapter 8 outcome definitions and Chapter 9 Clock rates; can now reference established mechanics"
+    },
+    {
+      "phase": 4,
+      "chapters": [
+        "06-character-creation"
+      ],
+      "rationale": "Can incorporate finalized mechanics references; self-contained creation flow benefits from settled core rules"
+    }
+  ],
+  "estimated_impact": {
+    "primary_dimension": "practical_usability",
+    "expected_improvement": "+1.5-2.0 points for Usability (6.2 -> 7.7-8.2); +1.0 point for Persona Fit through clearer mechanics",
+    "secondary_benefits": [
+      "Improved Rules Accuracy perception through explicit definitions",
+      "Better Clarity through tables and quick-references",
+      "Reduced GM cognitive load with procedural guidance"
+    ]
+  },
+  "review_cycle_recommendation": {
+    "re_review_personas": [
+      "gen-1763913096215-6l23ebgok",
+      "gen-1763913096216-x6k7lliwr",
+      "gen-1763913096219-6oqun1z2o",
+      "gen-1763913096218-ijqqbqgtf"
+    ],
+    "focus_dimensions": [
+      "practical_usability",
+      "persona_fit",
+      "rules_accuracy"
+    ],
+    "skip_personas": [],
+    "rationale": "Changes target mechanical clarity issues affecting multiple persona types; all personas should see improvement from explicit definitions and quick-references"
+  }
+}

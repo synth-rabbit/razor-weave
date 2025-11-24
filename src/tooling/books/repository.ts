@@ -22,7 +22,7 @@ export class BookRepository {
   getBySlug(slug: string): Book | null {
     try {
       const stmt = this.db.prepare(`
-        SELECT id, slug, title, book_type, source_path, status, created_at, updated_at
+        SELECT id, slug, title, book_type, source_path, current_version, status, created_at, updated_at
         FROM books
         WHERE slug = ?
       `);
@@ -44,7 +44,7 @@ export class BookRepository {
   getById(id: string): Book | null {
     try {
       const stmt = this.db.prepare(`
-        SELECT id, slug, title, book_type, source_path, status, created_at, updated_at
+        SELECT id, slug, title, book_type, source_path, current_version, status, created_at, updated_at
         FROM books
         WHERE id = ?
       `);
@@ -65,7 +65,7 @@ export class BookRepository {
   list(): Book[] {
     try {
       const stmt = this.db.prepare(`
-        SELECT id, slug, title, book_type, source_path, status, created_at, updated_at
+        SELECT id, slug, title, book_type, source_path, current_version, status, created_at, updated_at
         FROM books
         ORDER BY created_at ASC
       `);

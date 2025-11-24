@@ -226,9 +226,13 @@ async function runGenerateMode(db: Database.Database): Promise<void> {
   const promptPath = promptWriter.writePlanningPrompt(prompt);
   console.log(`  OK Prompt written: ${promptPath}`);
 
-  // 5. Update workflow status
-  workflowRepo.updateStatus(workflowRun.id, 'running');
-  console.log(`  OK Workflow status updated to 'running'`);
+  // 5. Update workflow status (only if not already running)
+  if (workflowRun.status !== 'running') {
+    workflowRepo.updateStatus(workflowRun.id, 'running');
+    console.log(`  OK Workflow status updated to 'running'`);
+  } else {
+    console.log(`  OK Workflow status already 'running'`);
+  }
 
   // Print success output with next steps
   const tableRows = [

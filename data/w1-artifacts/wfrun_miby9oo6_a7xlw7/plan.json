@@ -1,0 +1,279 @@
+{
+  "plan_id": "plan-20251123-miby9oo6",
+  "created_at": "2025-11-23T12:00:00Z",
+  "source_campaign_id": "campaign-20251122-191126-1p7dhyj4",
+  "summary": "Address character creation accessibility and combat clarity through quick-start options, consolidated quick-reference materials, and improved Clock guidance to improve persona fit and practical usability scores.",
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "Character creation lacks quick-start option and has example characters scattered across chapters, creating barriers for one-shots and new players",
+      "severity": "high",
+      "source_category": "Chapter 6: Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-marcus-osr-veteran",
+        "core-casey-neurodivergent",
+        "core-morgan-method-actor",
+        "core-taylor-video-game-convert"
+      ],
+      "improvement_goal": "Players can create a functional character in under 15 minutes using a quick-start path, with consolidated example characters for reference",
+      "success_metric": "Quick-start sidebar added; at least 2 complete example characters consolidated in chapter; simplified attribute guidance provided",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-002",
+      "description": "Resolve Clocks replacing HP adds conceptual overhead without sufficient explanation; conversational initiative removes tactical consideration without alternatives",
+      "severity": "high",
+      "source_category": "Chapter 10: Combat Basics",
+      "affected_chapters": [
+        "10-combat-basics"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-marcus-osr-veteran",
+        "core-casey-neurodivergent",
+        "core-taylor-video-game-convert",
+        "core-sam-forever-gm"
+      ],
+      "improvement_goal": "Players understand Resolve Clocks as an intuitive alternative to HP with clear worked examples showing the fiction-first benefits",
+      "success_metric": "Side-by-side comparison table (HP vs Resolve Clocks); 2+ worked combat examples showing Clock usage; initiative options summary",
+      "priority": 2
+    },
+    {
+      "issue_id": "issue-003",
+      "description": "Outcome tier table and Edge/Burden reference only appear inline without dedicated quick-reference format; DC setting lacks objective benchmarks",
+      "severity": "medium",
+      "source_category": "Chapter 8: Actions, Checks, and Outcomes",
+      "affected_chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "affected_personas": [
+        "core-marcus-osr-veteran",
+        "core-casey-neurodivergent",
+        "core-taylor-video-game-convert"
+      ],
+      "improvement_goal": "GMs and players can reference outcome tiers, Edge/Burden effects, and DC guidance within 10 seconds during play",
+      "success_metric": "Outcome tier quick-reference table added; Edge/Burden summary table added; DC ladder with concrete examples added",
+      "priority": 3
+    },
+    {
+      "issue_id": "issue-004",
+      "description": "Large number of potential tags without consolidated reference; Clock advancement guidance is vague with insufficient criteria for multi-Clock scenarios",
+      "severity": "medium",
+      "source_category": "Chapter 9: Tags, Conditions, and Clocks",
+      "affected_chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-casey-neurodivergent"
+      ],
+      "improvement_goal": "GMs can quickly reference common tags and understand Clock advancement rules for complex scenarios",
+      "success_metric": "Tag quick-reference table with categories added; Clock advancement decision tree or flowchart added; multi-Clock guidance expanded with examples",
+      "priority": 4
+    },
+    {
+      "issue_id": "issue-005",
+      "description": "Open-ended Skills and Proficiencies lack guardrails and power differential guidance, overwhelming some players",
+      "severity": "medium",
+      "source_category": "Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "gen-1763838681210-9jf790nx4",
+        "gen-1763838681226-s3vgqnvw1",
+        "gen-1763838681218-x9vrpaife"
+      ],
+      "improvement_goal": "Players have clear guidance on Skill/Proficiency scope with example lists that prevent analysis paralysis",
+      "success_metric": "Example Skill list (15-20 suggestions) added; Proficiency scope guidance added; 'too broad/too narrow' examples provided",
+      "priority": 5
+    }
+  ],
+  "chapter_modifications": [
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 1,
+      "issues_addressed": [
+        "issue-001",
+        "issue-005"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Beginning of chapter, after introduction",
+          "instruction": "Add a 'Quick-Start: 10-Minute Character' callout box that provides a streamlined path: 1) Pick a concept in one sentence, 2) Use the suggested attribute array 2/1/1/0, 3) Choose 3 Skills from the provided list, 4) Pick 2 Proficiencies from examples, 5) Select starting gear from a short list. This path skips collaborative elements for one-shots or time-pressed sessions.",
+          "success_criteria": "Complete character can be created following only the quick-start box without reading full chapter"
+        },
+        {
+          "type": "expand",
+          "target": "Example characters section",
+          "instruction": "Consolidate and expand example characters into a dedicated subsection. Include at least 3 complete example characters covering different archetypes: a combat-focused character, a social/investigation character, and a skill-specialist character. Show the full character sheet for each with annotations explaining design choices.",
+          "success_criteria": "3 complete example characters with full sheets and decision annotations in one location"
+        },
+        {
+          "type": "add_reference",
+          "target": "Skills subsection",
+          "instruction": "Add a 'Suggested Skills' sidebar with 15-20 example Skills organized by category (Physical, Social, Mental, Technical). Include a brief note on scope: 'A Skill should be broad enough to apply in multiple situations but specific enough to feel distinct. Too broad: \"Good at everything physical.\" Too narrow: \"Tying sailor knots.\" Just right: \"Athletics\" or \"Acrobatics.\"'",
+          "success_criteria": "Players have concrete examples to choose from or use as inspiration; scope guidance prevents over-broad or over-narrow choices"
+        },
+        {
+          "type": "add_reference",
+          "target": "Proficiencies subsection",
+          "instruction": "Add a 'Suggested Proficiencies' sidebar with 10-15 examples organized by type (Tools, Knowledge Areas, Social Contexts). Include guidance: 'Proficiencies represent specialized knowledge or tool familiarity. They often allow automatic success or avoid Checks entirely for routine applications.'",
+          "success_criteria": "Players understand Proficiency scope with concrete examples; distinction from Skills is clear"
+        }
+      ]
+    },
+    {
+      "chapter_id": "10-combat-basics",
+      "chapter_name": "Combat Basics",
+      "priority": 2,
+      "issues_addressed": [
+        "issue-002"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "expand",
+          "target": "Resolve Clocks introduction",
+          "instruction": "Add a 'Why Resolve Clocks?' callout box that directly addresses the HP comparison: 'Traditional HP tracks a number that decreases. Resolve Clocks track fictional pressure that increases. Instead of asking \"how many hit points left?\" you ask \"how close is this character to being taken out of the fight?\" This keeps attention on the narrative stakes rather than arithmetic.' Include a side-by-side comparison table.",
+          "success_criteria": "Players understand the design intent; comparison table shows HP-equivalent scenarios translated to Resolve Clock terms"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Combat examples",
+          "instruction": "Add 2 complete worked combat examples showing Resolve Clock progression from fresh to filled. First example: a tense duel with back-and-forth momentum shifts. Second example: a group fight showing how multiple characters interact with Clocks. Annotate each step showing: fictional action, mechanical resolution, Clock advancement, and how the fiction changes.",
+          "success_criteria": "Two complete combat sequences (4-6 exchanges each) with full annotation showing Clock progression"
+        },
+        {
+          "type": "add_reference",
+          "target": "Initiative section",
+          "instruction": "Add an 'Initiative Options' quick-reference box summarizing all three modes: Conversational (when to use, how it works), Popcorn (when to use, how it works), Rolled (when to use, how it works). Include a 'GM Tip: Match initiative to scene tone' note explaining that tense standoffs suit conversational, chaotic melees suit popcorn, and tactical set-pieces suit rolled.",
+          "success_criteria": "All three initiative modes summarized in one reference; guidance on when to use each"
+        }
+      ]
+    },
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks, and Outcomes",
+      "priority": 3,
+      "issues_addressed": [
+        "issue-003"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "End of Outcome Tiers section",
+          "instruction": "Add a dedicated 'Outcome Tiers Quick Reference' table formatted for at-table use. Columns: Margin Range | Outcome Tier | Typical Result | Example. Include all five tiers (Critical Success, Full Success, Partial Success, Failure, Critical Failure) with the margin ranges and brief descriptions.",
+          "success_criteria": "Table fits on one page; includes all tiers with margins and examples; can be used without reading surrounding text"
+        },
+        {
+          "type": "add_reference",
+          "target": "Edge and Burden section",
+          "instruction": "Add an 'Edge and Burden Quick Reference' table. Columns: Modifier | Dice Change | Common Sources | Stacking Note. Show +1 Edge through +2 Edge and -1 Burden through -2 Burden with dice pool changes (e.g., '+1 Edge: Roll 5d6, keep best 4'). List 3-4 common sources for each.",
+          "success_criteria": "Complete Edge/Burden reference with dice mechanics and common sources in scannable format"
+        },
+        {
+          "type": "expand",
+          "target": "Setting DC section",
+          "instruction": "Expand the DC ladder with concrete examples for each tier. Format: 'DC 12 (Easy): Climbing a rough stone wall with handholds. DC 14 (Routine): Picking a standard lock with proper tools. DC 16 (Tough): Convincing a suspicious guard to let you pass. DC 18 (Hard): Disarming a complex trap under time pressure. DC 20 (Heroic): Leaping between rooftops in a thunderstorm. DC 22 (Legendary): Talking down a dragon mid-attack.' Include a note that DCs should reflect fictional positioning, not abstract difficulty.",
+          "success_criteria": "Each DC tier has 1-2 concrete examples; guidance connects DC to fictional circumstances"
+        }
+      ]
+    },
+    {
+      "chapter_id": "09-tags-conditions-clocks",
+      "chapter_name": "Tags, Conditions, and Clocks",
+      "priority": 4,
+      "issues_addressed": [
+        "issue-004"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Tags section",
+          "instruction": "Add a 'Common Tags Quick Reference' table organized by category. Categories: Environmental (Dim Light, Cramped, Elevated, etc.), Situational (Outnumbered, Flanked, Surprised, etc.), Atmospheric (Tense, Chaotic, Formal, etc.). For each Tag, show: Name | Typical Effect | Common Sources. Limit to 15-20 most common Tags.",
+          "success_criteria": "15-20 common Tags categorized with effects and sources; table scannable during play"
+        },
+        {
+          "type": "expand",
+          "target": "Clock advancement section",
+          "instruction": "Add a 'Clock Advancement Guide' subsection with explicit criteria. Include: 1) Standard advancement rates by outcome (Critical Success: 2-3 segments, Full Success: 1-2 segments, Partial Success: 1 segment, Failure: threat Clock may advance). 2) Multi-Clock guidance: 'When multiple Clocks are active, ask: Which Clock does this action most directly affect? Advance that Clock. If the action is loud, risky, or draws attention, also tick the most relevant threat Clock.' 3) A decision flowchart for 'Which Clock advances?'",
+          "success_criteria": "Explicit advancement rates documented; multi-Clock decision guidance with flowchart or decision tree"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Clock examples",
+          "instruction": "Add a worked example showing opposing Clocks in action: an investigation (6-segment 'Find the Evidence') racing against a cover-up (4-segment 'Destroy the Evidence'). Show 4-5 rounds of play with different outcomes, demonstrating when each Clock advances and how the GM decides which Clock is affected by ambiguous actions.",
+          "success_criteria": "Complete opposing Clock example with 4-5 decision points annotated"
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "allow_growth"
+  },
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": [
+        "06-character-creation"
+      ],
+      "rationale": "Highest severity issue (10) with highest frequency (9/41); foundational chapter that gates player entry into the game"
+    },
+    {
+      "phase": 2,
+      "chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "rationale": "Core resolution mechanics that Chapter 10 builds upon; quick-reference materials benefit all subsequent play"
+    },
+    {
+      "phase": 3,
+      "chapters": [
+        "09-tags-conditions-clocks",
+        "10-combat-basics"
+      ],
+      "rationale": "Combat chapter depends on Clock understanding from Chapter 9; can be modified in parallel once Chapter 8 reference materials exist"
+    }
+  ],
+  "estimated_impact": {
+    "primary_dimension": "practical_usability",
+    "expected_improvement": "+1.0 to +1.5 points through quick-reference additions and consolidated examples",
+    "secondary_benefits": [
+      "Improved persona_fit for busy/casual players through quick-start character creation",
+      "Better clarity_readability through worked examples and comparison tables",
+      "Reduced cognitive load for neurodivergent players through consolidated reference materials"
+    ]
+  },
+  "review_cycle_recommendation": {
+    "re_review_personas": [
+      "core-jordan-busy-parent",
+      "core-casey-neurodivergent",
+      "core-taylor-video-game-convert",
+      "core-marcus-osr-veteran"
+    ],
+    "focus_dimensions": [
+      "practical_usability",
+      "persona_fit"
+    ],
+    "skip_personas": [
+      "core-alex-indie-convert",
+      "core-morgan-method-actor",
+      "core-devon-solo-player"
+    ],
+    "rationale": "Changes target usability and accessibility; indie/method-actor/solo personas were already satisfied with narrative depth and flexibility"
+  }
+}
