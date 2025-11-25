@@ -49,9 +49,15 @@ function resolveBookPath(input: string): string {
   }
 
   // Resolve to HTML file path - try common locations
+  const versionedPath = getVersionedSourcePath(book);
   const possiblePaths = [
+    // Versioned exports path (primary location)
+    resolve(REPO_ROOT, versionedPath, 'exports/html', `${book.slug.replace(/-/g, '_')}.html`),
+    resolve(REPO_ROOT, versionedPath, 'exports/html/core_rulebook.html'), // legacy name
+    // Promoted HTML paths
     resolve(REPO_ROOT, 'data/html/promoted', `${book.slug}.html`),
     resolve(REPO_ROOT, 'data/html/print/promoted', `${book.slug}.html`),
+    // Site paths
     resolve(REPO_ROOT, 'src/site', `${book.slug.replace(/-/g, '_')}.html`),
     resolve(REPO_ROOT, 'src/site', `${book.slug.replace(/-/g, '_')}_web.html`),
     resolve(REPO_ROOT, 'src/site', 'core_rulebook.html'), // fallback for core-rulebook

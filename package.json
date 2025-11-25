@@ -77,7 +77,8 @@
     "wf:result": "tsx src/tooling/cli-commands/workflow.ts result",
     "wf:status": "tsx src/tooling/cli-commands/workflow.ts status",
     "wf:list": "tsx src/tooling/cli-commands/workflow.ts list",
-    "wf:gate": "tsx src/tooling/cli-commands/workflow.ts gate"
+    "wf:gate": "tsx src/tooling/cli-commands/workflow.ts gate",
+    "wf:prompt": "tsx src/tooling/cli-commands/workflow-prompt.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
