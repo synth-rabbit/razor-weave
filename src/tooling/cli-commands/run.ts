@@ -330,13 +330,23 @@ async function main(): Promise<void> {
       const subcommand = args[2];
       const db = getDatabase();
 
+      // Get book info to determine current version
+      const bookRepo = new BookRepository(db.db);
+      const book = bookRepo.getBySlug('core-rulebook');
+      if (!book) {
+        log.error('Book not found: core-rulebook');
+        process.exit(1);
+      }
+      const bookVersion = book.current_version || '1.4.0';
+      const versionedPath = `books/core/v${bookVersion}`;
+
       switch (subcommand) {
         case 'build': {
           const force = args.includes('--force');
           const result = await buildWebReader({
-            bookPath: resolve(REPO_ROOT, 'books/core/v1'),
-            chaptersDir: resolve(REPO_ROOT, 'books/core/v1/chapters'),
-            sheetsDir: resolve(REPO_ROOT, 'books/core/v1/sheets'),
+            bookPath: resolve(REPO_ROOT, versionedPath),
+            chaptersDir: resolve(REPO_ROOT, versionedPath, 'chapters'),
+            sheetsDir: resolve(REPO_ROOT, versionedPath, 'sheets'),
             outputPath: resolve(REPO_ROOT, 'data/html/web-reader/core-rulebook.html'),
             templatePath: resolve(REPO_ROOT, 'src/tooling/html-gen/templates/web-reader.html'),
             db: db.db,
@@ -359,7 +369,7 @@ async function main(): Promise<void> {
             log.error('Usage: html web diff <build-id>');
             process.exit(1);
           }
-          const diff = diffWebBuild(db.db, buildId, resolve(REPO_ROOT, 'books/core/v1/chapters'));
+          const diff = diffWebBuild(db.db, buildId, resolve(REPO_ROOT, versionedPath, 'chapters'));
           console.log(formatDiff(diff));
           break;
         }
