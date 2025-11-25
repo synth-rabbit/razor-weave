@@ -2,7 +2,32 @@
 
 The W1 Editing Workflow takes review feedback and produces improved book content through an iterative agent-assisted process.
 
-## Quick Start (Strategic Command)
+## Recommended: Using wf:prompt
+
+The easiest way to run W1 is with `wf:prompt`, which generates a complete prompt for a new Claude Code session:
+
+```bash
+# Core personas only (10 reviewers)
+pnpm wf:prompt --type w1_editing --book core-rulebook --with-review
+
+# Core + 30 generated personas (40 reviewers, weighted sampling)
+pnpm wf:prompt --type w1_editing --book core-rulebook --with-review --plus=30
+
+# With focus category for sampling
+pnpm wf:prompt --type w1_editing --book core-rulebook --with-review --plus=30 --focus=combat
+```
+
+This:
+1. Creates a fresh review campaign
+2. Outputs a complete prompt with all steps
+3. You copy the prompt to a new Claude Code session
+4. Claude Code executes the workflow autonomously until reaching a human gate
+
+See [CLI Reference](cli-reference.md) for all options.
+
+---
+
+## Alternative: Strategic Command
 
 The simplest way to run W1 is with the strategic command:
 

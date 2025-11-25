@@ -24,14 +24,14 @@ All packages live in `src/` directory:
 
 ```
 src/
-├── agents/          - Agentic systems (planned)
-├── cli/             - Command-line tools
-├── maintenance/     - Maintenance utilities
-├── shared/          - Shared utilities
-├── site/            - Website generator
-├── tooling/         - Build tools, hooks, database, validators
-├── tools/           - Development tools
-└── workflows/       - Workflow automation
+├── agents/          - Agent prompt templates
+├── boardroom/       - Decision tracking system (@razorweave/boardroom)
+├── database/        - Core database layer (@razorweave/database)
+├── events/          - Event sourcing system (@razorweave/events)
+├── pdf-gen/         - PDF generation (@razorweave/pdf-gen)
+├── shared/          - Shared utilities (@razorweave/shared)
+├── site/            - Website generator (@razorweave/site)
+└── tooling/         - CLI commands, workflows, reviews (@razorweave/tooling)
 ```
 
 Each package has:
@@ -42,19 +42,67 @@ Each package has:
 
 ## Key Packages
 
-### @razorweave/tooling
+### @razorweave/database
 
-**Purpose:** Development tooling and automation
+**Purpose:** Core database layer and persistence
 
 **Contains:**
-- Database client (`database/`)
-- Git hooks (`hooks/git/`)
-- Claude Code hooks (`hooks/claude/`)
-- Validators (`validators/`)
-- Linters (`linters/`)
-- Scripts (`scripts/`)
+- `client.ts` - Database connection factory
+- `safe-client.ts` - SafeDatabaseClient (blocks destructive operations)
+- `base-repository.ts` - Base repository pattern
+- `schema.ts` - Table creation
+- `migrate.ts` - Migration runner
+- Specialized clients: state, snapshot, artifact, persona
 
-**Used by:** Root package, other packages, git hooks
+**Used by:** tooling, events, boardroom
+
+### @razorweave/tooling
+
+**Purpose:** CLI commands, workflows, and business logic
+
+**Contains:**
+- `cli-commands/` - All pnpm CLI entry points
+- `workflows/` - Workflow engine (WorkflowRunner, CheckpointManager)
+- `reviews/` - Review campaign system
+- `w1/` - W1 editing workflow logic
+- `books/` - Book repository
+- `personas/` - Persona management
+- `html-gen/` - HTML generation
+
+**Used by:** Root package scripts
+
+### @razorweave/events
+
+**Purpose:** Event sourcing and audit trail
+
+**Contains:**
+- Event store
+- Event types
+- Replay utilities
+
+**Used by:** boardroom, tooling
+
+### @razorweave/boardroom
+
+**Purpose:** Decision tracking and approval workflows
+
+**Contains:**
+- Decision records
+- Approval gates
+- Audit history
+
+**Used by:** tooling workflows
+
+### @razorweave/pdf-gen
+
+**Purpose:** PDF generation from HTML
+
+**Contains:**
+- PDFKit wrapper
+- SVG-to-PDF conversion
+- Print stylesheet application
+
+**Dependencies:** cheerio, pdfkit, svg-to-pdfkit (external only - zero internal deps)
 
 ### @razorweave/shared
 
@@ -67,10 +115,14 @@ Each package has:
 
 **Used by:** All other packages
 
-### Other Packages
+### @razorweave/site
 
-- **@razorweave/site** - Website generator
-- **@razorweave/agents** - Agentic systems (stub - see STUBS.md)
+**Purpose:** Website generator (razorweave.com)
+
+**Contains:**
+- Static site generator
+- Public assets
+- Page templates
 
 ## Working with Packages
 
@@ -177,9 +229,13 @@ Extends root configuration:
 
 ### Build Order
 
-1. **@razorweave/shared** - No dependencies
-2. **@razorweave/tooling** - Depends on shared
-3. **Other packages** - May depend on tooling/shared
+1. **@razorweave/shared** - No internal dependencies
+2. **@razorweave/database** - Foundation layer
+3. **@razorweave/events** - Depends on database
+4. **@razorweave/pdf-gen** - No internal dependencies (isolated)
+5. **@razorweave/boardroom** - Depends on events
+6. **@razorweave/tooling** - Depends on database, events, boardroom
+7. **@razorweave/site** - May depend on tooling
 
 ### Build Commands
 
