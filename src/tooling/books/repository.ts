@@ -1,239 +1,123 @@
 // src/tooling/books/repository.ts
-import type Database from 'better-sqlite3';
+import { BaseRepository } from '../database/base-repository.js';
 import { DatabaseError } from '../errors/index.js';
 import type { Book, CreateBookInput, UpdateBookInput } from './types.js';
+
+const BOOK_COLUMNS = 'id, slug, title, book_type, source_path, current_version, status, created_at, updated_at';
 
 /**
  * Repository for managing books in the database.
  * Provides CRUD operations for the books table.
  */
-export class BookRepository {
-  private db: Database.Database;
-
-  constructor(db: Database.Database) {
-    this.db = db;
+export class BookRepository extends BaseRepository<Book> {
+  protected getIdPrefix(): string {
+    return 'book';
   }
 
   /**
    * Get a book by its unique slug.
-   * @param slug - The URL-friendly slug of the book
-   * @returns The book if found, null otherwise
    */
   getBySlug(slug: string): Book | null {
-    try {
-      const stmt = this.db.prepare(`
-        SELECT id, slug, title, book_type, source_path, current_version, status, created_at, updated_at
-        FROM books
-        WHERE slug = ?
-      `);
-
-      const row = stmt.get(slug) as Book | undefined;
-      return row ?? null;
-    } catch (error) {
-      throw new DatabaseError(
-        `Failed to get book by slug "${slug}": ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
+    return this.execute(() => {
+      const stmt = this.db.prepare(`SELECT ${BOOK_COLUMNS} FROM books WHERE slug = ?`);
+      return (stmt.get(slug) as Book | undefined) ?? null;
+    }, `get book by slug "${slug}"`);
   }
 
   /**
    * Get a book by its unique ID.
-   * @param id - The unique identifier of the book
-   * @returns The book if found, null otherwise
    */
   getById(id: string): Book | null {
-    try {
-      const stmt = this.db.prepare(`
-        SELECT id, slug, title, book_type, source_path, current_version, status, created_at, updated_at
-        FROM books
-        WHERE id = ?
-      `);
-
-      const row = stmt.get(id) as Book | undefined;
-      return row ?? null;
-    } catch (error) {
-      throw new DatabaseError(
-        `Failed to get book by id "${id}": ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
+    return this.execute(() => {
+      const stmt = this.db.prepare(`SELECT ${BOOK_COLUMNS} FROM books WHERE id = ?`);
+      return (stmt.get(id) as Book | undefined) ?? null;
+    }, `get book by id "${id}"`);
   }
 
   /**
    * List all books.
-   * @returns Array of all books
    */
   list(): Book[] {
-    try {
-      const stmt = this.db.prepare(`
-        SELECT id, slug, title, book_type, source_path, current_version, status, created_at, updated_at
-        FROM books
-        ORDER BY created_at ASC
-      `);
-
+    return this.execute(() => {
+      const stmt = this.db.prepare(`SELECT ${BOOK_COLUMNS} FROM books ORDER BY created_at ASC`);
       return stmt.all() as Book[];
-    } catch (error) {
-      throw new DatabaseError(
-        `Failed to list books: ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
+    }, 'list books');
   }
 
   /**
    * Create a new book.
-   * @param input - The book data to create
-   * @returns The created book
-   * @throws DatabaseError if slug or id already exists
    */
   create(input: CreateBookInput): Book {
-    try {
+    return this.execute(() => {
       const status = input.status ?? 'draft';
       const currentVersion = input.current_version ?? '1.0.0';
 
-      const stmt = this.db.prepare(`
-        INSERT INTO books (id, slug, title, book_type, source_path, current_version, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `);
-
-      stmt.run(
-        input.id,
-        input.slug,
-        input.title,
-        input.book_type,
-        input.source_path,
-        currentVersion,
-        status
-      );
-
-      // Fetch and return the created book
-      const created = this.getById(input.id);
-      if (!created) {
-        throw new DatabaseError(`Book was created but could not be retrieved`);
-      }
-
-      return created;
-    } catch (error) {
-      // Check for unique constraint violations
-      if (error instanceof Error) {
-        if (error.message.includes('UNIQUE constraint failed: books.slug')) {
-          throw new DatabaseError(`Book with slug "${input.slug}" already exists`);
-        }
-        if (error.message.includes('UNIQUE constraint failed: books.id')) {
-          throw new DatabaseError(`Book with id "${input.id}" already exists`);
-        }
-      }
-
-      if (error instanceof DatabaseError) {
+      try {
+        this.db.prepare(`
+          INSERT INTO books (id, slug, title, book_type, source_path, current_version, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).run(input.id, input.slug, input.title, input.book_type, input.source_path, currentVersion, status);
+      } catch (error) {
+        this.handleConstraintError(error, {
+          'UNIQUE constraint failed: books.slug': `Book with slug "${input.slug}" already exists`,
+          'UNIQUE constraint failed: books.id': `Book with id "${input.id}" already exists`,
+        });
         throw error;
       }
 
-      throw new DatabaseError(
-        `Failed to create book: ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
+      const created = this.getById(input.id);
+      if (!created) {
+        throw new DatabaseError('Book was created but could not be retrieved');
+      }
+      return created;
+    }, 'create book');
   }
 
   /**
    * Update an existing book.
-   * @param id - The ID of the book to update
-   * @param updates - The fields to update
-   * @returns The updated book
-   * @throws DatabaseError if book not found or update fails
    */
   update(id: string, updates: UpdateBookInput): Book {
-    try {
-      // Check if book exists
+    return this.execute(() => {
       const existing = this.getById(id);
       if (!existing) {
         throw new DatabaseError(`Book with id "${id}" not found`);
       }
 
-      // Build dynamic UPDATE query
       const fields: string[] = [];
       const values: unknown[] = [];
 
-      if (updates.slug !== undefined) {
-        fields.push('slug = ?');
-        values.push(updates.slug);
-      }
-      if (updates.title !== undefined) {
-        fields.push('title = ?');
-        values.push(updates.title);
-      }
-      if (updates.book_type !== undefined) {
-        fields.push('book_type = ?');
-        values.push(updates.book_type);
-      }
-      if (updates.source_path !== undefined) {
-        fields.push('source_path = ?');
-        values.push(updates.source_path);
-      }
-      if (updates.status !== undefined) {
-        fields.push('status = ?');
-        values.push(updates.status);
-      }
-      if (updates.current_version !== undefined) {
-        fields.push('current_version = ?');
-        values.push(updates.current_version);
-      }
-
-      // Always update updated_at
+      if (updates.slug !== undefined) { fields.push('slug = ?'); values.push(updates.slug); }
+      if (updates.title !== undefined) { fields.push('title = ?'); values.push(updates.title); }
+      if (updates.book_type !== undefined) { fields.push('book_type = ?'); values.push(updates.book_type); }
+      if (updates.source_path !== undefined) { fields.push('source_path = ?'); values.push(updates.source_path); }
+      if (updates.status !== undefined) { fields.push('status = ?'); values.push(updates.status); }
+      if (updates.current_version !== undefined) { fields.push('current_version = ?'); values.push(updates.current_version); }
       fields.push('updated_at = CURRENT_TIMESTAMP');
 
-      if (fields.length === 1) {
-        // Only updated_at was set, nothing else to update
-        // Still run the update to bump updated_at
-      }
-
-      const stmt = this.db.prepare(`
-        UPDATE books
-        SET ${fields.join(', ')}
-        WHERE id = ?
-      `);
-
-      values.push(id);
-      stmt.run(...values);
-
-      // Fetch and return the updated book
-      const updated = this.getById(id);
-      if (!updated) {
-        throw new DatabaseError(`Book was updated but could not be retrieved`);
-      }
-
-      return updated;
-    } catch (error) {
-      // Check for unique constraint violations on slug
-      if (error instanceof Error && error.message.includes('UNIQUE constraint failed: books.slug')) {
-        throw new DatabaseError(`Book with slug "${updates.slug}" already exists`);
-      }
-
-      if (error instanceof DatabaseError) {
+      try {
+        this.db.prepare(`UPDATE books SET ${fields.join(', ')} WHERE id = ?`).run(...values, id);
+      } catch (error) {
+        this.handleConstraintError(error, {
+          'UNIQUE constraint failed: books.slug': `Book with slug "${updates.slug}" already exists`,
+        });
         throw error;
       }
 
-      throw new DatabaseError(
-        `Failed to update book "${id}": ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
+      const updated = this.getById(id);
+      if (!updated) {
+        throw new DatabaseError('Book was updated but could not be retrieved');
+      }
+      return updated;
+    }, `update book "${id}"`);
   }
 
   /**
    * Delete a book by ID.
-   * @param id - The ID of the book to delete
-   * @returns true if deleted, false if not found
    */
   delete(id: string): boolean {
-    try {
-      const stmt = this.db.prepare(`
-        DELETE FROM books
-        WHERE id = ?
-      `);
-
-      const result = stmt.run(id);
+    return this.execute(() => {
+      const result = this.db.prepare('DELETE FROM books WHERE id = ?').run(id);
       return result.changes > 0;
-    } catch (error) {
-      throw new DatabaseError(
-        `Failed to delete book "${id}": ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
+    }, `delete book "${id}"`);
   }
 }
