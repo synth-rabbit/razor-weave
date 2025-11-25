@@ -12,10 +12,8 @@ import { execSync } from 'child_process';
 import { resolve, isAbsolute } from 'path';
 import { CLIFormatter } from '../cli/formatter';
 import { SessionManager } from '../cli/session-manager';
-import { EventWriter } from '../events/writer';
-import { EventReader } from '../events/reader';
-import { Materializer } from '../events/materializer';
-import type { InsertEvent } from '../events/types';
+import { EventWriter, EventReader, Materializer } from '@razorweave/events';
+import type { InsertEvent } from '@razorweave/events';
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {

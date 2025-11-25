@@ -1,4 +1,4 @@
-// src/tooling/events/reader.ts
+// @razorweave/events - EventReader
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { DatabaseEvent } from './types';

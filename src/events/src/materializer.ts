@@ -1,4 +1,4 @@
-// src/tooling/events/materializer.ts
+// @razorweave/events - Materializer
 import { existsSync, copyFileSync, rmSync } from 'fs';
 import Database from 'better-sqlite3';
 import { EventReader } from './reader';

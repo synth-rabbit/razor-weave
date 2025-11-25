@@ -1,4 +1,4 @@
-// src/tooling/events/types.ts
+// @razorweave/events - Types
 export type EventOperation = 'INSERT' | 'UPDATE' | 'DELETE';
 
 export interface BaseEvent {

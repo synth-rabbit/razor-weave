@@ -5,7 +5,7 @@
  * Each VP has a specific role, responsibilities, constraints, and output format.
  */
 
-import type { VPType } from '../boardroom/types';
+import type { VPType } from '@razorweave/boardroom';
 
 export interface VPPromptTemplate {
   role: string;

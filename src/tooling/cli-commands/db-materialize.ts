@@ -1,6 +1,6 @@
 // src/tooling/cli-commands/db-materialize.ts
 import { CommandBuilder } from '../cli/command-builder.js';
-import { Materializer } from '../events/materializer.js';
+import { Materializer } from '@razorweave/events';
 
 new CommandBuilder('db:materialize')
   .description('Materializes events into database tables')

@@ -1,4 +1,4 @@
-// src/tooling/events/index.ts
+// @razorweave/events - Event sourcing utilities
 export * from './types';
 export * from './writer';
 export * from './reader';

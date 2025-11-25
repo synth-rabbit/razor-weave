@@ -13,8 +13,8 @@ import { execSync } from 'child_process';
 import { resolve, isAbsolute } from 'path';
 import { CLIFormatter } from '../cli/formatter';
 import { SessionManager } from '../cli/session-manager';
-import { EventReader } from '../events/reader';
-import type { InsertEvent, UpdateEvent } from '../events/types';
+import { EventReader } from '@razorweave/events';
+import type { InsertEvent, UpdateEvent } from '@razorweave/events';
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {

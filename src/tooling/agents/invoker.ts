@@ -5,7 +5,7 @@
  * Stores results in the event log for later materialization.
  */
 
-import { EventWriter } from '../events/writer';
+import { EventWriter } from '@razorweave/events';
 import {
   buildVPPrompt,
   ProductContext,
@@ -13,7 +13,7 @@ import {
   OpsContext,
   OpsBrainstormContext,
 } from './prompts';
-import type { VPType } from '../boardroom/types';
+import type { VPType } from '@razorweave/boardroom';
 
 export interface InvocationContext {
   vpType: VPType;

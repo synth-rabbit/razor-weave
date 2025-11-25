@@ -1,4 +1,4 @@
-// src/tooling/events/writer.ts
+// @razorweave/events - EventWriter
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { randomUUID } from 'crypto';

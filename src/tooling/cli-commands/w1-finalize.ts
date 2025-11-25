@@ -33,7 +33,7 @@ import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
 import { buildPrintHtml, type BuildResult } from '../html-gen/print/build.js';
 import { promotePrintBuild, type PromoteResult } from '../html-gen/print/promote.js';
-import { generatePDF } from '../pdf-gen/pipeline.js';
+import { generatePDF } from '@razorweave/pdf-gen';
 import { buildWebReader, promoteWebBuild } from '../html-gen/web/index.js';
 import {
   generateReleaseNotesPrompt,

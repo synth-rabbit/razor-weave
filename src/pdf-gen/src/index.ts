@@ -1,3 +1,4 @@
+// @razorweave/pdf-gen - PDF generation utilities
 export * from './types';
 export * from './utils';
 export * from './document';

@@ -5,11 +5,10 @@
  * Provides a higher-level interface over BoardroomClient and EventReader.
  */
 
-import { BoardroomClient } from '../boardroom/client';
-import { EventReader } from '../events/reader';
-import { EventWriter } from '../events/writer';
-import type { BoardroomSession, SessionStatus } from '../boardroom/types';
-import type { InsertEvent, UpdateEvent, DatabaseEvent } from '../events/types';
+import { BoardroomClient } from '@razorweave/boardroom';
+import type { BoardroomSession, SessionStatus } from '@razorweave/boardroom';
+import { EventReader, EventWriter } from '@razorweave/events';
+import type { InsertEvent, UpdateEvent, DatabaseEvent } from '@razorweave/events';
 
 export class SessionManager {
   private readonly eventsDir: string;

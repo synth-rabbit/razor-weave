@@ -19,7 +19,7 @@ import { ArtifactRegistry } from '../workflows/artifact-registry.js';
 import { BookRepository } from '../books/repository.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
-import { generatePDF } from '../pdf-gen/pipeline.js';
+import { generatePDF } from '@razorweave/pdf-gen';
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {

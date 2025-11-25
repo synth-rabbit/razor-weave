@@ -13,9 +13,9 @@ import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
 import { resolve, isAbsolute, join, dirname } from 'path';
 import { CLIFormatter } from '../cli/formatter';
-import { EventReader } from '../events/reader';
-import { BoardroomClient } from '../boardroom/client';
-import type { InsertEvent } from '../events/types';
+import { EventReader } from '@razorweave/events';
+import { BoardroomClient } from '@razorweave/boardroom';
+import type { InsertEvent } from '@razorweave/events';
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {

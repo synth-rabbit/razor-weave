@@ -6,9 +6,9 @@
 
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
-import { EventReader } from '../events/reader';
-import type { InsertEvent, UpdateEvent, DatabaseEvent } from '../events/types';
-import type { VPType } from '../boardroom/types';
+import { EventReader } from '@razorweave/events';
+import type { InsertEvent, UpdateEvent, DatabaseEvent } from '@razorweave/events';
+import type { VPType } from '@razorweave/boardroom';
 
 interface SessionData {
   id: string;

@@ -16,8 +16,8 @@ import { resolve, isAbsolute } from 'path';
 import { CLIFormatter } from '../cli/formatter';
 import { SessionManager } from '../cli/session-manager';
 import { VPInvoker } from '../agents/invoker';
-import { EventReader } from '../events/reader';
-import type { InsertEvent } from '../events/types';
+import { EventReader } from '@razorweave/events';
+import type { InsertEvent } from '@razorweave/events';
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {

@@ -1,6 +1,6 @@
-// src/tooling/boardroom/client.ts
+// @razorweave/boardroom - BoardroomClient
 import { randomUUID } from 'crypto';
-import { EventWriter } from '../events/writer';
+import { EventWriter } from '@razorweave/events';
 import type {
   BoardroomSession,
   VPPlan,

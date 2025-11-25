@@ -1,4 +1,4 @@
-import { BoardroomClient } from '../boardroom/client';
+import { BoardroomClient } from '@razorweave/boardroom';
 
 const client = new BoardroomClient('data/events', 'sess_c7c49ec7', 'main');
 
