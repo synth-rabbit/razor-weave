@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 import { execSync } from 'child_process';
 import Database from 'better-sqlite3';
 import { createTables } from '../database/schema.js';
@@ -6,53 +6,50 @@ import { mkdirSync, rmSync } from 'fs';
 
 describe('E2E CLI Commands', () => {
   let db: Database.Database;
-  const dbPath = 'data/project.db';
-  const testDataDir = 'data';
-  let initialPersonaCount = 0;
-  let initialCampaignCount = 0;
+  // Use isolated test database - NEVER touch production data/project.db
+  const testDataDir = 'data/test-e2e';
+  const dbPath = `${testDataDir}/test.db`;
+  const originalDbPath = process.env.RAZORWEAVE_DB_PATH;
+
+  beforeAll(() => {
+    // Set env var so CLI commands use the test database
+    process.env.RAZORWEAVE_DB_PATH = dbPath;
+  });
+
+  afterAll(() => {
+    // Restore original env var
+    if (originalDbPath) {
+      process.env.RAZORWEAVE_DB_PATH = originalDbPath;
+    } else {
+      delete process.env.RAZORWEAVE_DB_PATH;
+    }
+
+    // Clean up test directory
+    try {
+      rmSync(testDataDir, { recursive: true, force: true });
+    } catch {
+      // Ignore cleanup errors
+    }
+  });
 
   beforeEach(() => {
-    // Ensure data directory exists
+    // Ensure test data directory exists
     mkdirSync(testDataDir, { recursive: true });
 
     // For E2E tests, use a fresh database with correct schema
-    // Remove old database if it exists (may have outdated schema)
+    // Remove old test database if it exists
     try {
       execSync(`rm -f ${dbPath} ${dbPath}-shm ${dbPath}-wal`);
-    } catch (e) {
+    } catch {
       // Ignore if files don't exist
     }
 
     // Create fresh database with current schema
     db = new Database(dbPath);
     createTables(db);
-
-    // Record initial state for cleanup (should be 0 for fresh DB)
-    const personaCount = db
-      .prepare("SELECT COUNT(*) as count FROM personas WHERE type = 'generated'")
-      .get() as { count: number };
-    initialPersonaCount = personaCount.count;
-
-    const campaignCount = db
-      .prepare('SELECT COUNT(*) as count FROM review_campaigns')
-      .get() as { count: number };
-    initialCampaignCount = campaignCount.count;
   });
 
   afterEach(() => {
-    // Clean up test data (personas created during this test)
-    try {
-      db.prepare(
-        "DELETE FROM personas WHERE type = 'generated' AND id NOT IN (SELECT id FROM personas WHERE type = 'generated' LIMIT ?)"
-      ).run(initialPersonaCount);
-
-      db.prepare(
-        'DELETE FROM review_campaigns WHERE id NOT IN (SELECT id FROM review_campaigns LIMIT ?)'
-      ).run(initialCampaignCount);
-    } catch (e) {
-      // Ignore cleanup errors
-    }
-
     db.close();
   });
 
@@ -64,11 +61,11 @@ describe('E2E CLI Commands', () => {
 
     expect(output).toContain('Generated 5 personas');
 
-    // Verify in database (check for incremental increase)
+    // Verify in database (fresh DB starts empty, so should have exactly 5)
     const count = db
       .prepare("SELECT COUNT(*) as count FROM personas WHERE type = 'generated'")
       .get() as { count: number };
-    expect(count.count).toBe(initialPersonaCount + 5);
+    expect(count.count).toBe(5);
 
     // Verify newly created personas have correct attributes
     // Note: Get the most recent 5 personas since they were just created
@@ -111,8 +108,8 @@ describe('E2E CLI Commands', () => {
       stdio: 'ignore',
     });
 
-    // Create test book
-    const testBook = 'data/test-cli-book.html';
+    // Create test book in test directory
+    const testBook = `${testDataDir}/test-cli-book.html`;
     execSync(`echo '<html><body>Test</body></html>' > ${testBook}`);
 
     // Run review command
@@ -133,8 +130,6 @@ describe('E2E CLI Commands', () => {
     expect(campaign).toBeDefined();
     // Status is in_progress after reviewBook() runs executeReviews()
     expect(campaign?.status).toBe('in_progress');
-
-    // Cleanup
-    execSync(`rm -f ${testBook}`);
+    // No manual cleanup needed - afterAll cleans up entire test directory
   });
 });

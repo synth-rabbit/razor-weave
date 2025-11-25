@@ -30,6 +30,7 @@ import { execSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
+import { getVersionedSourcePath } from '../books/types.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { StrategyRepository } from '../w1/strategy-repository.js';
 import { createTables } from '../database/schema.js';
@@ -487,7 +488,7 @@ async function runGenerateMode(): Promise<void> {
 
     // 3. Get chapter paths and generate metrics
     console.log('Step 2: Gathering chapter metrics...');
-    const bookDir = resolve(projectRoot, book.source_path);
+    const bookDir = resolve(projectRoot, getVersionedSourcePath(book));
     const chapterPaths = getChapterPaths(bookDir, chapterIds);
     const existingChapters = chapterPaths.filter((p) => existsSync(p));
     const existingChapterIds = chapterIds.filter((_, i) => existsSync(chapterPaths[i]));

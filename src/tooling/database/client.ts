@@ -16,7 +16,8 @@ export class ProjectDatabase {
   public readonly personas: PersonaClient;
 
   constructor(dbPath?: string) {
-    const finalPath = dbPath || join(process.cwd(), 'data', 'project.db');
+    // Allow env var override for testing isolation
+    const finalPath = dbPath || process.env.RAZORWEAVE_DB_PATH || join(process.cwd(), 'data', 'project.db');
 
     this.db = new Database(finalPath);
     this.db.pragma('journal_mode = WAL');

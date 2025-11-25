@@ -18,6 +18,7 @@ const REPO_ROOT = resolve(__dirname, '../../..');
 import { log } from '../logging/logger.js';
 import Database from 'better-sqlite3';
 import { BookRepository } from '../books/repository.js';
+import { getVersionedSourcePath } from '../books/types.js';
 
 /**
  * Resolve a book slug or path to an actual HTML file path.
@@ -63,8 +64,8 @@ function resolveBookPath(input: string): string {
     }
   }
 
-  // Last resort - use the source_path from database
-  const sourcePath = resolve(REPO_ROOT, book.source_path);
+  // Last resort - use the versioned source_path from database
+  const sourcePath = resolve(REPO_ROOT, getVersionedSourcePath(book));
   log.warn(`Could not find HTML file for "${input}", using source_path: ${sourcePath}`);
   return sourcePath;
 }
@@ -263,9 +264,9 @@ async function main(): Promise<void> {
         case 'build': {
           const db = getDatabase();
           const result = await buildPrintHtml({
-            bookPath: resolve(REPO_ROOT, 'books/core/v1'),
-            chaptersDir: resolve(REPO_ROOT, 'books/core/v1/chapters'),
-            sheetsDir: resolve(REPO_ROOT, 'books/core/v1/sheets'),
+            bookPath: resolve(REPO_ROOT, 'books/core/v1.3.0'),
+            chaptersDir: resolve(REPO_ROOT, 'books/core/v1.3.0/chapters'),
+            sheetsDir: resolve(REPO_ROOT, 'books/core/v1.3.0/sheets'),
             outputPath: resolve(REPO_ROOT, 'data/html/print-design/core-rulebook.html'),
             db: db.db,
           });

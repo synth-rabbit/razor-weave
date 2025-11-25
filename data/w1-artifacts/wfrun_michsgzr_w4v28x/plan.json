@@ -1,0 +1,298 @@
+{
+  "plan_id": "plan-20251124-wfrun_michsgzr",
+  "created_at": "2025-11-24T01:30:00Z",
+  "source_campaign_id": "campaign-20251124-010827-3hy9kg3y",
+  "summary": "Address newcomer accessibility and usability by improving character creation flow, adding combat quick-reference, and enhancing resolution examples.",
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "Nine-step character creation process is overwhelming; example character Rella appears only after all steps",
+      "severity": "high",
+      "source_category": "Chapter 6: Character Creation",
+      "affected_chapters": [
+        "06-character-creation"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-alex-indie-convert",
+        "core-sarah-new-gm",
+        "core-sam-forever-gm",
+        "core-morgan-method-actor"
+      ],
+      "improvement_goal": "Newcomers can understand character creation destination before starting the journey",
+      "success_metric": "Example character appears at chapter start; Quick Start option provided for time-constrained players",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-002",
+      "description": "Combat introduces many concepts at once; Resolve Clock stakes discussion buried in prose; lacks concrete damage numbers",
+      "severity": "high",
+      "source_category": "Chapter 10: Combat Basics",
+      "affected_chapters": [
+        "10-combat-basics"
+      ],
+      "affected_personas": [
+        "core-jordan-busy-parent",
+        "core-alex-indie-convert",
+        "core-taylor-video-game-convert",
+        "core-sam-forever-gm"
+      ],
+      "improvement_goal": "Combat concepts are introduced progressively with clear reference materials",
+      "success_metric": "Combat at a Glance summary box added; concrete tick values documented; stakes discussion elevated to callout",
+      "priority": 2
+    },
+    {
+      "issue_id": "issue-003",
+      "description": "Resolution procedure lacks consolidated walkthrough; when-to-roll criteria too subjective; attribute selection guidance too light",
+      "severity": "medium",
+      "source_category": "Chapter 8: Actions, Checks, and Outcomes",
+      "affected_chapters": [
+        "08-actions-checks-outcomes"
+      ],
+      "affected_personas": [
+        "core-alex-indie-convert",
+        "core-taylor-video-game-convert",
+        "core-sarah-new-gm"
+      ],
+      "improvement_goal": "New GMs have clear decision frameworks for running checks",
+      "success_metric": "Complete resolution walkthrough example added; 3 borderline when-to-roll examples; attribute selection guidance with key words",
+      "priority": 3
+    },
+    {
+      "issue_id": "issue-004",
+      "description": "Dual-clock pattern buried in prose; emotional Conditions lack roleplay guidance; Tag effects use ambiguous language",
+      "severity": "medium",
+      "source_category": "Chapter 9: Tags, Conditions, and Clocks",
+      "affected_chapters": [
+        "09-tags-conditions-clocks"
+      ],
+      "affected_personas": [
+        "core-alex-indie-convert",
+        "core-morgan-method-actor"
+      ],
+      "improvement_goal": "Method actors have concrete roleplay guidance; dual-clock pattern is prominently featured",
+      "success_metric": "Progress/Pressure callout added; Condition roleplay table added; Tag effects clarified with definitive language",
+      "priority": 4
+    },
+    {
+      "issue_id": "issue-005",
+      "description": "Attribute scale feels compressed; Working with Low Attributes section needs deeper character expression guidance",
+      "severity": "low",
+      "source_category": "Chapter 7: Characters and Attributes",
+      "affected_chapters": [
+        "07-characters-and-attributes"
+      ],
+      "affected_personas": [
+        "core-taylor-video-game-convert",
+        "core-morgan-method-actor"
+      ],
+      "improvement_goal": "Players understand why bounded scale is meaningful and how to roleplay at each level",
+      "success_metric": "Probability explanation added; roleplay prompts for each attribute level",
+      "priority": 5
+    }
+  ],
+  "chapter_modifications": [
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 1,
+      "issues_addressed": [
+        "issue-001"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Chapter opening, before step-by-step process",
+          "instruction": "Add a 'Quick Start: 15-Minute Character Creation' callout box with a streamlined 6-step process: 1) Concept (one sentence), 2) Attributes (assign 2,1,1,0), 3) Skills (pick 3-4 verbs), 4) Proficiencies (pick 2 areas), 5) Gear (list 3-4 items), 6) One Connection (name one person). Reference full steps for those who want detail.",
+          "success_criteria": "Callout box appears within first page; time-constrained players have a viable path"
+        },
+        {
+          "type": "restructure",
+          "target": "Example character Rella section",
+          "instruction": "Move the complete Rella character example to the BEGINNING of the chapter, before 'The Creation Flow'. Present as 'Meet Rella: A Complete Character' with full character sheet. At the end-of-chapter location, replace with 'Reviewing Rella's Build' that references the beginning and explains how concept informed choices.",
+          "success_criteria": "Readers see destination before journey; example shows complete character before explaining each step"
+        }
+      ]
+    },
+    {
+      "chapter_id": "10-combat-basics",
+      "chapter_name": "Combat Basics",
+      "priority": 2,
+      "issues_addressed": [
+        "issue-002"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Chapter opening",
+          "instruction": "Add a 'Combat at a Glance' callout box summarizing: 1) Combat uses same Check system, 2) Resolve Clocks track damage, 3) Actions: Strike, Maneuver, Set Up, 4) Turn order options. Include mini-table showing outcome-to-ticks mapping.",
+          "success_criteria": "Summary box provides orientation before detailed content; tick values are concrete"
+        },
+        {
+          "type": "expand",
+          "target": "Resolve Clock section",
+          "instruction": "Add a prominent callout box titled 'The Key Question: What Does Taken Out Mean?' explaining that this single question unlocks the entire combat system. Explain that 'taken out' is context-dependent (killed, knocked unconscious, disarmed, convinced to surrender, etc.).",
+          "success_criteria": "Stakes discussion elevated from prose to prominent callout; conceptual key is unmissable"
+        },
+        {
+          "type": "clarify",
+          "target": "Damage/tick mechanics",
+          "instruction": "Add concrete tick values table: Critical Success = 3 ticks, Full Success = 2 ticks, Partial Success = 1 tick, Failure = 0 ticks. Note that GM may adjust based on fictional positioning.",
+          "success_criteria": "Players who need concrete numbers have a baseline reference"
+        },
+        {
+          "type": "add_reference",
+          "target": "Turn order section",
+          "instruction": "Add a sidebar titled 'Turn Order Options' listing: Conversational (default), Popcorn (player picks next), Initiative Roll (for tactical groups). Each with 1-sentence description.",
+          "success_criteria": "Groups have clear options rather than inventing their own"
+        }
+      ]
+    },
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks, and Outcomes",
+      "priority": 3,
+      "issues_addressed": [
+        "issue-003"
+      ],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "expand",
+          "target": "After core Check procedure explanation",
+          "instruction": "Add a complete resolution walkthrough example showing all steps in sequence: Scene setup (infiltrating manor), Intent declaration (reach study unseen), Approach (stealth through servant corridors), Attribute selection (AGI), DC setting (16), Modifiers (+1 Edge from dim light), Roll (show dice), Outcome interpretation (all five tiers).",
+          "success_criteria": "Single example demonstrates entire resolution flow end-to-end"
+        },
+        {
+          "type": "improve_examples",
+          "target": "When to Roll section",
+          "instruction": "Add 3 detailed worked examples showing borderline when-to-roll situations: 1) Climbing a fence (no roll -> add pursuers -> now roll), 2) Recalling facts (no roll -> add time pressure -> now roll), 3) Fixing machine (no roll -> add missing tools -> now roll). Each shows the three-part test (Uncertainty, Consequence, Agency) applied.",
+          "success_criteria": "New GMs have concrete guidance for borderline cases"
+        },
+        {
+          "type": "add_reference",
+          "target": "After Attribute selection discussion",
+          "instruction": "Add 'Choosing the Right Attribute' GM guidance box with key words for each: MIG (force, lift, break, endure), AGI (dodge, climb, sneak, aim), PRE (persuade, intimidate, charm), RSN (investigate, analyze, recall). Include 'Same Goal, Different Attributes' example showing 4 ways to get past a locked door.",
+          "success_criteria": "New GMs have decision framework for attribute selection"
+        }
+      ]
+    },
+    {
+      "chapter_id": "09-tags-conditions-clocks",
+      "chapter_name": "Tags, Conditions, and Clocks",
+      "priority": 4,
+      "issues_addressed": [
+        "issue-004"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "target": "Clocks section",
+          "instruction": "Add prominent 'The Progress/Pressure Pattern' callout box explaining the dual-clock structure: Progress Clock tracks toward goal, Pressure Clock tracks threat/opposition. When they race, tension builds naturally. Reference the investigation example.",
+          "success_criteria": "Brilliant pattern is prominently featured, not buried in prose"
+        },
+        {
+          "type": "expand",
+          "target": "Conditions section",
+          "instruction": "Add 'Roleplaying Emotional and Psychological Conditions' table with columns: Condition | How to Portray. Include: Frightened (trembling, avoiding threat's gaze), Dazed (slow responses, trailing off), Exhausted (heavy breathing, leaning on walls), Shaken (nervous laughter, fidgeting), Rattled (checking over shoulder, hesitation).",
+          "success_criteria": "Method actors have concrete portrayal guidance"
+        },
+        {
+          "type": "clarify",
+          "target": "Tag effects discussion",
+          "instruction": "Replace ambiguous language ('might impose', 'could grant') with definitive statements. Add 'Tag Effects Quick Reference' table: Helpful Tags grant Edge, Hindering Tags impose Burden, DC-Shifting Tags adjust DC by 2-4.",
+          "success_criteria": "Tag effects are consistent and predictable"
+        }
+      ]
+    },
+    {
+      "chapter_id": "07-characters-and-attributes",
+      "chapter_name": "Characters and Attributes",
+      "priority": 5,
+      "issues_addressed": [
+        "issue-005"
+      ],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "expand",
+          "target": "Why Small Numbers Matter section (or create if missing)",
+          "instruction": "Add explanation of why 0-2 scale is meaningful: bounded design keeps focus on story, each point represents significant capability difference. Show probability impact: +0 = ~38% success at DC 14, +1 = ~50%, +2 = ~62%. Video game players should understand this is intentional design.",
+          "success_criteria": "Players understand bounded scale is a feature, not a limitation"
+        },
+        {
+          "type": "expand",
+          "target": "Working with Low Attributes section",
+          "instruction": "Add 'Embodying Limitations as Character Identity' subsection with specific behavioral examples for each low attribute: Low MIG (compensating with tools, delegating physical tasks), Low AGI (moving deliberately, avoiding precarious situations), Low PRE (preferring written communication, building influence through competence), Low RSN (trusting gut instincts, asking for explanations).",
+          "success_criteria": "Method actors have concrete roleplay guidance for limitations"
+        },
+        {
+          "type": "add_reference",
+          "target": "End of Attributes explanation",
+          "instruction": "Add 'Roleplay Prompts by Attribute Level' tables for each attribute showing questions to consider at levels 0, 1, and 2. E.g., MIG 0: 'How do you compensate for physical limitations?', MIG 2: 'How do you use your strength to help others?'",
+          "success_criteria": "Players have prompts to develop character's relationship with each attribute"
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "allow_growth"
+  },
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": [
+        "06-character-creation"
+      ],
+      "rationale": "Highest priority issue affecting most personas; sets pattern for example-first approach"
+    },
+    {
+      "phase": 2,
+      "chapters": [
+        "08-actions-checks-outcomes",
+        "10-combat-basics"
+      ],
+      "rationale": "Core mechanics chapters that benefit from similar clarity improvements"
+    },
+    {
+      "phase": 3,
+      "chapters": [
+        "09-tags-conditions-clocks",
+        "07-characters-and-attributes"
+      ],
+      "rationale": "Supporting chapters that build on Phase 1-2 improvements"
+    }
+  ],
+  "estimated_impact": {
+    "primary_dimension": "practical_usability",
+    "expected_improvement": "+1.5 points average for practical_usability, +1.0 for persona_fit",
+    "secondary_benefits": [
+      "Improved clarity_readability through concrete examples",
+      "Better newcomer onboarding via Quick Start options",
+      "Enhanced method actor support via roleplay guidance"
+    ]
+  },
+  "review_cycle_recommendation": {
+    "re_review_personas": [
+      "core-jordan-busy-parent",
+      "core-sarah-new-gm",
+      "core-taylor-video-game-convert"
+    ],
+    "focus_dimensions": [
+      "practical_usability",
+      "persona_fit"
+    ],
+    "skip_personas": [
+      "core-sam-forever-gm",
+      "core-marcus-osr-veteran"
+    ],
+    "rationale": "Changes primarily target newcomer and time-constrained players; experienced GMs were already satisfied"
+  }
+}

@@ -87,10 +87,11 @@ export class BookRepository {
   create(input: CreateBookInput): Book {
     try {
       const status = input.status ?? 'draft';
+      const currentVersion = input.current_version ?? '1.0.0';
 
       const stmt = this.db.prepare(`
-        INSERT INTO books (id, slug, title, book_type, source_path, status)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO books (id, slug, title, book_type, source_path, current_version, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `);
 
       stmt.run(
@@ -99,6 +100,7 @@ export class BookRepository {
         input.title,
         input.book_type,
         input.source_path,
+        currentVersion,
         status
       );
 
@@ -168,6 +170,10 @@ export class BookRepository {
       if (updates.status !== undefined) {
         fields.push('status = ?');
         values.push(updates.status);
+      }
+      if (updates.current_version !== undefined) {
+        fields.push('current_version = ?');
+        values.push(updates.current_version);
       }
 
       // Always update updated_at

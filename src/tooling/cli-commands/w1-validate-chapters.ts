@@ -19,6 +19,7 @@ import { execSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
+import { getVersionedSourcePath } from '../books/types.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
@@ -428,7 +429,7 @@ async function runGenerateMode(): Promise<void> {
     }
 
     // 3. Get chapter paths
-    const bookDir = resolve(projectRoot, book.source_path);
+    const bookDir = resolve(projectRoot, getVersionedSourcePath(book));
     const chapterPaths = getChapterPaths(bookDir, chapterIds);
 
     // Check which chapters exist

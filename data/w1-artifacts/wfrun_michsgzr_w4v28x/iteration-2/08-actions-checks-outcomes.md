@@ -29,6 +29,82 @@ If all three are present, a Check is appropriate. If one or more are missing, th
 > *Assessment:* The outcome is uncertain, the stakes are serious, and the character's choices matter. The GM calls for a Check.
 > *Counter-example:* The same character crossing a sturdy bridge in calm weather does not roll. Success is assumed; the story moves forward.
 
+#### When-to-Roll Worked Examples
+
+The three-part test (Uncertainty, Consequence, Agency) is not always obvious. The following examples show how the same basic action can shift from "no roll needed" to "Check required" based on changing circumstances.
+
+> **Example - Climbing a Fence**
+>
+> **Scenario A: No Roll Needed**
+> Tomas wants to climb over the wooden fence surrounding the merchant's yard. He is alone, unhurried, and the fence has plenty of handholds.
+>
+> *Applying the Three-Part Test:*
+> - *Uncertainty?* No. Tomas is reasonably fit, the fence is climbable, and nothing interferes.
+> - *Consequence?* No. If he slips, he tries again. No time pressure, no observers.
+> - *Agency?* Yes. Tomas can climb or not climb.
+>
+> **Result:** Two conditions fail. No Check. The GM says, "You pull yourself over the fence and drop into the yard. What do you do next?"
+>
+> ---
+>
+> **Scenario B: Now Roll**
+> Same fence, but now city guards are pursuing Tomas. He hears their boots pounding the cobblestones behind him. Every second counts.
+>
+> *Applying the Three-Part Test:*
+> - *Uncertainty?* Yes. Under pressure, even simple tasks can go wrong.
+> - *Consequence?* Yes. If he is slow, the guards catch him. If he falls, he is exposed.
+> - *Agency?* Yes. His speed and choices matter.
+>
+> **Result:** All three conditions are met. The GM calls for an AGI-based Check. DC 12 (Easy—the fence is still climbable, but time pressure adds tension).
+
+> **Example - Recalling Facts**
+>
+> **Scenario A: No Roll Needed**
+> Sera wants to remember the name of the magistrate who oversees trade disputes. She studied law for years and this is common knowledge in her field.
+>
+> *Applying the Three-Part Test:*
+> - *Uncertainty?* No. This is routine knowledge for her background.
+> - *Consequence?* No. She can look it up if she forgets; the information is not secret.
+> - *Agency?* Yes. She either knows it or not.
+>
+> **Result:** Two conditions fail. No Check. The GM says, "You recall that Magistrate Velloran handles trade disputes from the River Court."
+>
+> ---
+>
+> **Scenario B: Now Roll**
+> Same question, but Sera is standing before the magistrate's clerk, who is about to close the office. She needs to name the correct magistrate *right now* to file her petition before the deadline. Getting it wrong means her client's case is delayed by a month.
+>
+> *Applying the Three-Part Test:*
+> - *Uncertainty?* Yes. Under pressure, memory can fail.
+> - *Consequence?* Yes. Wrong answer means a month's delay for her client.
+> - *Agency?* Yes. Her training and mental composure matter.
+>
+> **Result:** All three conditions are met. The GM calls for a RSN-based Check. DC 14 (Routine—she knows this, but pressure makes it harder to retrieve).
+
+> **Example - Fixing a Machine**
+>
+> **Scenario A: No Roll Needed**
+> Vance wants to repair a jammed printing press in his workshop. He has his tools, the machine is a model he knows well, and he has all afternoon.
+>
+> *Applying the Three-Part Test:*
+> - *Uncertainty?* No. This is routine maintenance for him.
+> - *Consequence?* No. If it takes longer, he just keeps working. No deadline.
+> - *Agency?* Yes. His skill can fix it.
+>
+> **Result:** Two conditions fail. No Check. The GM says, "You spend an hour disassembling the feed mechanism, clear the jam, and reassemble it. The press runs smoothly again."
+>
+> ---
+>
+> **Scenario B: Now Roll**
+> Same printing press, but Vance's tools were confiscated when he fled his workshop. He has only a borrowed screwdriver and a bent wire. The press must work by tonight to print pamphlets for the demonstration.
+>
+> *Applying the Three-Part Test:*
+> - *Uncertainty?* Yes. Without proper tools, success is not guaranteed.
+> - *Consequence?* Yes. Failure means no pamphlets, and the demonstration loses support.
+> - *Agency?* Yes. His improvisation and skill can overcome the obstacle.
+>
+> **Result:** All three conditions are met. The GM calls for an AGI-based Check (delicate work without proper tools). DC 16 (Tough—improvised tools make a routine task significantly harder).
+
 ### The Core Check Procedure
 
 Every Check follows the same basic loop:
@@ -38,6 +114,24 @@ Every Check follows the same basic loop:
 1. If needed, the GM selects an Attribute and relevant Skill, sets a DC, and notes any Tags, Conditions, or Proficiencies that might grant Edge or Burden.
 1. The player rolls **4d6**, applies modifiers, and compares the total to the DC.
 1. The table interprets the outcome tier (critical success, full success, partial success, failure, critical failure) and updates the fiction accordingly.
+
+> **Your First Check as GM**
+>
+> Running your first Check can feel daunting. Here's exactly what to do:
+>
+> 1. **Listen**: Player says "I want to climb the wall to reach the balcony."
+> 2. **Clarify**: Ask "Are you rushing or being careful? Is anyone watching?"
+> 3. **Attribute**: Climbing is physical and requires coordination—AGI.
+> 4. **DC**: Consult the ladder. Stone wall with handholds? DC 14. Smooth marble? DC 18.
+> 5. **Modifiers**: Rain? Burden. Rope? Edge.
+> 6. **Roll**: Player rolls 4d6 + AGI modifier.
+> 7. **Narrate**: Describe the outcome based on the tier.
+>
+> **Common New-GM Mistakes**:
+> - Setting DC too high (most tasks should be 12-16)
+> - Forgetting to ask about approach before setting DC
+> - Not letting Partial Successes introduce complications
+> - Calling for rolls when outcome is certain
 
 ### Declaring Intent and Approach
 
@@ -52,6 +146,28 @@ Intent focuses the scene. Approach determines which Attribute, Skills, Proficien
 > *Intent:* "I want to get the factory foreman to delay shipment of the crates."
 > *Approach:* "I speak with her in private, emphasize the safety risks, and show her evidence of the faulty wiring we found."
 > The GM recognizes this as a PRE-based approach with a relevant social Skill and possibly a Proficiency related to safety procedures or technical documentation.
+
+> **GM Guidance - Choosing the Right Attribute**
+>
+> The player's approach determines which Attribute applies. Use these key words to guide selection:
+>
+> | Attribute | Key Words | Character Is... |
+> |-----------|-----------|-----------------|
+> | **MIG** | Force, lift, break, endure, overpower, resist, hold, smash | Applying raw physical power or enduring hardship |
+> | **AGI** | Dodge, climb, sneak, aim, balance, tumble, sprint, pick (locks) | Using speed, coordination, or fine motor control |
+> | **PRE** | Persuade, intimidate, charm, deceive, perform, inspire, read (people) | Influencing others through personality or social skill |
+> | **RSN** | Investigate, analyze, recall, deduce, plan, notice, research | Using knowledge, logic, or careful observation |
+>
+> **Same Goal, Different Attributes**
+>
+> The same objective can often be achieved through different approaches, each using a different Attribute. Consider a locked door standing between you and your goal:
+>
+> - **MIG Approach:** "I shoulder-charge the door, breaking it off its hinges." (Force the door open through brute strength. Loud, fast, but obvious.)
+> - **AGI Approach:** "I kneel down and carefully pick the lock with my tools." (Bypass the lock through dexterity and precision. Quiet but takes time.)
+> - **PRE Approach:** "I knock and convince whoever answers that I am here for an inspection." (Talk your way past the obstacle. Requires someone on the other side.)
+> - **RSN Approach:** "I examine the door frame and hinges to find a structural weakness I can exploit." (Analyze the door to find the easiest point of entry. Takes time but might reveal a clever solution.)
+>
+> Each approach has different DCs, different risks, and different fictional consequences. A MIG approach to the door might be DC 14 but alerts everyone nearby. An AGI approach might be DC 16 but leaves no evidence. The GM sets DC based on what the character is actually attempting, not on the abstract goal.
 
 ### Setting DCs
 
@@ -103,29 +219,6 @@ Rather than constantly adjusting the DC, the game often represents favorable or 
 Edge and Burden usually come from Tags, Conditions, environment, tools, Proficiencies, or prior setup actions. They represent the table's shared sense that the character is favored or hindered in this moment. Multiple sources combine into a single level of Edge or Burden and are capped at +/-2—several small edges do not create infinite Edge, and multiple problems do not push you below -2. If a character would have both Edge and Burden, reduce them against each other (for example, +2 and -1 becomes +1) until only one side remains, then apply the final level.
 
 Tags and Conditions described in earlier chapters provide a shared vocabulary for these modifiers: *Dim Light*, *Slick*, or *Exposed* might impose Burden; *Solid Cover* or *Marked* might grant Edge in specific contexts or to specific parties.
-
-> **The Rule of Three: DC vs Edge/Burden**
->
-> When should you adjust the DC versus applying Edge or Burden? Use this simple principle:
->
-> **Scene factors adjust DC. Actor factors grant Edge or Burden.**
->
-> - **Scene factors** are environmental or situational—they affect anyone attempting the task in this moment. Adjust the DC.
-> - **Actor factors** are specific to this character—their preparation, tools, conditions, or positioning. Apply Edge or Burden.
->
-> **Scene Factors → Adjust DC:**
-> - The lock is masterwork quality → raise DC
-> - The wall is slick with rain → raise DC
-> - The guard is already suspicious → raise DC
-> - The terrain is familiar and well-lit → lower DC
->
-> **Actor Factors → Apply Edge/Burden:**
-> - Character has lockpicks and Lockpicking Proficiency → Edge
-> - Character is Shaken from a recent fight → Burden
-> - Ally just created a distraction → Edge
-> - Character is climbing with an injured arm → Burden
->
-> When in doubt, ask: "Would this affect *anyone* attempting this task, or just *this character*?" If anyone, adjust DC. If just this character, apply Edge or Burden.
 
 > **Example - Combining Multiple Modifier Sources**
 >
@@ -220,6 +313,188 @@ This table shows your percentage chance of achieving at least a **Full Success**
 > - **The system favors competent characters.** DC 14 is "Routine" for a reason—a character with +2 in their relevant Attribute succeeds three-quarters of the time. The challenge comes from Tough (DC 16) and Hard (DC 18) tasks, where every point of modifier matters.
 >
 > **Practical Application:** If you have +2 in an Attribute and attempt a DC 16 task, you have a 56% chance of Full Success. Adding Edge improves that to 68%. This is why fictional positioning and setup actions matter—they can shift borderline tasks into reliable territory.
+
+### Complete Resolution Walkthrough
+
+The following extended example demonstrates the complete resolution sequence from scene setup through all five outcome tiers. Study this to understand how each step connects and how different rolls produce different narrative results.
+
+> **Complete Resolution Walkthrough - Manor Infiltration**
+>
+> ---
+>
+> **Scene Setup**
+>
+> Lyra must infiltrate Lord Ashworth's manor during a dinner party to retrieve incriminating documents from his private study. The manor is busy with guests, servants move through the corridors, and guards patrol the grounds.
+>
+> *Relevant Tags:*
+> - *Dim Light* (the servant corridors are poorly lit to keep them unobtrusive)
+> - *Crowded Event* (many people moving about, both concealment and risk)
+> - *Patrolled* (guards make regular rounds)
+>
+> *Lyra's Capabilities:*
+> - AGI +2 (her Agility Attribute rating)
+> - Stealth Skill (relevant to moving unseen)
+> - Servant's Uniform (acquired earlier, provides fictional positioning)
+>
+> Her ally Marcus is stationed outside, watching the guard rotation and ready to create a distraction if needed. He spent the previous scene observing patterns.
+>
+> ---
+>
+> **Step 1: Player declares intent and approach**
+>
+> *Intent:* "I want to reach Lord Ashworth's study on the second floor without being detected."
+>
+> *Approach:* "I use the servant corridors rather than the main halls. My uniform lets me blend in if seen, and I time my movement to avoid the patrol routes Marcus identified."
+>
+> ---
+>
+> **Step 2: GM determines if a Check is needed**
+>
+> The GM applies the three-part test:
+>
+> - *Uncertainty?* Yes—the manor is active with servants, guests, and guards. Even with preparation, detection is possible.
+> - *Consequence?* Yes—if Lyra is caught, she faces arrest, Lord Ashworth is alerted, and the mission fails.
+> - *Agency?* Yes—Lyra's skill, preparation, and choices directly influence whether she succeeds.
+>
+> All three conditions are met. The GM calls for a Check.
+>
+> ---
+>
+> **Step 3: GM sets DC using the DC ladder**
+>
+> The GM considers the circumstances:
+>
+> - The servant corridors are less trafficked than the main halls (favorable)
+> - Guards patrol but are focused on the perimeter and main entrances (neutral)
+> - The dinner party creates ambient noise and movement (favorable for concealment)
+> - The study is in a private wing—being seen there would raise questions (unfavorable)
+>
+> Balancing these factors, the GM sets **DC 16** (Tough—skilled opposition in the form of alert guards, some unfavorable conditions in the private wing, but good preparation).
+>
+> ---
+>
+> **Step 4: GM determines Edge or Burden from circumstances**
+>
+> The GM tallies modifiers:
+>
+> - **+1 Edge** from *Dim Light* (the poorly lit corridors favor stealth)
+> - **+1 Edge** from Marcus's reconnaissance (he identified the patrol timing)
+> - The servant's uniform is good fictional positioning but does not stack to another Edge—it is already factored into the DC being 16 rather than 18
+>
+> Net calculation: +1 +1 = **+2 Edge total** (capped, no additional sources matter)
+>
+> Wait—the GM reconsiders. The *Dim Light* helps Lyra hide, but it also makes it harder for her to spot guards before they spot her. The GM rules this is a wash for the stealth attempt specifically, so:
+>
+> - **+1 Edge** from Marcus's reconnaissance (timing information)
+>
+> **Final modifier: +1 Edge**
+>
+> ---
+>
+> **Step 5: Player rolls 4d6, adds Attribute, adds +1 if relevant Skill applies**
+>
+> With +1 Edge, Lyra rolls 5d6 and keeps the best 4.
+>
+> **Dice rolled:** 3, 4, 4, 5, 6
+> **Dice kept (best 4):** 4, 4, 5, 6
+> **Dice total:** 4 + 4 + 5 + 6 = **19**
+>
+> Now add modifiers:
+> - Attribute (AGI): +2
+> - Skill (Stealth): +1
+>
+> **Final result:** 19 + 2 + 1 = **22**
+>
+> ---
+>
+> **Step 6: Calculate margin (result - DC) and determine outcome tier**
+>
+> **Margin:** 22 - 16 = **+6**
+>
+> Consulting the outcome tier table:
+> - **+5 or more = Critical Success** (this one)
+> - 0 to +4 = Full Success
+> - -1 to -2 = Partial Success
+> - -3 to -6 = Failure
+> - -7 or worse = Critical Failure
+>
+> **Outcome Tier: Critical Success**
+>
+> ---
+>
+> **Step 7: GM narrates the outcome**
+>
+> "You move through the servant corridors like a ghost. Marcus's timing is perfect—you slip past each patrol intersection in the gaps between rounds. A maid nearly bumps into you at a corner, but you step aside with a murmured apology, and she does not give you a second glance. When you reach the private wing, you notice something Marcus could not have seen from outside: the guard assigned to this corridor is asleep in an alcove, an empty wine bottle beside him. You reach the study door completely undetected—and you now know the guard rotation has a gap no one else has noticed. This information could prove valuable later."
+>
+> *Critical Success bonus:* Lyra not only succeeds but gains additional intelligence about the lax security that she can exploit or share.
+>
+> ---
+>
+> **Alternate Outcomes - What If Lyra Rolled Differently?**
+>
+> The same scene with different dice results:
+>
+> ---
+>
+> **Full Success (Margin +3)**
+>
+> *Roll:* 5d6 showing 2, 3, 4, 5, 5. Keep best 4: 3, 4, 5, 5 = 17.
+> *Final result:* 17 + 2 (AGI) + 1 (Skill) = 20.
+> *Margin:* 20 - 16 = +4.
+>
+> *GM Narration:* "You navigate the servant corridors without incident. The patrols pass at exactly the intervals Marcus predicted. When you reach the private wing, you pause at a corner as a guard strolls past, then continue to the study door. You are in position, undetected, ready to proceed."
+>
+> *Full Success:* Lyra achieves her intent cleanly. No bonus, but no complications either.
+>
+> ---
+>
+> **Partial Success (Margin -1)**
+>
+> *Roll:* 5d6 showing 1, 2, 3, 4, 5. Keep best 4: 2, 3, 4, 5 = 14.
+> *Final result:* 14 + 2 (AGI) + 1 (Skill) = 17.
+> *Margin:* 17 - 16 = +1... wait, that is still Full Success.
+>
+> Let us try: 5d6 showing 1, 1, 3, 4, 5. Keep best 4: 1, 3, 4, 5 = 13.
+> *Final result:* 13 + 2 (AGI) + 1 (Skill) = 16.
+> *Margin:* 16 - 16 = 0. Still Full Success.
+>
+> For Partial Success, we need margin -1 or -2:
+> *Roll:* 5d6 showing 1, 2, 2, 3, 4. Keep best 4: 2, 2, 3, 4 = 11.
+> *Final result:* 11 + 2 (AGI) + 1 (Skill) = 14.
+> *Margin:* 14 - 16 = **-2**.
+>
+> *GM Narration:* "You make it to the private wing, but a servant spots you as you pass through the kitchen corridor. 'You there—what are you doing in the east wing? Servants use the west stairs.' You mumble something about being new and getting lost, and she seems to accept it, but she watches you until you are out of sight. You reach the study door, but now someone knows a servant was where servants should not be. If anything goes wrong tonight, she will remember you."
+>
+> *Partial Success cost:* Lyra reaches her goal, but a witness can identify her. This complication may matter later.
+>
+> ---
+>
+> **Failure (Margin -4)**
+>
+> *Roll:* 5d6 showing 1, 1, 2, 3, 3. Keep best 4: 1, 2, 3, 3 = 9.
+> *Final result:* 9 + 2 (AGI) + 1 (Skill) = 12.
+> *Margin:* 12 - 16 = **-4**.
+>
+> *GM Narration:* "You round a corner and nearly collide with a guard—one whose route Marcus did not observe because he only patrols inside. He looks at you, then at the private wing corridor behind you. 'What business does a servant have in Lord Ashworth's private quarters?' His hand rests on his truncheon. You are not caught yet, but you need to explain yourself, and the study is still twenty feet away down a guarded hall. What do you do?"
+>
+> *Failure:* Lyra does not reach the study. The situation has worsened—she must now talk her way past the guard (a new PRE-based Check) or find another approach. The "Alert Level" Clock might tick forward.
+>
+> ---
+>
+> **Critical Failure (Margin -8)**
+>
+> *Roll:* 5d6 showing 1, 1, 1, 2, 3. Keep best 4: 1, 1, 2, 3 = 7.
+> *Final result:* 7 + 2 (AGI) + 1 (Skill) = 10.
+> *Margin:* 10 - 16 = **-6**. That is regular Failure, not Critical.
+>
+> For Critical Failure (margin -7 or worse):
+> *Roll:* 5d6 showing 1, 1, 1, 2, 2. Keep best 4: 1, 1, 2, 2 = 6.
+> *Final result:* 6 + 2 (AGI) + 1 (Skill) = 9.
+> *Margin:* 9 - 16 = **-7**.
+>
+> *GM Narration:* "You step into the private wing corridor—and freeze. Lord Ashworth himself stands at the far end, speaking quietly with his head of security. They both look up at the same moment. The security chief's eyes narrow. 'You. Halt.' Ashworth's expression shifts from curiosity to cold suspicion. There is no innocent explanation for a servant in his private wing during a party. Guards are summoned. Your cover is blown, and worse—Ashworth now knows someone is interested in his private quarters. Even if you escape tonight, he will move or destroy those documents."
+>
+> *Critical Failure:* The mission is severely compromised. Not only does Lyra fail to reach the study, but the target is now alerted. The entire operation may need to be abandoned or dramatically revised.
 
 ### Complete Check Example
 
@@ -422,6 +697,31 @@ The following examples demonstrate complete Check resolution from intent through
 > *Outcome Tier:* **Partial Success** (margin -1 to -2).
 >
 > *Narrative Result:* The lock clicks open—Vance's skill overcomes the poor conditions. However, the effort takes longer than expected, and one of his borrowed picks snaps inside the mechanism. He will need to explain the broken tool to its owner, and the damaged lock may be noticed when the household checks security in the morning. He is in, but evidence of his passage remains.
+
+> **Common First-Session Scenarios**
+>
+> These pre-built situations work great for your first session:
+>
+> **Investigating a Crime Scene (RSN Check)**
+> - DC 14: Notice obvious clues
+> - DC 16: Find hidden evidence
+> - DC 18: Reconstruct what happened
+> - *Full Success*: "You notice scratches on the windowsill—someone climbed out."
+> - *Partial*: "You find a torn piece of cloth, but contaminate other evidence."
+>
+> **Chasing a Pickpocket (AGI Check)**
+> - DC 14: Keep them in sight through crowds
+> - DC 16: Gain ground on them
+> - DC 18: Catch them before they reach the alley
+> - *Full Success*: "You tackle them at the market's edge."
+> - *Partial*: "You catch their sleeve—they struggle and you both fall."
+>
+> **Convincing a Guard (PRE Check)**
+> - DC 12: Friendly guard, reasonable request
+> - DC 16: Suspicious guard or unusual request
+> - DC 20: Hostile guard or outrageous request
+> - *Full Success*: "The guard nods and waves you through."
+> - *Partial*: "Fine, but I'm watching you. And I'll need your name."
 
 ### Strike Outcomes
 

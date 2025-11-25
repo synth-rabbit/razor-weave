@@ -22,8 +22,9 @@ CREATE INDEX IF NOT EXISTS idx_books_status ON books(status);
 -- ============================================
 -- SEED CORE RULEBOOK
 -- ============================================
-INSERT OR IGNORE INTO books (id, slug, title, book_type, source_path, status)
-VALUES ('book_core', 'core-rulebook', 'Razorweave Core Rulebook', 'core', 'books/core-rulebook', 'editing');
+-- Note: source_path is base path, current_version specifies version. Full path = source_path/v{current_version}
+INSERT OR IGNORE INTO books (id, slug, title, book_type, source_path, status, current_version)
+VALUES ('book_core', 'core-rulebook', 'Razorweave Core Rulebook', 'core', 'books/core', 'editing', '1.3.0');
 
 -- ============================================
 -- MODIFY BOOK_VERSIONS (add book_id column)

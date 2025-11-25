@@ -2757,6 +2757,30 @@ When selecting a DC, ask yourself: "What would make this task harder or easier?"
 </blockquote>
 <p>Edge and Burden usually come from Tags, Conditions, environment, tools, Proficiencies, or prior setup actions. They represent the table's shared sense that the character is favored or hindered in this moment. Multiple sources combine into a single level of Edge or Burden and are capped at +/-2—several small edges do not create infinite Edge, and multiple problems do not push you below -2. If a character would have both Edge and Burden, reduce them against each other (for example, +2 and -1 becomes +1) until only one side remains, then apply the final level.</p>
 <p>Tags and Conditions described in earlier chapters provide a shared vocabulary for these modifiers: <em>Dim Light</em>, <em>Slick</em>, or <em>Exposed</em> might impose Burden; <em>Solid Cover</em> or <em>Marked</em> might grant Edge in specific contexts or to specific parties.</p>
+<blockquote>
+<p><strong>The Rule of Three: DC vs Edge/Burden</strong></p>
+<p>When should you adjust the DC versus applying Edge or Burden? Use this simple principle:</p>
+<p><strong>Scene factors adjust DC. Actor factors grant Edge or Burden.</strong></p>
+<ul>
+<li><strong>Scene factors</strong> are environmental or situational—they affect anyone attempting the task in this moment. Adjust the DC.</li>
+<li><strong>Actor factors</strong> are specific to this character—their preparation, tools, conditions, or positioning. Apply Edge or Burden.</li>
+</ul>
+<p><strong>Scene Factors → Adjust DC:</strong></p>
+<ul>
+<li>The lock is masterwork quality → raise DC</li>
+<li>The wall is slick with rain → raise DC</li>
+<li>The guard is already suspicious → raise DC</li>
+<li>The terrain is familiar and well-lit → lower DC</li>
+</ul>
+<p><strong>Actor Factors → Apply Edge/Burden:</strong></p>
+<ul>
+<li>Character has lockpicks and Lockpicking Proficiency → Edge</li>
+<li>Character is Shaken from a recent fight → Burden</li>
+<li>Ally just created a distraction → Edge</li>
+<li>Character is climbing with an injured arm → Burden</li>
+</ul>
+<p>When in doubt, ask: "Would this affect <em>anyone</em> attempting this task, or just <em>this character</em>?" If anyone, adjust DC. If just this character, apply Edge or Burden.</p>
+</blockquote>
 <div class="example">
 <p><strong>Example - Combining Multiple Modifier Sources</strong></p>
 <p>Kira attempts to pick a lock on a warehouse door. The GM assesses the modifiers from multiple sources:</p>
@@ -4035,7 +4059,720 @@ You do not need Tags, Conditions, and Clocks on every scene. Start with one or t
 <section id="ch-10-combat-basics">
 <h2 id="combat-basics-heading">10. Combat Basics</h2>
 <p>Combat is one kind of scene the system supports. It uses the same resolution tools you have already learned—Attributes, Skills, Checks, Tags, Conditions, and Clocks—focused on immediate danger and tactical choices. This chapter introduces how combat scenes are framed, how turns work, and how to use the core combat actions to shape the fiction.</p>
+<hr>
+<h2 id="combat-round-at-a-glance-heading">Combat Round at a Glance</h2>
+<p><strong>Use this reference during play to keep combat moving smoothly.</strong></p>
+<h3 id="combat-basics-turn-structure">Turn Structure</h3>
+<ol>
+<li><strong>Establish Initiative</strong> – Use Conversational (GM rotates spotlight), Popcorn (active player picks next), or Rolled (AGI, highest first)</li>
+<li><strong>Declare Action</strong> – Choose Strike, Maneuver, Set Up, or Defend/Withdraw</li>
+<li><strong>GM Sets DC</strong> – Typically DC 12-16, adjusting for Tags and positioning</li>
+<li><strong>Roll Check</strong> – 4d6 + Attribute (+ Skill if applicable), apply Edge/Burden</li>
+<li><strong>Apply Outcome</strong> – Tick Clocks, add/remove Tags, apply Conditions</li>
+<li><strong>Update Fiction</strong> – Narrate results and move to next character</li>
+</ol>
+<h3 id="combat-basics-common-combat-actions-at-a-glance">Common Combat Actions at a Glance</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>What It Does</th>
+<th>When to Use It</th>
+<th>Success Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Strike</strong></td>
+<td>Direct attack to fill opponent's Resolve Clock</td>
+<td>Enemy is exposed, you have Edge, finishing wounded foes</td>
+<td>2-3 Clock ticks (Full/Critical)</td>
+</tr>
+<tr>
+<td><strong>Maneuver</strong></td>
+<td>Reposition, trip, shove, or control battlefield</td>
+<td>Need better position, enemy in strong cover, create openings</td>
+<td>Apply Tag (<em>Prone</em>, <em>Exposed</em>), remove enemy advantage</td>
+</tr>
+<tr>
+<td><strong>Set Up</strong></td>
+<td>Grant Edge to allies or create helpful Tags</td>
+<td>Low Strike chance, ally can capitalize better, face elite enemy</td>
+<td>Grant Edge or create advantageous Tag</td>
+</tr>
+<tr>
+<td><strong>Defend</strong></td>
+<td>Actively block or dodge incoming harm</td>
+<td>Under heavy fire, low on Resolve, need to survive this round</td>
+<td>Avoid harm or reduce to lesser Condition</td>
+</tr>
+<tr>
+<td><strong>Withdraw</strong></td>
+<td>Break contact and reach safety/cover</td>
+<td>Resolve nearly full, tactical retreat needed, regroup required</td>
+<td>Reach cover or exit safely</td>
+</tr>
+</tbody>
+</table>
+<h3 id="combat-basics-resolve-clock-ticks-when-striking-or-applying-pressure">Resolve Clock Ticks (When Striking or Applying Pressure)</h3>
+<table>
+<thead>
+<tr>
+<th>Check Outcome</th>
+<th>Clock Ticks</th>
+<th>What It Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Critical Success</strong> (+5 or more)</td>
+<td><strong>3 segments</strong></td>
+<td>Devastating hit, major progress</td>
+</tr>
+<tr>
+<td><strong>Full Success</strong> (0 to +4)</td>
+<td><strong>2 segments</strong></td>
+<td>Solid blow, clear progress</td>
+</tr>
+<tr>
+<td><strong>Partial Success</strong> (-1 to -2)</td>
+<td><strong>1 segment</strong></td>
+<td>Glancing hit, but you suffer a cost</td>
+</tr>
+<tr>
+<td><strong>Failure</strong> (-3 or worse)</td>
+<td><strong>0 segments</strong></td>
+<td>Miss or ineffective, GM may act</td>
+</tr>
+</tbody>
+</table>
+<p><strong>When a Clock fills:</strong> The target is <em>taken out</em>—establish what this means before combat begins (unconscious, fleeing, surrendered, captured, or killed).</p>
+<h3 id="combat-basics-quick-condition-reference">Quick Condition Reference</h3>
+<p><strong>Light Conditions</strong> (clear quickly):</p>
+<ul>
+<li><strong>Stunned</strong>: Lose next action</li>
+<li><strong>Dazed</strong>: Burden on Checks for 1-2 rounds</li>
+<li><strong>Prone</strong>: Burden on AGI; attackers gain Edge if adjacent</li>
+<li><strong>Exposed</strong>: Enemies gain Edge against you</li>
+</ul>
+<p><strong>Moderate Conditions</strong> (require action to clear):</p>
+<ul>
+<li><strong>Bleeding</strong>: Clock ticks 1/round until treated (MIG DC 12)</li>
+<li><strong>Burning</strong>: Clock ticks 1/round until extinguished (AGI DC 12)</li>
+<li><strong>Exhausted</strong>: Burden on MIG/AGI until you rest</li>
+<li><strong>Suppressed</strong>: Burden on movement/attacks while pinned</li>
+</ul>
+<p><strong>Severe Conditions</strong> (require significant intervention):</p>
+<ul>
+<li><strong>Broken Limb</strong>: Cannot use limb; needs medical care</li>
+<li><strong>Grievous Wound</strong>: Burden on all physical Checks; Clock ticks 1/scene</li>
+</ul>
+<hr>
+<h2 id="abstract-positioning-zone-based-combat-heading">Abstract Positioning: Zone-Based Combat</h2>
+<p><strong>The system does not track exact distances or grid squares.</strong> Instead, use these four positioning zones to handle tactical movement and range questions at the table.</p>
+<h3 id="combat-basics-positioning-zones">Positioning Zones</h3>
+<table>
+<thead>
+<tr>
+<th>Zone</th>
+<th>Range</th>
+<th>Movement</th>
+<th>Tactical Implications</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Engaged</strong></td>
+<td>Melee range with specific opponent(s)</td>
+<td>Adjacent to enemy, in direct confrontation</td>
+<td>Can Strike with melee weapons without penalty; exposed to counterattacks; moving away requires Withdraw action or risks opportunity attacks (GM discretion)</td>
+</tr>
+<tr>
+<td><strong>Close</strong></td>
+<td>Same room or immediate area</td>
+<td>Within sight and one movement action away</td>
+<td>Can reach Engaged in one action; can use short-range attacks (thrown, close-range powers); cannot use melee weapons without moving first</td>
+</tr>
+<tr>
+<td><strong>Far</strong></td>
+<td>Different room, across battlefield</td>
+<td>Two movement actions to reach Engaged</td>
+<td>Can use ranged weapons without penalty; melee/close-range ineffective; takes sustained effort to close distance; good for ranged support or retreat</td>
+</tr>
+<tr>
+<td><strong>Out of Range</strong></td>
+<td>Beyond immediate scene</td>
+<td>Cannot interact this turn</td>
+<td>No direct combat interaction possible; requires multiple turns or scene changes to affect; may exit combat entirely</td>
+</tr>
+</tbody>
+</table>
+<h3 id="combat-basics-using-zones-in-play">Using Zones in Play</h3>
+<p><strong>GM establishes zones at combat start:</strong></p>
+<blockquote>
+<p>"The warehouse has three zones: you are <strong>Close</strong> to the guards at the door, <strong>Far</strong> from the sniper on the catwalk, and the exit is <strong>Out of Range</strong> for this round—you'd need to disengage first."</p>
+</blockquote>
+<p><strong>Players declare zone changes:</strong></p>
+<blockquote>
+<p>"I want to <strong>Close to Engaged</strong> with the guard" → The GM may require a Check if enemies block the path or terrain is hazardous.</p>
+</blockquote>
+<p><strong>Zones affect action choices:</strong></p>
+<ul>
+<li><strong>Engaged</strong>: Melee Strikes, grappling, close control—highest risk/reward</li>
+<li><strong>Close</strong>: Tactical maneuvering, short-range attacks, supporting allies—flexible positioning</li>
+<li><strong>Far</strong>: Ranged attacks, spellcasting, staying safe—control from distance</li>
+<li><strong>Out of Range</strong>: Fleeing, calling for help, affecting scene externally—scene-level effects</li>
+</ul>
+<h3 id="combat-basics-zone-transitions-and-movement">Zone Transitions and Movement</h3>
+<p><strong>Free Movement (no Check required):</strong></p>
+<ul>
+<li>Move within your current zone (repositioning while Engaged, shifting behind cover while Close)</li>
+<li>Move from Close to Engaged if path is clear and unopposed</li>
+<li>Move from Engaged to Close if you Withdraw successfully</li>
+</ul>
+<p><strong>Contested Movement (Check required):</strong></p>
+<ul>
+<li>Move from Engaged to Close while under pressure (opposed Check or Withdraw action)</li>
+<li>Move through hazardous terrain (<em>Slick</em>, <em>Burning</em>, <em>Rubble</em>) to change zones</li>
+<li>Move while under the effects of Conditions that restrict movement (<em>Restrained</em>, <em>Suppressed</em>)</li>
+</ul>
+<p><strong>Multi-Action Movement:</strong></p>
+<ul>
+<li>Moving from Far to Engaged typically requires two actions or a full turn</li>
+<li>Moving to Out of Range from Engaged usually requires Withdraw + additional movement</li>
+</ul>
+<h3 id="combat-basics-zone-modifiers-and-tags">Zone Modifiers and Tags</h3>
+<p><strong>Environmental Tags affect zones differently:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Effect on Positioning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Solid Cover</strong></td>
+<td>Provides protection when Close or Far; limited value when Engaged</td>
+</tr>
+<tr>
+<td><strong>Elevated</strong></td>
+<td>Grants Edge on ranged attacks from Far zone to Close/Engaged below</td>
+</tr>
+<tr>
+<td><strong>Cramped</strong></td>
+<td>All combatants treated as Engaged or Close; Far zone unavailable</td>
+</tr>
+<tr>
+<td><strong>Open Ground</strong></td>
+<td>No cover between zones; moving between zones exposes you</td>
+</tr>
+<tr>
+<td><strong>Hazardous</strong></td>
+<td>Moving between zones requires Check or inflicts Condition</td>
+</tr>
+</tbody>
+</table>
+<h3 id="combat-basics-example-zone-based-combat-narration">Example: Zone-Based Combat Narration</h3>
+<blockquote>
+<p><strong>Setup:</strong> Party fights cultists in a temple. GM establishes zones:</p>
+<ul>
+<li><strong>Engaged</strong>: Kira is in melee with two cultists at the altar</li>
+<li><strong>Close</strong>: Varn and the cult leader are across the room, 20 feet apart</li>
+<li><strong>Far</strong>: Rella is on a balcony overlooking the scene</li>
+<li><strong>Out of Range</strong>: The temple entrance where reinforcements may arrive</li>
+</ul>
+<p><strong>Turn 1 – Kira (Engaged)</strong>: "I Strike at the closest cultist" → Standard melee attack</p>
+<p><strong>Turn 2 – Varn (Close)</strong>: "I want to reach the cult leader and interrupt his ritual" → Maneuver Check to close from Close to Engaged</p>
+<p><strong>Turn 3 – Rella (Far)</strong>: "I fire my crossbow at the cult leader" → Ranged Strike with clear line of sight</p>
+<p><strong>Turn 4 – Cult Leader (Close → Engaged)</strong>: "The leader draws a dagger and Strikes at Varn" → Now Engaged after Varn closed distance</p>
+<p><strong>Result:</strong> Everyone understands relative positions without tracking exact feet or grid squares. Tactical choices (close for melee, stay at range, retreat) are clear and mechanically meaningful.</p>
+</blockquote>
+<h3 id="combat-basics-when-to-use-zones-vs-freeform-description">When to Use Zones vs. Freeform Description</h3>
+<p><strong>Use zones when:</strong></p>
+<ul>
+<li>Combat involves ranged and melee combatants at different distances</li>
+<li>Players ask "Can I reach them?" or "Am I in range?"</li>
+<li>Tactical positioning matters (snipers, artillery, fleeing)</li>
+</ul>
+<p><strong>Use freeform description when:</strong></p>
+<ul>
+<li>Everyone is in close-quarters melee (entire fight is Engaged/Close)</li>
+<li>Positioning is clear from narrative context</li>
+<li>The fight is small-scale and conversational</li>
+</ul>
+<p><strong>GM Tip:</strong> Sketch quick zone circles on paper or use theater-of-the-mind descriptions. "You're all Close to each other around the fountain. The archers are Far on the wall. The gate is Out of Range for now." This gives enough tactical structure without requiring measurement tools.</p>
+<hr>
+<blockquote>
+<p><strong>Combat at a Glance</strong></p>
+<p>Combat uses the same tools you already know, just focused on immediate danger:</p>
+<ul>
+<li><strong>Same Check System:</strong> Roll 4d6 + Attribute vs. DC, interpret outcome tiers</li>
+<li><strong>Resolve Clocks:</strong> Track pressure instead of hit points—when the Clock fills, someone is <em>taken out</em></li>
+<li><strong>Four Core Actions:</strong> <strong>Strike</strong> (attack), <strong>Maneuver</strong> (reposition/control), <strong>Set Up</strong> (create advantage), <strong>Defend/Withdraw</strong> (protect/escape)</li>
+<li><strong>Flexible Turn Order:</strong> Choose conversational, popcorn, or rolled initiative to match scene tone</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Outcome</th>
+<th>Resolve Clock Ticks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Critical Success</strong> (+5 or more)</td>
+<td>3 ticks</td>
+</tr>
+<tr>
+<td><strong>Full Success</strong> (0 to +4)</td>
+<td>2 ticks</td>
+</tr>
+<tr>
+<td><strong>Partial Success</strong> (-1 to -2)</td>
+<td>1 tick</td>
+</tr>
+<tr>
+<td><strong>Failure</strong> (-3 or worse)</td>
+<td>0 ticks</td>
+</tr>
+</tbody>
+</table>
+<p>That is the entire combat system. Everything else is refinement.</p>
+</blockquote>
+<h2 id="combat-example-rella-vs-the-dock-thug-heading">Combat Example: Rella vs. the Dock Thug</h2>
+<p>Let's walk through a complete combat encounter showing tick progression.</p>
+<p><strong>Setup</strong>: Rella confronts a thug who caught her sneaking through the warehouse. Both have 6-segment Resolve Clocks.</p>
+<p><strong>Turn Order</strong>: Conversational—GM and player alternate naturally.</p>
+<hr>
+<p><strong>Round 1</strong></p>
+<p><em>Rella's Turn</em>: "I feint left and strike at his weapon hand."</p>
+<ul>
+<li><strong>Check</strong>: AGI + Strike, DC 14</li>
+<li><strong>Roll</strong>: 4d6+1 = 16 (<strong>Full Success</strong>)</li>
+<li><strong>Result</strong>: 2 ticks on Thug's Resolve Clock (now 2/6)</li>
+<li><strong>Narration</strong>: "Your blade catches his knuckles. He curses and shifts his grip."</li>
+</ul>
+<p><em>Thug's Turn</em>: The thug swings his club at Rella's head.</p>
+<ul>
+<li><strong>Check</strong>: Thug MIG vs Rella's defense, DC 14</li>
+<li><strong>Roll</strong>: 13 (<strong>Failure</strong>)</li>
+<li><strong>Result</strong>: 0 ticks on Rella's Resolve Clock</li>
+<li><strong>Narration</strong>: "You duck under the wild swing. He's off-balance."</li>
+</ul>
+<hr>
+<p><strong>Round 2</strong></p>
+<p><em>Rella's Turn</em>: "I use his stumble to Set Up—kicking crates into his path."</p>
+<ul>
+<li><strong>Check</strong>: AGI + Maneuver, DC 12</li>
+<li><strong>Roll</strong>: 18 (<strong>Full Success</strong>)</li>
+<li><strong>Result</strong>: Rella creates <em>Obstructed</em> Tag on the environment</li>
+<li><strong>Narration</strong>: "Crates scatter across his footing. He's boxed in."</li>
+</ul>
+<p><em>Thug's Turn</em>: Tries to shove through the crates to reach Rella.</p>
+<ul>
+<li><strong>Check</strong>: MIG vs DC 14, +2 Burden from <em>Obstructed</em></li>
+<li><strong>Roll</strong>: 14 (<strong>Partial Success</strong> at effective DC 16)</li>
+<li><strong>Result</strong>: 1 tick on Rella's Resolve Clock (now 1/6), but clears the obstacle</li>
+<li><strong>Narration</strong>: "He barrels through, clipping your shoulder. The crates are scattered."</li>
+</ul>
+<hr>
+<p><strong>Round 3</strong></p>
+<p><em>Rella's Turn</em>: "While he's recovering, I go for a disabling strike."</p>
+<ul>
+<li><strong>Check</strong>: AGI + Strike, DC 14</li>
+<li><strong>Roll</strong>: 21 (<strong>Critical Success</strong>)</li>
+<li><strong>Result</strong>: 3 ticks on Thug's Resolve Clock (now 5/6)</li>
+<li><strong>Narration</strong>: "Your blade finds the gap in his guard. He staggers, badly wounded."</li>
+</ul>
+<p><em>Thug's Turn</em>: Desperate swing with everything he has.</p>
+<ul>
+<li><strong>Check</strong>: MIG + Strike, DC 14</li>
+<li><strong>Roll</strong>: 15 (<strong>Partial Success</strong>)</li>
+<li><strong>Result</strong>: 1 tick on Rella's Resolve Clock (now 2/6)</li>
+<li><strong>Narration</strong>: "His club grazes your ribs. Painful, but you're still standing."</li>
+</ul>
+<hr>
+<p><strong>Round 4</strong></p>
+<p><em>Rella's Turn</em>: "I press the advantage—one more strike to finish this."</p>
+<ul>
+<li><strong>Check</strong>: AGI + Strike, DC 14</li>
+<li><strong>Roll</strong>: 17 (<strong>Full Success</strong>)</li>
+<li><strong>Result</strong>: 2 ticks on Thug's Resolve Clock (now 7/6—<strong>Taken Out!</strong>)</li>
+<li><strong>Stakes Question</strong>: What does "taken out" mean here?</li>
+<li><strong>Answer</strong>: The thug drops his club and surrenders, clutching his wounds.</li>
+</ul>
+<hr>
+<p><strong>Combat Summary</strong>:</p>
+<ul>
+<li><strong>Duration</strong>: 4 rounds</li>
+<li><strong>Rella's Resolve</strong>: 2/6 ticks (still fighting fit)</li>
+<li><strong>Thug's Resolve</strong>: Taken out (surrendered)</li>
+<li><strong>Key Moments</strong>: Set Up action created advantage; Critical Success dealt heavy damage</li>
+</ul>
+<p>This example shows: tick progression, Partial Success complications, Set Up creating Tags, and the "taken out" stakes question in action.</p>
+<hr>
+<h2 id="multi-round-combat-with-positioning-and-conditions-heading">Multi-Round Combat with Positioning and Conditions</h2>
+<p>This extended example demonstrates positioning zones, condition application, and how combat evolves across multiple rounds with tactical decisions.</p>
+<p><strong>Setup:</strong> The party (Kira, Varn, Rella) ambushes a VPC assassin and two guards in a warehouse. Stakes: Moderate (unconscious/captured).</p>
+<p><strong>Initial Positioning:</strong></p>
+<pre><code>[FAR: Catwalks - Rella (crossbow)]
+         |
+[CLOSE: Open Floor - Varn, Kira]
+         |
+[ENGAGED: Loading Dock - Assassin, 2 Guards]
+         |
+[OUT OF RANGE: Street Exit]
+</code></pre>
+<p><strong>Resolve Clocks:</strong></p>
+<ul>
+<li>Assassin: 8-segment Clock (0/8)</li>
+<li>Guards: Shared 6-segment Clock (0/6)</li>
+<li>Party: 6-segment Clocks each (0/6)</li>
+</ul>
+<hr>
+<h3 id="combat-basics-round-1-opening-moves-and-positioning">Round 1: Opening Moves and Positioning</h3>
+<p><strong>Rella's Turn (Far → stays Far)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Fire crossbow at Assassin from elevated position</li>
+<li><strong>Action:</strong> Strike (AGI + Ranged)</li>
+<li><strong>Position Bonus:</strong> <em>Elevated</em> Tag grants Edge</li>
+<li><strong>Check:</strong> Roll 5d6 keep best 4 = 18, AGI +2 = 20 vs DC 14</li>
+<li><strong>Outcome:</strong> Critical Success (+6 margin)</li>
+<li><strong>Effect:</strong> 3 ticks on Assassin's Clock (3/8)</li>
+<li><strong>Fiction:</strong> "Your bolt catches the assassin in the shoulder. He staggers, blood spreading across his cloak."</li>
+<li><strong>Position:</strong> Stays at Far, still has <em>Elevated</em> advantage</li>
+</ul>
+<p><strong>Kira's Turn (Close → Engaged)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Close distance and engage Guards to prevent them from reaching Varn</li>
+<li><strong>Action:</strong> Maneuver to move Close → Engaged with Guards</li>
+<li><strong>Check:</strong> AGI-based movement vs DC 12 (clear path)</li>
+<li><strong>Outcome:</strong> Full Success</li>
+<li><strong>Effect:</strong> Reaches Engaged with Guards; no Clock ticks but positions for next round</li>
+<li><strong>Fiction:</strong> "You vault crates and slide into melee range, blade drawn."</li>
+<li><strong>Position:</strong> Now Engaged with both Guards</li>
+</ul>
+<p><strong>Guard 1 (Engaged with Kira)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Strike at Kira to drive her back</li>
+<li><strong>Action:</strong> Strike (MIG + Club)</li>
+<li><strong>Check:</strong> Roll vs DC 14</li>
+<li><strong>Outcome:</strong> Partial Success</li>
+<li><strong>Effect:</strong> 1 tick on Kira's Clock (1/6), but Guard becomes <em>Exposed</em> (overextended)</li>
+<li><strong>Fiction:</strong> "His club clips your shoulder—painful but manageable. He overextends."</li>
+<li><strong>Condition Applied:</strong> Guard 1 gains <em>Exposed</em> (Light)</li>
+</ul>
+<p><strong>Varn (Close → Engaged)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Move to engage Assassin directly</li>
+<li><strong>Action:</strong> Maneuver to reach Assassin at loading dock</li>
+<li><strong>Check:</strong> AGI vs DC 14 (Guards are distracted by Kira, path open)</li>
+<li><strong>Outcome:</strong> Full Success</li>
+<li><strong>Effect:</strong> Reaches Engaged with Assassin</li>
+<li><strong>Fiction:</strong> "You sprint past the guards—Kira has them pinned—and reach the assassin."</li>
+<li><strong>Position:</strong> Now Engaged with Assassin</li>
+</ul>
+<p><strong>Assassin (Engaged with Varn)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Strike Varn with poisoned blade before he can set up</li>
+<li><strong>Action:</strong> Strike (AGI + Poisoned Dagger)</li>
+<li><strong>Check:</strong> Roll vs DC 14, but has 3/8 Clock (wounded, desperate)</li>
+<li><strong>Outcome:</strong> Full Success</li>
+<li><strong>Effect:</strong> 2 ticks on Varn's Clock (2/6), applies <em>Poisoned</em> (Moderate)</li>
+<li><strong>Fiction:</strong> "The blade flashes—shallow cut, but you feel the poison burn."</li>
+<li><strong>Condition Applied:</strong> Varn gains <em>Poisoned</em> (Burden on MIG Checks, Clock ticks 1/scene)</li>
+</ul>
+<p><strong>Guard 2 (Engaged with Kira)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Support Guard 1, flank Kira</li>
+<li><strong>Action:</strong> Strike</li>
+<li><strong>Check:</strong> Roll vs DC 14</li>
+<li><strong>Outcome:</strong> Failure</li>
+<li><strong>Fiction:</strong> "You sidestep—his swing hits empty air."</li>
+</ul>
+<p><strong>Round 1 Summary:</strong></p>
+<pre><code>[FAR: Rella (0/6) - elevated, clear shot]
+         |
+[ENGAGED: Varn (2/6, *Poisoned*) vs Assassin (3/8)]
+[ENGAGED: Kira (1/6) vs Guard 1 (*Exposed*), Guard 2]
+</code></pre>
+<ul>
+<li>Positioning established: Rella controls high ground, Kira pins guards, Varn engaged with primary target</li>
+<li>Conditions in play: Assassin wounded, Guard 1 exposed, Varn poisoned</li>
+</ul>
+<hr>
+<h3 id="combat-basics-round-2-conditions-escalate-tactical-pressure">Round 2: Conditions Escalate, Tactical Pressure</h3>
+<p><strong>Varn's Turn</strong></p>
+<ul>
+<li><strong>Condition Tick:</strong> <em>Poisoned</em> does not tick yet (only at scene end or every 10 minutes)</li>
+<li><strong>Intent:</strong> Set Up—feint to create opening for Rella's next shot</li>
+<li><strong>Action:</strong> Set Up (PRE-based, calling out Assassin's position)</li>
+<li><strong>Check:</strong> PRE vs DC 12</li>
+<li><strong>Outcome:</strong> Full Success</li>
+<li><strong>Effect:</strong> Grants Edge to next ally targeting Assassin</li>
+<li><strong>Fiction:</strong> "Now, Rella! He's exposed!" You point to the gap in his guard.</li>
+</ul>
+<p><strong>Rella's Turn (Far, with Edge from Varn)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Strike Assassin with Edge</li>
+<li><strong>Action:</strong> Strike with crossbow, Edge from Varn's Set Up, Edge from <em>Elevated</em></li>
+<li><strong>Stacked Edge:</strong> Only one Edge applies mechanically (5d6 keep best 4)</li>
+<li><strong>Check:</strong> Roll 5d6 keep best 4 = 19, AGI +2 = 21 vs DC 14</li>
+<li><strong>Outcome:</strong> Critical Success (+7 margin)</li>
+<li><strong>Effect:</strong> 3 ticks on Assassin's Clock (6/8)—nearly out</li>
+<li><strong>Fiction:</strong> "Your bolt punches through his ribs. He drops to one knee, gasping."</li>
+<li><strong>Condition Applied:</strong> Assassin gains <em>Bleeding</em> (Moderate)—will tick 1/round</li>
+</ul>
+<p><strong>Kira's Turn</strong></p>
+<ul>
+<li><strong>Intent:</strong> Finish Guard 1 (currently <em>Exposed</em>)</li>
+<li><strong>Action:</strong> Strike with Edge (enemy is <em>Exposed</em>)</li>
+<li><strong>Check:</strong> Roll 5d6 keep best 4 = 16, AGI +1 = 17 vs DC 14</li>
+<li><strong>Outcome:</strong> Full Success</li>
+<li><strong>Effect:</strong> 2 ticks on Guards' shared Clock (2/6)</li>
+<li><strong>Fiction:</strong> "You exploit his poor footing—blade slashes across his thigh. He falls."</li>
+<li><strong>Condition Applied:</strong> Guard 1 gains <em>Prone</em> (Light)</li>
+</ul>
+<p><strong>Guard 1 (Prone, must use action to stand or fight with Burden)</strong></p>
+<ul>
+<li><strong>Intent:</strong> Stand up</li>
+<li><strong>Action:</strong> Uses movement to stand (no Check)</li>
+<li><strong>Effect:</strong> Clears <em>Prone</em>, but loses offensive action this turn</li>
+<li><strong>Fiction:</strong> "He scrambles to his feet, wary now."</li>
+</ul>
+<p><strong>Assassin's Turn (6/8 Clock, <em>Bleeding</em>)</strong></p>
+<ul>
+<li><strong>Condition Tick:</strong> <em>Bleeding</em> ticks 1 segment at start of turn (7/8)—one more hit will take him out</li>
+<li><strong>Intent:</strong> Desperate Strike at Varn to finish him before being taken out</li>
+<li><strong>Action:</strong> Strike with Burden (<em>Bleeding</em> affects physical actions)</li>
+<li><strong>Check:</strong> Roll 5d6 keep worst 4 vs DC 14</li>
+<li><strong>Outcome:</strong> Partial Success</li>
+<li><strong>Effect:</strong> 1 tick on Varn's Clock (3/6), but Assassin becomes <em>Exhausted</em> (overextension)</li>
+<li><strong>Fiction:</strong> "He lunges wildly—blade cuts your arm, but he's flagging."</li>
+<li><strong>Condition Applied:</strong> Assassin gains <em>Exhausted</em> (Moderate, Burden on MIG/AGI)</li>
+</ul>
+<p><strong>Guard 2</strong></p>
+<ul>
+<li><strong>Intent:</strong> Strike Kira</li>
+<li><strong>Check:</strong> Roll vs DC 14</li>
+<li><strong>Outcome:</strong> Partial Success</li>
+<li><strong>Effect:</strong> 1 tick on Kira's Clock (2/6), but gains <em>Exposed</em></li>
+<li><strong>Fiction:</strong> "His strike glances off your armor, but he overcommits."</li>
+</ul>
+<p><strong>Round 2 Summary:</strong></p>
+<pre><code>[FAR: Rella (0/6)]
+         |
+[ENGAGED: Varn (3/6, *Poisoned*) vs Assassin (7/8, *Bleeding*, *Exhausted*)]
+[ENGAGED: Kira (2/6) vs Guard 1 (2/6 shared), Guard 2 (*Exposed*)]
+</code></pre>
+<ul>
+<li>Assassin nearly defeated: 7/8 Clock, bleeding and exhausted</li>
+<li>Guards holding but vulnerable: Guard 2 exposed</li>
+<li>Varn taking damage but still functional</li>
+</ul>
+<hr>
+<h3 id="combat-basics-round-3-resolution-and-takedown">Round 3: Resolution and Takedown</h3>
+<p><strong>Rella's Turn</strong></p>
+<ul>
+<li><strong>Intent:</strong> Finish the Assassin with one final shot</li>
+<li><strong>Action:</strong> Strike</li>
+<li><strong>Check:</strong> Roll 4d6 = 16, AGI +2 = 18 vs DC 12 (Assassin barely standing)</li>
+<li><strong>Outcome:</strong> Full Success</li>
+<li><strong>Effect:</strong> 2 ticks on Assassin's Clock (9/8—<strong>Taken Out</strong>)</li>
+<li><strong>Stakes Resolution:</strong> Assassin is unconscious, captured</li>
+<li><strong>Fiction:</strong> "Your bolt takes him in the chest. He collapses, unconscious but breathing."</li>
+<li><strong>Position:</strong> Assassin removed from combat</li>
+</ul>
+<p><strong>Kira's Turn</strong></p>
+<ul>
+<li><strong>Intent:</strong> Strike Guard 2 (currently <em>Exposed</em>)</li>
+<li><strong>Action:</strong> Strike with Edge</li>
+<li><strong>Check:</strong> Roll 5d6 keep best 4 = 15, AGI +1 = 16 vs DC 14</li>
+<li><strong>Outcome:</strong> Full Success</li>
+<li><strong>Effect:</strong> 2 ticks on Guards' Clock (4/6)</li>
+<li><strong>Fiction:</strong> "You press the advantage—quick strikes drive him back."</li>
+</ul>
+<p><strong>Varn's Turn</strong></p>
+<ul>
+<li><strong>Intent:</strong> Intimidate remaining Guards into surrender</li>
+<li><strong>Action:</strong> Set Up (PRE-based intimidation)</li>
+<li><strong>Check:</strong> PRE vs DC 12 (their leader is down, they are losing)</li>
+<li><strong>Outcome:</strong> Critical Success</li>
+<li><strong>Effect:</strong> Guards surrender immediately (GM narrates Clock filling narratively)</li>
+<li><strong>Fiction:</strong> "Drop your weapons! Your boss is done!" They see the assassin bleeding out and throw down their clubs.</li>
+</ul>
+<p><strong>Combat Ends:</strong> Assassin captured (unconscious, 8/8 Clock filled), Guards surrendered (narratively taken out).</p>
+<p><strong>Post-Combat:</strong></p>
+<ul>
+<li><strong>Varn:</strong> Still has <em>Poisoned</em> condition—needs treatment (RSN Check DC 14 or antidote)</li>
+<li><strong>Kira:</strong> 2/6 on Clock, minor injuries but functional</li>
+<li><strong>Rella:</strong> Unscathed, controlled the fight from range</li>
+<li><strong>Assassin:</strong> Unconscious, can be interrogated after stabilization</li>
+</ul>
+<hr>
+<h3 id="combat-basics-key-tactical-lessons-from-this-fight">Key Tactical Lessons from This Fight</h3>
+<ol>
+<li>
+<p><strong>Positioning Mattered:</strong> Rella's <em>Elevated</em> position at Far range provided consistent Edge, while Kira's willingness to engage Close/Engaged protected the party's flanks.</p>
+</li>
+<li>
+<p><strong>Conditions Compounded:</strong> The Assassin's <em>Bleeding</em> + <em>Exhausted</em> stack made him critically vulnerable by Round 3. Even though Burden doesn't stack mechanically, multiple conditions create narrative pressure and automatic Clock ticks.</p>
+</li>
+<li>
+<p><strong>Set Up Actions Won the Fight:</strong> Varn's Set Up granted Rella the Edge for a Critical Success that nearly finished the Assassin. Set Up is not wasted action—it's force multiplication.</p>
+</li>
+<li>
+<p><strong>Shared Clocks for Minions:</strong> Tracking two guards with one shared Clock simplified bookkeeping. When their leader fell and their Clock was 4/6, intimidation made narrative sense.</p>
+</li>
+<li>
+<p><strong>Zones Create Clear Tactical Choices:</strong> Everyone knew who could reach whom, when ranged attacks were effective, and how to coordinate without measuring distances.</p>
+</li>
+</ol>
+<hr>
 <p>If you are familiar with Hit Points from other games, think of Resolve Clocks as tracking momentum and composure rather than physical damage. A filled Clock does not mean death; it means the character can no longer continue fighting on their terms. They might flee, surrender, collapse from exhaustion, or be rendered helpless—the specific outcome depends on the stakes established at the start of the fight. This distinction matters: combat in this system ends when someone is <em>out</em>, not necessarily when they are dead.</p>
+<blockquote>
+<p><strong>The Key Question: What Does Taken Out Mean?</strong></p>
+<p>This single question unlocks the entire combat system.</p>
+<p>When a Resolve Clock fills, the character is <em>taken out</em>—but what that means depends entirely on the fiction and the stakes the table established before the fight began. "Taken out" is not a fixed mechanical state; it is a narrative outcome shaped by context.</p>
+<p><strong>Taken out might mean:</strong></p>
+<ul>
+<li><strong>Killed</strong> – in a lethal fight where death is on the table</li>
+<li><strong>Knocked unconscious</strong> – battered beyond the ability to continue</li>
+<li><strong>Disarmed and helpless</strong> – weapon lost, backed into a corner</li>
+<li><strong>Convinced to surrender</strong> – broken in spirit, not body</li>
+<li><strong>Fled the scene</strong> – self-preservation kicks in</li>
+<li><strong>Captured</strong> – subdued and restrained</li>
+<li><strong>Exhausted</strong> – too spent to fight but otherwise unharmed</li>
+</ul>
+<p>The same 6-segment Clock can represent wildly different outcomes depending on what the table agrees to at the start of the scene. A bar brawl might mean "first one knocked down loses." A duel to the death means exactly that. A hostage negotiation where you are "fighting" with words might mean "convinced to release the hostage."</p>
+<p><strong>Before any fight begins, ask:</strong> "What happens when someone's Clock fills?" The answer shapes every action that follows.</p>
+</blockquote>
+<h4 id="combat-basics-taken-out-mechanical-framework">Taken Out: Mechanical Framework</h4>
+<p>While the narrative outcome of being taken out varies with fiction and stakes, the mechanical framework provides structure and clarity.</p>
+<p><strong>Severity Levels for Taken Out Outcomes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Mechanical Effect</th>
+<th>Recovery Time</th>
+<th>Examples</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Minor</strong></td>
+<td>Out of current scene; can return in next scene at reduced capacity (start next scene with 2 segments filled)</td>
+<td>Immediate (next scene)</td>
+<td>Winded, embarrassed, disarmed and retreated, convinced to back down</td>
+<td>Low-stakes fights, sparring, social conflicts, comedic tones</td>
+</tr>
+<tr>
+<td><strong>Moderate</strong></td>
+<td>Out of current scene; cannot return until after a rest; apply one lasting Condition</td>
+<td>One rest period (hours to overnight)</td>
+<td>Knocked unconscious, badly beaten, captured and must be freed, fled in panic</td>
+<td>Standard combat, most encounters, genre-typical danger</td>
+</tr>
+<tr>
+<td><strong>Major</strong></td>
+<td>Out of current scene and next session; apply two lasting Conditions; requires medical/magical/technical intervention</td>
+<td>Days to weeks of recovery</td>
+<td>Grievously wounded, broken bones, severe trauma, near-death state</td>
+<td>High-stakes combat, climactic battles, lethal threats</td>
+</tr>
+<tr>
+<td><strong>Permanent</strong></td>
+<td>Character cannot return; permanent consequence or death</td>
+<td>Permanent</td>
+<td>Killed, permanently maimed, utterly broken, irrevocably lost</td>
+<td>Explicitly lethal stakes, climactic sacrifices, narrative endpoints</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Using Severity Levels:</strong></p>
+<ul>
+<li>
+<p><strong>Establish Severity at Scene Start:</strong> When stakes are set, the GM should indicate the severity level. "This is a standard fight—taken out means you are down until after a rest." This informs player decisions.</p>
+</li>
+<li>
+<p><strong>Escalate Severity with Context:</strong> A bar brawl is Minor. A duel with a rival is Moderate. A fight to defend your home from assassins is Major. Fighting the campaign's main villain when death has been explicitly on the table is Permanent.</p>
+</li>
+<li>
+<p><strong>Player Agency for PC Taken Out:</strong> When a PC's Clock fills at Moderate or higher severity, the player should have input into the specific outcome. The GM frames the severity, the player describes how their character goes out.</p>
+</li>
+<li>
+<p><strong>NPCs and Minions:</strong> Most NPCs default to Minor or Moderate. VPCs and major antagonists can reach Major or Permanent based on narrative weight.</p>
+</li>
+</ul>
+<p><strong>PCs vs. NPCs When Taken Out:</strong></p>
+<p>The system treats PCs and NPCs differently to respect player investment and narrative stakes:</p>
+<p><strong>Player Characters (PCs):</strong></p>
+<ul>
+<li>
+<p><strong>Minor/Moderate Default:</strong> Unless stakes are explicitly set to Major or Permanent, PCs taken out default to Moderate severity. They are out of the fight but will recover.</p>
+</li>
+<li>
+<p><strong>Death Requires Consent or Explicit Stakes:</strong> PCs do not die unless the player consents or the stakes were established as Permanent before the fight began. This prevents cheap deaths while maintaining tension.</p>
+</li>
+<li>
+<p><strong>Narrative Control:</strong> When a PC is taken out, the player describes their last moment before going down (within the severity framework). This preserves agency even in defeat.</p>
+</li>
+<li>
+<p><strong>Consequences Still Matter:</strong> Even at Moderate severity, a PC taken out suffers lasting Conditions, loses positioning, may be captured, and faces narrative consequences. Avoiding being taken out remains critically important.</p>
+</li>
+</ul>
+<p><strong>NPCs and VPCs:</strong></p>
+<ul>
+<li>
+<p><strong>Follow Established Stakes:</strong> NPCs taken out follow the severity established at scene start. Minions in a skirmish might scatter (Minor). A VPC antagonist in a climactic duel might die (Permanent).</p>
+</li>
+<li>
+<p><strong>GM Discretion:</strong> The GM determines specific outcomes for NPCs based on fiction and pacing. A recurring villain might be captured (Moderate) to return later, while nameless assassins might be killed (Permanent) to emphasize danger.</p>
+</li>
+<li>
+<p><strong>Narrative Weight Informs Severity:</strong> VPCs and named antagonists typically warrant Moderate or Major outcomes. Unnamed minions often default to Minor (fled, surrendered) or Moderate (unconscious, defeated).</p>
+</li>
+</ul>
+<p><strong>Examples in Play:</strong></p>
+<blockquote>
+<p><strong>Minor Severity – Tavern Brawl</strong></p>
+<p>The party brawls with rowdy sailors. Stakes: "First side out of the fight buys the next round."</p>
+<p>When the sailor's Clock fills: He is shoved off the table, laughs, and raises his hands in surrender. He will be drinking with the party later, no hard feelings. He can return to the scene socially but not combatively.</p>
+</blockquote>
+<blockquote>
+<p><strong>Moderate Severity – Border Skirmish</strong></p>
+<p>The party defends a caravan from bandits. Stakes: "Taken out means captured or knocked out; you will need rescue or recovery."</p>
+<p>When a PC's Clock fills: The PC is struck hard and goes down, unconscious. They wake hours later with the <em>Concussed</em> Condition (Burden on RSN Checks). The caravan survived, but the PC missed the aftermath and must recover before the next encounter.</p>
+</blockquote>
+<blockquote>
+<p><strong>Major Severity – Assassination Attempt</strong></p>
+<p>Assassins ambush the party in their sleep. Stakes: "This is lethal—taken out means you are critically wounded or worse."</p>
+<p>When a PC's Clock fills: The PC takes a blade meant for the heart. The player describes collapsing, blood spreading across the floor. They survive but are out for the next session, recovering from the <em>Grievous Wound</em> and <em>Blood Loss</em> Conditions. Narrative focus shifts to the party's desperate efforts to get them to a healer.</p>
+</blockquote>
+<blockquote>
+<p><strong>Permanent Severity – Final Confrontation</strong></p>
+<p>The party faces the campaign's main villain. Stakes established in Session Zero: "Death is on the table in climactic fights." The villain has murdered beloved NPCs. The party wants to end this.</p>
+<p>When the villain's Clock fills: The villain is killed. Their reign of terror ends permanently. The table knew this was possible and embraced it.</p>
+<p>If a PC's Clock fills: The player consents to their character dying heroically, holding off the villain long enough for allies to strike the final blow. Their sacrifice becomes a defining campaign moment.</p>
+</blockquote>
+<p><strong>GM Guidance on Severity:</strong></p>
+<ul>
+<li>
+<p><strong>Default to Moderate for Most Play:</strong> Moderate severity provides meaningful consequences (out until a rest, one Condition) without sidelining players for extended real time.</p>
+</li>
+<li>
+<p><strong>Reserve Major for High Stakes:</strong> Use Major severity sparingly—for encounters where the fiction demands serious consequences and players understand the risks going in.</p>
+</li>
+<li>
+<p><strong>Permanent Requires Explicit Consent:</strong> Never surprise players with Permanent severity. Death or permanent consequences should be discussed and agreed upon beforehand, either in Session Zero or when stakes are set for a specific encounter.</p>
+</li>
+<li>
+<p><strong>Communicate Clearly:</strong> When establishing stakes, name the severity level. "This is a Moderate fight—if you are taken out, you will be out until after a rest with a Condition." Transparency prevents table conflicts.</p>
+</li>
+</ul>
 <h3 id="combat-basics-combat-as-a-scene">Combat as a Scene</h3>
 <p>Combat starts when violence breaks out and the moment-to-moment sequence of actions matters. The GM does not call for "initiative" the first time someone raises a voice. They wait until it is important to know who acts in what order and how threats respond.</p>
 <p>The table can always ask, "Is this a structured combat now, or are we still in free conversation?" Use structured turns when:</p>
@@ -4045,6 +4782,70 @@ You do not need Tags, Conditions, and Clocks on every scene. Start with one or t
 <li>Players benefit from clarity about who goes when.</li>
 </ul>
 <p>Stay in loose, conversational play when a moment can be resolved with a few Checks and clear narration. Not every scuffle needs the full structure of a fight. Many tense scenes will move fluidly between free narration, a short exchange of blows, and back again without ever feeling like a separate "combat mode."</p>
+<h4 id="combat-basics-when-to-shift-to-structured-combat">When to Shift to Structured Combat</h4>
+<p>The transition from conversational play to structured combat should feel natural and necessary. Use these explicit triggers to guide the shift:</p>
+<p><strong>Shift to Structured Combat When:</strong></p>
+<ol>
+<li>
+<p><strong>Initiative Ambiguity Occurs</strong> – Two or more characters want to act simultaneously and it matters who goes first.</p>
+<ul>
+<li><em>Example:</em> A tense standoff erupts—everyone draws weapons at once. Who fires first? Switch to structured turns.</li>
+</ul>
+</li>
+<li>
+<p><strong>Tactical Complexity Emerges</strong> – Position, cover, and timing become strategically significant enough that free narration feels confusing.</p>
+<ul>
+<li><em>Example:</em> A bar brawl spreads across multiple rooms with environmental hazards. Track turns to maintain clarity.</li>
+</ul>
+</li>
+<li>
+<p><strong>Multiple Opponents Act Against the Group</strong> – Three or more enemies coordinate attacks and tracking actions in conversation becomes unwieldy.</p>
+<ul>
+<li><em>Example:</em> Four guards rush the party from different angles. Structured turns prevent losing track of who has acted.</li>
+</ul>
+</li>
+<li>
+<p><strong>Stakes Escalate to Life-Threatening</strong> – The moment violence becomes potentially lethal and Resolve Clocks start mattering.</p>
+<ul>
+<li><em>Example:</em> A heated argument turns violent when someone draws a blade with lethal intent. Shift to structured combat.</li>
+</ul>
+</li>
+<li>
+<p><strong>Players Request It</strong> – Anyone at the table says "Wait, who goes when?" or "Can we do initiative?"</p>
+<ul>
+<li><em>Example:</em> A player feels uncertain about turn order during a chaotic scene. Honor that request and structure it.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Stay in Conversational Play When:</strong></p>
+<ul>
+<li>Only one or two combatants are involved and actions naturally alternate.</li>
+<li>The conflict is brief and will resolve in one or two Checks.</li>
+<li>Tension comes from negotiation or positioning rather than mechanical tactics.</li>
+<li>The scene feels more like a cinematic moment than a tactical encounter.</li>
+</ul>
+<p><strong>Edge Cases and GM Guidance:</strong></p>
+<ul>
+<li>
+<p><strong>Mid-Scene Transitions:</strong> You can shift into structured combat partway through a scene. If a tense negotiation becomes a fight, simply say "We're in structured turns now" and establish initiative.</p>
+</li>
+<li>
+<p><strong>Shifting Back:</strong> If structured combat winds down to a single opponent fleeing or negotiating surrender, you can shift back to conversational play. Ask the table: "Do we still need turns, or can we handle this narratively?"</p>
+</li>
+<li>
+<p><strong>Surprise and Ambushes:</strong> If one side has complete surprise, handle the first action narratively, then shift to structured combat once the ambushed side can respond. This keeps surprise impactful without robbing players of agency.</p>
+</li>
+<li>
+<p><strong>When in Doubt, Ask:</strong> If you are uncertain whether to shift to structured combat, ask the table: "Does this feel like we need turns, or are we good in conversation?" Consensus beats rigid rules.</p>
+</li>
+</ul>
+<div class="example">
+<p><strong>Example – Triggered Transition</strong></p>
+<p>The party is negotiating with a gang leader in a warehouse. Tension rises. One PC insults the leader, who signals his enforcers. Three enforcers draw weapons and move to surround the party while the leader reaches for his gun.</p>
+<p><strong>Trigger:</strong> Multiple opponents acting simultaneously (Trigger 3) combined with stakes escalating to life-threatening (Trigger 4).</p>
+<p><strong>GM Response:</strong> "Okay, that just became a fight. Let's do initiative—everyone roll AGI."</p>
+<p>The shift is explicit, triggered by clear criteria, and feels justified by the fiction.</p>
+</div>
 <h3 id="combat-basics-resolve-instead-of-hit-points">Resolve Instead of Hit Points</h3>
 <p>The system does not track hit points. Instead, it uses Clocks and Conditions to represent how close someone is to being taken out of a fight.</p>
 <ul>
@@ -4197,33 +4998,37 @@ Boss-tier enemies often combine their 8-segment Clock with special abilities, en
 <thead>
 <tr>
 <th>Outcome</th>
+<th>Ticks</th>
 <th>Resolve Clock Effect</th>
-<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Critical Success</strong> (margin +5 or more)</td>
-<td>2-3 segments</td>
-<td>Devastating blow; tick 3 for particularly effective attacks or exploited vulnerabilities</td>
+<td>3</td>
+<td>Devastating blow; major progress toward taking them out</td>
 </tr>
 <tr>
 <td><strong>Full Success</strong> (margin 0 to +4)</td>
-<td>2 segments</td>
+<td>2</td>
 <td>Solid hit; clear progress toward taking them out</td>
 </tr>
 <tr>
 <td><strong>Partial Success</strong> (margin -1 to -2)</td>
-<td>1 segment</td>
+<td>1</td>
 <td>Glancing blow; you also suffer a cost or complication (counterblow, lost position, Condition)</td>
 </tr>
 <tr>
 <td><strong>Failure</strong> (margin -3 or worse)</td>
-<td>0 segments</td>
+<td>0</td>
 <td>Miss or ineffective; GM may tick a threat Clock against you or impose a Condition</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Note</strong>
+These tick values are the baseline. The GM may adjust based on fictional positioning: exploiting a vulnerability might add +1 tick, while attacking through <em>Solid Cover</em> might reduce effect. The fiction always matters.</p>
+</blockquote>
 <div class="example">
 <p><strong>Example – Enemy Resolve</strong>
 A dangerous VPC has a 6-segment Resolve Clock. Each Full Success on a Strike or a particularly effective Maneuver ticks 2 segments; Partial successes tick 1 segment with a cost. As the Clock fills, the GM describes them becoming desperate, defensive, or reckless. When the sixth segment ticks, they are out of the fight in a way that fits the story.</p>
@@ -4232,6 +5037,31 @@ A dangerous VPC has a 6-segment Resolve Clock. Each Full Success on a Strike or 
 <p>Before a fight begins, the table should briefly agree on what "taken out" means in this scene. Are you trying to kill, rout, capture, or simply delay? The same Resolve Clock can represent different outcomes depending on those stakes. This keeps combat aligned with the tone of your campaign and avoids surprises about consequences.</p>
 <h3 id="combat-basics-turns-and-order">Turns and Order</h3>
 <p>Combat uses structured turns, but order does not have to be rigid. The GM chooses an ordering approach that fits the scene.</p>
+<blockquote>
+<p><strong>Turn Order Options</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conversational</strong> (default)</td>
+<td>The GM asks "Who acts next?" and rotates the spotlight naturally—best for small skirmishes and narrative-focused scenes.</td>
+</tr>
+<tr>
+<td><strong>Popcorn</strong></td>
+<td>After resolving your turn, you choose who goes next (ally or enemy)—creates dynamic, unpredictable flow.</td>
+</tr>
+<tr>
+<td><strong>Initiative Roll</strong></td>
+<td>Each participant rolls AGI; act in order from highest to lowest—suits tactical set-pieces where precise timing matters.</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <blockquote>
 <p><strong>Initiative Options Quick Reference</strong></p>
 <table>
@@ -4344,7 +5174,7 @@ Keep the procedure moving briskly. Steps 2–6 should take no more than a minute
 </table>
 <p><strong>Outcome Effects Summary:</strong></p>
 <ul>
-<li><strong>Critical (+5+):</strong> 2-3 Clock segments, possible bonus effect</li>
+<li><strong>Critical (+5+):</strong> 3 Clock segments, possible bonus effect</li>
 <li><strong>Full (0 to +4):</strong> 2 Clock segments</li>
 <li><strong>Partial (-1 to -2):</strong> 1 Clock segment, plus a cost or complication</li>
 <li><strong>Failure (-3-):</strong> No progress; GM may tick a Clock against you</li>
@@ -4604,6 +5434,642 @@ The party enters a warehouse fight with these Tags: <em>Dim Light</em>, <em>Stac
 <p>Many combat consequences are expressed as Conditions: being <em>Stunned</em> by a concussive blast, <em>Bleeding</em> after a severe hit, or <em>Suppressed</em> by incoming fire. These Conditions modify subsequent Checks and shape choices.</p>
 <p>Whenever a Condition is applied in combat, the GM should state how long it lasts and how it can be cleared. For example, <em>Stunned</em> might end after you lose your next action, while <em>Exhausted</em> may persist until you rest between scenes.</p>
 <p>Multiple Conditions can stack in dangerous ways. A character who is both <em>Bleeding</em> and <em>Exhausted</em> is under pressure each round and rolling with Burden on many actions. Scenes like this are signals to change tactics—seek cover, call for help, or end the fight on your own terms.</p>
+<h4 id="combat-basics-combat-conditions-severity-and-mechanical-effects">Combat Conditions: Severity and Mechanical Effects</h4>
+<p>This section standardizes common combat Conditions with specific mechanical effects and severity levels. Use these as written or adapt them to fit your genre and tone.</p>
+<p><strong>Condition Severity Levels:</strong></p>
+<ul>
+<li><strong>Light:</strong> Temporary hindrance; clears after one action or one round.</li>
+<li><strong>Moderate:</strong> Significant impairment; clears after the scene ends or with intervention.</li>
+<li><strong>Severe:</strong> Dangerous state requiring immediate attention; persists until rest or treatment.</li>
+</ul>
+<hr>
+<p><strong>Physical Conditions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Severity</th>
+<th>Mechanical Effect</th>
+<th>Duration</th>
+<th>How to Clear</th>
+<th>When to Apply</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stunned</strong></td>
+<td>Light</td>
+<td>Lose your next action (cannot act next turn)</td>
+<td>1 round</td>
+<td>Automatic after lost action</td>
+<td>Concussive blasts, stunning strikes, flash bangs, psychic shocks</td>
+</tr>
+<tr>
+<td><strong>Dazed</strong></td>
+<td>Light</td>
+<td>Burden on all Checks until end of next turn</td>
+<td>1-2 rounds</td>
+<td>Automatic after duration</td>
+<td>Glancing head blows, disorienting effects, bright flashes</td>
+</tr>
+<tr>
+<td><strong>Prone</strong></td>
+<td>Light</td>
+<td>Burden on AGI Checks; attackers gain Edge if adjacent (Burden if attacking from range)</td>
+<td>Until you use movement to stand</td>
+<td>Spend movement to stand (no Check required)</td>
+<td>Knocked down, tripped, thrown, or diving for cover</td>
+</tr>
+<tr>
+<td><strong>Bleeding</strong></td>
+<td>Moderate</td>
+<td>At the start of each round, tick your Resolve Clock 1 segment automatically</td>
+<td>Until treated</td>
+<td>Succeed on MIG Check (DC 12) or receive medical aid</td>
+<td>Slashing wounds, deep cuts, piercing injuries</td>
+</tr>
+<tr>
+<td><strong>Burning</strong></td>
+<td>Moderate</td>
+<td>Burden on all physical actions; tick your Resolve Clock 1 segment at start of each round</td>
+<td>Until extinguished</td>
+<td>Use action to extinguish (AGI Check DC 12) or ally assists</td>
+<td>Fire damage, chemical burns, extreme heat exposure</td>
+</tr>
+<tr>
+<td><strong>Exhausted</strong></td>
+<td>Moderate</td>
+<td>Burden on MIG and AGI Checks; cannot Sprint</td>
+<td>Until you rest</td>
+<td>Complete a rest period (at least 1 hour of downtime)</td>
+<td>Overexertion, prolonged combat, poison, blood loss</td>
+</tr>
+<tr>
+<td><strong>Poisoned</strong></td>
+<td>Moderate</td>
+<td>Burden on MIG Checks; tick Resolve Clock 1 segment every 10 minutes or at scene end</td>
+<td>Until cured</td>
+<td>Antidote or medical treatment (RSN Check DC 14-18)</td>
+<td>Toxins, venoms, disease exposure</td>
+</tr>
+<tr>
+<td><strong>Broken Limb</strong></td>
+<td>Severe</td>
+<td>Cannot use the affected limb; Burden on any Check involving it; if leg, movement reduced to half</td>
+<td>Until medical treatment</td>
+<td>Requires medical/magical/technical intervention (days to weeks)</td>
+<td>Crushing damage, critical falls, grievous injury</td>
+</tr>
+<tr>
+<td><strong>Grievous Wound</strong></td>
+<td>Severe</td>
+<td>Burden on all physical Checks; Resolve Clock automatically ticks 1 segment at start of each scene</td>
+<td>Until medical treatment</td>
+<td>Extended rest and medical intervention (multiple sessions)</td>
+<td>Near-death injuries, critical hits, assassination attempts</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Mental and Social Conditions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Severity</th>
+<th>Mechanical Effect</th>
+<th>Duration</th>
+<th>How to Clear</th>
+<th>When to Apply</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frightened</strong></td>
+<td>Light</td>
+<td>Burden on Checks while threat is visible; cannot willingly move closer to threat source</td>
+<td>Until threat is gone or 1 minute passes</td>
+<td>Remove threat or succeed on PRE Check (DC 14)</td>
+<td>Intimidation, horror moments, overwhelming threats</td>
+</tr>
+<tr>
+<td><strong>Shaken</strong></td>
+<td>Moderate</td>
+<td>Burden on PRE and RSN Checks</td>
+<td>Until scene ends</td>
+<td>Succeed on PRE Check (DC 14) or receive encouragement from ally</td>
+<td>Failed morale checks, witnessing horror, crushing social defeat</td>
+</tr>
+<tr>
+<td><strong>Demoralized</strong></td>
+<td>Moderate</td>
+<td>Burden on all Checks against the source of demoralization</td>
+<td>Until scene ends</td>
+<td>Succeed on PRE Check (DC 16) or achieve a significant victory</td>
+<td>Overwhelming opposition, crushing loss, broken confidence</td>
+</tr>
+<tr>
+<td><strong>Panicked</strong></td>
+<td>Severe</td>
+<td>Must use action to flee or hide; Burden on all Checks</td>
+<td>Until safe and can rest</td>
+<td>Reach safety and succeed on PRE Check (DC 16)</td>
+<td>Extreme horror, overwhelming terror, critical morale break</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Tactical Conditions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Severity</th>
+<th>Mechanical Effect</th>
+<th>Duration</th>
+<th>How to Clear</th>
+<th>When to Apply</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Exposed</strong></td>
+<td>Light</td>
+<td>Attackers gain Edge on Checks targeting you</td>
+<td>Until you Maneuver to cover or repositioned by ally</td>
+<td>Maneuver to safety or attacker loses line of sight</td>
+<td>Failed repositioning, forced out of cover, flanked</td>
+</tr>
+<tr>
+<td><strong>Suppressed</strong></td>
+<td>Moderate</td>
+<td>Burden on movement and attacks; cannot leave cover without Check</td>
+<td>Until suppressing fire stops or 1 round after it ends</td>
+<td>Source stops attacking or you succeed on AGI Check (DC 14) to break</td>
+<td>Heavy fire, area denial, overwhelming ranged attacks</td>
+</tr>
+<tr>
+<td><strong>Restrained</strong></td>
+<td>Moderate</td>
+<td>Cannot move; Burden on physical actions; attackers gain Edge on Checks targeting you</td>
+<td>Until you break free or are released</td>
+<td>Succeed on MIG Check (DC varies by restraint: 12-18)</td>
+<td>Grappled, bound, entangled, trapped</td>
+</tr>
+<tr>
+<td><strong>Blinded</strong></td>
+<td>Severe</td>
+<td>Burden on all Checks requiring sight; automatically fail sight-based Checks</td>
+<td>Until condition ends or you adapt</td>
+<td>Remove cause (light returns, eyes heal) or rely on other senses</td>
+<td>Darkness, flash blindness, eye injury, magical blindness</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Environmental Conditions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Severity</th>
+<th>Mechanical Effect</th>
+<th>Duration</th>
+<th>How to Clear</th>
+<th>When to Apply</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Soaked</strong></td>
+<td>Light</td>
+<td>Burden on AGI Checks; vulnerable to cold and electrical damage</td>
+<td>Until you dry off</td>
+<td>Wait 10 minutes in safe area or use heat source</td>
+<td>Water immersion, heavy rain, liquid splash</td>
+</tr>
+<tr>
+<td><strong>Frozen</strong></td>
+<td>Moderate</td>
+<td>Burden on AGI and MIG Checks; movement reduced by half; tick Resolve Clock 1 segment per round if exposed</td>
+<td>Until warmed</td>
+<td>Reach heat source and spend 1 round warming</td>
+<td>Extreme cold, ice-based attacks, hypothermia</td>
+</tr>
+<tr>
+<td><strong>Corroded</strong> (gear)</td>
+<td>Moderate</td>
+<td>Burden when using affected gear; gear may break on critical failure</td>
+<td>Until repaired</td>
+<td>Succeed on RSN Check (DC 14) to repair or replace gear</td>
+<td>Acid damage, rust, extreme corrosion to equipment</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Using Conditions Effectively:</strong></p>
+<p><strong>Stacking Conditions:</strong></p>
+<ul>
+<li>
+<p>Multiple Conditions stack. A character with <em>Bleeding</em> (Moderate) and <em>Exhausted</em> (Moderate) suffers Burden on physical Checks from <em>Exhausted</em>, ticks their Resolve Clock at the start of each round from <em>Bleeding</em>, and cannot Sprint. This compounds into a dangerous situation requiring tactical withdrawal or aid.</p>
+</li>
+<li>
+<p><strong>Maximum Burden from Conditions:</strong> Burden does not stack mechanically—you roll 5d6 and keep the worst 4, regardless of how many Burden sources you have. However, multiple Conditions increase the difficulty of clearing them and create narrative escalation.</p>
+</li>
+</ul>
+<p><strong>Conditions as Tactical Tools:</strong></p>
+<ul>
+<li>
+<p><strong>Maneuvers Apply Conditions:</strong> Use Maneuver actions to apply Conditions to enemies. A successful Maneuver might apply <em>Exposed</em>, <em>Prone</em>, or <em>Dazed</em> to set up devastating follow-up Strikes.</p>
+</li>
+<li>
+<p><strong>Conditions Multiply Danger:</strong> An enemy with <em>Prone</em> and <em>Exposed</em> is dramatically easier to finish. Coordinate your Conditions to compound effects.</p>
+</li>
+<li>
+<p><strong>Clear Conditions Strategically:</strong> Not every Condition requires immediate attention. <em>Dazed</em> (Light) clears automatically; focus on clearing <em>Bleeding</em> or <em>Burning</em> (Moderate) before they tick your Clock dangerously high.</p>
+</li>
+</ul>
+<p><strong>GM Guidance on Applying Conditions:</strong></p>
+<ul>
+<li>
+<p><strong>Conditions Replace Generic Burden:</strong> Instead of saying "you have Burden on your next Check," apply a specific Condition with defined duration and mechanical effects. This improves clarity and consistency.</p>
+</li>
+<li>
+<p><strong>Match Condition to Fiction:</strong> If the fiction describes a concussive blast, apply <em>Stunned</em>. If the fiction describes heavy fire pinning someone down, apply <em>Suppressed</em>. Let the narrative guide which Condition fits.</p>
+</li>
+<li>
+<p><strong>Communicate Duration and Clearing Method:</strong> When you apply a Condition, immediately state how long it lasts and how to clear it. "You are <em>Bleeding</em> (Moderate)—your Clock will tick 1 segment at the start of each round until someone treats you with a MIG Check DC 12, or you get medical aid."</p>
+</li>
+<li>
+<p><strong>Avoid Condition Spam:</strong> Do not overload characters with multiple Light Conditions simultaneously unless the fiction strongly supports it. Two or three Conditions should feel dangerous; five or six should feel overwhelming and rare.</p>
+</li>
+</ul>
+<p><strong>Condition Examples in Play:</strong></p>
+<blockquote>
+<p><strong>Applying Stunned</strong></p>
+<p>The sorcerer gestures, and a concussive blast of force slams into Kira.</p>
+<p><strong>GM:</strong> "Make a MIG Check against DC 16 to resist being stunned."</p>
+<p><strong>Kira's Player:</strong> Rolls 11. Failure.</p>
+<p><strong>GM:</strong> "The blast knocks the wind out of you. You are <em>Stunned</em> (Light)—you lose your next action. After that, it clears automatically."</p>
+<p><strong>Mechanical Effect:</strong> Kira cannot act next turn. The round after, she acts normally.</p>
+</blockquote>
+<blockquote>
+<p><strong>Applying and Clearing Bleeding</strong></p>
+<p>The assassin's blade opens a deep gash across Varn's side.</p>
+<p><strong>GM:</strong> "That is a Full Success on his Strike—2 ticks to your Clock. The blade cuts deep. You are <em>Bleeding</em> (Moderate). At the start of each round, your Clock will tick 1 segment automatically until someone treats you."</p>
+<p><strong>Varn's Player (next round):</strong> "I press my hand to the wound and try to stop the bleeding."</p>
+<p><strong>GM:</strong> "That is a MIG Check, DC 12."</p>
+<p><strong>Varn's Player:</strong> Rolls 14. Success.</p>
+<p><strong>GM:</strong> "You manage to staunch the bleeding with pressure and a torn piece of cloth. <em>Bleeding</em> clears."</p>
+</blockquote>
+<blockquote>
+<p><strong>Stacking Conditions</strong></p>
+<p>Rella is fighting a fire mage. She has been hit with a fireball (<em>Burning</em>, Moderate) and failed a defense check that left her sprawled on the ground (<em>Prone</em>, Light).</p>
+<p><strong>Mechanical State:</strong></p>
+<ul>
+<li><em>Burning</em>: Burden on all physical actions; Resolve Clock ticks 1 segment per round.</li>
+<li><em>Prone</em>: Burden on AGI Checks; adjacent attackers have Edge.</li>
+</ul>
+<p><strong>Rella's Player (on her turn):</strong> "I use my action to roll and smother the flames, then I will stand."</p>
+<p><strong>GM:</strong> "Extinguishing the fire is an AGI Check, DC 12, but you have Burden from <em>Burning</em>. You can stand after if you succeed."</p>
+<p><strong>Rella's Player:</strong> Rolls 13 with Burden (5d6 keep worst 4). Success.</p>
+<p><strong>GM:</strong> "You roll frantically, smothering the flames against the dirt. <em>Burning</em> clears. You push yourself to your feet—<em>Prone</em> clears. You are battered but standing."</p>
+</blockquote>
+<hr>
+<p><strong>Custom Conditions:</strong></p>
+<p>The table above covers common combat Conditions, but the system supports custom Conditions tailored to your genre, setting, or specific encounters. When creating a custom Condition, follow this template:</p>
+<p><strong>Custom Condition Template:</strong></p>
+<ul>
+<li><strong>Name:</strong> Clear, evocative name (e.g., <em>Cursed</em>, <em>System Failure</em>, <em>Infected</em>)</li>
+<li><strong>Severity:</strong> Light, Moderate, or Severe</li>
+<li><strong>Mechanical Effect:</strong> Specific Edge/Burden and any automatic effects (Clock ticks, action restrictions)</li>
+<li><strong>Duration:</strong> How long it lasts (rounds, scenes, until treated)</li>
+<li><strong>How to Clear:</strong> Specific action or Check to remove it</li>
+<li><strong>When to Apply:</strong> Fiction trigger (curse, malfunction, disease)</li>
+</ul>
+<p><strong>Example Custom Conditions:</strong></p>
+<blockquote>
+<p><strong>Cybernetic Malfunction</strong> (Sci-Fi)</p>
+<p><strong>Severity:</strong> Moderate
+<strong>Mechanical Effect:</strong> Burden on Checks using the affected cybernetic system; system may fail entirely on critical failure.
+<strong>Duration:</strong> Until repaired.
+<strong>How to Clear:</strong> RSN Check (DC 16) with appropriate tools, or professional repair.
+<strong>When to Apply:</strong> EMP damage, critical system failure, hacking.</p>
+</blockquote>
+<blockquote>
+<p><strong>Cursed</strong> (Fantasy)</p>
+<p><strong>Severity:</strong> Severe
+<strong>Mechanical Effect:</strong> Burden on all Checks; minor misfortunes occur narratively (dropped items, stumbles, bad luck).
+<strong>Duration:</strong> Until curse is lifted.
+<strong>How to Clear:</strong> Ritual, magical intervention, or completing a specific task.
+<strong>When to Apply:</strong> Magical curse, angered deity, dark artifact.</p>
+</blockquote>
+<blockquote>
+<p><strong>Shell-Shocked</strong> (War/Noir)</p>
+<p><strong>Severity:</strong> Moderate
+<strong>Mechanical Effect:</strong> Burden on PRE and RSN Checks in stressful situations; flashbacks may trigger at GM discretion.
+<strong>Duration:</strong> Until therapy or significant rest (multiple sessions).
+<strong>How to Clear:</strong> Prolonged rest, psychological treatment, narrative resolution.
+<strong>When to Apply:</strong> Prolonged combat, witnessing atrocities, surviving near-death trauma.</p>
+</blockquote>
+<hr>
+<h3 id="combat-basics-weapons-and-armor-tags-and-effects">Weapons and Armor: Tags and Effects</h3>
+<p>This system does not track weapon damage dice or armor class values. Instead, weapons and armor provide mechanical benefits through Tags, Conditions, and fictional positioning. This section provides a framework for creating weapon and armor effects that fit any genre.</p>
+<h4 id="combat-basics-weapons-tags-and-mechanical-effects">Weapons: Tags and Mechanical Effects</h4>
+<p>Weapons are defined by their Tags and the fictional effects they enable. A weapon's effectiveness comes from how it interacts with the fiction and what tactical advantages it creates.</p>
+<p><strong>Weapon Tag Framework:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Weapon Tag</th>
+<th>Mechanical Effect</th>
+<th>Examples</th>
+<th>Typical Use Cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precise</strong></td>
+<td>Grants +1 Edge when targeting a specific weak point or gap in defenses</td>
+<td>Rapier, sniper rifle, scalpel, needle</td>
+<td>Exploiting armor gaps, surgical strikes, called shots</td>
+</tr>
+<tr>
+<td><strong>Heavy</strong></td>
+<td>On Critical Success, apply <em>Stunned</em> or <em>Prone</em> Condition in addition to Clock ticks</td>
+<td>War hammer, heavy club, sledgehammer, battering ram</td>
+<td>Breaking through defenses, devastating blows, overwhelming force</td>
+</tr>
+<tr>
+<td><strong>Reach</strong></td>
+<td>Can Strike from adjacent zone without entering melee range; prevents enemies from closing without risk</td>
+<td>Spear, pike, halberd, staff</td>
+<td>Defensive positioning, controlling space, keeping enemies at bay</td>
+</tr>
+<tr>
+<td><strong>Quick</strong></td>
+<td>Grants +1 Edge on Maneuver actions in combat; can disengage without Check</td>
+<td>Dagger, short sword, combat knife, pistol</td>
+<td>Hit-and-run tactics, repositioning, defensive fighting</td>
+</tr>
+<tr>
+<td><strong>Ranged</strong></td>
+<td>Can Strike targets at a distance; no effect on targets in melee with you (Burden if shooting into melee)</td>
+<td>Bow, crossbow, rifle, thrown weapon</td>
+<td>Attacking from cover, supporting allies, avoiding melee</td>
+</tr>
+<tr>
+<td><strong>Area</strong></td>
+<td>On Full Success or better, can affect multiple targets in the same zone (distribute Clock ticks)</td>
+<td>Grenade, explosive, fireball spell, flamethrower</td>
+<td>Crowd control, overwhelming numbers, area denial</td>
+</tr>
+<tr>
+<td><strong>Penetrating</strong></td>
+<td>Ignores benefits from light armor; reduces effectiveness of medium armor</td>
+<td>Armor-piercing round, war pick, lance, plasma weapon</td>
+<td>Defeating armored foes, bypassing defenses</td>
+</tr>
+<tr>
+<td><strong>Brutal</strong></td>
+<td>On Partial Success, still tick 1 segment even if cost is applied; represents devastating offensive capability</td>
+<td>Great axe, chainsaw, heavy machine gun, cleaver</td>
+<td>Overwhelming offense, sacrificing defense for damage</td>
+</tr>
+<tr>
+<td><strong>Defensive</strong></td>
+<td>Grants +1 Edge on Defend actions; can parry attacks effectively</td>
+<td>Shield, staff, parrying dagger, buckler</td>
+<td>Defensive fighting, protecting allies, outlasting opponents</td>
+</tr>
+<tr>
+<td><strong>Versatile</strong></td>
+<td>Can be used with MIG or AGI depending on approach; adapts to fighting style</td>
+<td>Longsword, spear, rifle, hand axe</td>
+<td>Flexible tactics, adapting to circumstances</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Using Weapon Tags:</strong></p>
+<ul>
+<li>
+<p><strong>Tags Modify Checks:</strong> When you use a weapon, its Tags modify your Checks. A <em>Precise</em> rapier grants Edge when you target weak points. A <em>Heavy</em> hammer applies <em>Stunned</em> on Critical Success.</p>
+</li>
+<li>
+<p><strong>Fictional Positioning Matters:</strong> A weapon's Tag only applies when the fiction supports it. You cannot use <em>Reach</em> in cramped quarters where there is no room to extend a spear. You cannot use <em>Ranged</em> effectively in total darkness without a means to see your target.</p>
+</li>
+<li>
+<p><strong>Multiple Tags:</strong> Signature or magical weapons might have two Tags. A legendary sword might be both <em>Precise</em> and <em>Versatile</em>. This represents exceptional quality or unique properties.</p>
+</li>
+</ul>
+<p><strong>Example Weapons by Genre:</strong></p>
+<p><strong>Fantasy:</strong></p>
+<ul>
+<li><strong>Longsword</strong> (<em>Versatile</em>): Can be used with MIG (powerful swings) or AGI (quick thrusts). Standard adventurer weapon.</li>
+<li><strong>War Hammer</strong> (<em>Heavy</em>): On Critical Success, target is <em>Stunned</em> in addition to Clock ticks. Devastating but slow.</li>
+<li><strong>Rapier</strong> (<em>Precise</em>, <em>Quick</em>): Grants Edge when targeting gaps; Edge on Maneuvers. Favored by duelists.</li>
+<li><strong>Longbow</strong> (<em>Ranged</em>, <em>Penetrating</em>): Strikes at distance; ignores light armor. Requires clear line of sight.</li>
+<li><strong>Spear</strong> (<em>Reach</em>, <em>Versatile</em>): Keeps enemies at bay; can use MIG or AGI. Defensive and adaptable.</li>
+</ul>
+<p><strong>Noir/Modern:</strong></p>
+<ul>
+<li><strong>Revolver</strong> (<em>Ranged</em>, <em>Quick</em>): Strikes at distance; Edge on disengaging. Classic detective sidearm.</li>
+<li><strong>Shotgun</strong> (<em>Area</em>, <em>Brutal</em>): Affects multiple targets in close range; Partial Success still ticks Clock. Room-clearer.</li>
+<li><strong>Sniper Rifle</strong> (<em>Ranged</em>, <em>Precise</em>): Long-distance precision; Edge when targeting specific points. Requires setup.</li>
+<li><strong>Brass Knuckles</strong> (<em>Heavy</em>, <em>Quick</em>): Stuns on Critical Success; Edge on Maneuvers. Brutal close combat.</li>
+<li><strong>Combat Knife</strong> (<em>Quick</em>, <em>Precise</em>): Edge on Maneuvers and targeting weak points. Silent and lethal.</li>
+</ul>
+<p><strong>Sci-Fi:</strong></p>
+<ul>
+<li><strong>Plasma Rifle</strong> (<em>Ranged</em>, <em>Penetrating</em>): Strikes at distance; ignores light armor. Standard military weapon.</li>
+<li><strong>Monomolecular Blade</strong> (<em>Precise</em>, <em>Penetrating</em>): Edge when targeting gaps; ignores armor. Expensive and deadly.</li>
+<li><strong>Arc Weapon</strong> (<em>Area</em>, <em>Heavy</em>): Affects multiple targets; stuns on Critical Success. Anti-crowd tool.</li>
+<li><strong>Energy Shield</strong> (<em>Defensive</em>): Edge on Defend actions. Protects bearer and adjacent allies.</li>
+<li><strong>Heavy Bolter</strong> (<em>Ranged</em>, <em>Brutal</em>, <em>Heavy</em>): Devastating but unwieldy. Partial Success still ticks; Critical stuns.</li>
+</ul>
+<p><strong>Creating Custom Weapons:</strong></p>
+<p>When players or GMs want to create new weapons, use this process:</p>
+<ol>
+<li><strong>Define the Fiction:</strong> What is the weapon? What does it look like? How is it used?</li>
+<li><strong>Choose 1-2 Tags:</strong> Select Tags that reflect the weapon's fictional strengths. Most weapons have one Tag; signature or exceptional weapons might have two.</li>
+<li><strong>Set the Mechanical Effect:</strong> Based on the Tags, determine how the weapon modifies Checks, applies Conditions, or interacts with armor.</li>
+<li><strong>Test in Play:</strong> Use the weapon in a session. If it feels too strong or too weak, adjust the Tags or mechanical effects.</li>
+</ol>
+<div class="example">
+<p><strong>Example: Creating a Flail</strong></p>
+<p><strong>Fiction:</strong> A heavy chain with a spiked ball. Difficult to defend against because of unpredictable motion; wraps around shields.</p>
+<p><strong>Tags:</strong> <em>Heavy</em> (devastating blows) and <em>Penetrating</em> (ignores shield defenses).</p>
+<p><strong>Mechanical Effect:</strong> On Critical Success, apply <em>Stunned</em> or <em>Prone</em>. Ignores benefits from shields and light armor.</p>
+<p><strong>Test in Play:</strong> Player uses the flail against a shield-bearing knight. The <em>Penetrating</em> Tag ignores the knight's <em>Defensive</em> shield bonus, and a Critical Success leaves the knight <em>Stunned</em>. Feels powerful but fair—requires Critical Success for maximum effect.</p>
+</div>
+<hr>
+<h4 id="combat-basics-armor-tags-and-mechanical-effects">Armor: Tags and Mechanical Effects</h4>
+<p>Armor provides protection through Tags that modify incoming attacks. Like weapons, armor is defined by its fictional presence and tactical effects rather than numerical values.</p>
+<p><strong>Armor Tag Framework:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Armor Tag</th>
+<th>Mechanical Effect</th>
+<th>Examples</th>
+<th>Trade-Offs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Light Armor</strong></td>
+<td>Imposes Burden on enemy Checks when exploiting <em>Exposed</em> Tag; grants +1 Edge on AGI Checks to avoid danger</td>
+<td>Leather jerkin, padded coat, light vest, cloth armor</td>
+<td>Does not reduce Clock ticks directly; mobility over protection</td>
+</tr>
+<tr>
+<td><strong>Medium Armor</strong></td>
+<td>Reduce Clock ticks by 1 (minimum 1) from successful Strikes; imposes Burden on Stealth and some AGI Checks</td>
+<td>Chainmail, reinforced coat, tactical vest, scale armor</td>
+<td>Balanced protection and mobility; noticeable but not cumbersome</td>
+</tr>
+<tr>
+<td><strong>Heavy Armor</strong></td>
+<td>Reduce Clock ticks by 2 (minimum 1) from successful Strikes; imposes Burden on AGI Checks and Stealth; cannot Sprint</td>
+<td>Plate armor, full battle suit, power armor, riot gear</td>
+<td>Maximum protection; significant mobility penalty</td>
+</tr>
+<tr>
+<td><strong>Shielded</strong></td>
+<td>Grants +1 Edge on Defend actions; can use Defend to protect adjacent ally</td>
+<td>Shield, buckler, energy barrier, riot shield</td>
+<td>Requires one hand; active defense tool</td>
+</tr>
+<tr>
+<td><strong>Reinforced</strong></td>
+<td>Immune to <em>Penetrating</em> weapon effects; armor cannot be bypassed by called shots</td>
+<td>Composite plates, hardened steel, ceramic trauma plates</td>
+<td>Heavy and expensive; prevents targeted weak point exploitation</td>
+</tr>
+<tr>
+<td><strong>Ablative</strong></td>
+<td>First hit each scene is ignored (no Clock ticks); afterward, armor downgrades one tier</td>
+<td>Sacrificial plating, breakaway vest, magical ward</td>
+<td>One-time protection; degrades after use</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Using Armor Tags:</strong></p>
+<ul>
+<li>
+<p><strong>Armor Reduces Clock Ticks:</strong> Medium and Heavy Armor reduce the number of segments ticked on your Resolve Clock when you are hit. A Full Success normally ticks 2 segments; Medium Armor reduces it to 1. Heavy Armor would reduce a Full Success from 2 ticks to 0 (but minimum 1 means it still ticks 1 segment).</p>
+</li>
+<li>
+<p><strong>Armor Has Trade-Offs:</strong> Heavier armor provides better protection but imposes Burden on mobility and stealth. Light Armor keeps you mobile but does not reduce damage. Choose armor that fits your tactics.</p>
+</li>
+<li>
+<p><strong>Fictional Positioning Matters:</strong> Armor only works when the fiction supports it. A <em>Penetrating</em> weapon bypasses light armor. Armor does not protect against conditions like <em>Burning</em> or <em>Poisoned</em> unless it specifically includes protection (e.g., a sealed suit prevents gas).</p>
+</li>
+<li>
+<p><strong>Armor Can Be Bypassed:</strong> Even Heavy Armor has gaps. A <em>Precise</em> weapon targeting joints or vision slits can bypass armor's protection (treat as if unarmored for that attack).</p>
+</li>
+</ul>
+<p><strong>Example Armor by Genre:</strong></p>
+<p><strong>Fantasy:</strong></p>
+<ul>
+<li><strong>Leather Armor</strong> (<em>Light Armor</em>): Grants Edge on AGI Checks to dodge; Burden when exploited while <em>Exposed</em>. Favored by scouts and rogues.</li>
+<li><strong>Chainmail</strong> (<em>Medium Armor</em>): Reduces Clock ticks by 1; Burden on Stealth. Standard soldier's armor.</li>
+<li><strong>Plate Armor</strong> (<em>Heavy Armor</em>, <em>Reinforced</em>): Reduces Clock ticks by 2; Burden on AGI; immune to <em>Penetrating</em> and called shots. Knight's armor.</li>
+<li><strong>Tower Shield</strong> (<em>Shielded</em>, <em>Defensive</em>): Edge on Defend; can protect adjacent ally. Requires both hands (or MIG 3+).</li>
+</ul>
+<p><strong>Noir/Modern:</strong></p>
+<ul>
+<li><strong>Leather Jacket</strong> (<em>Light Armor</em>): Edge on AGI Checks; minimal protection. Style and mobility.</li>
+<li><strong>Tactical Vest</strong> (<em>Medium Armor</em>): Reduces Clock ticks by 1; Burden on Stealth. Police or security standard.</li>
+<li><strong>Riot Gear</strong> (<em>Heavy Armor</em>, <em>Shielded</em>): Reduces Clock ticks by 2; Burden on AGI; includes shield. Crowd control equipment.</li>
+<li><strong>Concealed Vest</strong> (<em>Light Armor</em>, <em>Ablative</em>): First hit ignored; downgrades afterward. Undercover protection.</li>
+</ul>
+<p><strong>Sci-Fi:</strong></p>
+<ul>
+<li><strong>Enviro-Suit</strong> (<em>Light Armor</em>): Edge on AGI Checks; protects against environmental hazards. Exploration gear.</li>
+<li><strong>Combat Armor</strong> (<em>Medium Armor</em>, <em>Reinforced</em>): Reduces Clock ticks by 1; immune to <em>Penetrating</em>. Standard military issue.</li>
+<li><strong>Power Armor</strong> (<em>Heavy Armor</em>, <em>Shielded</em>, <em>Reinforced</em>): Reduces Clock ticks by 2; immune to <em>Penetrating</em>; Edge on Defend. Elite equipment; requires training.</li>
+<li><strong>Energy Shield</strong> (<em>Shielded</em>, <em>Ablative</em>): Edge on Defend; first hit ignored per scene. Advanced technology.</li>
+</ul>
+<p><strong>Creating Custom Armor:</strong></p>
+<p>When creating new armor, use this process:</p>
+<ol>
+<li><strong>Define the Fiction:</strong> What is the armor? What does it look like? What is it made of?</li>
+<li><strong>Choose 1-2 Tags:</strong> Select Tags that reflect the armor's protective capability and trade-offs. Most armor has one Tag; exceptional armor might have two.</li>
+<li><strong>Set the Mechanical Effect:</strong> Determine how the armor reduces Clock ticks, grants Edge/Burden, or provides specific protections.</li>
+<li><strong>Test in Play:</strong> Use the armor in a session. Adjust Tags or effects if needed.</li>
+</ol>
+<div class="example">
+<p><strong>Example: Creating Bone Armor</strong></p>
+<p><strong>Fiction:</strong> Hardened plates carved from monster bones, layered and bound with sinew. Intimidating but crude.</p>
+<p><strong>Tags:</strong> <em>Medium Armor</em> (solid protection) and <em>Fearsome</em> (custom Tag—grants Edge on Intimidation).</p>
+<p><strong>Mechanical Effect:</strong> Reduces Clock ticks by 1; Burden on Stealth; Edge on Intimidation Checks.</p>
+<p><strong>Test in Play:</strong> Barbarian PC wears bone armor into a fight. Reduces incoming damage effectively, Intimidation Edge fits the character. Stealth Burden is appropriate for the loud, clattering armor. Feels thematically strong without being overpowered.</p>
+</div>
+<hr>
+<h4 id="combat-basics-weapons-and-armor-in-play-tactical-considerations">Weapons and Armor in Play: Tactical Considerations</h4>
+<p><strong>Matching Weapons to Tactics:</strong></p>
+<ul>
+<li><strong>Aggressive Fighters:</strong> Use <em>Heavy</em> or <em>Brutal</em> weapons to maximize Clock ticks. Pair with Light or Medium Armor for mobility.</li>
+<li><strong>Defensive Fighters:</strong> Use <em>Defensive</em> weapons (shields, staves) with Medium or Heavy Armor. Outlast opponents.</li>
+<li><strong>Mobile Skirmishers:</strong> Use <em>Quick</em> or <em>Ranged</em> weapons with Light Armor. Hit and run; avoid being pinned.</li>
+<li><strong>Precision Strikers:</strong> Use <em>Precise</em> weapons to exploit weaknesses. Light Armor to stay agile and target gaps.</li>
+</ul>
+<p><strong>Countering Armor:</strong></p>
+<ul>
+<li><strong>Against Light Armor:</strong> Any weapon works; Light Armor does not reduce Clock ticks. Exploit their <em>Exposed</em> status when possible.</li>
+<li><strong>Against Medium Armor:</strong> Use <em>Penetrating</em> or <em>Heavy</em> weapons. <em>Penetrating</em> bypasses the armor reduction; <em>Heavy</em> applies Conditions even when ticks are reduced.</li>
+<li><strong>Against Heavy Armor:</strong> Use <em>Penetrating</em> weapons and target weak points (<em>Precise</em> weapons). Apply Conditions (<em>Stunned</em>, <em>Prone</em>) to bypass armor's Clock reduction. Maneuver to create <em>Exposed</em> and exploit gaps.</li>
+</ul>
+<p><strong>Countering Weapons:</strong></p>
+<ul>
+<li><strong>Against Reach Weapons:</strong> Close distance with Maneuver actions. Once inside their reach, they lose advantage.</li>
+<li><strong>Against Ranged Weapons:</strong> Use cover and Maneuver to close distance. Ranged weapons have Burden when shooting into melee.</li>
+<li><strong>Against Heavy Weapons:</strong> Use mobility and <em>Quick</em> weapons to outmaneuver. Heavy weapons are devastating but slower.</li>
+<li><strong>Against Defensive Weapons:</strong> Use <em>Penetrating</em> weapons to bypass shields, or use Maneuvers to create openings and apply <em>Exposed</em>.</li>
+</ul>
+<p><strong>GM Guidance on Equipment Balance:</strong></p>
+<ul>
+<li>
+<p><strong>Default to One Tag:</strong> Most weapons and armor should have one Tag. This keeps mechanics simple and avoids power creep.</p>
+</li>
+<li>
+<p><strong>Two Tags for Signature Gear:</strong> Exceptional, magical, or high-tech equipment can have two Tags. Reserve this for campaign rewards or significant narrative items.</p>
+</li>
+<li>
+<p><strong>Fictional Justification:</strong> Tags should reflect the fiction. A rusty sword is not <em>Precise</em>. Improvised armor (a pot lid shield) might be <em>Shielded</em> but not <em>Reinforced</em>.</p>
+</li>
+<li>
+<p><strong>Availability and Cost:</strong> Balance equipment through fiction and availability, not mechanical restrictions. Heavy Armor is expensive, difficult to obtain, and socially conspicuous. This limits its use more than mechanical penalties.</p>
+</li>
+<li>
+<p><strong>Genre Expectations:</strong> In a gritty noir game, armor might be rare and provide less protection. In a high-fantasy epic, legendary armor with multiple Tags fits the genre. Match equipment power to campaign tone.</p>
+</li>
+</ul>
+<hr>
+<p><strong>Quick Reference: Weapon and Armor Tags</strong></p>
+<p><strong>Weapons:</strong></p>
+<ul>
+<li><em>Precise:</em> Edge when targeting weak points</li>
+<li><em>Heavy:</em> Critical Success applies <em>Stunned</em> or <em>Prone</em></li>
+<li><em>Reach:</em> Strike from adjacent zone; control space</li>
+<li><em>Quick:</em> Edge on Maneuvers; disengage without Check</li>
+<li><em>Ranged:</em> Strike at distance</li>
+<li><em>Area:</em> Affect multiple targets on success</li>
+<li><em>Penetrating:</em> Ignore light armor; reduce medium armor effectiveness</li>
+<li><em>Brutal:</em> Partial Success still ticks 1 segment</li>
+<li><em>Defensive:</em> Edge on Defend actions</li>
+<li><em>Versatile:</em> Use MIG or AGI</li>
+</ul>
+<p><strong>Armor:</strong></p>
+<ul>
+<li><em>Light Armor:</em> Edge on AGI Checks; Burden when <em>Exposed</em></li>
+<li><em>Medium Armor:</em> Reduce Clock ticks by 1; Burden on Stealth</li>
+<li><em>Heavy Armor:</em> Reduce Clock ticks by 2; Burden on AGI; no Sprint</li>
+<li><em>Shielded:</em> Edge on Defend; protect adjacent ally</li>
+<li><em>Reinforced:</em> Immune to <em>Penetrating</em>; cannot bypass with called shots</li>
+<li><em>Ablative:</em> First hit ignored; downgrades afterward</li>
+</ul>
 <hr>
 <h3 id="combat-basics-worked-combat-examples">Worked Combat Examples</h3>
 <p>These examples show complete combat sequences with Resolve Clock progression, demonstrating how the system flows in practice.</p>
@@ -5004,7 +6470,53 @@ The party enters a warehouse fight with these Tags: <em>Dim Light</em>, <em>Stac
 <p>Across several rounds, you will see patterns emerge: early positioning and Set Ups, decisive Strikes when Edge and Tags line up, Conditions and Clocks signaling rising danger, and Defend/Withdraw actions when the tide turns. Treat each fight as a story with a beginning, middle, and end rather than as a series of disconnected attacks.</p>
 <p>The rest of this book expands on combat by showing how Tags, Conditions, Skills, Proficiencies, NPCs, VPCs, and GM tools combine to create varied, genre-flexible fights. The goal is always the same: keep the fiction moving, keep consequences meaningful, and let the battlefield tell part of the story.</p>
 <h3 id="combat-basics-chapter-summary">Chapter Summary</h3>
-<p>Combat uses the same Check system as other scenes, focused through Resolve Clocks, core combat actions (Strike, Maneuver, Set Up, Defend/Withdraw), and environmental Tags. Use the <strong>Combat Turn Checklist</strong> for quick reference during play. Follow the seven-step Combat Round Procedure for structured fights. Use the <strong>Resolve Clock Tick Rates</strong> table to determine outcome effects. Reference the <strong>Action Types Quick Reference</strong> for at-a-glance guidance on your options. Consult <strong>Reading the Battlefield</strong> to exploit environmental Tags tactically. Use the <strong>Tactical Decision Matrix</strong> to choose optimal actions based on your situation. Apply <strong>Action Economy Tips</strong> to maximize the impact of each turn. Assess threats using the <strong>Reading Enemy Threat Levels</strong> guidance before engaging. Choose an initiative mode that fits the scene tone. The worked examples show how Clocks, Tags, and actions combine into dynamic fights with meaningful stakes.</p>
+<p>Combat uses the same Check system as other scenes, focused through Resolve Clocks, core combat actions (Strike, Maneuver, Set Up, Defend/Withdraw), and environmental Tags. Use the <strong>Combat at a Glance</strong> box for a quick system overview. Reference the <strong>Resolve Clock Tick Rates</strong> table for concrete tick values (Critical = 3, Full = 2, Partial = 1, Failure = 0).</p>
+<p><strong>Key Concepts:</strong></p>
+<ul>
+<li>
+<p><strong>What Does Taken Out Mean?</strong> This question shapes every combat. Use the <strong>Taken Out Severity Levels</strong> table (Minor, Moderate, Major, Permanent) to establish stakes before fights begin. PCs and NPCs are treated differently—PCs have narrative control and death requires consent or explicit stakes.</p>
+</li>
+<li>
+<p><strong>When to Shift to Structured Combat:</strong> Use the five explicit triggers (Initiative Ambiguity, Tactical Complexity, Multiple Opponents, Life-Threatening Stakes, Player Request) to guide the transition from conversational play to structured turns. See <strong>When to Shift to Structured Combat</strong> for detailed guidance and edge cases.</p>
+</li>
+<li>
+<p><strong>Zone-Based Positioning:</strong> Use the four positioning zones (Engaged, Close, Far, Out of Range) to handle tactical movement without measuring exact distances. Each zone has clear tactical implications and movement rules. See <strong>Abstract Positioning: Zone-Based Combat</strong> for complete guidelines and examples.</p>
+</li>
+<li>
+<p><strong>Combat Conditions:</strong> Standardized conditions with severity levels (Light, Moderate, Severe) provide specific mechanical effects. Reference the <strong>Combat Conditions</strong> tables for Physical, Mental/Social, Tactical, and Environmental conditions. Each condition specifies mechanical effect, duration, and how to clear it. Conditions stack but Burden does not multiply mechanically.</p>
+</li>
+<li>
+<p><strong>Weapons and Armor:</strong> Equipment is defined by Tags rather than numerical stats. Weapons provide tactical advantages (<em>Precise</em>, <em>Heavy</em>, <em>Reach</em>, <em>Quick</em>, <em>Ranged</em>, <em>Area</em>, <em>Penetrating</em>, <em>Brutal</em>, <em>Defensive</em>, <em>Versatile</em>). Armor reduces Clock ticks and provides defensive benefits (<em>Light</em>, <em>Medium</em>, <em>Heavy</em>, <em>Shielded</em>, <em>Reinforced</em>, <em>Ablative</em>). Use the <strong>Weapon and Armor Tag Framework</strong> tables to create custom equipment for any genre.</p>
+</li>
+</ul>
+<p><strong>Quick Reference Tools:</strong></p>
+<ul>
+<li><strong>Combat Round at a Glance</strong> (NEW) – Complete turn structure, common actions table, Clock tick rates, and quick condition reference for at-the-table use</li>
+<li><strong>Abstract Positioning: Zone-Based Combat</strong> (NEW) – Four-zone positioning system with tactical implications, movement rules, and practical examples</li>
+<li><strong>Multi-Round Combat Example</strong> (NEW) – Three-round fight demonstrating positioning zones, condition application, and tactical coordination with visual battlefield diagrams</li>
+<li><strong>Combat at a Glance</strong> – System overview and tick rates</li>
+<li><strong>Resolve Clock Sizing Guidelines</strong> – Enemy threat levels and Clock sizes</li>
+<li><strong>Combat Turn Checklist</strong> – Step-by-step turn procedure</li>
+<li><strong>Action Types Quick Reference</strong> – Core actions and typical DCs</li>
+<li><strong>Tactical Decision Matrix</strong> – Situation-based action recommendations</li>
+<li><strong>Action Economy Tips</strong> – Maximize turn impact through coordination</li>
+<li><strong>Reading the Battlefield</strong> – Environmental Tags and tactical exploitation</li>
+<li><strong>Reading Enemy Threat Levels</strong> – Assess opponents before engaging</li>
+<li><strong>Taken Out Severity Levels</strong> – Stakes framework with PC/NPC distinctions</li>
+<li><strong>Combat Conditions Tables</strong> – Standardized conditions with mechanical effects</li>
+<li><strong>Weapon and Armor Tags</strong> – Equipment framework for any genre</li>
+</ul>
+<p><strong>Procedure:</strong></p>
+<ol>
+<li>Establish what "taken out" means and the severity level before combat begins.</li>
+<li>Decide when to shift to structured combat using explicit triggers.</li>
+<li>Choose turn order mode (Conversational, Popcorn, Initiative Roll) to match scene tone.</li>
+<li>Follow the seven-step Combat Round Procedure for each turn.</li>
+<li>Apply Conditions with specific mechanical effects and durations.</li>
+<li>Use weapon and armor Tags to create tactical advantages and challenges.</li>
+<li>Reference worked examples to see complete combat sequences in action.</li>
+</ol>
+<p>The worked examples demonstrate how Clocks, Tags, Conditions, weapons, armor, and actions combine into dynamic fights with meaningful stakes across multiple genres. The system remains consistent whether you are playing fantasy, noir, or sci-fi—learn it once, use it everywhere.</p>
 </section>
 
 <section id="ch-11-exploration-social-play">

@@ -18,6 +18,7 @@ function createTestDatabase(): Database.Database {
       title TEXT NOT NULL,
       book_type TEXT NOT NULL CHECK(book_type IN ('core', 'source', 'campaign', 'supplement')),
       source_path TEXT NOT NULL,
+      current_version TEXT DEFAULT '1.0.0',
       status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'editing', 'published')),
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

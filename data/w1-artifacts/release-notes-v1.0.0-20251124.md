@@ -15,7 +15,7 @@ This release includes updates to Razorweave Core Rulebook from the W1 editing wo
 
 ## Changes
 
-Changes were made as part of workflow run `wfrun_micb9fyp_s7pths`.
+Changes were made as part of workflow run `wfrun_michsgzr_w4v28x`.
 
 ## Known Issues
 

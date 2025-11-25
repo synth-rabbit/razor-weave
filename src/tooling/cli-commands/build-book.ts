@@ -17,6 +17,7 @@ import { execSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
+import { getVersionedSourcePath } from '../books/types.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
@@ -111,7 +112,7 @@ async function main(): Promise<void> {
   const bookRepo = new BookRepository(db);
   const workflowRepo = new WorkflowRepository(db);
 
-  let book: { id: string; slug: string; title: string; source_path: string } | null = null;
+  let book: { id: string; slug: string; title: string; source_path: string; current_version: string } | null = null;
   let outputPath: string;
 
   // Resolve book
@@ -184,8 +185,9 @@ async function main(): Promise<void> {
   console.log(`Output: ${outputPath}`);
   console.log('');
 
-  // Resolve paths
-  const bookDir = resolve(projectRoot, book.source_path);
+  // Resolve paths - use versioned source path
+  const versionedPath = getVersionedSourcePath(book);
+  const bookDir = resolve(projectRoot, versionedPath);
   const chaptersDir = join(bookDir, 'chapters');
   const sheetsDir = join(bookDir, 'sheets');
   const templatePath = resolve(projectRoot, 'src/tooling/html-gen/templates/web-reader.html');
@@ -212,7 +214,7 @@ async function main(): Promise<void> {
   // Build with force=true to include pending changes
   console.log('Building HTML...');
   const result = await buildWebReader({
-    bookPath: book.source_path,
+    bookPath: versionedPath,
     chaptersDir,
     sheetsDir: existsSync(sheetsDir) ? sheetsDir : chaptersDir,
     outputPath,

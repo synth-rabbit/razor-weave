@@ -13,8 +13,9 @@ export const CORE_RULEBOOK_SEED: CreateBookInput = {
   slug: 'core-rulebook',
   title: 'Razorweave Core Rulebook',
   book_type: 'core',
-  source_path: 'books/core-rulebook',
+  source_path: 'books/core',  // Base path - combine with current_version to get full path
   status: 'editing',
+  current_version: '1.3.0',
 };
 
 export interface SeedResult {

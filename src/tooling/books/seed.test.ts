@@ -20,7 +20,8 @@ function createTestDatabase(): Database.Database {
       source_path TEXT NOT NULL,
       status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'editing', 'published')),
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      current_version TEXT DEFAULT '1.0.0'
     );
 
     CREATE INDEX IF NOT EXISTS idx_books_slug ON books(slug);
@@ -57,7 +58,7 @@ describe('seedCoreRulebook', () => {
     expect(book!.slug).toBe('core-rulebook');
     expect(book!.title).toBe('Razorweave Core Rulebook');
     expect(book!.book_type).toBe('core');
-    expect(book!.source_path).toBe('books/core-rulebook');
+    expect(book!.source_path).toBe('books/core');
     expect(book!.status).toBe('editing');
   });
 
@@ -148,8 +149,12 @@ describe('CORE_RULEBOOK_SEED', () => {
     expect(CORE_RULEBOOK_SEED.book_type).toBe('core');
   });
 
-  it('should have correct source_path', () => {
-    expect(CORE_RULEBOOK_SEED.source_path).toBe('books/core-rulebook');
+  it('should have correct source_path (base path without version)', () => {
+    expect(CORE_RULEBOOK_SEED.source_path).toBe('books/core');
+  });
+
+  it('should have correct current_version', () => {
+    expect(CORE_RULEBOOK_SEED.current_version).toBe('1.3.0');
   });
 
   it('should have status as editing', () => {

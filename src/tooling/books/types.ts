@@ -54,8 +54,10 @@ export interface CreateBookInput {
   title: string;
   /** Type of book */
   book_type: BookType;
-  /** Relative path to book source files */
+  /** Relative path to book source files (base path without version) */
   source_path: string;
+  /** Current semantic version (e.g., '1.3.0') - defaults to '1.0.0' */
+  current_version?: string;
   /** Current status in workflow (defaults to 'draft') */
   status?: BookStatus;
 }
@@ -65,3 +67,13 @@ export interface CreateBookInput {
  * All fields are optional.
  */
 export type UpdateBookInput = Partial<Omit<Book, 'id' | 'created_at' | 'updated_at'>>;
+
+/**
+ * Get the versioned source path for a book.
+ * Combines base source_path with current_version.
+ * @example getVersionedSourcePath({ source_path: 'books/core', current_version: '1.3.0' })
+ *          // returns 'books/core/v1.3.0'
+ */
+export function getVersionedSourcePath(book: Pick<Book, 'source_path' | 'current_version'>): string {
+  return `${book.source_path}/v${book.current_version}`;
+}

@@ -1,0 +1,113 @@
+{
+  "id": "strat_mide3grv2ct8k7",
+  "book_id": "book_core",
+  "book_slug": "core-rulebook",
+  "goal": {
+    "metric_threshold": 8,
+    "primary_dimension": "overall_score",
+    "max_cycles": 3,
+    "max_runs": 3,
+    "delta_threshold_for_validation": 1,
+    "use_dynamic_deltas": true
+  },
+  "areas": [
+    {
+      "area_id": "area-general",
+      "name": "General",
+      "type": "issue_category",
+      "target_chapters": [],
+      "target_issues": [
+        "GENERAL-1"
+      ],
+      "target_dimension": "overall_score",
+      "priority": 1,
+      "max_cycles": 3,
+      "delta_target": 1.5,
+      "status": "pending",
+      "current_cycle": 0,
+      "chapters_modified": []
+    },
+    {
+      "area_id": "area-chapter-6:-character-creation",
+      "name": "Chapter 6: Character Creation",
+      "type": "issue_category",
+      "target_chapters": [],
+      "target_issues": [
+        "CHAPTER-6:-CHARACTER-CREATION-1"
+      ],
+      "target_dimension": "overall_score",
+      "priority": 2,
+      "max_cycles": 3,
+      "delta_target": 1.5,
+      "status": "pending",
+      "current_cycle": 0,
+      "chapters_modified": []
+    },
+    {
+      "area_id": "area-chapter-8:-actions,-checks,-and-outcomes",
+      "name": "Chapter 8: Actions, Checks, And Outcomes",
+      "type": "issue_category",
+      "target_chapters": [],
+      "target_issues": [
+        "CHAPTER-8:-ACTIONS,-CHECKS,-AND-OUTCOMES-1"
+      ],
+      "target_dimension": "overall_score",
+      "priority": 3,
+      "max_cycles": 3,
+      "delta_target": 1.5,
+      "status": "pending",
+      "current_cycle": 0,
+      "chapters_modified": []
+    },
+    {
+      "area_id": "area-chapter-9:-tags,-conditions,-and-clocks",
+      "name": "Chapter 9: Tags, Conditions, And Clocks",
+      "type": "issue_category",
+      "target_chapters": [],
+      "target_issues": [
+        "CHAPTER-9:-TAGS,-CONDITIONS,-AND-CLOCKS-1"
+      ],
+      "target_dimension": "overall_score",
+      "priority": 4,
+      "max_cycles": 3,
+      "delta_target": 1,
+      "status": "pending",
+      "current_cycle": 0,
+      "chapters_modified": []
+    },
+    {
+      "area_id": "area-chapter-8---actions,-checks,-and-outcomes",
+      "name": "Chapter 8 Actions, Checks, And Outcomes",
+      "type": "issue_category",
+      "target_chapters": [],
+      "target_issues": [
+        "CHAPTER-8---ACTIONS,-CHECKS,-AND-OUTCOMES-1"
+      ],
+      "target_dimension": "overall_score",
+      "priority": 5,
+      "max_cycles": 3,
+      "delta_target": 1,
+      "status": "pending",
+      "current_cycle": 0,
+      "chapters_modified": []
+    },
+    {
+      "area_id": "area-chapter-10:-combat-basics",
+      "name": "Chapter 10: Combat Basics",
+      "type": "issue_category",
+      "target_chapters": [],
+      "target_issues": [
+        "CHAPTER-10:-COMBAT-BASICS-1"
+      ],
+      "target_dimension": "overall_score",
+      "priority": 6,
+      "max_cycles": 3,
+      "delta_target": 0.7,
+      "status": "pending",
+      "current_cycle": 0,
+      "chapters_modified": []
+    }
+  ],
+  "source_analysis_path": "/Users/pandorz/Documents/razorweave/data/reviews/analysis/campaign-20251124-140640-b5nf5qll.md",
+  "created_at": "2025-11-24T16:57:08.779Z"
+}

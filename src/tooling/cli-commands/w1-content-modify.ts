@@ -23,6 +23,7 @@ import { CLIFormatter } from '../cli/formatter.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { ArtifactRegistry } from '../workflows/artifact-registry.js';
 import { BookRepository } from '../books/repository.js';
+import { getVersionedSourcePath } from '../books/types.js';
 import { createTables } from '../database/schema.js';
 import { runMigrations } from '../database/migrate.js';
 import {
@@ -252,8 +253,8 @@ async function handleGenerateWriterPrompt(
   }
   console.log(`  OK Plan loaded: ${plan.plan_id}`);
 
-  // Get chapter paths
-  const chapterPaths = getOriginalChapterPaths(projectRoot, book.source_path, plan);
+  // Get chapter paths (use versioned source path)
+  const chapterPaths = getOriginalChapterPaths(projectRoot, getVersionedSourcePath(book), plan);
   if (chapterPaths.length === 0) {
     console.error(`  ERROR: No chapters found for modification`);
     process.exit(1);

@@ -1,0 +1,81 @@
+{
+  "iteration": 2,
+  "focus": "Deepen newcomer accessibility and clarity for personas still below target",
+  "baseline_score": 7.6,
+  "target_score": 8.0,
+  "gap_analysis": {
+    "clarity_readability": {
+      "current": 7.8,
+      "target": 8.0,
+      "gap": 0.2,
+      "priority": "medium"
+    },
+    "persona_fit": {
+      "current": 7.3,
+      "target": 8.0,
+      "gap": 0.7,
+      "priority": "high"
+    },
+    "practical_usability": {
+      "current": 7.3,
+      "target": 8.0,
+      "gap": 0.7,
+      "priority": "high"
+    }
+  },
+  "remaining_issues": [
+    {
+      "issue": "Part I lacks quick-start scenario for immediate play",
+      "source": "core-alex-indie-convert",
+      "solution": "Add 'Your First Scene' guided example to Chapter 6"
+    },
+    {
+      "issue": "New GMs need scaffolding for running first session",
+      "source": "core-sarah-new-gm",
+      "solution": "Enhance Chapter 8 with 'Your First Check as GM' walkthrough"
+    },
+    {
+      "issue": "Combat tick system needs reinforced examples",
+      "source": "core-taylor-video-game-convert",
+      "solution": "Add worked combat example showing tick progression"
+    }
+  ],
+  "chapter_modifications": [
+    {
+      "chapter_id": "06-character-creation",
+      "modifications": [
+        {
+          "type": "add_example",
+          "instruction": "Add 'Your First Scene: Testing Rella' mini-scenario after character creation summary. Include: A simple situation (locked door), show how Rella's player would approach it, and demonstrate a single Check from intent to outcome. Reference Chapter 8 for full rules."
+        }
+      ]
+    },
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "modifications": [
+        {
+          "type": "add_reference",
+          "instruction": "Add 'Your First Check as GM' callout specifically for new GMs. Walk through: Player says 'I want to do X', you ask clarifying questions, you set DC using the ladder, player rolls, you interpret. Include common new-GM mistakes to avoid."
+        },
+        {
+          "type": "expand",
+          "instruction": "Add 'Common First-Session Scenarios' sidebar with 3 pre-built Check situations: 1) Investigating a crime scene (RSN), 2) Chasing a pickpocket (AGI), 3) Convincing a guard (PRE). Each with suggested DC and outcome narration."
+        }
+      ]
+    },
+    {
+      "chapter_id": "10-combat-basics",
+      "modifications": [
+        {
+          "type": "add_example",
+          "instruction": "Add 'Combat Example: Rella vs. the Dock Thug' showing a complete 3-round combat. Show: Initiative, tick tracking turn-by-turn, a Partial Success leading to complication, and resolution when Resolve Clock fills. Use actual dice results and narration."
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "max_chapters_modified": 3,
+    "build_on_run1": true,
+    "preserve_run1_changes": true
+  }
+}

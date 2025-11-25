@@ -21,6 +21,7 @@ import { execSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
+import { getVersionedSourcePath } from '../books/types.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { ArtifactRegistry } from '../workflows/artifact-registry.js';
 import { createTables } from '../database/schema.js';
@@ -157,7 +158,7 @@ async function main(): Promise<void> {
 
     // 3. Build web HTML
     console.log('Step 2: Building web HTML...');
-    const bookDir = resolve(projectRoot, book.source_path);
+    const bookDir = resolve(projectRoot, getVersionedSourcePath(book));
     const chaptersDir = resolve(bookDir, 'chapters');
     const sheetsDir = resolve(bookDir, 'sheets');
     const outputPath = resolve(projectRoot, `data/html/web-reader/${book.slug}.html`);

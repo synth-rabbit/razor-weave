@@ -26,6 +26,7 @@ import { execSync } from 'node:child_process';
 import Database from 'better-sqlite3';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
+import { getVersionedSourcePath } from '../books/types.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { ArtifactRegistry } from '../workflows/artifact-registry.js';
 import { createTables } from '../database/schema.js';
@@ -233,12 +234,13 @@ console.log('');
  */
 async function stepPrintHtml(
   db: Database.Database,
-  book: { id: string; slug: string; title: string; source_path: string },
+  book: { id: string; slug: string; title: string; source_path: string; current_version: string },
   artifactRegistry: ArtifactRegistry
 ): Promise<StepResult> {
   console.log('Step 1: Print HTML');
 
-  const bookDir = resolve(projectRoot, book.source_path);
+  const versionedPath = getVersionedSourcePath(book);
+  const bookDir = resolve(projectRoot, versionedPath);
   const chaptersDir = join(bookDir, 'chapters');
   const sheetsDir = join(bookDir, 'sheets');
   const outputBaseDir = resolve(projectRoot, 'data/html/print');
@@ -261,7 +263,7 @@ async function stepPrintHtml(
   try {
     // Build print HTML
     const buildResult: BuildResult = await buildPrintHtml({
-      bookPath: book.source_path,
+      bookPath: versionedPath,
       chaptersDir,
       sheetsDir: existsSync(sheetsDir) ? sheetsDir : chaptersDir,
       outputPath: buildOutputPath,
@@ -389,13 +391,14 @@ async function stepPdf(
  */
 async function stepWebHtml(
   db: Database.Database,
-  book: { id: string; slug: string; title: string; source_path: string },
+  book: { id: string; slug: string; title: string; source_path: string; current_version: string },
   artifactRegistry: ArtifactRegistry
 ): Promise<StepResult> {
   console.log('');
   console.log('Step 3: Web HTML');
 
-  const bookDir = resolve(projectRoot, book.source_path);
+  const versionedPath = getVersionedSourcePath(book);
+  const bookDir = resolve(projectRoot, versionedPath);
   const chaptersDir = resolve(bookDir, 'chapters');
   const sheetsDir = resolve(bookDir, 'sheets');
   const outputPath = resolve(projectRoot, `data/html/web-reader/${book.slug}.html`);
@@ -769,13 +772,13 @@ async function runFullFinalization(): Promise<void> {
     const newVersionInfo = bumpVersion(currentVersion, versionBumpType);
     const newVersion = newVersionInfo.version;
 
-    // Parse current source path to get base path
-    const currentSourcePath = book.source_path; // e.g., books/core/v1.0.0
-    const baseBookPath = currentSourcePath.replace(/\/v[\d.]+$/, ''); // e.g., books/core
-    const newSourcePath = `${baseBookPath}/v${newVersion}`; // e.g., books/core/v1.1.0
+    // source_path is the base path (e.g., books/core), current_version determines versioned path
+    const baseBookPath = book.source_path; // e.g., books/core
+    const currentVersionedPath = getVersionedSourcePath(book); // e.g., books/core/v1.3.0
+    const newVersionedPath = `${baseBookPath}/v${newVersion}`; // e.g., books/core/v1.4.0
 
-    const currentDir = resolve(projectRoot, currentSourcePath);
-    const newDir = resolve(projectRoot, newSourcePath);
+    const currentDir = resolve(projectRoot, currentVersionedPath);
+    const newDir = resolve(projectRoot, newVersionedPath);
     const artifactChaptersDir = resolve(projectRoot, `data/w1-artifacts/${workflowRunId}/chapters`);
 
     console.log(`  Version bump: ${currentVersion} → ${newVersion} (${versionBumpType})`);
@@ -784,7 +787,7 @@ async function runFullFinalization(): Promise<void> {
     if (!existsSync(newDir)) {
       const { cpSync } = await import('node:fs');
       cpSync(currentDir, newDir, { recursive: true });
-      console.log(`  OK Created: ${newSourcePath}`);
+      console.log(`  OK Created: ${newVersionedPath}`);
 
       // Apply modified chapters from artifacts
       if (existsSync(artifactChaptersDir)) {
@@ -801,21 +804,20 @@ async function runFullFinalization(): Promise<void> {
         console.log(`  OK Applied ${modifiedChapters.length} modified chapters`);
       }
 
-      // Update database
-      db.prepare(`UPDATE books SET current_version = ?, source_path = ? WHERE id = ?`)
-        .run(newVersion, newSourcePath, book.id);
+      // Update database - only update current_version, source_path stays as base path
+      db.prepare(`UPDATE books SET current_version = ? WHERE id = ?`)
+        .run(newVersion, book.id);
 
-      // Record release
+      // Record release (stores full versioned path for historical records)
       const releaseId = `bkr_${Date.now().toString(36)}`;
       db.prepare(`
         INSERT INTO book_releases (id, book_id, version, version_major, version_minor, version_patch, source_path, created_from_workflow, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
-      `).run(releaseId, book.id, newVersion, newVersionInfo.major, newVersionInfo.minor, newVersionInfo.patch, newSourcePath, workflowRunId);
+      `).run(releaseId, book.id, newVersion, newVersionInfo.major, newVersionInfo.minor, newVersionInfo.patch, newVersionedPath, workflowRunId);
 
       console.log(`  OK Database updated`);
 
-      // Update book object for subsequent steps
-      book.source_path = newSourcePath;
+      // Update book object for subsequent steps (use versioned path for step functions)
       book.current_version = newVersion;
     } else {
       console.log(`  (!) Version ${newVersion} already exists, skipping creation`);

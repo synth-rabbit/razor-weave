@@ -1,0 +1,135 @@
+{
+  "version": "2.0",
+  "created_at": "2025-11-24T22:45:00.000Z",
+  "rationale": "Rebalanced from random sampling to target audience focus. Previous campaigns over-sampled GMless Advocates (5.9 avg fit), Skepticals (5.5), and Power Gamers (5.4) who fundamentally dislike fiction-first systems. New pool is 70% target audience, 30% stretch personas for accessibility feedback.",
+  "distribution": {
+    "target_audience": 8,
+    "stretch_personas": 2
+  },
+  "core_personas": [
+    {
+      "slot": 1,
+      "id": "core-sam-forever-gm",
+      "type": "curated",
+      "name": "Sam the Forever GM",
+      "archetype": "Explorer",
+      "experience": "Forever GM",
+      "fiction_first": "Native",
+      "gm_style": "Collaborative Storyteller",
+      "traits": ["Comfortable with Abstraction", "Genre-Agnostic Enthusiast", "Systems Integrator"],
+      "historical_fit": 9.0,
+      "purpose": "Experienced GM perspective, tests GM-facing content"
+    },
+    {
+      "slot": 2,
+      "id": "core-alex-indie-convert",
+      "type": "curated",
+      "name": "Alex the Indie Convert",
+      "archetype": "Storyteller",
+      "experience": "Experienced (3-10 years)",
+      "fiction_first": "Evangelical",
+      "gm_style": "Collaborative Storyteller",
+      "traits": ["Prefers Narrative Tools", "Enjoys Flexibility", "Intuitive"],
+      "historical_fit": 9.0,
+      "purpose": "Narrative-focused player, validates fiction-first philosophy"
+    },
+    {
+      "slot": 3,
+      "id": "core-morgan-method-actor",
+      "type": "curated",
+      "name": "Morgan the Method Actor",
+      "archetype": "Method Actor",
+      "experience": "Experienced (3-10 years)",
+      "fiction_first": "Native",
+      "gm_style": null,
+      "traits": ["Intuitive", "Comfortable with Abstraction"],
+      "historical_fit": 9.0,
+      "purpose": "Deep character immersion, tests roleplay support"
+    },
+    {
+      "slot": 4,
+      "id": "core-devon-solo-player",
+      "type": "curated",
+      "name": "Devon the Solo Player",
+      "archetype": "Explorer",
+      "experience": "Experienced (3-10 years)",
+      "fiction_first": "Native",
+      "gm_style": "Non-GM (Solo)",
+      "traits": ["Comfortable with Abstraction", "Genre-Agnostic Enthusiast", "Experimental"],
+      "historical_fit": 8.0,
+      "purpose": "Solo/alternative play modes, tests non-traditional use"
+    },
+    {
+      "slot": 5,
+      "type": "generated",
+      "generation_constraints": {
+        "archetype": "Storyteller",
+        "fiction_first": "Native",
+        "gm_style": "Scene Framer",
+        "experience": ["Experienced (3-10 years)", "Hybrid GM/Player"]
+      },
+      "purpose": "Scene framing GM style validation"
+    },
+    {
+      "slot": 6,
+      "type": "generated",
+      "generation_constraints": {
+        "archetype": "Explorer",
+        "fiction_first": "Evangelical",
+        "gm_style": "Prepared Sandbox",
+        "experience": ["Long-term GM", "Forever GM"]
+      },
+      "purpose": "Sandbox prep and world-building focus"
+    },
+    {
+      "slot": 7,
+      "type": "generated",
+      "generation_constraints": {
+        "archetype": "Casual Gamer",
+        "fiction_first": "Curious",
+        "experience": "Newbie (0-1 years)",
+        "cognitive_style": "Verbal"
+      },
+      "purpose": "Onboarding test - can newbies learn from this book?"
+    },
+    {
+      "slot": 8,
+      "type": "generated",
+      "generation_constraints": {
+        "archetype": "Socializer",
+        "fiction_first": "Native",
+        "gm_style": "Collaborative Storyteller",
+        "narrative_mechanics": "Comfortable with Abstraction"
+      },
+      "purpose": "Social play and group dynamics focus"
+    },
+    {
+      "slot": 9,
+      "type": "generated",
+      "generation_constraints": {
+        "archetype": "Achiever",
+        "fiction_first": "Converting",
+        "narrative_mechanics": "Needs Concrete Numbers",
+        "gm_style": ["Prepared Sandbox", "Scene Framer"]
+      },
+      "purpose": "STRETCH: Tests if book helps crunchy players convert"
+    },
+    {
+      "slot": 10,
+      "type": "generated",
+      "generation_constraints": {
+        "archetype": "Tactician",
+        "fiction_first": "Curious",
+        "narrative_mechanics": "Wary of Abstraction",
+        "experience": ["Experienced (3-10 years)", "Veteran (10-20 years)"]
+      },
+      "purpose": "STRETCH: Tests tactical depth for skeptical players"
+    }
+  ],
+  "excluded_traits": {
+    "fiction_first": ["Skeptical"],
+    "gm_style": ["GMless Advocate", "Railroad Conductor"],
+    "archetype": ["Power Gamer", "Killer"],
+    "rationale": "These traits correlate with <6.0 Persona Fit scores. The game is not designed for these players and optimizing for them would compromise the core design."
+  }
+}

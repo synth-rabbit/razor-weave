@@ -777,6 +777,26 @@ ${resumeNote}
 
 You are executing a strategic W1 editing workflow for **${bookTitle}** (${bookSlug}).
 
+## ⚠️ WORKFLOW COMPLETION CHECKLIST
+
+A workflow is NOT complete until ALL of these are done:
+
+| # | Phase | Status | Notes |
+|---|-------|--------|-------|
+| 1 | Planning | ⬜ | Create improvement plan from analysis |
+| 2 | Content Modification | ⬜ | Modify chapters, save to artifacts |
+| 3 | Validation | ⬜ | Run w1:validate to compare metrics |
+| 4 | Human Gate | ⬜ | Wait for user approval |
+| 5a | Create New Version | ⬜ | mkdir books/core/vX.Y.Z with chapters/ and sheets/ |
+| 5b | Copy Unchanged | ⬜ | cp -r current version chapters to new version |
+| 5c | Apply Modified | ⬜ | cp workflow artifacts chapters to new version (overwrites) |
+| 5d | Update DB Version | ⬜ | UPDATE books SET current_version |
+| 5e | Build HTML/PDF | ⬜ | Run build:book and finalize-pdf |
+| 5f | Update Run Status | ⬜ | UPDATE workflow_runs SET status = 'completed' |
+| 5g | Update State | ⬜ | Set state.json current_phase = 'completed' |
+
+**Mark each step as you complete it in your tracking.**
+
 > **⚠️ CRITICAL: Source files are MARKDOWN (.md) in \`books/\` directories.**
 > **NEVER edit HTML, PDF, or other generated output files.**
 > **The w1:content-modify command will tell you which markdown files to modify.**
@@ -883,14 +903,105 @@ When metrics are met OR max cycles exceeded:
 
 ### Phase 5: Finalization
 
-After human approval:
+> **⚠️ CRITICAL: This phase has multiple steps. Do NOT skip any steps.**
+> **The workflow is NOT complete until all finalization steps are done and state is updated.**
 
-1. **Run finalization:**
-   \`\`\`bash
-   pnpm w1:finalize --book=${bookSlug} --run=${runIdPlaceholder}
-   \`\`\`
+After human approval, you must complete ALL of the following:
 
-2. **Update state:** Set current_phase to 'completed' in \`${artifactsDir}/state.json\`
+#### Step 5.1: Determine Version Bump
+
+Check the current version from database:
+\`\`\`bash
+sqlite3 data/project.db "SELECT source_path, current_version FROM books WHERE slug = '${bookSlug}';"
+\`\`\`
+
+Decide version bump type based on changes:
+- **patch** (x.x.1): Minor fixes, typos, clarifications
+- **minor** (x.1.0): New content, significant rewrites
+- **major** (1.0.0): Breaking changes, major restructuring
+
+#### Step 5.2: Create New Version Directory
+
+Create the new version folder and copy ALL chapters (unchanged + modified):
+
+\`\`\`bash
+# Example: if current is v1.3.0 and bumping to v1.4.0
+NEW_VERSION="v1.4.0"
+CURRENT_VERSION="v1.3.0"
+
+# Create new version directory
+mkdir -p books/core/\${NEW_VERSION}/chapters
+mkdir -p books/core/\${NEW_VERSION}/sheets
+
+# Copy ALL chapters from current version to new version (preserves unchanged chapters)
+cp -r books/core/\${CURRENT_VERSION}/chapters/* books/core/\${NEW_VERSION}/chapters/
+cp -r books/core/\${CURRENT_VERSION}/sheets/* books/core/\${NEW_VERSION}/sheets/
+
+# Now overlay the modified chapters from workflow artifacts
+cp data/w1-artifacts/${runIdPlaceholder}/chapters/*.md books/core/\${NEW_VERSION}/chapters/
+\`\`\`
+
+**IMPORTANT:** The new version directory must contain ALL chapters:
+- Unchanged chapters: copied from current version
+- Modified chapters: copied from workflow artifacts (overwrites the unchanged copies)
+
+#### Step 5.3: Update Database Version
+
+Update the book's current_version in the database:
+\`\`\`bash
+sqlite3 data/project.db "UPDATE books SET current_version = '1.4.0' WHERE slug = '${bookSlug}';"
+\`\`\`
+
+#### Step 5.4: Build HTML and PDF from New Version
+
+Now build outputs from the NEW version directory:
+
+\`\`\`bash
+# Build web reader HTML
+pnpm build:book --book=${bookSlug}
+
+# Build print HTML
+pnpm w1:finalize-print-html --book=${bookSlug} --run=${runIdPlaceholder}
+
+# Generate PDF
+pnpm w1:finalize-pdf --book=${bookSlug}
+\`\`\`
+
+#### Step 5.5: Update Workflow State
+
+Update \`${artifactsDir}/state.json\`:
+\`\`\`json
+{
+  "current_phase": "completed",
+  "completed_at": "<ISO timestamp>",
+  "new_version": "1.4.0",
+  "previous_version": "1.3.0",
+  "finalization_steps": {
+    "version_created": true,
+    "chapters_copied": true,
+    "modified_chapters_applied": true,
+    "html_built": true,
+    "pdf_generated": true
+  }
+}
+\`\`\`
+
+#### Step 5.6: Update Workflow Run Status
+
+\`\`\`bash
+sqlite3 data/project.db "UPDATE workflow_runs SET status = 'completed', updated_at = datetime('now') WHERE id = '${runIdPlaceholder}';"
+\`\`\`
+
+#### Step 5.7: Summary Report
+
+Report to user:
+- Previous version: v1.3.0
+- New version: v1.4.0
+- Chapters modified: [list from artifacts]
+- New version path: books/core/v1.4.0/
+- HTML built: ✅
+- PDF generated: ✅
+- Workflow status: completed
 
 ## State Management
 
@@ -1214,6 +1325,51 @@ pnpm w1:human-gate --run=${workflowRunId} --reason=<threshold_met|max_runs_exhau
 - Runs used: ${currentRun}/${maxRuns}
 - Summary of changes per area
 - Ask for approval/rejection/full-review
+
+**After User Approves:**
+
+Once the user runs \`pnpm w1:human-gate --approve\`, proceed with finalization:
+
+### Finalization Steps (MANDATORY after approval)
+
+1. **Determine version bump** (patch/minor/major based on scope of changes)
+
+2. **Create NEW version directory:**
+   \`\`\`bash
+   # Check current version
+   sqlite3 data/project.db "SELECT current_version FROM books WHERE slug = '${bookSlug}';"
+
+   # Create new version (e.g., v1.3.0 -> v1.4.0)
+   mkdir -p books/core/v1.4.0/chapters books/core/v1.4.0/sheets
+
+   # Copy ALL chapters from current version
+   cp -r books/core/v1.3.0/chapters/* books/core/v1.4.0/chapters/
+   cp -r books/core/v1.3.0/sheets/* books/core/v1.4.0/sheets/
+
+   # Overlay modified chapters from workflow artifacts
+   cp data/w1-artifacts/${workflowRunId}/chapters/*.md books/core/v1.4.0/chapters/
+   \`\`\`
+
+3. **Update database version:**
+   \`\`\`bash
+   sqlite3 data/project.db "UPDATE books SET current_version = '1.4.0' WHERE slug = '${bookSlug}';"
+   \`\`\`
+
+4. **Build HTML and PDF from new version:**
+   \`\`\`bash
+   pnpm build:book --book=${bookSlug}
+   pnpm w1:finalize-pdf --book=${bookSlug}
+   \`\`\`
+
+5. **Update workflow status:**
+   \`\`\`bash
+   sqlite3 data/project.db "UPDATE workflow_runs SET status = 'completed', updated_at = datetime('now') WHERE id = '${workflowRunId}';"
+   \`\`\`
+
+6. **Report completion** with:
+   - Previous version → New version
+   - Modified chapters list
+   - Generated files (HTML, PDF paths)
 
 ## Dynamic Thresholds${useDynamicDeltas ? ` (ENABLED)` : ` (DISABLED)`}
 

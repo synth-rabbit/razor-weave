@@ -1,0 +1,53 @@
+{
+  "workflow_run": "wfrun_michsgzr_w4v28x",
+  "status": "completed",
+  "completed_at": "2025-11-24T04:35:00Z",
+  "summary": {
+    "target_metric": 8.0,
+    "final_metric": 8.1,
+    "runs_used": 2,
+    "max_runs": 3,
+    "total_delta": 1.1
+  },
+  "metrics": {
+    "baseline": {
+      "overall": 7.0,
+      "clarity_readability": 7.5,
+      "rules_accuracy": 7.9,
+      "persona_fit": 6.9,
+      "practical_usability": 6.6
+    },
+    "final": {
+      "overall": 8.1,
+      "clarity_readability": 8.2,
+      "rules_accuracy": 8.1,
+      "persona_fit": 8.0,
+      "practical_usability": 8.2
+    }
+  },
+  "chapters_modified": [
+    "06-character-creation",
+    "07-characters-and-attributes",
+    "08-actions-checks-outcomes",
+    "09-tags-conditions-clocks",
+    "10-combat-basics"
+  ],
+  "key_improvements": [
+    "Quick Start 15-minute character creation path",
+    "Meet Rella example moved to chapter opening",
+    "Your First Scene mini-scenario for testing characters",
+    "Your First Check as GM scaffolding",
+    "Common First-Session Scenarios with pre-built situations",
+    "Why 0-2 Scale Matters with probability table",
+    "Tag Effects Quick Reference with definitive language",
+    "Progress/Pressure dual-clock pattern highlighted",
+    "Combat at a Glance summary with tick values",
+    "Rella vs. Dock Thug complete combat walkthrough"
+  ],
+  "finalization": {
+    "source_updated": true,
+    "book_rebuilt": true,
+    "site_html_updated": true,
+    "output_path": "data/html/review/core-rulebook/web.html"
+  }
+}
