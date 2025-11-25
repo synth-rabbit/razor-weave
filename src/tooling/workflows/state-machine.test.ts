@@ -76,10 +76,10 @@ describe('WorkflowStateMachine', () => {
         },
       );
 
-      it('should not allow transition to pending (self)', () => {
+      it('should allow no-op transition to pending (self)', () => {
         const machine = new WorkflowStateMachine('pending');
-        expect(machine.canTransitionTo('pending')).toBe(false);
-        expect(() => machine.transition('pending')).toThrow(InvalidTransitionError);
+        expect(machine.canTransitionTo('pending')).toBe(true);
+        expect(() => machine.transition('pending')).not.toThrow();
       });
     });
 
@@ -90,40 +90,49 @@ describe('WorkflowStateMachine', () => {
         expect(() => machine.transition('pending')).toThrow(InvalidTransitionError);
       });
 
-      it('should not allow transition to running (self)', () => {
+      it('should allow no-op transition to running (self)', () => {
         const machine = new WorkflowStateMachine('running');
-        expect(machine.canTransitionTo('running')).toBe(false);
-        expect(() => machine.transition('running')).toThrow(InvalidTransitionError);
+        expect(machine.canTransitionTo('running')).toBe(true);
+        expect(() => machine.transition('running')).not.toThrow();
       });
     });
 
     describe('from paused', () => {
-      it.each(['pending', 'completed'] as WorkflowStatus[])(
-        'should not allow transition to %s',
-        (targetState) => {
-          const machine = new WorkflowStateMachine('paused');
-          expect(machine.canTransitionTo(targetState)).toBe(false);
-          expect(() => machine.transition(targetState)).toThrow(InvalidTransitionError);
-        },
-      );
-
-      it('should not allow transition to paused (self)', () => {
+      it('should not allow transition to pending', () => {
         const machine = new WorkflowStateMachine('paused');
-        expect(machine.canTransitionTo('paused')).toBe(false);
-        expect(() => machine.transition('paused')).toThrow(InvalidTransitionError);
+        expect(machine.canTransitionTo('pending')).toBe(false);
+        expect(() => machine.transition('pending')).toThrow(InvalidTransitionError);
+      });
+
+      it('should allow no-op transition to paused (self)', () => {
+        const machine = new WorkflowStateMachine('paused');
+        expect(machine.canTransitionTo('paused')).toBe(true);
+        expect(() => machine.transition('paused')).not.toThrow();
       });
     });
   });
 
   describe('terminal states', () => {
+    // States that cannot be transitioned TO from terminal states
+    const NON_SELF_STATES = WORKFLOW_STATUSES.filter((s) => s !== 'completed' && s !== 'failed');
+
     describe('completed state', () => {
-      it.each(WORKFLOW_STATUSES)('should reject transition to %s', (targetState) => {
+      it.each(NON_SELF_STATES)('should reject transition to %s', (targetState) => {
         const machine = new WorkflowStateMachine('completed');
-        expect(machine.canTransitionTo(targetState)).toBe(false);
-        expect(() => machine.transition(targetState)).toThrow(InvalidTransitionError);
+        // Same-state transition is allowed (no-op), others are rejected
+        if (targetState !== 'completed') {
+          expect(machine.canTransitionTo(targetState)).toBe(false);
+          expect(() => machine.transition(targetState)).toThrow(InvalidTransitionError);
+        }
       });
 
-      it('should have no valid transitions', () => {
+      it('should allow no-op transition to same state', () => {
+        const machine = new WorkflowStateMachine('completed');
+        expect(machine.canTransitionTo('completed')).toBe(true);
+        expect(() => machine.transition('completed')).not.toThrow();
+      });
+
+      it('should have no valid transitions (except no-op)', () => {
         const machine = new WorkflowStateMachine('completed');
         expect(machine.getValidTransitions()).toEqual([]);
       });
@@ -135,13 +144,21 @@ describe('WorkflowStateMachine', () => {
     });
 
     describe('failed state', () => {
-      it.each(WORKFLOW_STATUSES)('should reject transition to %s', (targetState) => {
+      it.each(NON_SELF_STATES)('should reject transition to %s', (targetState) => {
         const machine = new WorkflowStateMachine('failed');
-        expect(machine.canTransitionTo(targetState)).toBe(false);
-        expect(() => machine.transition(targetState)).toThrow(InvalidTransitionError);
+        if (targetState !== 'failed') {
+          expect(machine.canTransitionTo(targetState)).toBe(false);
+          expect(() => machine.transition(targetState)).toThrow(InvalidTransitionError);
+        }
       });
 
-      it('should have no valid transitions', () => {
+      it('should allow no-op transition to same state', () => {
+        const machine = new WorkflowStateMachine('failed');
+        expect(machine.canTransitionTo('failed')).toBe(true);
+        expect(() => machine.transition('failed')).not.toThrow();
+      });
+
+      it('should have no valid transitions (except no-op)', () => {
         const machine = new WorkflowStateMachine('failed');
         expect(machine.getValidTransitions()).toEqual([]);
       });
@@ -164,9 +181,9 @@ describe('WorkflowStateMachine', () => {
       expect(machine.getValidTransitions()).toEqual(['paused', 'completed', 'failed']);
     });
 
-    it('should return ["running", "failed"] for paused', () => {
+    it('should return ["running", "completed", "failed"] for paused', () => {
       const machine = new WorkflowStateMachine('paused');
-      expect(machine.getValidTransitions()).toEqual(['running', 'failed']);
+      expect(machine.getValidTransitions()).toEqual(['running', 'completed', 'failed']);
     });
 
     it('should return [] for completed', () => {

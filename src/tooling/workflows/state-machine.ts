@@ -30,7 +30,7 @@ export class InvalidTransitionError extends Error {
 const VALID_TRANSITIONS: Record<WorkflowStatus, readonly WorkflowStatus[]> = {
   pending: ['running'],
   running: ['paused', 'completed', 'failed'],
-  paused: ['running', 'failed'],
+  paused: ['running', 'completed', 'failed'], // completed added for human gate rejection
   completed: [], // terminal
   failed: [], // terminal
 } as const;

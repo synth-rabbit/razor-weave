@@ -369,12 +369,12 @@ describe('WorkflowRepository', () => {
           .toThrow(InvalidTransitionError);
       });
 
-      it('should throw InvalidTransitionError when transitioning from paused to completed', () => {
+      it('should throw InvalidTransitionError when transitioning from paused to pending', () => {
         const workflow = repo.create({ workflow_type: 'w1_editing', book_id: 'book_test' });
         repo.updateStatus(workflow.id, 'running');
         repo.updateStatus(workflow.id, 'paused');
 
-        expect(() => repo.updateStatus(workflow.id, 'completed'))
+        expect(() => repo.updateStatus(workflow.id, 'pending'))
           .toThrow(InvalidTransitionError);
       });
     });

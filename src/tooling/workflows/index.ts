@@ -10,6 +10,7 @@ export * from './state-machine.js';
 // Workflow engine (new)
 export * from './engine-types.js';
 export * from './checkpoint-manager.js';
+export * from './workflow-runner.js';
 
 // Repository
 export * from './repository.js';
