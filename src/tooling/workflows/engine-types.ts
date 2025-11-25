@@ -6,6 +6,94 @@
  */
 
 // =============================================================================
+// Error Classes
+// =============================================================================
+
+/**
+ * Base error for workflow-related errors
+ */
+export class WorkflowError extends Error {
+  constructor(
+    message: string,
+    public readonly code: string,
+    public readonly context?: Record<string, unknown>
+  ) {
+    super(message);
+    this.name = 'WorkflowError';
+  }
+}
+
+/**
+ * Thrown when a workflow type is not found
+ */
+export class UnknownWorkflowError extends WorkflowError {
+  constructor(workflowType: string) {
+    super(
+      `Unknown workflow type: ${workflowType}. Available types depend on registered workflows.`,
+      'UNKNOWN_WORKFLOW',
+      { workflowType }
+    );
+    this.name = 'UnknownWorkflowError';
+  }
+}
+
+/**
+ * Thrown when a checkpoint is not found
+ */
+export class CheckpointNotFoundError extends WorkflowError {
+  constructor(runId: string) {
+    super(
+      `No checkpoint found for workflow run: ${runId}. The workflow may not exist or may have been deleted.`,
+      'CHECKPOINT_NOT_FOUND',
+      { runId }
+    );
+    this.name = 'CheckpointNotFoundError';
+  }
+}
+
+/**
+ * Thrown when a step is not found in the workflow definition
+ */
+export class StepNotFoundError extends WorkflowError {
+  constructor(stepName: string, workflowType: string) {
+    super(
+      `Step "${stepName}" not found in workflow "${workflowType}". Check that the step name is correct.`,
+      'STEP_NOT_FOUND',
+      { stepName, workflowType }
+    );
+    this.name = 'StepNotFoundError';
+  }
+}
+
+/**
+ * Thrown when a precondition fails
+ */
+export class PreconditionFailedError extends WorkflowError {
+  constructor(stepName: string, conditionName: string, errorMessage: string) {
+    super(
+      `Precondition "${conditionName}" failed for step "${stepName}": ${errorMessage}`,
+      'PRECONDITION_FAILED',
+      { stepName, conditionName }
+    );
+    this.name = 'PreconditionFailedError';
+  }
+}
+
+/**
+ * Thrown when a human gate option is invalid
+ */
+export class InvalidGateOptionError extends WorkflowError {
+  constructor(option: string, validOptions: string[]) {
+    super(
+      `Invalid gate option: "${option}". Valid options are: ${validOptions.join(', ')}`,
+      'INVALID_GATE_OPTION',
+      { option, validOptions }
+    );
+    this.name = 'InvalidGateOptionError';
+  }
+}
+
+// =============================================================================
 // Workflow Definition Types
 // =============================================================================
 
