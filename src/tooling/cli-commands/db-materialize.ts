@@ -1,52 +1,46 @@
 // src/tooling/cli-commands/db-materialize.ts
-import { Materializer } from '../events/materializer';
-import { parseArgs } from 'util';
+import { CommandBuilder } from '../cli/command-builder.js';
+import { Materializer } from '../events/materializer.js';
 
-const { values } = parseArgs({
-  options: {
-    events: { type: 'string', default: 'data/events' },
-    db: { type: 'string', default: 'data/project.db' },
-  },
-});
+new CommandBuilder('db:materialize')
+  .description('Materializes events into database tables')
+  .option('events', { type: 'string', description: 'Events directory', default: 'data/events' })
+  .option('db', { type: 'string', description: 'Database path', default: 'data/project.db' })
+  .run((ctx) => {
+    const eventsDir = ctx.args.events!;
+    const dbPath = ctx.args.db!;
 
-const eventsDir = values.events!;
-const dbPath = values.db!;
+    const materializer = new Materializer(eventsDir, dbPath);
 
-console.log('═══════════════════════════════════════════════════════════');
-console.log('DB MATERIALIZE');
-console.log('═══════════════════════════════════════════════════════════');
-console.log(`Events directory: ${eventsDir}`);
-console.log(`Database path: ${dbPath}`);
-console.log('');
+    // Register all boardroom tables
+    materializer.registerTable('boardroom_sessions', 'id');
+    materializer.registerTable('vp_plans', 'id');
+    materializer.registerTable('phases', 'id');
+    materializer.registerTable('milestones', 'id');
+    materializer.registerTable('engineering_tasks', 'id');
+    materializer.registerTable('ceo_feedback', 'id');
+    materializer.registerTable('brainstorm_opinions', 'id');
+    materializer.registerTable('vp_consultations', 'id');
 
-const materializer = new Materializer(eventsDir, dbPath);
+    // Register VP Ops tables
+    materializer.registerTable('execution_batches', 'id');
+    materializer.registerTable('operational_risks', 'id');
+    materializer.registerTable('boardroom_minutes', 'id');
 
-// Register all boardroom tables
-materializer.registerTable('boardroom_sessions', 'id');
-materializer.registerTable('vp_plans', 'id');
-materializer.registerTable('phases', 'id');
-materializer.registerTable('milestones', 'id');
-materializer.registerTable('engineering_tasks', 'id');
-materializer.registerTable('ceo_feedback', 'id');
-materializer.registerTable('brainstorm_opinions', 'id');
-materializer.registerTable('vp_consultations', 'id');
+    // Register checkpoint table
+    materializer.registerTable('session_checkpoints', 'id');
 
-// Register VP Ops tables
-materializer.registerTable('execution_batches', 'id');
-materializer.registerTable('operational_risks', 'id');
-materializer.registerTable('boardroom_minutes', 'id');
+    materializer.materialize();
 
-// Register checkpoint table
-materializer.registerTable('session_checkpoints', 'id');
-
-try {
-  materializer.materialize();
-  console.log('───────────────────────────────────────────────────────────');
-  console.log('STATUS');
-  console.log('───────────────────────────────────────────────────────────');
-  console.log('✓ Database materialized successfully');
-  console.log(`✓ Output: ${dbPath}`);
-} catch (error) {
-  console.error('✗ Materialization failed:', error);
-  process.exit(1);
-}
+    return {
+      title: 'DB MATERIALIZE',
+      content: [
+        `Events directory: ${eventsDir}`,
+        `Database path: ${dbPath}`,
+      ],
+      status: [
+        { label: 'Database materialized successfully', success: true },
+        { label: `Output: ${dbPath}`, success: true },
+      ],
+    };
+  });
