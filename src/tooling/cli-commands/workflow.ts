@@ -43,6 +43,11 @@ const { values, positionals } = parseArgs({
     status: { type: 'string', short: 's' },
     decision: { type: 'string', short: 'd' },
     input: { type: 'string', short: 'i' },
+    success: { type: 'boolean' },
+    failure: { type: 'boolean' },
+    result: { type: 'string' },
+    error: { type: 'string', short: 'e' },
+    hint: { type: 'string' },
     db: { type: 'string', default: 'data/project.db' },
     help: { type: 'boolean', short: 'h' },
   },
@@ -63,21 +68,29 @@ if (values.help || !command) {
         'Commands:',
         '  start   - Start a new workflow',
         '  resume  - Resume a paused workflow',
+        '  result  - Report step completion',
         '  status  - Show workflow status',
         '  list    - List workflow runs',
         '  gate    - Handle human gate decision',
         '',
         'Usage:',
-        '  pnpm workflow:start --type w1_editing --book <slug>',
-        '  pnpm workflow:resume --run <id>',
-        '  pnpm workflow:status --run <id>',
-        '  pnpm workflow:list [--book <slug>] [--status <status>]',
-        '  pnpm workflow:gate --run <id> --decision <decision> [--input <text>]',
+        '  pnpm wf:start --type w1_editing --book <slug>',
+        '  pnpm wf:resume --run <id>',
+        '  pnpm wf:result --run <id> --success [--result <json>]',
+        '  pnpm wf:result --run <id> --failure --error "message"',
+        '  pnpm wf:status --run <id>',
+        '  pnpm wf:list [--book <slug>] [--status <status>]',
+        '  pnpm wf:gate --run <id> --decision <decision> [--input <text>]',
         '',
         'Options:',
         '  --type, -t      Workflow type (e.g., w1_editing)',
         '  --book, -b      Book slug',
         '  --run, -r       Workflow run ID',
+        '  --success       Mark step as successful',
+        '  --failure       Mark step as failed',
+        '  --result        Step result as JSON',
+        '  --error, -e     Error message (with --failure)',
+        '  --hint          Hint for conditional branching',
         '  --status, -s    Filter by status (pending, running, paused, completed, failed)',
         '  --decision, -d  Gate decision (Approve, Reject, Request Changes, Full Review)',
         '  --input, -i     Additional input for gate decision',
@@ -315,6 +328,68 @@ function handleList(): void {
 }
 
 /**
+ * Handle result command (report step completion)
+ */
+async function handleResult(): Promise<void> {
+  if (!values.run) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --run',
+        status: [{ label: 'Workflow run ID is required', success: false }],
+      })
+    );
+    process.exit(1);
+  }
+
+  if (!values.success && !values.failure) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Must specify --success or --failure',
+        status: [{ label: 'Step outcome is required', success: false }],
+      })
+    );
+    process.exit(1);
+  }
+
+  // Parse result JSON if provided
+  let resultData: unknown = {};
+  if (values.result) {
+    try {
+      resultData = JSON.parse(values.result);
+    } catch {
+      console.error(
+        CLIFormatter.format({
+          title: 'ERROR',
+          content: 'Invalid JSON in --result',
+          status: [{ label: 'Result must be valid JSON', success: false }],
+        })
+      );
+      process.exit(1);
+    }
+  }
+
+  const stepOutput = {
+    success: values.success ?? false,
+    result: resultData,
+    error: values.error,
+    postconditionsPassed: values.success ?? false,
+    nextStepHint: values.hint,
+  };
+
+  console.log(
+    CLIFormatter.format({
+      title: 'PROCESSING STEP RESULT',
+      content: `Run: ${values.run}, Success: ${stepOutput.success}`,
+    })
+  );
+
+  const state = await runner.processStepResult(values.run, stepOutput);
+  formatState(state);
+}
+
+/**
  * Handle gate command (human gate decision)
  */
 async function handleGate(): Promise<void> {
@@ -360,6 +435,9 @@ async function main(): Promise<void> {
         break;
       case 'resume':
         await handleResume();
+        break;
+      case 'result':
+        await handleResult();
         break;
       case 'status':
         handleStatus();

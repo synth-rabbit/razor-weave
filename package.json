@@ -74,6 +74,7 @@
     "wf": "tsx src/tooling/cli-commands/workflow.ts",
     "wf:start": "tsx src/tooling/cli-commands/workflow.ts start",
     "wf:resume": "tsx src/tooling/cli-commands/workflow.ts resume",
+    "wf:result": "tsx src/tooling/cli-commands/workflow.ts result",
     "wf:status": "tsx src/tooling/cli-commands/workflow.ts status",
     "wf:list": "tsx src/tooling/cli-commands/workflow.ts list",
     "wf:gate": "tsx src/tooling/cli-commands/workflow.ts gate"
