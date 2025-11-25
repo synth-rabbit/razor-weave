@@ -5,6 +5,7 @@
 //
 export * from './base-repository.js';
 export * from './client.js';
+export * from './safe-client.js';
 export * from './schema.js';
 export * from './state-client.js';
 export * from './snapshot-client.js';
