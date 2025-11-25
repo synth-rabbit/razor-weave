@@ -70,7 +70,13 @@
     "w1:finalize-web-html": "tsx src/tooling/cli-commands/w1-finalize-web-html.ts",
     "w1:human-gate": "tsx src/tooling/cli-commands/w1-human-gate.ts",
     "w1:finalize": "tsx src/tooling/cli-commands/w1-finalize.ts",
-    "w1:strategic": "tsx src/tooling/cli-commands/w1-strategic.ts"
+    "w1:strategic": "tsx src/tooling/cli-commands/w1-strategic.ts",
+    "wf": "tsx src/tooling/cli-commands/workflow.ts",
+    "wf:start": "tsx src/tooling/cli-commands/workflow.ts start",
+    "wf:resume": "tsx src/tooling/cli-commands/workflow.ts resume",
+    "wf:status": "tsx src/tooling/cli-commands/workflow.ts status",
+    "wf:list": "tsx src/tooling/cli-commands/workflow.ts list",
+    "wf:gate": "tsx src/tooling/cli-commands/workflow.ts gate"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
