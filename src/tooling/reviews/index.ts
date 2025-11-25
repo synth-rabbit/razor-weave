@@ -25,6 +25,12 @@ export {
   FOCUS_CATEGORIES,
 } from './persona-sampler.js';
 
+// Review collection (reads agent JSON output, persists to DB)
+export {
+  collectReviews,
+  getCollectionStatus,
+} from './review-collector.js';
+
 // Re-export types
 export type { CampaignStatus, ContentType } from './campaign-client.js';
 export type { InitializeCampaignParams, AddReviewersParams, AddReviewersResult } from './review-orchestrator.js';

@@ -1,13 +1,14 @@
 /**
  * w1:strategic CLI Command
  *
- * Creates or resumes a strategic W1 editing workflow.
+ * Creates or resumes a strategic W1 editing workflow using PM Agent planning.
  *
  * Usage:
- *   pnpm w1:strategic --book <slug> --fresh              # Fresh review + strategic plan
- *   pnpm w1:strategic --book <slug> --analysis <path>    # Use existing analysis
+ *   pnpm w1:strategic --book <slug> --analysis <path>    # Generate PM planning prompt
+ *   pnpm w1:strategic --save-plan <plan.json> --book <slug>  # Save AI-generated plan
  *   pnpm w1:strategic --resume <plan-id>                 # Resume existing plan
  *   pnpm w1:strategic --list                             # List strategic plans
+ *   pnpm w1:strategic --book <slug> --fresh              # Full workflow with reviews
  */
 
 import { parseArgs } from 'node:util';
@@ -23,10 +24,13 @@ import {
   generateFreshWorkflowPrompt,
   generateRunOrchestratorPrompt,
 } from '../w1/prompt-generator.js';
-import { generateAreasFromAnalysis } from '../w1/area-generator.js';
 import { createTables } from '@razorweave/database';
 import { runMigrations } from '@razorweave/database';
-import type { CreateStrategicPlanInput, StrategyGoal, AnalysisForAreaGeneration } from '../w1/strategy-types.js';
+import type { CreateStrategicPlanInput, StrategyGoal, ImprovementArea } from '../w1/strategy-types.js';
+
+// Valid primary dimension values for StrategyGoal
+type PrimaryDimension = 'clarity_readability' | 'rules_accuracy' | 'persona_fit' | 'practical_usability' | 'overall_score';
+const VALID_DIMENSIONS: PrimaryDimension[] = ['clarity_readability', 'rules_accuracy', 'persona_fit', 'practical_usability', 'overall_score'];
 
 // Get project root
 function getProjectRoot(): string {
@@ -38,11 +42,12 @@ function getProjectRoot(): string {
 }
 
 // Parse arguments
-const { values, positionals } = parseArgs({
+const { values } = parseArgs({
   options: {
     book: { type: 'string', short: 'b' },
     fresh: { type: 'boolean', short: 'f' },
     analysis: { type: 'string', short: 'a' },
+    'save-plan': { type: 'string', short: 's' },
     resume: { type: 'string', short: 'r' },
     list: { type: 'boolean', short: 'l' },
     'metric-threshold': { type: 'string', default: '8.0' },
@@ -65,26 +70,35 @@ if (values.help) {
   console.log(
     CLIFormatter.format({
       title: 'W1 STRATEGIC WORKFLOW',
-      content: 'Create or resume a strategic W1 editing workflow with persistent state.',
+      content: 'Create or resume a strategic W1 editing workflow using PM Agent planning.',
       nextStep: [
         'Usage:',
-        '  pnpm w1:strategic --book <slug> --fresh              # Fresh review + strategic plan',
-        '  pnpm w1:strategic --book <slug> --analysis <path>    # Use existing analysis',
-        '  pnpm w1:strategic --resume <plan-id>                 # Resume existing plan',
-        '  pnpm w1:strategic --list [--book <slug>]             # List strategic plans',
+        '  pnpm w1:strategic --book <slug> --analysis <path>       # Generate PM planning prompt',
+        '  pnpm w1:strategic --save-plan <plan.json> --book <slug> # Save AI-generated plan',
+        '  pnpm w1:strategic --resume <plan-id>                    # Resume existing plan',
+        '  pnpm w1:strategic --list [--book <slug>]                # List strategic plans',
+        '  pnpm w1:strategic --book <slug> --fresh                 # Full workflow with reviews',
         '',
         'Options:',
         '  --book, -b           Book slug (required for new plans)',
-        '  --fresh, -f          Run full review + analyze pipeline (takes time)',
-        '  --analysis, -a       Path to existing analysis file (JSON or markdown)',
+        '  --analysis, -a       Path to analysis file (generates PM prompt)',
+        '  --save-plan, -s      Path to AI-generated plan JSON (saves to DB)',
+        '  --fresh, -f          Run full review + analyze pipeline',
         '  --resume, -r         Resume existing plan by ID',
         '  --list, -l           List strategic plans',
         '  --metric-threshold   Target metric score (default: 8.0)',
         '  --max-cycles         Max cycles per improvement area (default: 3)',
         '  --max-runs           Max parallel run iterations (default: 3)',
-        '  --max-areas          Max improvement areas to generate (default: 6)',
+        '  --max-areas          Max improvement areas (default: 6)',
         '  --delta-threshold    Delta required for validation (default: 1.0)',
         '  --use-dynamic-deltas Scale delta by score level (default: true)',
+        '',
+        'Workflow:',
+        '  1. pnpm w1:strategic --book <slug> --analysis <path>',
+        '     → Generates PM planning prompt',
+        '  2. Execute the prompt with Claude (creates plan.json)',
+        '  3. pnpm w1:strategic --save-plan <plan.json> --book <slug>',
+        '     → Saves plan, outputs execution prompt',
       ],
     })
   );
@@ -118,7 +132,6 @@ if (values.list) {
         content: 'No strategic plans found.',
         nextStep: [
           'Create a new plan:',
-          '  pnpm w1:strategic --book <slug> --fresh',
           '  pnpm w1:strategic --book <slug> --analysis <path>',
         ],
       })
@@ -218,6 +231,199 @@ if (values.resume) {
   process.exit(0);
 }
 
+// Handle --save-plan: Convert AI-generated plan to strategic plan and save
+if (values['save-plan']) {
+  if (!values.book) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Missing required argument: --book <slug>',
+        status: [{ label: 'Book slug required for saving plan', success: false }],
+      })
+    );
+    db.close();
+    process.exit(1);
+  }
+
+  const book = bookRepo.getBySlug(values.book);
+  if (!book) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: `Book not found: ${values.book}`,
+        status: [{ label: 'Book not found', success: false }],
+      })
+    );
+    db.close();
+    process.exit(1);
+  }
+
+  const planPath = resolve(projectRoot, values['save-plan']);
+  if (!existsSync(planPath)) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: `Plan file not found: ${planPath}`,
+        status: [{ label: 'File not found', success: false }],
+      })
+    );
+    db.close();
+    process.exit(1);
+  }
+
+  // Load the AI-generated plan
+  let pmPlan: PMAgentPlan;
+  try {
+    pmPlan = JSON.parse(readFileSync(planPath, 'utf-8'));
+  } catch (error) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: `Failed to parse plan JSON: ${error instanceof Error ? error.message : String(error)}`,
+        status: [{ label: 'Invalid JSON', success: false }],
+      })
+    );
+    db.close();
+    process.exit(1);
+  }
+
+  // Validate required fields
+  if (!pmPlan.chapter_modifications || !Array.isArray(pmPlan.chapter_modifications)) {
+    console.error(
+      CLIFormatter.format({
+        title: 'ERROR',
+        content: 'Plan missing required field: chapter_modifications[]',
+        status: [{ label: 'Invalid plan structure', success: false }],
+      })
+    );
+    db.close();
+    process.exit(1);
+  }
+
+  // Parse config from CLI options
+  const metricThreshold = parseFloat(values['metric-threshold'] || '8.0');
+  const maxCycles = parseInt(values['max-cycles'] || '3', 10);
+  const maxRuns = parseInt(values['max-runs'] || '3', 10);
+  const deltaThreshold = parseFloat(values['delta-threshold'] || '1.0');
+  const useDynamicDeltas = values['use-dynamic-deltas'] !== false;
+  const maxAreas = parseInt(values['max-areas'] || '6', 10);
+
+  // Convert PM plan to strategic areas
+  const areas = convertPMPlanToAreas(pmPlan, maxCycles, maxAreas);
+
+  // Parse and validate primary dimension
+  const rawDimension = pmPlan.estimated_impact?.primary_dimension;
+  const primaryDimension: PrimaryDimension =
+    rawDimension && VALID_DIMENSIONS.includes(rawDimension as PrimaryDimension)
+      ? (rawDimension as PrimaryDimension)
+      : 'overall_score';
+
+  // Create goal configuration
+  const goal: StrategyGoal = {
+    metric_threshold: metricThreshold,
+    primary_dimension: primaryDimension,
+    max_cycles: maxCycles,
+    max_runs: maxRuns,
+    delta_threshold_for_validation: deltaThreshold,
+    use_dynamic_deltas: useDynamicDeltas,
+  };
+
+  // Create the strategic plan
+  const planInput: CreateStrategicPlanInput = {
+    book_id: book.id,
+    book_slug: book.slug,
+    source_analysis_path: planPath,
+    goal,
+    areas,
+  };
+
+  const plan = strategyRepo.create(planInput);
+
+  // Create artifacts directory and save files
+  const artifactsDir = resolve(projectRoot, `data/w1-strategic/${plan.id}`);
+  mkdirSync(artifactsDir, { recursive: true });
+
+  // Save strategy.json (includes the full PM plan for reference)
+  writeFileSync(
+    join(artifactsDir, 'strategy.json'),
+    JSON.stringify(
+      {
+        id: plan.id,
+        book_id: plan.book_id,
+        book_slug: plan.book_slug,
+        goal: plan.goal,
+        areas: plan.areas,
+        source_pm_plan: pmPlan,
+        created_at: plan.created_at,
+      },
+      null,
+      2
+    )
+  );
+
+  // Save state.json
+  writeFileSync(join(artifactsDir, 'state.json'), JSON.stringify(plan.state, null, 2));
+
+  // Save the original PM plan for reference
+  writeFileSync(join(artifactsDir, 'pm-plan.json'), JSON.stringify(pmPlan, null, 2));
+
+  // Generate the execution prompt
+  let prompt: string;
+  if (areas.length > 1) {
+    prompt = generateRunOrchestratorPrompt({
+      planId: plan.id,
+      workflowRunId: plan.workflow_run_id || '{workflow_run_id}',
+      bookSlug: book.slug,
+      bookTitle: book.title,
+      artifactsDir,
+      currentRun: plan.state.current_run,
+      maxRuns: goal.max_runs,
+      areas: plan.areas,
+      metricThreshold: goal.metric_threshold,
+      useDynamicDeltas: goal.use_dynamic_deltas,
+    });
+  } else {
+    prompt = generateStrategyPrompt({
+      planId: plan.id,
+      bookSlug: book.slug,
+      bookTitle: book.title,
+      artifactsDir,
+      isResume: false,
+    });
+  }
+
+  console.log(
+    CLIFormatter.format({
+      title: 'STRATEGIC PLAN CREATED FROM PM AGENT OUTPUT',
+      content: [
+        `Plan ID: ${plan.id}`,
+        `Source: ${pmPlan.plan_id || 'AI-generated'}`,
+        `Book: ${book.title} (${book.slug})`,
+        `Summary: ${pmPlan.summary || 'No summary'}`,
+        `Goal: ${goal.primary_dimension} >= ${goal.metric_threshold}`,
+        `Improvement Areas: ${areas.length}`,
+        '',
+        'Areas:',
+        ...areas.map(a => `  • ${a.name} (${a.target_chapters.length} chapters, ${a.target_issues.length} issues)`),
+        '',
+        `Artifacts: ${artifactsDir}`,
+      ].join('\n'),
+      status: [
+        { label: 'PM plan loaded', success: true },
+        { label: 'Strategic plan created', success: true },
+        { label: 'Artifacts saved', success: true },
+      ],
+    })
+  );
+
+  console.log('\n' + '─'.repeat(60) + '\n');
+  console.log('PROMPT TO EXECUTE:\n');
+  console.log(prompt);
+
+  db.close();
+  process.exit(0);
+}
+
 // Create new plan - requires --book and either --fresh or --analysis
 if (!values.book) {
   console.error(
@@ -227,8 +433,8 @@ if (!values.book) {
       status: [{ label: 'Book slug required', success: false }],
       nextStep: [
         'Usage:',
-        '  pnpm w1:strategic --book <slug> --fresh',
         '  pnpm w1:strategic --book <slug> --analysis <path>',
+        '  pnpm w1:strategic --book <slug> --fresh',
       ],
     })
   );
@@ -244,8 +450,8 @@ if (!values.fresh && !values.analysis) {
       status: [{ label: 'Missing mode', success: false }],
       nextStep: [
         'Options:',
-        '  --fresh              Run fresh review analysis',
-        '  --analysis <path>    Use existing analysis file',
+        '  --analysis <path>    Generate PM planning prompt from analysis',
+        '  --fresh              Run full review + analyze pipeline',
       ],
     })
   );
@@ -268,26 +474,8 @@ if (!book) {
   process.exit(1);
 }
 
-// Load or create analysis
-let analysisPath: string | undefined;
-let analysisContent: string;
-
-if (values.analysis) {
-  analysisPath = resolve(projectRoot, values.analysis);
-  if (!existsSync(analysisPath)) {
-    console.error(
-      CLIFormatter.format({
-        title: 'ERROR',
-        content: `Analysis file not found: ${analysisPath}`,
-        status: [{ label: 'File not found', success: false }],
-      })
-    );
-    db.close();
-    process.exit(1);
-  }
-  analysisContent = readFileSync(analysisPath, 'utf-8');
-} else {
-  // --fresh: Generate prompt that includes review + analyze steps
+// Handle --fresh: Generate full workflow prompt
+if (values.fresh) {
   const freshPrompt = generateFreshWorkflowPrompt({
     bookSlug: book.slug,
     bookTitle: book.title,
@@ -304,9 +492,10 @@ if (values.analysis) {
         '',
         'This prompt will guide Claude Code through:',
         '  1. Running persona reviews',
-        '  2. Analyzing reviews',
-        '  3. Creating strategic plan',
-        '  4. Executing W1 editing workflow',
+        '  2. Collecting review results',
+        '  3. Analyzing reviews',
+        '  4. PM Agent planning',
+        '  5. Executing W1 editing workflow',
       ].join('\n'),
       status: [{ label: 'Prompt generated', success: true }],
     })
@@ -320,212 +509,303 @@ if (values.analysis) {
   process.exit(0);
 }
 
-// Parse config from CLI options
-const metricThreshold = parseFloat(values['metric-threshold'] || '8.0');
-const maxCycles = parseInt(values['max-cycles'] || '3', 10);
-const maxRuns = parseInt(values['max-runs'] || '3', 10);
-const deltaThreshold = parseFloat(values['delta-threshold'] || '1.0');
-const useDynamicDeltas = values['use-dynamic-deltas'] !== false;
-const maxAreas = parseInt(values['max-areas'] || '6', 10);
-
-// Create goal configuration
-const goal: StrategyGoal = {
-  metric_threshold: metricThreshold,
-  primary_dimension: 'overall_score',
-  max_cycles: maxCycles,
-  max_runs: maxRuns,
-  delta_threshold_for_validation: deltaThreshold,
-  use_dynamic_deltas: useDynamicDeltas,
-};
-
-// Parse analysis and generate improvement areas
-let analysisData: AnalysisForAreaGeneration | null = null;
-
-// Try to parse analysis as JSON first
-try {
-  if (analysisPath?.endsWith('.json')) {
-    const analysisJson = JSON.parse(analysisContent);
-    if (analysisJson.priority_rankings) {
-      analysisData = {
-        priority_rankings: analysisJson.priority_rankings.map((r: Record<string, unknown>) => ({
-          category: String(r.category || 'unknown'),
-          severity: Number(r.severity ?? r.score ?? 5),
-          frequency: Number(r.frequency ?? r.count ?? 1),
-          affected_chapters: Array.isArray(r.affected_chapters) ? r.affected_chapters : [],
-          affected_personas: Array.isArray(r.affected_personas) ? r.affected_personas : undefined,
-          description: r.description ? String(r.description) : undefined,
-        })),
-        dimension_summaries: analysisJson.dimension_summaries ?? {},
-        persona_breakdowns: analysisJson.persona_breakdowns,
-      };
-    }
-  }
-} catch {
-  // Not JSON, will try markdown below
+// Handle --analysis: Generate PM planning prompt
+const analysisPath = resolve(projectRoot, values.analysis!);
+if (!existsSync(analysisPath)) {
+  console.error(
+    CLIFormatter.format({
+      title: 'ERROR',
+      content: `Analysis file not found: ${analysisPath}`,
+      status: [{ label: 'File not found', success: false }],
+    })
+  );
+  db.close();
+  process.exit(1);
 }
 
-// Try markdown parsing if JSON failed
-if (!analysisData) {
-  // Extract priority rankings from markdown structure
-  const rankingMatch = analysisContent.match(/## Priority Rankings?\n([\s\S]*?)(?=\n## |$)/i);
-  if (rankingMatch) {
-    const rankings: AnalysisForAreaGeneration['priority_rankings'] = [];
-    const lines = rankingMatch[1].split('\n');
-    let currentCategory = '';
-    let currentSeverity = 5;
+const analysisContent = readFileSync(analysisPath, 'utf-8');
 
-    for (const line of lines) {
-      const categoryMatch = line.match(/^\d+\.\s*\*\*(.+?)\*\*/);
-      if (categoryMatch) {
-        currentCategory = categoryMatch[1];
-        // Try to extract severity from the line
-        const sevMatch = line.match(/severity[:\s]+(\d+)/i);
-        currentSeverity = sevMatch ? parseInt(sevMatch[1], 10) : 5;
+// Generate PM planning prompt
+const pmPrompt = generatePMPlanningPrompt({
+  bookId: book.id,
+  bookSlug: book.slug,
+  bookTitle: book.title,
+  analysisContent,
+  analysisPath,
+  metricThreshold: parseFloat(values['metric-threshold'] || '8.0'),
+  maxChapters: parseInt(values['max-areas'] || '6', 10),
+});
 
-        rankings.push({
-          category: currentCategory,
-          severity: currentSeverity,
-          frequency: 1,
-          affected_chapters: [],
-        });
-      }
-    }
+// Create output directory for the prompt
+const promptsDir = resolve(projectRoot, 'data/w1-prompts');
+mkdirSync(promptsDir, { recursive: true });
 
-    if (rankings.length > 0) {
-      analysisData = {
-        priority_rankings: rankings,
-        dimension_summaries: {},
-      };
-    }
-  }
-}
-
-// Generate areas from analysis data, or fall back to default
-let areas;
-if (analysisData && analysisData.priority_rankings.length > 0) {
-  areas = generateAreasFromAnalysis(analysisData, {
-    maxAreas,
-    maxCyclesPerArea: maxCycles,
-  });
-  console.log(CLIFormatter.format({
-    title: 'AREAS GENERATED',
-    content: `Generated ${areas.length} improvement areas from analysis`,
-    status: areas.map(a => ({ label: `${a.name} (${a.target_chapters.length} chapters)`, success: true })),
-  }));
-} else {
-  // Fall back to default area if parsing fails
-  areas = [{
-    area_id: 'area-general',
-    name: 'General Improvements',
-    type: 'issue_category' as const,
-    description: 'Address issues identified in the analysis',
-    target_chapters: [],
-    target_issues: [],
-    priority: 1,
-    max_cycles: maxCycles,
-  }];
-  console.log(CLIFormatter.format({
-    title: 'AREAS GENERATED',
-    content: 'Could not parse specific areas from analysis, using general improvement area',
-    status: [{ label: 'General Improvements', pending: true }],
-  }));
-}
-
-// Create the strategic plan
-const planInput: CreateStrategicPlanInput = {
-  book_id: book.id,
-  book_slug: book.slug,
-  source_analysis_path: analysisPath,
-  goal,
-  areas,
-};
-
-const plan = strategyRepo.create(planInput);
-
-// Create artifacts directory and save files
-const artifactsDir = resolve(projectRoot, `data/w1-strategic/${plan.id}`);
-mkdirSync(artifactsDir, { recursive: true });
-
-// Save strategy.json
-writeFileSync(
-  join(artifactsDir, 'strategy.json'),
-  JSON.stringify(
-    {
-      id: plan.id,
-      book_id: plan.book_id,
-      book_slug: plan.book_slug,
-      goal: plan.goal,
-      areas: plan.areas,
-      source_analysis_path: plan.source_analysis_path,
-      created_at: plan.created_at,
-    },
-    null,
-    2
-  )
-);
-
-// Save state.json
-writeFileSync(join(artifactsDir, 'state.json'), JSON.stringify(plan.state, null, 2));
-
-// Copy analysis file for reference
-if (analysisPath) {
-  writeFileSync(join(artifactsDir, 'source-analysis.md'), analysisContent);
-}
-
-// Generate the prompt - use parallel orchestrator for multiple areas, legacy for single
-let prompt: string;
-if (areas.length > 1) {
-  // Multiple areas: use parallel run orchestrator
-  prompt = generateRunOrchestratorPrompt({
-    planId: plan.id,
-    workflowRunId: plan.workflow_run_id || '{workflow_run_id}',
-    bookSlug: book.slug,
-    bookTitle: book.title,
-    artifactsDir,
-    currentRun: plan.state.current_run,
-    maxRuns: goal.max_runs,
-    areas: plan.areas,
-    metricThreshold: goal.metric_threshold,
-    useDynamicDeltas: goal.use_dynamic_deltas,
-  });
-} else {
-  // Single area: use legacy sequential prompt
-  prompt = generateStrategyPrompt({
-    planId: plan.id,
-    bookSlug: book.slug,
-    bookTitle: book.title,
-    artifactsDir,
-    isResume: false,
-  });
-}
+const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+const promptPath = join(promptsDir, `pm-planning-${book.slug}-${timestamp}.txt`);
+writeFileSync(promptPath, pmPrompt);
 
 console.log(
   CLIFormatter.format({
-    title: 'STRATEGIC PLAN CREATED',
+    title: 'PM PLANNING PROMPT GENERATED',
     content: [
-      `Plan ID: ${plan.id}`,
       `Book: ${book.title} (${book.slug})`,
-      `Goal: ${goal.primary_dimension} >= ${goal.metric_threshold}`,
-      `Max Runs: ${goal.max_runs} (parallel execution batches)`,
-      `Max Cycles per Area: ${goal.max_cycles}`,
-      `Delta Threshold: ${goal.delta_threshold_for_validation}${goal.use_dynamic_deltas ? ' (dynamic scaling enabled)' : ''}`,
-      `Improvement Areas: ${areas.length}`,
+      `Analysis: ${analysisPath}`,
+      `Prompt saved: ${promptPath}`,
       '',
-      'Areas:',
-      ...areas.map(a => `  • ${a.name} (${a.target_chapters.length} chapters, priority ${a.priority})`),
-      '',
-      `Artifacts: ${artifactsDir}`,
+      'The PM Agent will create a detailed improvement plan with:',
+      '  • Target issues with success metrics',
+      '  • Chapter modifications with specific instructions',
+      '  • Execution order and dependencies',
+      '  • Impact estimates',
     ].join('\n'),
     status: [
-      { label: 'Plan created', success: true },
-      { label: 'Artifacts saved', success: true },
-      { label: `${areas.length} areas ready for parallel execution`, pending: true },
+      { label: 'Analysis loaded', success: true },
+      { label: 'PM prompt generated', success: true },
+    ],
+    nextStep: [
+      'Next steps:',
+      '',
+      '1. Execute the PM planning prompt:',
+      `   Read and execute the prompt in: ${promptPath}`,
+      '',
+      '2. Save the AI-generated plan to a JSON file:',
+      `   Write plan to: data/w1-strategic/pm-plan-${book.slug}.json`,
+      '',
+      '3. Create strategic plan from the PM output:',
+      `   pnpm w1:strategic --save-plan data/w1-strategic/pm-plan-${book.slug}.json --book ${book.slug}`,
     ],
   })
 );
 
 console.log('\n' + '─'.repeat(60) + '\n');
-console.log('PROMPT TO EXECUTE:\n');
-console.log(prompt);
+console.log('PM PLANNING PROMPT:\n');
+console.log(pmPrompt);
 
 db.close();
+
+// =============================================================================
+// Helper Types and Functions
+// =============================================================================
+
+/**
+ * PM Agent plan structure (output from pm-analysis-to-plan.md)
+ */
+interface PMAgentPlan {
+  plan_id?: string;
+  created_at?: string;
+  source_campaign_id?: string;
+  summary?: string;
+  target_issues?: Array<{
+    issue_id: string;
+    description: string;
+    severity: 'high' | 'medium' | 'low';
+    source_category: string;
+    affected_chapters: string[];
+    affected_personas?: string[];
+    improvement_goal: string;
+    success_metric: string;
+    priority: number;
+  }>;
+  chapter_modifications: Array<{
+    chapter_id: string;
+    chapter_name: string;
+    priority: number;
+    issues_addressed: string[];
+    estimated_effort: 'low' | 'medium' | 'high';
+    modifications: Array<{
+      type: string;
+      target: string;
+      instruction: string;
+      success_criteria: string;
+    }>;
+  }>;
+  constraints?: {
+    max_chapters_modified?: number;
+    preserve_structure?: boolean;
+    follow_style_guides?: boolean;
+    preserve_mechanics?: boolean;
+    word_count_target?: string;
+  };
+  execution_order?: Array<{
+    phase: number;
+    chapters: string[];
+    rationale: string;
+  }>;
+  estimated_impact?: {
+    primary_dimension?: string;
+    expected_improvement?: string;
+    secondary_benefits?: string[];
+  };
+  review_cycle_recommendation?: {
+    re_review_personas?: string[];
+    focus_dimensions?: string[];
+    skip_personas?: string[];
+    rationale?: string;
+  };
+}
+
+/**
+ * Convert PM Agent plan to strategic improvement areas
+ */
+function convertPMPlanToAreas(
+  pmPlan: PMAgentPlan,
+  maxCycles: number,
+  maxAreas: number
+): Omit<ImprovementArea, 'status' | 'current_cycle' | 'baseline_score' | 'current_score' | 'delta_achieved' | 'chapters_modified' | 'baseline_metrics' | 'current_metrics' | 'delta'>[] {
+  const areas: Omit<ImprovementArea, 'status' | 'current_cycle' | 'baseline_score' | 'current_score' | 'delta_achieved' | 'chapters_modified' | 'baseline_metrics' | 'current_metrics' | 'delta'>[] = [];
+
+  // If execution_order exists, group by phase
+  if (pmPlan.execution_order && pmPlan.execution_order.length > 0) {
+    for (const phase of pmPlan.execution_order.slice(0, maxAreas)) {
+      const chapterMods = pmPlan.chapter_modifications.filter(cm =>
+        phase.chapters.includes(cm.chapter_id)
+      );
+
+      if (chapterMods.length === 0) continue;
+
+      // Collect all issues addressed
+      const issuesAddressed = new Set<string>();
+      for (const cm of chapterMods) {
+        for (const issueId of cm.issues_addressed) {
+          issuesAddressed.add(issueId);
+        }
+      }
+
+      // Find issue descriptions
+      const issueDescriptions = (pmPlan.target_issues || [])
+        .filter(ti => issuesAddressed.has(ti.issue_id))
+        .map(ti => ti.description);
+
+      areas.push({
+        area_id: `area-phase-${phase.phase}`,
+        name: `Phase ${phase.phase}: ${phase.rationale.slice(0, 50)}${phase.rationale.length > 50 ? '...' : ''}`,
+        type: 'chapter_cluster',
+        description: phase.rationale,
+        target_chapters: phase.chapters,
+        target_issues: issueDescriptions,
+        priority: phase.phase,
+        max_cycles: maxCycles,
+        target_dimension: pmPlan.estimated_impact?.primary_dimension as 'clarity_readability' | 'rules_accuracy' | 'persona_fit' | 'practical_usability' | 'overall_score' | undefined,
+      });
+    }
+  } else {
+    // No execution order - group by chapter priority
+    const sortedMods = [...pmPlan.chapter_modifications].sort((a, b) => a.priority - b.priority);
+
+    for (let i = 0; i < Math.min(sortedMods.length, maxAreas); i++) {
+      const cm = sortedMods[i];
+
+      // Find issue descriptions
+      const issueDescriptions = (pmPlan.target_issues || [])
+        .filter(ti => cm.issues_addressed.includes(ti.issue_id))
+        .map(ti => ti.description);
+
+      areas.push({
+        area_id: `area-${cm.chapter_id}`,
+        name: `${cm.chapter_name} Improvements`,
+        type: 'chapter_cluster',
+        description: `Improvements for ${cm.chapter_name}: ${cm.modifications.length} modifications`,
+        target_chapters: [cm.chapter_id],
+        target_issues: issueDescriptions,
+        priority: cm.priority,
+        max_cycles: maxCycles,
+      });
+    }
+  }
+
+  return areas;
+}
+
+/**
+ * Generate PM planning prompt from analysis
+ */
+interface PMPromptContext {
+  bookId: string;
+  bookSlug: string;
+  bookTitle: string;
+  analysisContent: string;
+  analysisPath: string;
+  metricThreshold: number;
+  maxChapters: number;
+}
+
+function generatePMPlanningPrompt(context: PMPromptContext): string {
+  const { bookSlug, bookTitle, analysisContent, analysisPath, metricThreshold, maxChapters } = context;
+
+  // Load the PM agent prompt template
+  const pmPromptPath = resolve(projectRoot, 'src/tooling/agents/prompts/pm-analysis-to-plan.md');
+  const pmPromptTemplate = existsSync(pmPromptPath)
+    ? readFileSync(pmPromptPath, 'utf-8')
+    : '';
+
+  // Load style guides if available
+  let styleGuidesContent = '';
+  const styleGuidesDir = resolve(projectRoot, 'docs/style_guides');
+  if (existsSync(join(styleGuidesDir, 'content.md'))) {
+    styleGuidesContent += '\n### Content Style Guide\n';
+    styleGuidesContent += readFileSync(join(styleGuidesDir, 'content.md'), 'utf-8');
+  }
+  if (existsSync(join(styleGuidesDir, 'mechanics.md'))) {
+    styleGuidesContent += '\n### Mechanics Style Guide\n';
+    styleGuidesContent += readFileSync(join(styleGuidesDir, 'mechanics.md'), 'utf-8');
+  }
+
+  // Get chapter list from book
+  const chaptersDir = resolve(projectRoot, `books/core/v1.3.0/chapters`);
+  let chapterList = '';
+  if (existsSync(chaptersDir)) {
+    const chapters = require('fs').readdirSync(chaptersDir)
+      .filter((f: string) => f.endsWith('.md'))
+      .sort();
+    chapterList = chapters.map((f: string) => `  - ${f.replace('.md', '')}`).join('\n');
+  }
+
+  return `# PM Planning Task
+
+You are the Project Manager (PM) agent for the W1 editing workflow.
+
+## Context
+
+- **Book:** ${bookTitle} (${bookSlug})
+- **Analysis Source:** ${analysisPath}
+- **Target Metric:** overall_score >= ${metricThreshold}
+- **Max Chapters to Modify:** ${maxChapters}
+
+## Review Analysis
+
+${analysisContent}
+
+## Book Chapters
+
+${chapterList || '_Chapter list not available - check books/core/ directory_'}
+
+## Style Guides
+${styleGuidesContent || '_No style guides found in docs/style_guides/_'}
+
+## PM Agent Instructions
+
+${pmPromptTemplate}
+
+## Output Requirements
+
+After analyzing the review feedback, create your improvement plan and save it as JSON:
+
+**Output path:** \`data/w1-strategic/pm-plan-${bookSlug}.json\`
+
+The JSON must follow the ImprovementPlan schema exactly (see PM Agent Instructions above).
+
+## Next Steps After Creating Plan
+
+After you save the plan JSON, run:
+
+\`\`\`bash
+pnpm w1:strategic --save-plan data/w1-strategic/pm-plan-${bookSlug}.json --book ${bookSlug}
+\`\`\`
+
+This will create the strategic plan and generate the execution prompt.
+
+## Begin
+
+Read the analysis above and create a prioritized improvement plan.
+`;
+}

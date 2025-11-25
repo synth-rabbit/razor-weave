@@ -693,21 +693,31 @@ Run persona-based reviews on the book:
 pnpm review:book ${bookSlug}
 \`\`\`
 
-This generates 40+ persona reviews. Follow the prompts to complete all reviews.
+This generates 40+ persona prompts. Execute all reviewer agents (they write JSON to \`data/reviews/raw/{campaign-id}/\`).
 
-## Phase 2: Analyze Reviews
+## Phase 2: Collect Reviews
 
-Once reviews are complete, run analysis:
+After all reviewer agents complete, collect their JSON outputs into the database:
 
 \`\`\`bash
-pnpm review:analyze --book=${bookSlug}
+pnpm review:collect {campaign-id}
+\`\`\`
+
+This reads JSON files and persists them to the database for analysis.
+
+## Phase 3: Analyze Reviews
+
+Once reviews are collected, run analysis:
+
+\`\`\`bash
+pnpm review:analyze {campaign-id}
 \`\`\`
 
 This creates an analysis file at \`data/reviews/analysis/campaign-XXXXX.md\`.
 
 Note the path to the analysis file from the output.
 
-## Phase 3: Create Strategic Plan
+## Phase 4: Create Strategic Plan
 
 With the analysis complete, create the strategic plan:
 
@@ -720,9 +730,9 @@ This will:
 2. Create artifacts in \`data/w1-strategic/{plan_id}/\`
 3. Output a new prompt for executing the plan
 
-## Phase 4: Execute Strategic Plan
+## Phase 5: Execute Strategic Plan
 
-Copy and execute the prompt output from Phase 3. That prompt contains instructions for:
+Copy and execute the prompt output from Phase 4. That prompt contains instructions for:
 - Iterating through improvement areas
 - Running delta validation
 - Triggering large-batch validation

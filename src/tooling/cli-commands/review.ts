@@ -6,6 +6,8 @@ import {
   ReviewOrchestrator,
   writeAnalysisMarkdown,
   AnalysisDataSchema,
+  collectReviews,
+  getCollectionStatus,
   type CampaignStatus,
   type ContentType,
   type FocusCategory,
@@ -517,6 +519,57 @@ export function addReviewers(
   } catch (error) {
     log.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);
+  }
+}
+
+/**
+ * Command: review collect <campaign-id>
+ * Collects review JSON files written by agents and persists to database
+ */
+export function collectCampaignReviews(campaignId: string): void {
+  log.info(`\nCollecting reviews for campaign: ${campaignId}\n`);
+
+  const db = getDatabase();
+  const rawDb = db.getDb();
+
+  // First show status
+  const status = getCollectionStatus(rawDb, campaignId);
+  log.info(`Expected reviewers: ${status.expected.length}`);
+  log.info(`Already collected: ${status.collected.length}`);
+  log.info(`JSON files found: ${status.hasJsonFiles.length}`);
+  log.info(`Pending: ${status.pending.length}`);
+
+  if (status.hasJsonFiles.length === 0) {
+    log.info('\nNo JSON files to collect. Run reviewer agents first.');
+    return;
+  }
+
+  // Collect reviews
+  const result = collectReviews(rawDb, campaignId);
+
+  log.info(`\n✅ Collection complete!`);
+  log.info(`  Collected: ${result.collected}`);
+  log.info(`  Skipped (already in DB): ${result.skipped}`);
+  if (result.errors.length > 0) {
+    log.warn(`  Errors: ${result.errors.length}`);
+    for (const error of result.errors) {
+      log.error(`    - ${error}`);
+    }
+  }
+
+  // Check if all reviews are now collected
+  const newStatus = getCollectionStatus(rawDb, campaignId);
+  if (newStatus.pending.length === 0) {
+    log.info('\n✅ All reviews collected! Ready for analysis.');
+    log.info(`\nNext: pnpm review:analyze ${campaignId}`);
+  } else {
+    log.info(`\n⏳ Still waiting for ${newStatus.pending.length} reviews:`);
+    for (const personaId of newStatus.pending.slice(0, 10)) {
+      log.info(`  - ${personaId}`);
+    }
+    if (newStatus.pending.length > 10) {
+      log.info(`  ... and ${newStatus.pending.length - 10} more`);
+    }
   }
 }
 

@@ -21,38 +21,70 @@ This:
 1. Creates a fresh review campaign
 2. Outputs a complete prompt with all steps
 3. You copy the prompt to a new Claude Code session
-4. Claude Code executes the workflow autonomously until reaching a human gate
+4. Claude Code executes the workflow autonomously:
+   - Runs reviewer agents (write JSON to files)
+   - Collects reviews into database (`review:collect`)
+   - Analyzes reviews
+   - Creates strategic plan
+   - Iterates until human gate
 
 See [CLI Reference](cli-reference.md) for all options.
 
 ---
 
-## Alternative: Strategic Command
+## Alternative: Strategic Command with PM Agent
 
-The simplest way to run W1 is with the strategic command:
+The strategic command uses a PM (Project Manager) Agent to create detailed improvement plans from review analysis. This two-step process leverages AI for intelligent planning:
+
+### Step 1: Generate PM Planning Prompt
 
 ```bash
-# Full workflow with fresh reviews
-pnpm w1:strategic --book=core-rulebook --fresh
-
-# Or use existing analysis
+# From existing analysis
 pnpm w1:strategic --book=core-rulebook --analysis=data/reviews/analysis/campaign-xxx.md
 
-# Resume a failed/interrupted session
+# Or with fresh reviews (runs review → analyze → PM planning)
+pnpm w1:strategic --book=core-rulebook --fresh
+```
+
+This outputs a prompt for the PM Agent. Execute it with Claude Code to generate a detailed improvement plan (`plan.json`).
+
+### Step 2: Save Plan and Execute
+
+```bash
+# Save AI-generated plan to database
+pnpm w1:strategic --save-plan=./plan.json --book=core-rulebook
+
+# Resume a saved plan
 pnpm w1:strategic --resume=strat_abc123
 
 # List all strategic plans
 pnpm w1:strategic --list
 ```
 
-This generates a single prompt that guides Claude Code through the entire workflow:
-1. Reviews (if `--fresh`)
-2. Analysis
-3. Strategic planning
-4. Content modification iterations
-5. Validation with metrics check
-6. Human gate approval
-7. Finalization (creates new book version)
+The `--save-plan` mode:
+1. Validates the AI-generated plan JSON
+2. Converts plan to strategic improvement areas
+3. Saves to database with tracking
+4. Outputs an execution prompt for content modification
+
+### Complete Strategic Workflow
+
+```
+1. pnpm w1:strategic --book <slug> --analysis <path>
+   → Generates PM planning prompt
+
+2. [Execute PM prompt with Claude Code → creates plan.json]
+
+3. pnpm w1:strategic --save-plan <plan.json> --book <slug>
+   → Validates plan, saves to DB, outputs execution prompt
+
+4. [Execute the modification workflow]
+   → Writer → Editor → Domain Expert → Validation
+
+5. Human gate approval
+
+6. Finalization (creates new book version)
+```
 
 ### Configuration Options
 
@@ -332,11 +364,12 @@ pnpm w1:finalize --save --run=wfrun_abc123 --artifacts=./final/
 
 | Command | Description |
 |---------|-------------|
+| `pnpm w1:strategic --book=<slug> --analysis=<path>` | Generate PM planning prompt from analysis |
+| `pnpm w1:strategic --save-plan=<plan.json> --book=<slug>` | Save AI-generated plan to database |
 | `pnpm w1:strategic --book=<slug> --fresh` | Full workflow with fresh reviews |
-| `pnpm w1:strategic --book=<slug> --analysis=<path>` | Workflow with existing analysis |
 | `pnpm w1:strategic --resume=<plan-id>` | Resume interrupted session |
 | `pnpm w1:strategic --list` | List all strategic plans |
-| `pnpm w1:strategic --book=<slug> --max-areas=6 --use-dynamic-deltas` | Parallel areas with dynamic thresholds |
+| `pnpm w1:strategic --save-plan=... --max-areas=6 --use-dynamic-deltas` | With options |
 
 ### Individual Commands
 

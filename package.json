@@ -28,6 +28,7 @@
     "review:analyze": "tsx src/tooling/cli-commands/run.ts review analyze",
     "review:add-reviewers": "tsx src/tooling/cli-commands/run.ts review add-reviewers",
     "review:reanalyze": "tsx src/tooling/cli-commands/run.ts review reanalyze",
+    "review:collect": "tsx src/tooling/cli-commands/run.ts review collect",
     "personas:hydrate": "tsx src/tooling/cli-commands/run.ts hydrate-core",
     "personas:generate": "tsx src/tooling/cli-commands/run.ts generate",
     "personas:stats": "tsx src/tooling/cli-commands/run.ts stats",

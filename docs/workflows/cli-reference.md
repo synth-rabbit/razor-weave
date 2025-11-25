@@ -171,6 +171,16 @@ Re-run analysis on a campaign.
 pnpm review:reanalyze <campaign-id>
 ```
 
+### review:collect
+
+Collect review JSON files written by agents and persist to database.
+
+```bash
+pnpm review:collect <campaign-id>
+```
+
+This reads JSON files from `data/reviews/raw/<campaign-id>/` and persists valid reviews to the database. Run this after reviewer agents have completed writing their JSON output files.
+
 ---
 
 ## W1 Editing (`w1:*`)
@@ -179,14 +189,19 @@ Commands for the W1 editing workflow steps.
 
 ### w1:strategic
 
-Generate strategic improvement plan from analysis.
+Generate PM planning prompts and manage strategic plans.
 
 ```bash
-# With fresh reviews
-pnpm w1:strategic --book=core-rulebook --fresh
-
-# Using existing analysis
+# Step 1: Generate PM planning prompt from analysis
 pnpm w1:strategic --book=core-rulebook --analysis=<path>
+# → Outputs prompt for PM Agent to create plan.json
+
+# Step 2: Save AI-generated plan to database
+pnpm w1:strategic --save-plan=./plan.json --book=core-rulebook
+# → Validates plan, saves to DB, outputs execution prompt
+
+# Or: Full workflow with fresh reviews
+pnpm w1:strategic --book=core-rulebook --fresh
 
 # Resume interrupted session
 pnpm w1:strategic --resume=<plan-id>
@@ -194,6 +209,16 @@ pnpm w1:strategic --resume=<plan-id>
 # List all plans
 pnpm w1:strategic --list
 ```
+
+**Options:**
+- `--analysis, -a` - Path to review analysis (generates PM prompt)
+- `--save-plan, -s` - Path to AI-generated plan JSON (saves to DB)
+- `--fresh, -f` - Run full review + analyze + planning pipeline
+- `--resume, -r` - Resume existing plan by ID
+- `--list, -l` - List all strategic plans
+- `--metric-threshold` - Target score (default: 8.0)
+- `--max-cycles` - Max cycles per area (default: 3)
+- `--max-areas` - Max improvement areas (default: 6)
 
 ### w1:content-modify
 

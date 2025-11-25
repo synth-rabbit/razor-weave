@@ -5,7 +5,7 @@ import { PersonaClient } from '@razorweave/database';
 import { CampaignClient } from './campaign-client.js';
 import { snapshotBook } from './content-snapshot.js';
 import { generateReviewerPromptFile, generateAnalyzerPromptFile } from './prompt-generator.js';
-import { mkdirSync, writeFileSync, rmSync } from 'fs';
+import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from 'fs';
 import { TESTING } from '../constants/index.js';
 
 describe('generateReviewerPromptFile', () => {
@@ -40,6 +40,7 @@ describe('generateReviewerPromptFile', () => {
   afterEach(() => {
     db.close();
     rmSync('data/test', { recursive: true, force: true });
+    rmSync('data/reviews', { recursive: true, force: true });
   });
 
   it('generates complete prompt file with all sections', () => {
@@ -61,17 +62,47 @@ describe('generateReviewerPromptFile', () => {
     // Generate prompt
     const promptText = generateReviewerPromptFile(db, campaignId, 'test-sarah');
 
-    // Verify sections exist
-    expect(promptText).toContain('You are conducting a review for campaign');
-    expect(promptText).toContain('PERSONA: test-sarah');
-    expect(promptText).toContain('Sarah Chen');
-    expect(promptText).toContain('Explorer');
-    expect(promptText).toContain('Newbie');
-    expect(promptText).toContain('CONTENT:');
-    expect(promptText).toContain('TASK: Review this book');
-    expect(promptText).toContain('OUTPUT REQUIREMENTS');
-    expect(promptText).toContain('campaignClient.createPersonaReview');
-    expect(promptText).toContain('writeReviewMarkdown');
+    // Verify sections exist - new format
+    expect(promptText).toContain('# Review Task');
+    expect(promptText).toContain('## Your Persona: Sarah Chen');
+    expect(promptText).toContain('**Archetype:** Explorer');
+    expect(promptText).toContain('**Experience Level:** Newbie');
+    expect(promptText).toContain('## Content to Review');
+    expect(promptText).toContain('## Review Criteria');
+    expect(promptText).toContain('## Required Output');
+    expect(promptText).toContain('.json');
+    expect(promptText).toContain('ratings');
+    expect(promptText).toContain('issue_annotations');
+  });
+
+  it('writes content file for agent to read', () => {
+    const contentId = snapshotBook(db, {
+      bookPath: testBookPath,
+      version: 'v1.0',
+      source: 'claude',
+    });
+
+    const campaignId = campaignClient.createCampaign({
+      campaignName: 'Test Campaign',
+      contentType: 'book',
+      contentId,
+      personaSelectionStrategy: 'manual',
+      personaIds: ['test-sarah'],
+    });
+
+    // Generate prompt - should also create content file
+    const promptText = generateReviewerPromptFile(db, campaignId, 'test-sarah');
+
+    // Check content file was written
+    const contentPath = `data/reviews/content/${campaignId}/content.html`;
+    expect(existsSync(contentPath)).toBe(true);
+
+    // Verify content matches original
+    const writtenContent = readFileSync(contentPath, 'utf-8');
+    expect(writtenContent).toContain('<h1>Test Book</h1>');
+
+    // Prompt should reference the content file
+    expect(promptText).toContain(contentPath);
   });
 
   it('throws error when campaign not found', () => {
@@ -101,9 +132,9 @@ describe('generateReviewerPromptFile', () => {
     }).toThrow('Persona not found: nonexistent-persona');
   });
 
-  it('throws error when content not found', () => {
+  it('throws error when content snapshot not found', () => {
     // Manually insert campaign with invalid content_id
-    const invalidContentId = 99999;
+    const invalidContentId = 'book-invalid12345';
     db.prepare(
       `INSERT INTO review_campaigns (id, campaign_name, content_type, content_id, persona_selection_strategy, persona_ids, status)
        VALUES (?, ?, ?, ?, ?, ?, ?)`
@@ -111,7 +142,7 @@ describe('generateReviewerPromptFile', () => {
 
     expect(() => {
       generateReviewerPromptFile(db, 'test-campaign-invalid', 'test-sarah');
-    }).toThrow('Content not found: 99999');
+    }).toThrow('Book snapshot not found: book-invalid12345');
   });
 
   it('generates analyzer prompt with all reviews', () => {
@@ -143,7 +174,9 @@ describe('generateReviewerPromptFile', () => {
           practical_usability: 8,
         },
         narrative_feedback: 'Good content',
-        issue_annotations: [],
+        issue_annotations: [
+          { section: 'Intro', issue: 'Too brief', impact: 'Confusing', location: 'Line 1' }
+        ],
         overall_assessment: 'Solid',
       },
       agentExecutionTime: TESTING.MOCK_AGENT_EXECUTION_TIME_MS,
@@ -152,11 +185,15 @@ describe('generateReviewerPromptFile', () => {
     // Generate analyzer prompt
     const promptText = generateAnalyzerPromptFile(db, campaignId);
 
-    // Verify sections
-    expect(promptText).toContain('You are analyzing reviews for campaign');
-    expect(promptText).toContain('test-sarah');
+    // Verify sections - new format
+    expect(promptText).toContain('# Review Analysis Task');
+    expect(promptText).toContain('## Review Summary');
     expect(promptText).toContain('Sarah Chen');
-    expect(promptText).toContain('clarity_readability: 8');
-    expect(promptText).toContain('campaignClient.createCampaignAnalysis');
+    expect(promptText).toContain('Explorer');
+    expect(promptText).toContain('## Review Files');
+    expect(promptText).toContain('.json');
+    expect(promptText).toContain('## Analysis Requirements');
+    expect(promptText).toContain('## Output');
+    expect(promptText).toContain('.md');
   });
 });

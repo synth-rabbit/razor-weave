@@ -84,6 +84,7 @@ import {
   analyzeCampaign,
   addReviewers,
   reanalyzeCampaign,
+  collectCampaignReviews,
   type ListCampaignsFilters,
 } from './review.js';
 import {
@@ -258,9 +259,17 @@ async function main(): Promise<void> {
           process.exit(1);
         }
         reanalyzeCampaign(campaignId);
+      } else if (subcommand === 'collect') {
+        const campaignId = args[2];
+        if (!campaignId) {
+          log.error('Error: Please provide a campaign ID');
+          log.error('Usage: pnpm review:collect <campaign-id>');
+          process.exit(1);
+        }
+        collectCampaignReviews(campaignId);
       } else {
         log.error(`Unknown review subcommand: ${subcommand}`);
-        log.error('Available subcommands: book, chapter, list, view, status, analyze, add-reviewers, reanalyze');
+        log.error('Available subcommands: book, chapter, list, view, status, analyze, add-reviewers, reanalyze, collect');
         process.exit(1);
       }
     } else if (command === 'html' && args[1] === 'print') {

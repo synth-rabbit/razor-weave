@@ -55,6 +55,7 @@ describe('Prompt Writer', () => {
     db.close();
     rmSync('data/test', { recursive: true, force: true });
     rmSync('data/reviews/prompts', { recursive: true, force: true });
+    rmSync('data/reviews/content', { recursive: true, force: true });
   });
 
   it('writes reviewer prompt files for all campaign personas', () => {
@@ -88,10 +89,10 @@ describe('Prompt Writer', () => {
     expect(existsSync(`data/reviews/prompts/${campaignId}/test-sarah.txt`)).toBe(true);
     expect(existsSync(`data/reviews/prompts/${campaignId}/test-alex.txt`)).toBe(true);
 
-    // Verify file contents contain expected sections
+    // Verify file contents contain expected sections (new format)
     const sarahPrompt = readFileSync(`data/reviews/prompts/${campaignId}/test-sarah.txt`, 'utf-8');
-    expect(sarahPrompt).toContain('You are conducting a review for campaign');
-    expect(sarahPrompt).toContain('PERSONA: test-sarah');
+    expect(sarahPrompt).toContain('# Review Task');
+    expect(sarahPrompt).toContain('## Your Persona: Test Sarah');
   });
 
   it('writes analyzer prompt file after reviews exist', () => {
@@ -151,9 +152,9 @@ describe('Prompt Writer', () => {
     expect(analyzerPath).toBe(`data/reviews/prompts/${campaignId}/analyzer.txt`);
     expect(existsSync(analyzerPath)).toBe(true);
 
-    // Verify analyzer file contents
+    // Verify analyzer file contents (new format)
     const analyzerPrompt = readFileSync(analyzerPath, 'utf-8');
-    expect(analyzerPrompt).toContain('You are analyzing reviews for campaign');
+    expect(analyzerPrompt).toContain('# Review Analysis Task');
   });
 
   it('throws error if campaign not found', () => {
@@ -245,8 +246,8 @@ describe('Prompt Writer', () => {
     expect(files2).toEqual(files1);
     expect(existsSync(files2[0])).toBe(true);
 
-    // Verify file still contains valid prompt
+    // Verify file still contains valid prompt (new format)
     const promptContent = readFileSync(files2[0], 'utf-8');
-    expect(promptContent).toContain('You are conducting a review');
+    expect(promptContent).toContain('# Review Task');
   });
 });
