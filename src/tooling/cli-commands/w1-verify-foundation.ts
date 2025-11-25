@@ -19,9 +19,9 @@ import { WorkflowRepository } from '../workflows/repository.js';
 import { WorkflowStateMachine } from '../workflows/state-machine.js';
 import { ArtifactRegistry } from '../workflows/artifact-registry.js';
 import { CampaignClient } from '../reviews/campaign-client.js';
-import { PersonaClient } from '../database/persona-client.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { PersonaClient } from '@razorweave/database';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 
 // ============================================================================
 // Constants

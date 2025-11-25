@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Database from 'better-sqlite3';
 import { mkdirSync } from 'node:fs';
-import { createTables } from '../database/schema.js';
+import { createTables } from '@razorweave/database';
 import { CampaignClient } from './campaign-client.js';
 import type { CreateCampaignData } from './campaign-client.js';
 import { TESTING } from '../constants/index.js';

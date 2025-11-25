@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 // scripts/verify-database.ts
-import { getDatabase } from '../database/index.js';
+import { getDatabase } from '@razorweave/database';
 import { writeFileSync, mkdirSync } from 'fs';
 import { log } from '../logging/logger.js';
 

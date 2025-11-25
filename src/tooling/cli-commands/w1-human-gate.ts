@@ -23,8 +23,8 @@ import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { StrategyRepository } from '../w1/strategy-repository.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 
 // Get project root
 function getProjectRoot(): string {

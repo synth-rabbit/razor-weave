@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import Database from 'better-sqlite3';
-import { createTables } from '../database/schema.js';
+import { createTables } from '@razorweave/database';
 import { CampaignClient } from './campaign-client.js';
-import { PersonaClient } from '../database/persona-client.js';
+import { PersonaClient } from '@razorweave/database';
 import { ReviewOrchestrator } from './review-orchestrator.js';
 import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { resolve } from 'path';

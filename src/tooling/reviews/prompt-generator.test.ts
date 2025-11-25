@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Database from 'better-sqlite3';
-import { createTables } from '../database/schema.js';
-import { PersonaClient } from '../database/persona-client.js';
+import { createTables } from '@razorweave/database';
+import { PersonaClient } from '@razorweave/database';
 import { CampaignClient } from './campaign-client.js';
 import { snapshotBook } from './content-snapshot.js';
 import { generateReviewerPromptFile, generateAnalyzerPromptFile } from './prompt-generator.js';

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { loadPersonaFromFile, hydratePersona } from './hydrator.js';
-import { getDatabase } from '../database/index.js';
+import { getDatabase } from '@razorweave/database';
 
 describe('Hydrator', () => {
   describe('loadPersonaFromFile', () => {

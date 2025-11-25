@@ -1,6 +1,6 @@
 import type Database from 'better-sqlite3';
 import { CampaignClient } from './campaign-client.js';
-import { PersonaClient } from '../database/persona-client.js';
+import { PersonaClient } from '@razorweave/database';
 import type { ReviewData } from './schemas.js';
 
 export function generateReviewerPromptFile(

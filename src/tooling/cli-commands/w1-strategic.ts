@@ -24,8 +24,8 @@ import {
   generateRunOrchestratorPrompt,
 } from '../w1/prompt-generator.js';
 import { generateAreasFromAnalysis } from '../w1/area-generator.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 import type { CreateStrategicPlanInput, StrategyGoal, AnalysisForAreaGeneration } from '../w1/strategy-types.js';
 
 // Get project root

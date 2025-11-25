@@ -1,13 +1,6 @@
 // src/tooling/database/index.ts
 //
-// Database layer exports - foundation layer only.
-// For review system (CampaignClient), import from '../reviews/campaign-client.js'
+// Re-export from @razorweave/database for backward compatibility.
+// New code should import directly from '@razorweave/database'.
 //
-export * from './base-repository.js';
-export * from './client.js';
-export * from './safe-client.js';
-export * from './schema.js';
-export * from './state-client.js';
-export * from './snapshot-client.js';
-export * from './artifact-client.js';
-export * from './types.js';
+export * from '@razorweave/database';

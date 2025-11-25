@@ -19,8 +19,8 @@ import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
 import { getVersionedSourcePath } from '../books/types.js';
 import { WorkflowRepository } from '../workflows/repository.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 import { buildWebReader } from '../html-gen/web/build.js';
 
 // Get project root (git root or fallback to cwd)

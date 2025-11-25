@@ -28,8 +28,8 @@ import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { ArtifactRegistry, type WorkflowArtifact } from '../workflows/artifact-registry.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 
 // Get project root (git root or fallback to cwd)
 function getProjectRoot(): string {

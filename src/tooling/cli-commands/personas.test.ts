@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { hydrateCore, generate, stats } from './personas.js';
-import { getDatabase, ProjectDatabase } from '../database/index.js';
+import { getDatabase, ProjectDatabase } from '@razorweave/database';
 import { hydrateAllCorePersonas } from '../personas/hydrator.js';
 import { generatePersonaBatch } from '../personas/generator.js';
 import * as logger from '../logging/logger.js';

@@ -1,7 +1,7 @@
 import type Database from 'better-sqlite3';
 import { CampaignClient, type Campaign } from './campaign-client.js';
 import { snapshotBook, snapshotChapter } from './content-snapshot.js';
-import { PersonaClient } from '../database/persona-client.js';
+import { PersonaClient } from '@razorweave/database';
 import { writePromptFiles, writeAnalyzerPromptFile } from './prompt-writer.js';
 import { log } from '../logging/logger.js';
 import { inferFocus, samplePersonas, type FocusCategory } from './persona-sampler.js';

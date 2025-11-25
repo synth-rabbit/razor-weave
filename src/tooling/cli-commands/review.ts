@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { getDatabase } from '../database/index.js';
+import { getDatabase } from '@razorweave/database';
 import { log } from '../logging/logger.js';
 import {
   CampaignClient,

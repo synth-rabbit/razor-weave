@@ -21,8 +21,8 @@ import { WorkflowRepository } from '../workflows/repository.js';
 import { BookRepository } from '../books/repository.js';
 import { createConditionDatabase } from '../workflows/condition-database.js';
 import { w1EditingWorkflow } from '../workflows/w1-workflow.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 import type { WorkflowDefinition } from '../workflows/engine-types.js';
 
 // Get project root

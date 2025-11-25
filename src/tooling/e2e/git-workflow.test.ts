@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { execSync } from 'child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'fs';
 import Database from 'better-sqlite3';
-import { createTables } from '../database/schema.js';
-import { StateClient } from '../database/state-client.js';
+import { createTables } from '@razorweave/database';
+import { StateClient } from '@razorweave/database';
 
 describe('E2E Git Workflow', () => {
   let db: Database.Database;

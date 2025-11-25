@@ -18,8 +18,8 @@ import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { ArtifactRegistry } from '../workflows/artifact-registry.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 import { buildPrintHtml, type BuildResult } from '../html-gen/print/build.js';
 import { promotePrintBuild, type PromoteResult } from '../html-gen/print/promote.js';
 

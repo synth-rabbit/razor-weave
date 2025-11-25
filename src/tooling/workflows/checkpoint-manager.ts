@@ -5,7 +5,7 @@
  * operations for rich checkpoint data stored in the database.
  */
 
-import { BaseRepository } from '../database/base-repository.js';
+import { BaseRepository } from '@razorweave/database';
 import { DatabaseError } from '../errors/index.js';
 import type {
   Checkpoint,

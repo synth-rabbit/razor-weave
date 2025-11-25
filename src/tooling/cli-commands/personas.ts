@@ -1,4 +1,4 @@
-import { getDatabase } from '../database/index.js';
+import { getDatabase } from '@razorweave/database';
 import { hydrateAllCorePersonas } from '../personas/hydrator.js';
 import { generatePersonaBatch } from '../personas/generator.js';
 import { log } from '../logging/logger.js';

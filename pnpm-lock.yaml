@@ -78,6 +78,25 @@ importers:
         specifier: ^1.1.0
         version: 1.6.1(@types/node@20.19.25)
 
+  src/database:
+    dependencies:
+      better-sqlite3:
+        specifier: ^12.4.1
+        version: 12.4.1
+    devDependencies:
+      '@types/better-sqlite3':
+        specifier: ^7.6.13
+        version: 7.6.13
+      '@types/node':
+        specifier: ^20.19.25
+        version: 20.19.25
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+      vitest:
+        specifier: ^1.1.0
+        version: 1.6.1(@types/node@20.19.25)
+
   src/events:
     dependencies:
       better-sqlite3:
@@ -158,6 +177,9 @@ importers:
       '@razorweave/boardroom':
         specifier: workspace:*
         version: link:../boardroom
+      '@razorweave/database':
+        specifier: workspace:*
+        version: link:../database
       '@razorweave/events':
         specifier: workspace:*
         version: link:../events

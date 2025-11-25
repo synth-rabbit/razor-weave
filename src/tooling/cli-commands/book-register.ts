@@ -14,8 +14,8 @@ import { resolve, join } from 'node:path';
 import { execSync } from 'node:child_process';
 import { CLIFormatter } from '../cli/formatter.js';
 import { BookRepository } from '../books/repository.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 import type { BookType } from '../books/types.js';
 
 // Get project root (git root or fallback to cwd)

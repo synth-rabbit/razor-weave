@@ -94,7 +94,7 @@ import {
   formatDiff,
   promoteWebBuild,
 } from '../html-gen/web/index.js';
-import { getDatabase } from '../database/index.js';
+import { getDatabase } from '@razorweave/database';
 import { HtmlBuildClient } from '../html-gen/build-client.js';
 
 async function main(): Promise<void> {

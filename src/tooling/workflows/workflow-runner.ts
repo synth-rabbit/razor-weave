@@ -7,7 +7,7 @@
  */
 
 import type Database from 'better-sqlite3';
-import { SafeDatabaseClient, type BackupInfo } from '../database/safe-client.js';
+import { SafeDatabaseClient, type BackupInfo } from '@razorweave/database';
 import { CheckpointManager } from './checkpoint-manager.js';
 import { WorkflowRepository } from './repository.js';
 import type {

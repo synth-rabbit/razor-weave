@@ -7,7 +7,7 @@ import {
   snapshotChapter,
   getChapterSnapshot,
 } from './content-snapshot.js';
-import { createTables } from '../database/schema.js';
+import { createTables } from '@razorweave/database';
 
 describe('Content Snapshot', () => {
   let db: Database.Database;

@@ -2,8 +2,8 @@ import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import YAML from 'yaml';
-import { getDatabase } from '../database/index.js';
-import type { PersonaData } from '../database/persona-client.js';
+import { getDatabase } from '@razorweave/database';
+import type { PersonaData } from '@razorweave/database';
 
 /**
  * Find the project root by walking up from current directory

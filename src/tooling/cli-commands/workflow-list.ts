@@ -14,8 +14,8 @@ import { execSync } from 'node:child_process';
 import { CLIFormatter } from '../cli/formatter.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { BookRepository } from '../books/repository.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 import {
   WORKFLOW_STATUSES,
   WORKFLOW_TYPES,

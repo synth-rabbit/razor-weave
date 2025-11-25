@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { getDatabase } from '../database/index.js';
+import { getDatabase } from '@razorweave/database';
 
 interface InvalidReview {
   clarity?: number;

@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from 'fs';
 import Database from 'better-sqlite3';
-import { createTables } from '../database/schema.js';
+import { createTables } from '@razorweave/database';
 import { CampaignClient } from './campaign-client.js';
-import { PersonaClient } from '../database/persona-client.js';
+import { PersonaClient } from '@razorweave/database';
 import { snapshotBook } from './content-snapshot.js';
 import { writePromptFiles, writeAnalyzerPromptFile } from './prompt-writer.js';
 

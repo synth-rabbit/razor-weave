@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 import { execSync } from 'child_process';
 import Database from 'better-sqlite3';
-import { createTables } from '../database/schema.js';
+import { createTables } from '@razorweave/database';
 import { mkdirSync, rmSync } from 'fs';
 
 describe('E2E CLI Commands', () => {

@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@razorweave/boardroom": "workspace:*",
+    "@razorweave/database": "workspace:*",
     "@razorweave/events": "workspace:*",
     "@razorweave/pdf-gen": "workspace:*",
     "@razorweave/shared": "workspace:*",

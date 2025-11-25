@@ -4,8 +4,8 @@ import Database from 'better-sqlite3';
 import { resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 import { CLIFormatter } from './formatter.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 
 /**
  * Option definition for CLI arguments.

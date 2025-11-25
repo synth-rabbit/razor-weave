@@ -33,8 +33,8 @@ import { BookRepository } from '../books/repository.js';
 import { getVersionedSourcePath } from '../books/types.js';
 import { WorkflowRepository } from '../workflows/repository.js';
 import { StrategyRepository } from '../w1/strategy-repository.js';
-import { createTables } from '../database/schema.js';
-import { runMigrations } from '../database/migrate.js';
+import { createTables } from '@razorweave/database';
+import { runMigrations } from '@razorweave/database';
 import {
   generateMetricsEvalPrompt,
   W1PromptWriter,

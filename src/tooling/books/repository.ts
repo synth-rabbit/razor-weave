@@ -1,5 +1,5 @@
 // src/tooling/books/repository.ts
-import { BaseRepository } from '../database/base-repository.js';
+import { BaseRepository } from '@razorweave/database';
 import { DatabaseError } from '../errors/index.js';
 import type { Book, CreateBookInput, UpdateBookInput } from './types.js';
 

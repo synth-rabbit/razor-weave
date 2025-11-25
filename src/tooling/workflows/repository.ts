@@ -1,5 +1,5 @@
 // src/tooling/workflows/repository.ts
-import { BaseRepository } from '../database/base-repository.js';
+import { BaseRepository } from '@razorweave/database';
 import { DatabaseError } from '../errors/index.js';
 import { WorkflowStateMachine } from './state-machine.js';
 import type { WorkflowRun, WorkflowStatus, WorkflowType } from './types.js';
