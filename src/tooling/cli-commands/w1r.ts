@@ -224,6 +224,79 @@ export function listW1R(
   }));
 }
 
+export interface ProcessResult {
+  success: boolean;
+  prompt?: string;
+  error?: string;
+}
+
+/**
+ * Process feedback and generate agent instructions
+ */
+export async function processW1R(
+  db: Database.Database,
+  runId: string,
+  chapterNumber: number
+): Promise<ProcessResult> {
+  const w1rRepo = new W1RRepository(db);
+
+  const result = w1rRepo.getRun(runId);
+  if (!result) {
+    return { success: false, error: `Run not found: ${runId}` };
+  }
+
+  const { checkpoint } = result;
+
+  if (checkpoint.currentChapter !== chapterNumber) {
+    return {
+      success: false,
+      error: `Expected chapter ${checkpoint.currentChapter}, got ${chapterNumber}`,
+    };
+  }
+
+  const workspace = getWorkspaceInfo(DATA_DIR, runId);
+
+  // Read feedback
+  const feedbackFilename = `${String(chapterNumber).padStart(2, '0')}-feedback.md`;
+  const feedbackPath = resolve(workspace.feedbackPath, feedbackFilename);
+
+  let feedback;
+  try {
+    feedback = await readFeedback(feedbackPath);
+  } catch (e) {
+    return { success: false, error: `Could not read feedback: ${feedbackPath}` };
+  }
+
+  // Update checkpoint with feedback
+  checkpoint.currentFeedback = feedback;
+  checkpoint.chapterStatus = 'clarifying';
+  w1rRepo.updateCheckpoint(runId, checkpoint);
+
+  // Get chapter info
+  const chapters = await getChaptersFromWorkspace(workspace.chaptersPath);
+  const chapter = chapters.find(c => c.number === chapterNumber);
+  if (!chapter) {
+    return { success: false, error: `Chapter ${chapterNumber} not found` };
+  }
+
+  // Read chapter content
+  const chapterPath = resolve(workspace.chaptersPath, chapter.filename);
+  const chapterContent = await readFile(chapterPath, 'utf-8');
+
+  // Format feedback
+  const feedbackFormatted = formatFeedbackForPrompt(feedback);
+
+  // Generate processing prompt
+  const prompt = generateProcessingPrompt(
+    checkpoint,
+    chapter,
+    chapterContent,
+    feedbackFormatted
+  );
+
+  return { success: true, prompt };
+}
+
 // Helper functions
 
 async function getChaptersFromWorkspace(chaptersPath: string): Promise<ChapterInfo[]> {

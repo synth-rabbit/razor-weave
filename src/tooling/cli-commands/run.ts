@@ -12,7 +12,7 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
 import { hydrateCore, generate, stats } from './personas.js';
-import { startW1R, resumeW1R, getW1RStatus, listW1R } from './w1r.js';
+import { startW1R, resumeW1R, getW1RStatus, listW1R, processW1R } from './w1r.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '../../..');
@@ -478,9 +478,33 @@ async function main(): Promise<void> {
           break;
         }
 
+        case 'process': {
+          const runArg = args.find(a => a.startsWith('--run='));
+          const chapterArg = args.find(a => a.startsWith('--chapter='));
+
+          if (!runArg || !chapterArg) {
+            console.error('Usage: w1r process --run=<id> --chapter=<n>');
+            process.exit(1);
+          }
+
+          const runId = runArg.split('=')[1];
+          const chapterNum = parseInt(chapterArg.split('=')[1], 10);
+
+          const db = getDatabase();
+          const result = await processW1R(db.db, runId, chapterNum);
+
+          if (result.success) {
+            console.log(result.prompt);
+          } else {
+            console.error(`Error: ${result.error}`);
+            process.exit(1);
+          }
+          break;
+        }
+
         default:
           console.error(`Unknown w1r command: ${subcommand}`);
-          console.error('Available: start, resume, status, list');
+          console.error('Available: start, resume, status, list, process');
           process.exit(1);
       }
     } else {
