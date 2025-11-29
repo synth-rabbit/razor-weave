@@ -71,11 +71,35 @@ Once you understand the feedback (after clarification or if none needed):
 3. Write the updated chapter back to the same file
 4. Create a change summary
 
-**Phase 3: Review**
-After writing, run:
-  pnpm w1r:review --run ${checkpoint.workflowRunId} --chapter ${chapter.number}
+**Phase 3: Self-Review**
+After writing the updated chapter, conduct two reviews:
 
-This will return prompts for Editor and Domain expert review.
+1. **Editor Review** - Assess:
+   - Prose quality, grammar, readability
+   - Consistency with the book's style
+   - Pacing and flow
+   - Whether changes appropriately address the feedback
+
+2. **Domain Expert Review** - Assess:
+   - Rules accuracy and clarity
+   - Mechanical consistency with other chapters
+   - Whether examples correctly demonstrate concepts
+   - Player/GM usability
+
+Format each review as:
+**Assessment:** [Approve / Approve with notes / Concerns]
+**Feedback:** [Your observations]
+
+**Phase 4: Present to Human**
+After both reviews, present:
+1. Summary of changes made
+2. Editor review findings
+3. Domain expert review findings
+
+Then ask: "Would you like to approve this chapter, or provide additional feedback?"
+
+If approved, run:
+  pnpm w1r:approve --run ${checkpoint.workflowRunId} --chapter ${chapter.number}
 
 ### Begin
 Start by assessing the feedback. Do you need any clarification, or is the feedback clear?`;
