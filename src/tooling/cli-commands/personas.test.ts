@@ -1,14 +1,9 @@
 import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { hydrateCore, generate, stats } from './personas.js';
-import { getDatabase, ProjectDatabase } from '@razorweave/database';
+import type { ProjectDatabase } from '@razorweave/database';
 import { hydrateAllCorePersonas } from '../personas/hydrator.js';
 import { generatePersonaBatch } from '../personas/generator.js';
 import * as logger from '../logging/logger.js';
-
-// Mock the dependencies
-vi.mock('../database/index.js');
-vi.mock('../personas/hydrator.js');
-vi.mock('../personas/generator.js');
 
 interface MockPersonaClient {
   create: Mock<[data: unknown], string>;
@@ -20,27 +15,40 @@ interface MockDatabase extends Partial<ProjectDatabase> {
   personas: MockPersonaClient;
 }
 
+// Create persistent mock database that persists across test runs
+const mockDb: MockDatabase = {
+  personas: {
+    create: vi.fn<[data: unknown], string>().mockReturnValue('test-id'),
+    getAll: vi.fn<[], unknown[]>().mockReturnValue([]),
+    countByDimension: vi.fn<[], Record<string, number>>().mockReturnValue({}),
+  },
+};
+
+// Mock the dependencies with factory functions
+vi.mock('@razorweave/database', () => ({
+  getDatabase: vi.fn(() => mockDb),
+}));
+vi.mock('../personas/hydrator.js', () => ({
+  hydrateAllCorePersonas: vi.fn(),
+}));
+vi.mock('../personas/generator.js', () => ({
+  generatePersonaBatch: vi.fn(),
+}));
+
 describe('personas CLI commands', () => {
-  let mockDb: MockDatabase;
   let logSpy: Mock;
 
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
 
+    // Reset mock database methods
+    mockDb.personas.create.mockReturnValue('test-id');
+    mockDb.personas.getAll.mockReturnValue([]);
+    mockDb.personas.countByDimension.mockReturnValue({});
+
     // Spy on logger.log.info to capture output
     logSpy = vi.spyOn(logger.log, 'info').mockImplementation(() => {});
-
-    // Setup mock database
-    mockDb = {
-      personas: {
-        create: vi.fn<[data: unknown], string>().mockReturnValue('test-id'),
-        getAll: vi.fn<[], unknown[]>().mockReturnValue([]),
-        countByDimension: vi.fn<[], Record<string, number>>().mockReturnValue({}),
-      },
-    };
-
-    vi.mocked(getDatabase).mockReturnValue(mockDb);
   });
 
   describe('hydrate-core command', () => {

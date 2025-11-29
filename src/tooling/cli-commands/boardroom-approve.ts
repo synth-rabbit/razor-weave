@@ -37,11 +37,13 @@ const { values } = parseArgs({
   options: {
     session: { type: 'string', short: 's' },
     events: { type: 'string', default: 'data/events' },
+    db: { type: 'string', default: 'data/project.db' },
   },
 });
 
 const sessionId = values.session;
 const eventsDir = resolveFromRoot(values.events!);
+const dbPath = resolveFromRoot(values.db!);
 
 // Validate arguments
 if (!sessionId) {
@@ -115,7 +117,6 @@ for (const planEvent of vpPlanEvents) {
 sessionManager.completeSession(sessionId);
 
 // Auto-materialize database
-const dbPath = resolveFromRoot('data/project.db');
 const materializer = new Materializer(eventsDir, dbPath);
 
 // Register all boardroom tables
