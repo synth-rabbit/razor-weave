@@ -79,7 +79,14 @@
     "wf:status": "tsx src/tooling/cli-commands/workflow.ts status",
     "wf:list": "tsx src/tooling/cli-commands/workflow.ts list",
     "wf:gate": "tsx src/tooling/cli-commands/workflow.ts gate",
-    "wf:prompt": "tsx src/tooling/cli-commands/workflow-prompt.ts"
+    "wf:prompt": "tsx src/tooling/cli-commands/workflow-prompt.ts",
+    "w1r:start": "tsx src/tooling/cli-commands/run.ts w1r start",
+    "w1r:resume": "tsx src/tooling/cli-commands/run.ts w1r resume",
+    "w1r:status": "tsx src/tooling/cli-commands/run.ts w1r status",
+    "w1r:list": "tsx src/tooling/cli-commands/run.ts w1r list",
+    "w1r:process": "tsx src/tooling/cli-commands/run.ts w1r process",
+    "w1r:approve": "tsx src/tooling/cli-commands/run.ts w1r approve",
+    "w1r:complete": "tsx src/tooling/cli-commands/run.ts w1r complete"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",

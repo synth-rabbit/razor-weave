@@ -12,6 +12,7 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
 import { hydrateCore, generate, stats } from './personas.js';
+import { startW1R, resumeW1R, getW1RStatus, listW1R } from './w1r.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '../../..');
@@ -387,6 +388,101 @@ async function main(): Promise<void> {
           log.error('Available: build, list, diff, promote');
           process.exit(1);
       }
+    } else if (command === 'w1r') {
+      const subcommand = args[1];
+
+      switch (subcommand) {
+        case 'start': {
+          const bookArg = args.find(a => a.startsWith('--book='));
+          const bookSlug = bookArg?.split('=')[1] || 'core-rulebook';
+
+          const db = getDatabase();
+          const result = await startW1R(db.db, bookSlug);
+
+          if (result.success) {
+            console.log(`\n✓ Created W1R run: ${result.runId}\n`);
+            console.log('--- PROMPT TO PASTE ---\n');
+            console.log(result.prompt);
+            console.log('\n--- END PROMPT ---\n');
+          } else {
+            console.error(`Error: ${result.error}`);
+            process.exit(1);
+          }
+          break;
+        }
+
+        case 'resume': {
+          const runArg = args.find(a => a.startsWith('--run='));
+          if (!runArg) {
+            console.error('Usage: w1r resume --run=<id>');
+            process.exit(1);
+          }
+          const runId = runArg.split('=')[1];
+
+          const db = getDatabase();
+          const result = await resumeW1R(db.db, runId);
+
+          if (result.success) {
+            console.log(`\n✓ Resuming W1R run: ${result.runId}\n`);
+            console.log('--- PROMPT TO PASTE ---\n');
+            console.log(result.prompt);
+            console.log('\n--- END PROMPT ---\n');
+          } else {
+            console.error(`Error: ${result.error}`);
+            process.exit(1);
+          }
+          break;
+        }
+
+        case 'status': {
+          const runArg = args.find(a => a.startsWith('--run='));
+          if (!runArg) {
+            console.error('Usage: w1r status --run=<id>');
+            process.exit(1);
+          }
+          const runId = runArg.split('=')[1];
+
+          const db = getDatabase();
+          const result = getW1RStatus(db.db, runId);
+
+          if (result.success) {
+            console.log(result.status);
+          } else {
+            console.error(`Error: ${result.error}`);
+            process.exit(1);
+          }
+          break;
+        }
+
+        case 'list': {
+          const bookArg = args.find(a => a.startsWith('--book='));
+          const statusArg = args.find(a => a.startsWith('--status='));
+
+          const db = getDatabase();
+          const runs = listW1R(db.db, {
+            bookSlug: bookArg?.split('=')[1],
+            status: statusArg?.split('=')[1],
+          });
+
+          if (runs.length === 0) {
+            console.log('No W1R runs found.');
+          } else {
+            console.log('W1R Runs:\n');
+            for (const run of runs) {
+              console.log(`  ${run.runId}`);
+              console.log(`    Book: ${run.bookSlug}`);
+              console.log(`    Status: ${run.status}, Chapter ${run.chapter}`);
+              console.log(`    Updated: ${run.updatedAt}\n`);
+            }
+          }
+          break;
+        }
+
+        default:
+          console.error(`Unknown w1r command: ${subcommand}`);
+          console.error('Available: start, resume, status, list');
+          process.exit(1);
+      }
     } else {
       log.error(`Unknown command: ${command}`);
       log.error('Available commands:');
@@ -412,6 +508,10 @@ async function main(): Promise<void> {
       log.error('  html web list [--limit=N]                 - List web builds');
       log.error('  html web diff <build-id>                  - Diff vs build');
       log.error('  html web promote                          - Copy to site pages/');
+      log.error('  w1r start [--book=<slug>]                 - Start W1R revision workflow');
+      log.error('  w1r resume --run=<id>                     - Resume W1R run');
+      log.error('  w1r status --run=<id>                     - Check W1R run status');
+      log.error('  w1r list [--book=<slug>] [--status=...]   - List W1R runs');
       process.exit(1);
     }
   } catch (error) {
