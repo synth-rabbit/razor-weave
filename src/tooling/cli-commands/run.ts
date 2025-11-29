@@ -274,14 +274,24 @@ async function main(): Promise<void> {
       }
     } else if (command === 'html' && args[1] === 'print') {
       const subcommand = args[2];
+      const db = getDatabase();
+
+      // Get book info to determine current version
+      const printBookRepo = new BookRepository(db.db);
+      const printBook = printBookRepo.getBySlug('core-rulebook');
+      if (!printBook) {
+        log.error('Book not found: core-rulebook');
+        process.exit(1);
+      }
+      const printBookVersion = printBook.current_version || '1.4.0';
+      const printVersionedPath = `books/core/v${printBookVersion}`;
 
       switch (subcommand) {
         case 'build': {
-          const db = getDatabase();
           const result = await buildPrintHtml({
-            bookPath: resolve(REPO_ROOT, 'books/core/v1.3.0'),
-            chaptersDir: resolve(REPO_ROOT, 'books/core/v1.3.0/chapters'),
-            sheetsDir: resolve(REPO_ROOT, 'books/core/v1.3.0/sheets'),
+            bookPath: resolve(REPO_ROOT, printVersionedPath),
+            chaptersDir: resolve(REPO_ROOT, printVersionedPath, 'chapters'),
+            sheetsDir: resolve(REPO_ROOT, printVersionedPath, 'sheets'),
             outputPath: resolve(REPO_ROOT, 'data/html/print-design/core-rulebook.html'),
             db: db.db,
           });

@@ -94,10 +94,25 @@ function replaceUnderscoreFills(html: string): string {
 
 /**
  * Extract title from chapter content
+ * Handles multiple formats:
+ * - ## N. Title (standard h2)
+ * - # N. Title (h1 with number-dot)
+ * - # Chapter N: Title (h1 with "Chapter N:" prefix)
  */
 function extractTitle(content: string, fallback: string): string {
-  const match = content.match(/^##\s*\d+\.\s*(.+)$/m);
-  return match ? match[1].trim() : fallback;
+  // Try ## N. Title format first
+  let match = content.match(/^##\s*\d+\.\s*(.+)$/m);
+  if (match) return match[1].trim();
+
+  // Try # N. Title format (h1 with number-dot)
+  match = content.match(/^#\s*\d+\.\s*(.+)$/m);
+  if (match) return match[1].trim();
+
+  // Try # Chapter N: Title format
+  match = content.match(/^#\s*Chapter\s+\d+:\s*(.+)$/m);
+  if (match) return match[1].trim();
+
+  return fallback;
 }
 
 /**
