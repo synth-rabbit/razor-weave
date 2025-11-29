@@ -12,7 +12,7 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
 import { hydrateCore, generate, stats } from './personas.js';
-import { startW1R, resumeW1R, getW1RStatus, listW1R, processW1R } from './w1r.js';
+import { startW1R, resumeW1R, getW1RStatus, listW1R, processW1R, approveW1R, completeW1R } from './w1r.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '../../..');
@@ -502,9 +502,64 @@ async function main(): Promise<void> {
           break;
         }
 
+        case 'approve': {
+          const runArg = args.find(a => a.startsWith('--run='));
+          const chapterArg = args.find(a => a.startsWith('--chapter='));
+
+          if (!runArg || !chapterArg) {
+            console.error('Usage: w1r approve --run=<id> --chapter=<n>');
+            process.exit(1);
+          }
+
+          const runId = runArg.split('=')[1];
+          const chapterNum = parseInt(chapterArg.split('=')[1], 10);
+
+          const db = getDatabase();
+          const result = await approveW1R(db.db, runId, chapterNum);
+
+          if (result.success) {
+            if (result.isComplete) {
+              console.log('\n✓ All chapters complete!\n');
+            } else {
+              console.log(`\n✓ Chapter ${chapterNum} approved!\n`);
+            }
+            console.log('--- PROMPT ---\n');
+            console.log(result.prompt);
+            console.log('\n--- END ---\n');
+          } else {
+            console.error(`Error: ${result.error}`);
+            process.exit(1);
+          }
+          break;
+        }
+
+        case 'complete': {
+          const runArg = args.find(a => a.startsWith('--run='));
+          const reviewArg = args.find(a => a.startsWith('--review='));
+
+          if (!runArg) {
+            console.error('Usage: w1r complete --run=<id> [--review=skip|sanity|comprehensive]');
+            process.exit(1);
+          }
+
+          const runId = runArg.split('=')[1];
+          const reviewOption = (reviewArg?.split('=')[1] || 'skip') as 'skip' | 'sanity' | 'comprehensive';
+
+          const db = getDatabase();
+          const result = await completeW1R(db.db, runId, reviewOption);
+
+          if (result.success) {
+            console.log(`\n✓ ${result.message}\n`);
+          } else {
+            console.error(`Error: ${result.error}`);
+            process.exit(1);
+          }
+          break;
+        }
+
         default:
           console.error(`Unknown w1r command: ${subcommand}`);
-          console.error('Available: start, resume, status, list, process');
+          console.error('Available: start, resume, status, list, process, approve, complete');
           process.exit(1);
       }
     } else {

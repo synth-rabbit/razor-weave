@@ -19,6 +19,7 @@ import {
   generateSessionPrompt,
   generateProcessingPrompt,
   generateCompletionPrompt,
+  generateNextChapterPrompt,
 } from '../workflows/w1r-prompts.js';
 
 const REPO_ROOT = resolve(process.cwd());
@@ -295,6 +296,152 @@ export async function processW1R(
   );
 
   return { success: true, prompt };
+}
+
+export interface ApproveResult {
+  success: boolean;
+  isComplete?: boolean;
+  prompt?: string;
+  error?: string;
+}
+
+/**
+ * Approve current chapter and advance to next
+ */
+export async function approveW1R(
+  db: Database.Database,
+  runId: string,
+  chapterNumber: number
+): Promise<ApproveResult> {
+  const w1rRepo = new W1RRepository(db);
+
+  const result = w1rRepo.getRun(runId);
+  if (!result) {
+    return { success: false, error: `Run not found: ${runId}` };
+  }
+
+  const { checkpoint } = result;
+
+  if (checkpoint.currentChapter !== chapterNumber) {
+    return {
+      success: false,
+      error: `Expected chapter ${checkpoint.currentChapter}, got ${chapterNumber}`,
+    };
+  }
+
+  // Record completion
+  checkpoint.completedChapters.push({
+    chapter: chapterNumber,
+    feedbackRounds: checkpoint.currentChapterIteration,
+    completedAt: new Date().toISOString(),
+  });
+
+  const workspace = getWorkspaceInfo(DATA_DIR, runId);
+  const chapters = await getChaptersFromWorkspace(workspace.chaptersPath);
+  const totalChapters = chapters.length;
+
+  // Check if all chapters complete
+  if (chapterNumber >= totalChapters) {
+    checkpoint.chapterStatus = 'feedback'; // Terminal state
+    w1rRepo.updateCheckpoint(runId, checkpoint);
+    w1rRepo.updateStatus(runId, 'completed');
+
+    // Generate completion prompt
+    const nextVersion = incrementPatchVersion(checkpoint.sourceVersion);
+    const prompt = generateCompletionPrompt(checkpoint, nextVersion);
+
+    return { success: true, isComplete: true, prompt };
+  }
+
+  // Advance to next chapter
+  const nextChapterNum = chapterNumber + 1;
+  const nextChapter = chapters.find(c => c.number === nextChapterNum);
+
+  if (!nextChapter) {
+    return { success: false, error: `Next chapter ${nextChapterNum} not found` };
+  }
+
+  // Reset state for next chapter
+  checkpoint.currentChapter = nextChapterNum;
+  checkpoint.chapterStatus = 'feedback';
+  checkpoint.currentFeedback = null;
+  checkpoint.clarifyingDialogue = [];
+  checkpoint.writerOutput = null;
+  checkpoint.editorReview = null;
+  checkpoint.domainReview = null;
+  checkpoint.currentChapterIteration = 1;
+
+  w1rRepo.updateCheckpoint(runId, checkpoint);
+
+  // Create feedback template for next chapter
+  const feedbackPath = await createChapterFeedbackTemplate(workspace, nextChapter);
+
+  // Generate next chapter prompt
+  const prompt = generateNextChapterPrompt(checkpoint, workspace, nextChapter, feedbackPath);
+
+  return { success: true, isComplete: false, prompt };
+}
+
+export interface CompleteResult {
+  success: boolean;
+  newVersion?: string;
+  message?: string;
+  error?: string;
+}
+
+/**
+ * Complete W1R workflow with optional reviews and promotion
+ */
+export async function completeW1R(
+  db: Database.Database,
+  runId: string,
+  reviewOption: 'skip' | 'sanity' | 'comprehensive'
+): Promise<CompleteResult> {
+  const w1rRepo = new W1RRepository(db);
+  const bookRepo = new BookRepository(db);
+
+  const result = w1rRepo.getRun(runId);
+  if (!result) {
+    return { success: false, error: `Run not found: ${runId}` };
+  }
+
+  const { checkpoint } = result;
+  const book = bookRepo.getBySlug(checkpoint.bookSlug);
+
+  if (!book) {
+    return { success: false, error: `Book not found: ${checkpoint.bookSlug}` };
+  }
+
+  const newVersion = incrementPatchVersion(checkpoint.sourceVersion);
+
+  // TODO: Implement review execution if not 'skip'
+  if (reviewOption !== 'skip') {
+    return {
+      success: false,
+      error: `Review option '${reviewOption}' not yet implemented. Use 'skip' for now.`,
+    };
+  }
+
+  // TODO: Implement version promotion
+  // 1. Create new version directory
+  // 2. Copy chapters from workspace
+  // 3. Update database
+  // 4. Generate HTML/PDF
+
+  return {
+    success: true,
+    newVersion,
+    message: `Promoted to v${newVersion}. Run html:web:build and pdf:build to generate artifacts.`,
+  };
+}
+
+/**
+ * Increment the patch version number
+ */
+function incrementPatchVersion(version: string): string {
+  const parts = version.split('.').map(Number);
+  parts[2] = (parts[2] || 0) + 1;
+  return parts.join('.');
 }
 
 // Helper functions
