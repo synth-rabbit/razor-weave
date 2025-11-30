@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS books (
   book_type TEXT NOT NULL CHECK(book_type IN ('core', 'source', 'campaign', 'supplement')),
   source_path TEXT NOT NULL,
   status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'editing', 'published')),
+  current_version TEXT DEFAULT '1.0.0',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

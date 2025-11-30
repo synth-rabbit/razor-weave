@@ -5,12 +5,18 @@ import { join } from 'path';
 import Database from 'better-sqlite3';
 
 const TEST_EVENTS_DIR = 'data/test-approve-events';
-const TEST_DB = 'data/project.db';
+// ⚠️ CRITICAL: NEVER use 'data/project.db' - that's the production database!
+// Tests MUST use an isolated path to prevent data loss.
+const TEST_DB_DIR = 'data/test-boardroom-approve';
+const TEST_DB = join(TEST_DB_DIR, 'test.db');
 
 describe('boardroom:approve CLI', () => {
   beforeEach(() => {
+    // Clean up test directories
     if (existsSync(TEST_EVENTS_DIR)) rmSync(TEST_EVENTS_DIR, { recursive: true });
+    if (existsSync(TEST_DB_DIR)) rmSync(TEST_DB_DIR, { recursive: true });
     mkdirSync(TEST_EVENTS_DIR, { recursive: true });
+    mkdirSync(TEST_DB_DIR, { recursive: true });
 
     writeFileSync(
       join(TEST_EVENTS_DIR, '2024-11-22-test.jsonl'),
@@ -50,13 +56,12 @@ describe('boardroom:approve CLI', () => {
 
   afterEach(() => {
     if (existsSync(TEST_EVENTS_DIR)) rmSync(TEST_EVENTS_DIR, { recursive: true });
-    if (existsSync(TEST_DB)) rmSync(TEST_DB);
-    if (existsSync(`${TEST_DB}.backup`)) rmSync(`${TEST_DB}.backup`);
+    if (existsSync(TEST_DB_DIR)) rmSync(TEST_DB_DIR, { recursive: true });
   });
 
   it('should approve session and mark complete', () => {
     const output = execSync(
-      `npx tsx src/tooling/cli-commands/boardroom-approve.ts --session sess_approve_test --events ${TEST_EVENTS_DIR}`,
+      `npx tsx src/tooling/cli-commands/boardroom-approve.ts --session sess_approve_test --events ${TEST_EVENTS_DIR} --db ${TEST_DB}`,
       { encoding: 'utf-8' }
     );
 
@@ -67,7 +72,7 @@ describe('boardroom:approve CLI', () => {
 
   it('should write approval events', () => {
     execSync(
-      `npx tsx src/tooling/cli-commands/boardroom-approve.ts --session sess_approve_test --events ${TEST_EVENTS_DIR}`,
+      `npx tsx src/tooling/cli-commands/boardroom-approve.ts --session sess_approve_test --events ${TEST_EVENTS_DIR} --db ${TEST_DB}`,
       { encoding: 'utf-8' }
     );
 
@@ -79,7 +84,7 @@ describe('boardroom:approve CLI', () => {
   it('should fail without --session', () => {
     expect(() => {
       execSync(
-        `npx tsx src/tooling/cli-commands/boardroom-approve.ts --events ${TEST_EVENTS_DIR}`,
+        `npx tsx src/tooling/cli-commands/boardroom-approve.ts --events ${TEST_EVENTS_DIR} --db ${TEST_DB}`,
         { encoding: 'utf-8', stdio: 'pipe' }
       );
     }).toThrow();
@@ -87,7 +92,7 @@ describe('boardroom:approve CLI', () => {
 
   it('should auto-materialize database after approval', () => {
     execSync(
-      `npx tsx src/tooling/cli-commands/boardroom-approve.ts --session sess_approve_test --events ${TEST_EVENTS_DIR}`,
+      `npx tsx src/tooling/cli-commands/boardroom-approve.ts --session sess_approve_test --events ${TEST_EVENTS_DIR} --db ${TEST_DB}`,
       { encoding: 'utf-8' }
     );
 

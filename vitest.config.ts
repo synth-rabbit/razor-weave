@@ -3,6 +3,10 @@ import { COVERAGE_THRESHOLDS } from './src/tooling/constants/index.js';
 
 export default defineConfig({
   test: {
+    // ⚠️ CRITICAL: All tests MUST use isolated test databases!
+    // NEVER use 'data/project.db' in tests - use 'data/test-<feature>/test.db'
+    // See src/tooling/test/vitest-setup.ts for helper utilities.
+    setupFiles: ['./src/tooling/test/vitest-setup.ts'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
