@@ -48,6 +48,7 @@ const { values, positionals } = parseArgs({
     result: { type: 'string' },
     error: { type: 'string', short: 'e' },
     hint: { type: 'string' },
+    'with-review': { type: 'boolean' },
     db: { type: 'string', default: 'data/project.db' },
     help: { type: 'boolean', short: 'h' },
   },
@@ -94,6 +95,7 @@ if (values.help || !command) {
         '  --status, -s    Filter by status (pending, running, paused, completed, failed)',
         '  --decision, -d  Gate decision (Approve, Reject, Request Changes, Full Review)',
         '  --input, -i     Additional input for gate decision',
+        '  --with-review   Run fresh book review + analysis before starting workflow',
       ],
     })
   );
@@ -195,6 +197,65 @@ async function handleStart(): Promise<void> {
       })
     );
     process.exit(1);
+  }
+
+  // Run fresh review and analysis first if requested
+  if (values['with-review']) {
+    console.log(
+      CLIFormatter.format({
+        title: 'RUNNING FRESH REVIEW',
+        content: `Book: ${book.title}`,
+        nextStep: ['Step 1/2: Running pnpm review:book with --fresh flag...'],
+      })
+    );
+
+    try {
+      execSync(`pnpm review:book ${values.book} --fresh`, {
+        cwd: projectRoot,
+        stdio: 'inherit',
+        encoding: 'utf-8',
+      });
+    } catch (error) {
+      console.error(
+        CLIFormatter.format({
+          title: 'ERROR',
+          content: 'Review failed - workflow not started',
+          status: [{ label: 'Review must pass before workflow', success: false }],
+        })
+      );
+      process.exit(1);
+    }
+
+    console.log(
+      CLIFormatter.format({
+        title: 'ANALYZING REVIEWS',
+        content: `Book: ${book.title}`,
+        nextStep: ['Step 2/2: Running pnpm review:analyze...'],
+      })
+    );
+
+    try {
+      execSync(`pnpm review:analyze ${values.book}`, {
+        cwd: projectRoot,
+        stdio: 'inherit',
+        encoding: 'utf-8',
+      });
+      console.log(
+        CLIFormatter.format({
+          title: 'REVIEW & ANALYSIS COMPLETE',
+          content: 'Proceeding to start workflow...',
+        })
+      );
+    } catch (error) {
+      console.error(
+        CLIFormatter.format({
+          title: 'ERROR',
+          content: 'Analysis failed - workflow not started',
+          status: [{ label: 'Analysis must pass before workflow', success: false }],
+        })
+      );
+      process.exit(1);
+    }
   }
 
   console.log(

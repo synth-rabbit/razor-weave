@@ -1,0 +1,1163 @@
+# W1 Planning Task
+
+You are the PM agent for W1 workflow run `wfrun_michsgzr_w4v28x`.
+
+## Context
+
+- **Book:** Razorweave Core Rulebook (book_core)
+- **Workflow Run:** wfrun_michsgzr_w4v28x
+
+## Review Analysis
+
+# Campaign Analysis: /Users/pandorz/Documents/razorweave/src/site/core_rulebook.html Review - 2025-11-24T01:08:27.455Z
+Date: 2025-11-24T01:18:06.586Z | Personas: 11 | Content: book-da55c10d5fab
+
+## Executive Summary
+Analysis of 11 persona reviews for campaign campaign-20251124-010827-3hy9kg3y. Average scores: Clarity 7.5/10, Rules Accuracy 7.9/10, Persona Fit 6.9/10, Usability 6.6/10. Top issue categories: Chapter 6: Character Creation, Chapter 10: Combat Basics, Chapter 8: Actions, Checks, and Outcomes.
+
+## Priority Rankings
+1. **Chapter 6: Character Creation** (Severity: 10, Frequency: 6/11)
+   - Affected personas: core-jordan-busy-parent, core-alex-indie-convert, core-sarah-new-gm, core-sam-forever-gm, core-morgan-method-actor
+   - Description: Nine-step character creation process with many cross-references; Example character (Rella) appears after all the detailed steps rather than alongside them; Example character (Rella) appears only after all nine detailed steps
+
+2. **Chapter 10: Combat Basics** (Severity: 9, Frequency: 5/11)
+   - Affected personas: core-jordan-busy-parent, core-alex-indie-convert, core-taylor-video-game-convert, core-sam-forever-gm
+   - Description: Combat introduces many concepts (Resolve, Maneuvers, Set Ups, Actions) at once; The Resolve Clock / 'taken out' stakes discussion is excellent but could be more prominent; Resolve Clock system lacks concrete damage numbers
+
+3. **Chapter 8: Actions, Checks, and Outcomes** (Severity: 8, Frequency: 4/11)
+   - Affected personas: core-alex-indie-convert, core-taylor-video-game-convert, core-sarah-new-gm
+   - Description: Resolution procedure could benefit from a consolidated walkthrough example; When to roll criteria too subjective; Attribute selection guidance is too light for new GMs
+
+4. **Chapter 9: Tags, Conditions, and Clocks** (Severity: 7, Frequency: 3/11)
+   - Affected personas: core-alex-indie-convert, core-morgan-method-actor
+   - Description: Dual-clock investigation structure deserves more visual prominence; The emotional and psychological Conditions could use more detailed guidance for roleplay expression
+
+5. **Part I Overall** (Severity: 6, Frequency: 2/11)
+   - Affected personas: core-alex-indie-convert
+   - Description: No starter scenario or quick-start materials for new groups
+
+6. **Chapter 7: Characters and Attributes** (Severity: 5, Frequency: 2/11)
+   - Affected personas: core-taylor-video-game-convert, core-morgan-method-actor
+   - Description: Attribute scale feels too compressed for meaningful differentiation; The 'Working with Low Attributes' section is good but could go deeper on character expression
+
+7. **Part III: Game Master Section** (Severity: 4, Frequency: 2/11)
+   - Affected personas: core-sarah-new-gm
+   - Description: Advanced GM advice without foundational scaffolding for new GMs; Assumed familiarity with narrative/indie RPG conventions
+
+8. **Chapter 5: Ways to Play the Game** (Severity: 3, Frequency: 1/11)
+   - Affected personas: core-devon-solo-player
+   - Description: Solo play mentioned but not deeply supported
+
+9. **Chapter 26: Alternative Play** (Severity: 2, Frequency: 1/11)
+   - Affected personas: core-devon-solo-player
+   - Description: Alternative play chapter buried in GM section
+
+10. **Core Resolution System** (Severity: 1, Frequency: 1/11)
+   - Affected personas: core-devon-solo-player
+   - Description: GM-centric language throughout Check resolution
+
+## Dimension Summaries
+### Clarity & Readability
+Average: 7.5/10 | Common themes: Generally well-received
+
+### Rules Accuracy
+Average: 7.9/10 | Common themes: Generally well-received
+
+### Persona Fit
+Average: 6.9/10 | Common themes: Generally well-received
+
+### Practical Usability
+Average: 6.6/10 | Common themes: Generally well-received
+
+## Persona Breakdowns
+### Explorer (3 items)
+- Strengths: Devon the Solo Player: Strong overall fit, Sam the Forever GM: Strong overall fit
+- Struggles: No major issues identified
+
+### Casual Gamer (2 items)
+- Strengths: Generally positive reception
+- Struggles: No major issues identified
+
+### Storyteller (3 items)
+- Strengths: Alex the Indie Convert: Strong overall fit, Alex the Indie Convert: Strong overall fit
+- Struggles: No major issues identified
+
+### Tactician (2 items)
+- Strengths: Generally positive reception
+- Struggles: Marcus the OSR Veteran: DC setting guidance is insufficiently precise
+
+### Puzzle Solver (2 items)
+- Strengths: Casey the Neurodivergent Player: Strong overall fit
+- Struggles: No major issues identified
+
+### Achiever (2 items)
+- Strengths: Generally positive reception
+- Struggles: Taylor the Video Game Convert: Attribute scale feels too compressed for meaningful differentiation
+
+### Socializer (2 items)
+- Strengths: Generally positive reception
+- Struggles: No major issues identified
+
+### Method Actor (2 items)
+- Strengths: Morgan the Method Actor: Strong overall fit
+- Struggles: No major issues identified
+
+## Style Guides
+
+### Content Style Guide
+# Content Style Guide
+
+This guide defines the voice, tone, and structural conventions for all Razorweave content. Writers and editors should reference this document to ensure consistency across all chapters, supplements, and reference materials.
+
+---
+
+## Voice and Tone
+
+### Second Person, Direct Address
+
+Address the reader directly using "you" and "your." This creates an instructive, conversational tone that invites participation.
+
+**Do:**
+- "You roll when the GM calls for a Check."
+- "Your character begins with a small set of equipment."
+- "When you declare an action, you state two things."
+
+**Avoid:**
+- "Players roll when the GM calls for a Check."
+- "Characters begin with a small set of equipment."
+- "When declaring an action, state two things."
+
+### Instructive but Not Prescriptive
+
+Explain how the system works while leaving room for table interpretation. Present mechanics as tools, not mandates.
+
+**Do:**
+- "The GM can use conversational order, popcorn order, or initiative rolls depending on the scene."
+- "You can expand or revise identity elements later if the story reveals new truths."
+
+**Avoid:**
+- "You must use popcorn order for all combat scenes."
+- "Never change identity elements after character creation."
+
+### Fiction-First Emphasis
+
+Always ground mechanical explanations in narrative context. Lead with what happens in the story, then explain how the system supports it.
+
+**Do:**
+- "Combat starts when violence breaks out and the moment-to-moment sequence of actions matters."
+- "A Check only occurs when the outcome is meaningfully uncertain, the stakes matter to the story, and failure would move the scene forward."
+
+**Avoid:**
+- "Roll initiative at the start of combat."
+- "Make a Check whenever attempting a difficult action."
+
+---
+
+## Terminology Consistency
+
+Use these terms consistently throughout all content:
+
+| Use This | Not This | Notes |
+|----------|----------|-------|
+| GM | DM, Referee, Narrator | Game Master is the standard term |
+| PC | Hero, Player, Adventurer | Player Character when referring to the character sheet entity |
+| Check | Roll, Test, Attempt | The resolution mechanic is always called a Check |
+| DC | TN, Target, Difficulty | Difficulty Class is the target number |
+| VPC | Major NPC, Boss | Vital Player Character for significant non-player characters |
+| Edge | Advantage, Bonus dice | The favorable circumstance modifier |
+| Burden | Disadvantage, Penalty dice | The unfavorable circumstance modifier |
+| Tag | Marker, Label, Status | Descriptors for environments and situations |
+| Condition | Status effect, Debuff | Persistent character states |
+| Clock | Progress track, Timer | Segmented trackers for goals and threats |
+| Attribute | Stat, Ability score | The four core capabilities (MIG, AGI, PRE, RSN) |
+| Skill | Ability, Talent | Action-based competencies |
+| Proficiency | Expertise, Specialty | Domain knowledge and tool familiarity |
+
+---
+
+## Section Structure
+
+### Standard Chapter Flow
+
+Chapters should follow this general structure:
+
+1. **Opening Hook** - A brief paragraph establishing what this chapter covers and why it matters to play
+2. **Core Concept** - Clear explanation of the central idea or mechanic
+3. **How It Works** - Step-by-step procedural guidance
+4. **Examples** - Concrete illustrations using blockquote callouts
+5. **GM Guidance** - Tips for running the content at the table (where applicable)
+6. **Chapter Summary** - Brief recap of key points (for longer chapters)
+
+### Section Openers
+
+Begin major sections with a grounding statement that connects to the reader's experience or the broader system.
+
+**Good opener:**
+> "Tags, Conditions, and Clocks are the tools the game uses to make the world feel solid and responsive."
+
+**Weak opener:**
+> "This section describes Tags."
+
+### Transitions Between Sections
+
+Use transitional sentences to connect sections and maintain reading flow.
+
+**Example:**
+> "The principles in this chapter describe how the table works together. The next chapter expands on these principles by showing how different modes of play shape the experience of the system."
+
+---
+
+## Tone Guidelines
+
+### Active Voice
+
+Prefer active constructions that clearly identify who performs the action.
+
+**Do:**
+- "The GM sets a Difficulty Class to represent how hard the task is."
+- "Players describe what their characters attempt."
+
+**Avoid:**
+- "A Difficulty Class is set to represent task difficulty."
+- "What characters attempt is described by players."
+
+### Concise Sentences
+
+Keep sentences focused on a single idea. Break complex explanations into multiple sentences.
+
+**Do:**
+> "Checks should move the story forward, not stall it. When in doubt, use partial successes to trade progress for cost rather than stopping action."
+
+**Avoid:**
+> "Checks should move the story forward rather than stalling it, which means that when in doubt you should use partial successes to trade progress for cost because this keeps the action moving."
+
+### Concrete Over Abstract
+
+Use specific examples rather than abstract descriptions when explaining concepts.
+
+**Do:**
+> "A concept like 'retired scout with a guilty conscience' offers a clearer direction than simply 'fighter.'"
+
+**Avoid:**
+> "More specific concepts provide better direction than generic ones."
+
+### Accessible Vocabulary
+
+Write for readers who may be new to tabletop RPGs. Avoid jargon without explanation. Define terms on first use.
+
+---
+
+## Using Examples
+
+### Example Blockquotes
+
+Use blockquote callouts for examples. Format with a bold label followed by the example content.
+
+```markdown
+> **Example**
+> A character wants to leap between rooftops during a chase in heavy rain. The gap is significant, the conditions are poor, and falling would be dangerous. The outcome is uncertain, the stakes are serious, and the character's choices matter. The GM calls for a Check.
+```
+
+### Example Types
+
+- **Narrative examples** - Short fiction snippets showing the mechanic in play
+- **Cross-genre examples** - Demonstrate how the same mechanic works across different settings
+- **Counter-examples** - Show what does not trigger a rule or mechanic
+
+### Example Labels
+
+Use descriptive labels when an example illustrates a specific concept:
+
+- `> **Example - When to Roll**`
+- `> **Example - Intent and Approach**`
+- `> **Example - Cross-Genre Check**`
+
+---
+
+## Writing Conventions
+
+### Numbers
+
+- Spell out numbers one through nine in prose: "choose three items," "roll four dice"
+- Use numerals for 10 and above: "a 12-segment Clock," "DC 16"
+- Always use numerals for game mechanics: "4d6," "DC 14," "+2 Edge"
+- Use numerals in tables and stat blocks
+
+### Lists
+
+Use **numbered lists** for sequential procedures:
+> 1. The player declares intent and approach.
+> 2. The GM decides whether a Check is needed.
+> 3. The GM sets DC and notes modifiers.
+
+Use **bulleted lists** for non-sequential items:
+> - Environmental Tags
+> - Situational Tags
+> - Atmospheric Tags
+
+### Emphasis
+
+- Use **bold** for game terms on first significant use in a section
+- Use **bold** for defined terms in explanatory text
+- Use *italics* for Tag and Condition names: *Dim Light*, *Exhausted*, *Bleeding*
+- Use *italics* for emphasis within sentences (sparingly)
+- Avoid ALL CAPS for emphasis
+
+### Contractions
+
+Use contractions sparingly. They are acceptable in conversational passages but should be avoided in formal rule explanations.
+
+**Acceptable:**
+> "You don't need to memorize the entire book before you play."
+
+**Preferred in rules text:**
+> "You do not need to optimize your Skills."
+
+---
+
+## Callout Types
+
+Use blockquote callouts consistently:
+
+### Example Callout
+```markdown
+> **Example**
+> [Example content here]
+```
+
+### GM Guidance Callout
+```markdown
+> **GM Guidance**
+> [Advice for running the game]
+```
+
+### Note Callout
+```markdown
+> **Note**
+> [Important clarification or reminder]
+```
+
+### Warning Callout
+```markdown
+> **Warning**
+> [Caution about common mistakes or edge cases]
+```
+
+---
+
+## Chapter Summary Pattern
+
+End longer chapters with a summary section that:
+1. Recaps the main concepts covered
+2. Connects to upcoming content
+3. Reinforces the fiction-first philosophy
+
+**Example:**
+> "Character Creation turns an idea into a playable character who fits naturally into the world and the campaign. By moving from concept to identity, Attributes, Skills, Proficiencies, gear, background, relationships, and goals, you build a character who feels grounded and ready for play. Later chapters explain how these elements interact with the core mechanics during sessions."
+
+### Mechanics Style Guide
+# Mechanics Style Guide
+
+This guide defines formatting standards for game mechanics, dice notation, rules text patterns, and mechanical terminology. Use this guide to ensure all mechanical content is consistent, clear, and correctly formatted.
+
+---
+
+## Game Term Formatting
+
+### Term Formatting Table
+
+| Term Type | Format | Examples |
+|-----------|--------|----------|
+| Dice notation | Plain text, no spaces | 4d6, 2d6+3, 1d8-1 |
+| Difficulty Class | DC + space + number | DC 12, DC 16, DC 20 |
+| Attributes | Bold on first use, then plain | **Might (MIG)**, then MIG or Might |
+| Attribute abbreviations | ALL CAPS | MIG, AGI, PRE, RSN |
+| Tags | Italic | *Dim Light*, *Cramped*, *Elevated* |
+| Conditions | Italic | *Exhausted*, *Bleeding*, *Frightened* |
+| Skills | Plain text, capitalized | Stealth, Observation, Technical Work |
+| Proficiencies | Plain text, capitalized | Telegraph Instruments, Precision Tools |
+| Edge/Burden | Bold when defined, plain after | **Edge**, **Burden**, then Edge, Burden |
+| Clock names | Quoted, Title Case | "Evacuation Complete" Clock |
+| Clock segments | Numeral + hyphen + segment | 6-segment Clock, 4-segment Clock |
+| Outcome tiers | Bold | **Full Success**, **Partial Success** |
+| Actions | Bold | **Strike**, **Maneuver**, **Set Up** |
+
+### Inline Mechanical References
+
+When referencing mechanics inline:
+
+**Do:**
+- "Make a Check against DC 14."
+- "Roll 4d6 and add your Agility."
+- "The *Exhausted* Condition imposes Burden."
+- "A 6-segment Clock tracks progress."
+
+**Avoid:**
+- "Make a check against difficulty 14."
+- "Roll four six-sided dice and add agility."
+- "The Exhausted condition imposes burden."
+- "A six segment clock tracks progress."
+
+---
+
+## Dice Notation Standards
+
+### Basic Notation
+
+| Format | Meaning | Example |
+|--------|---------|---------|
+| NdX | Roll N dice with X sides | 4d6 = roll 4 six-sided dice |
+| NdX+M | Roll NdX, add M to total | 2d6+3 = roll 2d6, add 3 |
+| NdX-M | Roll NdX, subtract M from total | 1d8-1 = roll 1d8, subtract 1 |
+
+### Edge and Burden Notation
+
+| Modifier | Notation | Description |
+|----------|----------|-------------|
+| +1 Edge | Roll 5d6, keep best 4 | Add one die, drop lowest |
+| +2 Edge | Roll 6d6, keep best 4 | Add two dice, drop two lowest |
+| -1 Burden | Roll 5d6, keep worst 4 | Add one die, drop highest |
+| -2 Burden | Roll 6d6, keep worst 4 | Add two dice, drop two highest |
+
+### Writing About Dice
+
+When explaining dice mechanics in prose:
+
+**Do:**
+> "Roll **4d6**, apply modifiers, and compare the total to the DC."
+
+> "With +1 Edge, roll 5d6 and keep the best 4 dice."
+
+**Avoid:**
+> "Roll four six-sided dice."
+
+> "With advantage, roll an extra die and drop the lowest."
+
+### Dice in Examples
+
+In examples, show the full mechanical sequence:
+
+> **Example - Calculating Margin**
+> The DC is 16. You roll 4d6 and get 3, 4, 5, 6 for a total of 18.
+> Your Attribute adds +2, bringing your result to 20.
+> Margin = 20 - 16 = +4, which is a **Full Success**.
+
+---
+
+## Difficulty Class Standards
+
+### Standard DC Ladder
+
+Always use this ladder consistently:
+
+| DC | Difficulty Level | When to Use |
+|----|------------------|-------------|
+| 12 | Easy | Favorable conditions, strong positioning |
+| 14 | Routine | Standard conditions, typical challenges |
+| 16 | Tough | Unfavorable conditions, skilled opposition |
+| 18 | Hard | Hostile conditions, significant obstacles |
+| 20 | Heroic | Extreme conditions, exceptional challenges |
+| 22 | Legendary | Near-impossible, setting-defining moments |
+
+### DC in Prose
+
+Reference DCs naturally:
+
+**Do:**
+> "The GM sets a DC of 16 for the tough climb."
+> "Against DC 14, this is a Routine task."
+
+**Avoid:**
+> "The GM sets difficulty at sixteen."
+> "This is difficulty class 14."
+
+### When to Specify DC
+
+- Always specify DC when showing example Checks
+- Specify DC ranges when discussing task categories
+- Use descriptive terms (Easy, Routine, Tough) alongside numbers
+
+---
+
+## Rules Text Patterns
+
+### Check Format
+
+When describing a Check in rules text, use this pattern:
+
+```
+[Situation] → [Attribute]-based Check → [DC/difficulty] → [Outcome interpretation]
+```
+
+**Example:**
+> When a character attempts to calm a frightened NPC, the GM calls for a PRE-based Check. Against DC 14, a **Full Success** calms the NPC completely. A **Partial Success** calms them but creates an obligation. **Failure** spreads the panic further.
+
+### Outcome Format
+
+Present outcome tiers in a consistent order:
+
+1. **Critical Success** (margin +5 or more)
+2. **Full Success** (margin 0 to +4)
+3. **Partial Success** (margin -1 to -2)
+4. **Failure** (margin -3 to -6)
+5. **Critical Failure** (margin -7 or worse, or all 1s)
+
+When space is limited, you may omit Critical tiers and focus on Full/Partial/Failure.
+
+### Tag Application Pattern
+
+When describing how Tags apply:
+
+```
+[Tag name] + [mechanical effect] + [fictional context]
+```
+
+**Example:**
+> *Dim Light* imposes Burden on actions requiring clear sight but grants Edge on Stealth attempts. Characters can use light sources to remove this Tag from their immediate area.
+
+### Condition Application Pattern
+
+When describing how Conditions work:
+
+```
+[Condition name] + [source] + [effect] + [clearing method]
+```
+
+**Example:**
+> **Exhausted** - Acquired through overexertion or sustained hardship. Imposes Burden on demanding physical actions. Clears after meaningful rest or appropriate aid.
+
+---
+
+## Clock Mechanics Documentation
+
+### Clock Sizes
+
+Use standard clock sizes:
+
+| Segments | Use Case |
+|----------|----------|
+| 4-segment | Quick threats, minor goals, time pressure |
+| 6-segment | Standard projects, moderate obstacles |
+| 8-segment | Major endeavors, significant threats |
+
+### Clock Notation
+
+Write clock references consistently:
+
+**Do:**
+- "Create a 6-segment 'Investigation' Clock."
+- "The 'Flood Waters Rise' Clock has 4 segments."
+- "Tick the Clock forward by 2 segments."
+
+**Avoid:**
+- "Create a six segment investigation clock."
+- "The flood waters rise clock has four segments."
+- "Advance the clock two segments."
+
+### Clock Advancement
+
+Document clock advancement clearly:
+
+| Result | Clock Effect |
+|--------|--------------|
+| **Critical Success** | Tick 2-3 segments |
+| **Full Success** | Tick 1-2 segments |
+| **Partial Success** | Tick 1 segment, plus complication |
+| **Failure** | No progress, may tick threat Clock |
+
+### Opposing Clocks
+
+When documenting racing clocks:
+
+> **Example - Opposing Clocks**
+> The group investigates a corrupt official while the official works to cover their tracks.
+> - "Expose the Official" - 6-segment Clock (investigation progress)
+> - "Cover-Up" - 4-segment Clock (enemy countermeasures)
+>
+> Successful investigation Checks advance the first Clock. Failures, loud approaches, or conspicuous actions advance the second. Which Clock fills first determines the outcome.
+
+---
+
+## Example Patterns
+
+### Combat Example Pattern
+
+```markdown
+> **Example - [Combat Concept]**
+> [Scene setup with relevant Tags]
+> [Character action and intent]
+> [Check details: Attribute, DC, modifiers]
+> [Outcome and fictional result]
+> [Clock or Condition changes if applicable]
+```
+
+**Full Example:**
+> **Example - Strike Action**
+> In a rooftop fight marked *Elevated* with *Fragile Cover*, Kira attempts to disarm her opponent with a quick strike to their weapon arm.
+>
+> The GM calls for an AGI-based Check against DC 16. Kira has +1 Edge from flanking established by an ally's Set Up.
+>
+> She rolls 5d6 (keeping best 4): 2, 3, 5, 5, 6. Keeping 3, 5, 5, 6 = 19. With AGI +1, her total is 20. Margin = +4, a **Full Success**.
+>
+> The opponent's weapon clatters across the rooftop. The GM ticks 2 segments on their Resolve Clock and applies the *Disarmed* Tag.
+
+### Skill Check Example Pattern
+
+```markdown
+> **Example - [Skill Check Type]**
+> *Trigger:* [What prompts the Check]
+> *Assessment:* [Why a Check is appropriate]
+> *Roll:* [Mechanical details]
+> *Consequence:* [Outcome by tier]
+```
+
+**Full Example:**
+> **Example - Social Influence**
+> *Trigger:* A character wants to convince the factory foreman to delay shipment of suspicious crates.
+>
+> *Assessment:* The outcome is uncertain (the foreman has orders), consequential (the shipment contains evidence), and within the character's influence (they have documentation of safety violations).
+>
+> *Roll:* PRE-based Check against DC 14 (Routine social situation) with potential Edge from the documentation.
+>
+> *Consequence:* **Full Success** - the foreman agrees and becomes a potential ally. **Partial Success** - the foreman delays but demands a personal favor in return. **Failure** - the foreman refuses and reports the inquiry to management.
+
+---
+
+## Consistency Rules
+
+### Define Before Use
+
+Always define game terms before using them in complex explanations:
+
+**Do:**
+> **Edge** grants favorable dice. When you have Edge, roll additional dice and keep the best results. With +1 Edge, roll 5d6 and keep the best 4.
+
+**Avoid:**
+> Roll with Edge to improve your chances. Edge means rolling extra dice.
+
+### DC Range Consistency
+
+Always use the standard DC values. Do not invent intermediate values:
+
+**Do:** DC 12, DC 14, DC 16, DC 18, DC 20, DC 22
+
+**Avoid:** DC 13, DC 15, DC 17, DC 19
+
+### Clock Size Consistency
+
+Use standard clock sizes. Do not use non-standard segments:
+
+**Do:** 4-segment, 6-segment, 8-segment
+
+**Avoid:** 3-segment, 5-segment, 7-segment, 10-segment
+
+### Attribute Reference Consistency
+
+When referencing Attributes:
+
+- First mention: **Might (MIG)**, **Agility (AGI)**, **Presence (PRE)**, **Reason (RSN)**
+- Subsequent mentions: Use either full name or abbreviation consistently within a section
+- In mechanical notation: Use abbreviations (MIG-based Check, PRE roll)
+
+### Tag and Condition Consistency
+
+- Always italicize Tag and Condition names
+- Use Title Case: *Dim Light*, *Fragile Cover*, *Exhausted*
+- Be consistent with Tag naming: *Elevated* not *High Ground* (unless both are defined)
+
+---
+
+## Quick Reference Summary
+
+### Number Formatting
+
+| Context | Format |
+|---------|--------|
+| Dice | 4d6, 2d6+3 |
+| DC | DC 12, DC 16 |
+| Margin | +4, -2 |
+| Clock segments | 6-segment |
+| Edge/Burden | +1 Edge, -2 Burden |
+
+### Text Formatting
+
+| Element | Format |
+|---------|--------|
+| Tags | *Italic* |
+| Conditions | *Italic* |
+| Attributes (first use) | **Bold** |
+| Actions | **Bold** |
+| Outcome tiers | **Bold** |
+| Skills | Plain, Capitalized |
+| Proficiencies | Plain, Capitalized |
+
+### Standard Values
+
+| Category | Values |
+|----------|--------|
+| DCs | 12, 14, 16, 18, 20, 22 |
+| Clock sizes | 4, 6, 8 segments |
+| Edge/Burden cap | +/-2 |
+| Margin tiers | +5 crit, 0+ full, -1/-2 partial, -3 fail, -7 crit fail |
+
+
+## Task
+
+# PM Agent: Review Analysis to Improvement Plan
+
+## Your Role
+
+You are the Project Manager agent responsible for analyzing review feedback and creating actionable improvement plans for the book content team. Your job is to transform raw review analysis data into a prioritized, executable improvement plan that Writer agents can implement.
+
+## Input
+
+You will receive two types of input:
+
+### 1. Review Analysis JSON
+
+The analysis data from the `review:analyze` pipeline containing:
+
+```json
+{
+  "executive_summary": "Brief overview of all reviews",
+  "priority_rankings": [
+    {
+      "category": "Issue category name",
+      "severity": 8,           // 1-10 scale
+      "frequency": 3,          // How many reviewers noted this
+      "affected_personas": ["core-newcomer", "core-veteran"],
+      "description": "What the issue is and why it matters"
+    }
+  ],
+  "dimension_summaries": {
+    "clarity_readability": {
+      "average": 7.5,
+      "themes": ["Complex terminology", "Long paragraphs"]
+    },
+    "rules_accuracy": {
+      "average": 8.0,
+      "themes": ["Consistent mechanics", "Some edge cases unclear"]
+    },
+    "persona_fit": {
+      "average": 6.5,
+      "themes": ["Good for veterans", "Challenging for newcomers"]
+    },
+    "practical_usability": {
+      "average": 7.0,
+      "themes": ["Good examples", "Needs more quick-reference"]
+    }
+  },
+  "persona_breakdowns": {
+    "newcomers": {
+      "strengths": ["Welcoming tone", "Good examples"],
+      "struggles": ["Dense rules sections", "Terminology overload"]
+    },
+    "veterans": {
+      "strengths": ["Depth of mechanics", "Flexibility"],
+      "struggles": ["Finding specific rules quickly"]
+    }
+  }
+}
+```
+
+### 2. Book Context
+
+- **Chapter list:** Available chapters in the book with their IDs and names
+- **Style guides:** Content, formatting, and mechanics style guidelines
+- **Current book structure:** How chapters are organized and flow
+
+## Task
+
+Analyze the review feedback and create a prioritized improvement plan that:
+
+1. Identifies the highest-impact issues to address
+2. Maps issues to specific chapters that need modification
+3. Provides clear, actionable instructions for Writer agents
+4. Defines measurable success criteria
+5. Respects constraints (max chapters, style guides)
+
+## Output Format
+
+Return a JSON object with the following structure:
+
+```json
+{
+  "plan_id": "plan-{timestamp}-{random}",
+  "created_at": "2024-01-15T10:30:00Z",
+  "source_campaign_id": "campaign-id-from-analysis",
+  "summary": "Brief 1-2 sentence summary of the improvement plan focus",
+
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "Clear description of the issue being addressed",
+      "severity": "high",
+      "source_category": "Category from priority_rankings",
+      "affected_chapters": ["06-character-creation", "07-characters-and-attributes"],
+      "affected_personas": ["core-newcomer", "generated-casual-player"],
+      "improvement_goal": "What success looks like for this issue",
+      "success_metric": "Measurable outcome (e.g., 'Reduce jargon count by 50%', 'Add 3 examples per section')",
+      "priority": 1
+    }
+  ],
+
+  "chapter_modifications": [
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 1,
+      "issues_addressed": ["issue-001", "issue-002"],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "clarify",
+          "target": "Attribute Selection subsection",
+          "instruction": "Rewrite the attribute selection guidance to use plain language. Replace 'allocate attribute points' with 'choose how good your character is at different things'. Add a sidebar explaining what each attribute means in practical terms.",
+          "success_criteria": "No jargon without immediate explanation; newcomer can understand without prior TTRPG knowledge"
+        },
+        {
+          "type": "expand",
+          "target": "Example character creation",
+          "instruction": "Add a second worked example showing a different character archetype. The current example is a fighter-type; add a magic-user or social character to demonstrate different attribute priorities.",
+          "success_criteria": "Two complete examples covering different playstyles"
+        }
+      ]
+    }
+  ],
+
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "maintain_or_reduce"
+  },
+
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": ["06-character-creation"],
+      "rationale": "Highest priority issue affecting most personas"
+    },
+    {
+      "phase": 2,
+      "chapters": ["07-characters-and-attributes", "08-actions-checks-outcomes"],
+      "rationale": "Related chapters that build on phase 1 changes"
+    }
+  ],
+
+  "estimated_impact": {
+    "primary_dimension": "persona_fit",
+    "expected_improvement": "+1.5 points average for newcomer personas",
+    "secondary_benefits": ["Improved clarity_readability for all personas", "Better practical_usability through examples"]
+  },
+
+  "review_cycle_recommendation": {
+    "re_review_personas": ["core-newcomer", "generated-casual-player"],
+    "focus_dimensions": ["persona_fit", "clarity_readability"],
+    "skip_personas": ["core-veteran"],
+    "rationale": "Changes primarily target newcomer experience; veterans were satisfied"
+  }
+}
+```
+
+## Modification Types
+
+Use these types to categorize changes:
+
+| Type | Description | When to Use |
+|------|-------------|-------------|
+| `clarify` | Improve clarity without changing meaning | Confusing wording, jargon, complex sentences |
+| `expand` | Add more content | Missing examples, insufficient explanation |
+| `restructure` | Reorganize existing content | Poor flow, buried information, navigation issues |
+| `fix_mechanics` | Correct rules or mechanics descriptions | Inconsistencies, errors, ambiguous rules |
+| `improve_examples` | Enhance or add examples | Abstract concepts, complex procedures |
+| `add_reference` | Add quick-reference elements | Tables, sidebars, summaries |
+| `reduce` | Trim verbose content | Redundancy, over-explanation for target audience |
+
+## Guidelines
+
+### Prioritization Rules
+
+1. **Severity x Frequency:** Issues affecting multiple personas with high severity come first
+2. **Newcomer Priority:** When severity is equal, prioritize issues affecting newcomers
+3. **Chapter Clustering:** Group related issues to minimize context switching for Writer agents
+4. **Dependency Awareness:** Order modifications so foundational chapters are edited first
+
+### Constraints to Honor
+
+1. **Maximum 5 chapters per cycle:** Focus creates better results than breadth
+2. **Preserve book structure:** Don't suggest major reorganization unless severity >= 9
+3. **Respect style guides:** All modifications must comply with established style guidelines
+4. **Preserve core mechanics:** Clarify but don't change fundamental rules
+
+### Writing Effective Instructions
+
+**DO:**
+- Be specific about location: "In the 'Attribute Selection' subsection, third paragraph..."
+- Provide concrete examples: "Replace 'allocate points' with 'choose how good...'"
+- Define success clearly: "A newcomer should understand without external reference"
+- Reference style guides: "Follow the terminology conventions from the mechanics style guide"
+
+**DON'T:**
+- Be vague: "Make it clearer" (too ambiguous)
+- Suggest rewrites without guidance: "Rewrite this section" (no direction)
+- Ignore persona context: "Improve readability" (for whom?)
+- Create open-ended tasks: "Add examples as needed" (how many? what type?)
+
+## Example
+
+### Input Analysis (Abbreviated)
+
+```json
+{
+  "executive_summary": "Book scores well overall but newcomers struggle with dense rules chapters. Veterans appreciate depth but want better reference tools.",
+  "priority_rankings": [
+    {
+      "category": "Newcomer Accessibility",
+      "severity": 8,
+      "frequency": 4,
+      "affected_personas": ["core-newcomer", "gen-casual-01", "gen-casual-02", "gen-returning-01"],
+      "description": "Chapter 6-8 use heavy TTRPG jargon without explanation, creating barriers for new players."
+    },
+    {
+      "category": "Quick Reference Gaps",
+      "severity": 6,
+      "frequency": 3,
+      "affected_personas": ["core-veteran", "core-gm", "gen-experienced-01"],
+      "description": "Experienced players want summary tables and quick-reference sidebars for at-table use."
+    }
+  ],
+  "dimension_summaries": {
+    "clarity_readability": { "average": 6.8, "themes": ["Jargon-heavy", "Long paragraphs"] },
+    "rules_accuracy": { "average": 8.5, "themes": ["Consistent", "Well-structured"] },
+    "persona_fit": { "average": 6.2, "themes": ["Too advanced for newcomers"] },
+    "practical_usability": { "average": 7.0, "themes": ["Good content, hard to find"] }
+  }
+}
+```
+
+### Expected Output
+
+```json
+{
+  "plan_id": "plan-20240115-a1b2c3",
+  "created_at": "2024-01-15T10:30:00Z",
+  "source_campaign_id": "campaign-book-review-001",
+  "summary": "Address newcomer accessibility in core rules chapters through jargon reduction and added explanatory content, while adding quick-reference elements for veteran usability.",
+
+  "target_issues": [
+    {
+      "issue_id": "issue-001",
+      "description": "Heavy TTRPG jargon in chapters 6-8 creates barriers for newcomers",
+      "severity": "high",
+      "source_category": "Newcomer Accessibility",
+      "affected_chapters": ["06-character-creation", "07-characters-and-attributes", "08-actions-checks-outcomes"],
+      "affected_personas": ["core-newcomer", "gen-casual-01", "gen-casual-02", "gen-returning-01"],
+      "improvement_goal": "Newcomers can understand core rules without prior TTRPG experience",
+      "success_metric": "All jargon terms have inline explanation or sidebar definition on first use",
+      "priority": 1
+    },
+    {
+      "issue_id": "issue-002",
+      "description": "Lack of quick-reference elements slows veteran at-table use",
+      "severity": "medium",
+      "source_category": "Quick Reference Gaps",
+      "affected_chapters": ["08-actions-checks-outcomes", "10-combat-basics"],
+      "affected_personas": ["core-veteran", "core-gm", "gen-experienced-01"],
+      "improvement_goal": "Veterans can find rule summaries within 10 seconds",
+      "success_metric": "Each modified chapter has at least one summary table or quick-reference sidebar",
+      "priority": 2
+    }
+  ],
+
+  "chapter_modifications": [
+    {
+      "chapter_id": "06-character-creation",
+      "chapter_name": "Character Creation",
+      "priority": 1,
+      "issues_addressed": ["issue-001"],
+      "estimated_effort": "medium",
+      "modifications": [
+        {
+          "type": "clarify",
+          "target": "Opening paragraphs",
+          "instruction": "Add a 'What You'll Learn' callout box at the start listing: 1) How to make your character's basic choices, 2) What the numbers mean, 3) How to record your character. Use plain English throughout.",
+          "success_criteria": "A reader with no TTRPG experience understands what they'll accomplish"
+        },
+        {
+          "type": "clarify",
+          "target": "Attribute selection section",
+          "instruction": "Replace 'attribute array' with 'set of numbers that show how capable your character is'. Add a sidebar titled 'TTRPG Term: Attributes' explaining the concept for newcomers.",
+          "success_criteria": "Term is explained before use; sidebar provides deeper context"
+        },
+        {
+          "type": "improve_examples",
+          "target": "Worked example",
+          "instruction": "Expand the existing example to show the player's thought process, not just the mechanical choices. Add annotations explaining WHY each choice was made, not just WHAT was chosen.",
+          "success_criteria": "Example includes 3+ decision-point annotations with rationale"
+        }
+      ]
+    },
+    {
+      "chapter_id": "08-actions-checks-outcomes",
+      "chapter_name": "Actions, Checks & Outcomes",
+      "priority": 2,
+      "issues_addressed": ["issue-001", "issue-002"],
+      "estimated_effort": "high",
+      "modifications": [
+        {
+          "type": "clarify",
+          "target": "Dice mechanics introduction",
+          "instruction": "Start with a plain-language summary: 'When you try to do something uncertain, you roll dice and add a number. Higher is better.' Then introduce the formal terminology.",
+          "success_criteria": "Core concept explained in one sentence before detailed mechanics"
+        },
+        {
+          "type": "add_reference",
+          "target": "End of chapter",
+          "instruction": "Add a 'Quick Reference: Checks' table with columns: Situation Type | Roll | What Affects It | Example. Include 4-5 common situations.",
+          "success_criteria": "Table fits on one page and covers most common play situations"
+        }
+      ]
+    }
+  ],
+
+  "constraints": {
+    "max_chapters_modified": 5,
+    "preserve_structure": true,
+    "follow_style_guides": true,
+    "preserve_mechanics": true,
+    "word_count_target": "maintain_or_reduce"
+  },
+
+  "execution_order": [
+    {
+      "phase": 1,
+      "chapters": ["06-character-creation"],
+      "rationale": "First chapter newcomers encounter; foundational for other changes"
+    },
+    {
+      "phase": 2,
+      "chapters": ["08-actions-checks-outcomes"],
+      "rationale": "Core mechanics chapter; builds on vocabulary established in phase 1"
+    }
+  ],
+
+  "estimated_impact": {
+    "primary_dimension": "persona_fit",
+    "expected_improvement": "+1.5 points average for newcomer personas",
+    "secondary_benefits": [
+      "Improved clarity_readability for all personas",
+      "Better practical_usability through quick-reference elements"
+    ]
+  },
+
+  "review_cycle_recommendation": {
+    "re_review_personas": ["core-newcomer", "gen-casual-01"],
+    "focus_dimensions": ["persona_fit", "clarity_readability"],
+    "skip_personas": ["core-veteran"],
+    "rationale": "Changes primarily target newcomer experience; veteran issues (quick-ref) are secondary"
+  }
+}
+```
+
+## Schema Reference
+
+The output must validate against the `ImprovementPlanSchema`:
+
+```typescript
+import { z } from 'zod';
+
+const ModificationSchema = z.object({
+  type: z.enum(['clarify', 'expand', 'restructure', 'fix_mechanics', 'improve_examples', 'add_reference', 'reduce']),
+  target: z.string().min(1),
+  instruction: z.string().min(20),
+  success_criteria: z.string().min(10),
+});
+
+const ChapterModificationSchema = z.object({
+  chapter_id: z.string(),
+  chapter_name: z.string(),
+  priority: z.number().int().min(1).max(5),
+  issues_addressed: z.array(z.string()),
+  estimated_effort: z.enum(['low', 'medium', 'high']),
+  modifications: z.array(ModificationSchema).min(1),
+});
+
+const TargetIssueSchema = z.object({
+  issue_id: z.string(),
+  description: z.string().min(10),
+  severity: z.enum(['high', 'medium', 'low']),
+  source_category: z.string(),
+  affected_chapters: z.array(z.string()),
+  affected_personas: z.array(z.string()),
+  improvement_goal: z.string(),
+  success_metric: z.string(),
+  priority: z.number().int().min(1).max(5),
+});
+
+const ImprovementPlanSchema = z.object({
+  plan_id: z.string(),
+  created_at: z.string().datetime(),
+  source_campaign_id: z.string(),
+  summary: z.string().min(20).max(200),
+  target_issues: z.array(TargetIssueSchema).min(1).max(5),
+  chapter_modifications: z.array(ChapterModificationSchema).min(1).max(5),
+  constraints: z.object({
+    max_chapters_modified: z.number().int().default(5),
+    preserve_structure: z.boolean().default(true),
+    follow_style_guides: z.boolean().default(true),
+    preserve_mechanics: z.boolean().default(true),
+    word_count_target: z.enum(['maintain_or_reduce', 'allow_growth', 'strict_limit']),
+  }),
+  execution_order: z.array(z.object({
+    phase: z.number().int().min(1),
+    chapters: z.array(z.string()),
+    rationale: z.string(),
+  })),
+  estimated_impact: z.object({
+    primary_dimension: z.enum(['clarity_readability', 'rules_accuracy', 'persona_fit', 'practical_usability']),
+    expected_improvement: z.string(),
+    secondary_benefits: z.array(z.string()),
+  }),
+  review_cycle_recommendation: z.object({
+    re_review_personas: z.array(z.string()),
+    focus_dimensions: z.array(z.string()),
+    skip_personas: z.array(z.string()),
+    rationale: z.string(),
+  }),
+});
+```
+
+## Checklist Before Returning
+
+Before finalizing your improvement plan, verify:
+
+- [ ] All `target_issues` trace back to `priority_rankings` in the input
+- [ ] Each `chapter_modification` addresses at least one `target_issue`
+- [ ] No more than 5 chapters are modified
+- [ ] Each `modification.instruction` is specific enough for a Writer agent to execute
+- [ ] Each `success_criteria` is measurable or verifiable
+- [ ] `execution_order` respects chapter dependencies (foundational chapters first)
+- [ ] `review_cycle_recommendation` focuses on personas most affected by changes
+
+
+Analyze the review feedback above and create an improvement plan.
+
+## Output Requirements
+
+After creating the plan, save it using this command:
+
+```bash
+pnpm w1:planning --save --run=wfrun_michsgzr_w4v28x --plan=<path-to-your-plan.json>
+```
+
+The plan JSON must include:
+- plan_id: string
+- summary: string
+- target_issues: array of issues to address
+- chapter_modifications: array of chapters with modifications
+- constraints: object with max_chapters_modified, preserve_structure, etc.
+- estimated_impact: string
+
+Write the plan to: `data/w1-artifacts/wfrun_michsgzr_w4v28x/plan.json`

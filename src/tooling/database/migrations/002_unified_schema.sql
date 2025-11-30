@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS books (
   book_type TEXT NOT NULL CHECK(book_type IN ('core', 'source', 'campaign', 'supplement')),
   source_path TEXT NOT NULL,
   status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'editing', 'published')),
+  current_version TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -44,7 +45,7 @@ UPDATE book_versions SET book_id = 'book_core' WHERE book_path LIKE '%core-ruleb
 CREATE TABLE IF NOT EXISTS workflow_runs (
   id TEXT PRIMARY KEY,
   workflow_type TEXT NOT NULL CHECK(workflow_type IN (
-    'w1_editing', 'w2_pdf', 'w3_publication', 'w4_playtesting'
+    'w1_editing', 'w1r_revision', 'w2_pdf', 'w3_publication', 'w4_playtesting'
   )),
   book_id TEXT NOT NULL REFERENCES books(id),
   input_version_id TEXT REFERENCES book_versions(content_id),
@@ -55,6 +56,8 @@ CREATE TABLE IF NOT EXISTS workflow_runs (
     'pending', 'running', 'paused', 'completed', 'failed'
   )),
   current_agent TEXT,
+  current_step TEXT,
+  checkpoint_json TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

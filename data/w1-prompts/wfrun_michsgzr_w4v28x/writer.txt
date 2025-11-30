@@ -1,0 +1,48 @@
+# W1 Writer Orchestrator
+
+You are coordinating parallel chapter modifications for workflow run `wfrun_michsgzr_w4v28x`.
+
+## Instructions
+
+1. Read the shared context: `data/w1-prompts/wfrun_michsgzr_w4v28x/shared-context.md`
+2. Dispatch chapter writers in batches (max 5 parallel)
+3. Wait for each batch to complete before starting the next
+4. After all chapters are written, confirm completion
+
+## Chapter Assignments
+
+### Batch 1
+Dispatch these Task() calls in a single message:
+
+| Chapter | Source | Output | Modifications |
+|---------|--------|--------|---------------|
+| 06-character-creation | /Users/pandorz/Documents/razorweave/books/core/v1.3.0/chapters/06-character-creation.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_michsgzr_w4v28x/chapters/06-character-creation.md | add_reference: Add a 'Quick Start: 15-Minute Character Creation' callout box with a streamlined 6-step process: 1) Concept (one sentence), 2) Attributes (assign 2,1,1,0), 3) Skills (pick 3-4 verbs), 4) Proficiencies (pick 2 areas), 5) Gear (list 3-4 items), 6) One Connection (name one person). Reference full steps for those who want detail.; restructure: Move the complete Rella character example to the BEGINNING of the chapter, before 'The Creation Flow'. Present as 'Meet Rella: A Complete Character' with full character sheet. At the end-of-chapter location, replace with 'Reviewing Rella's Build' that references the beginning and explains how concept informed choices. |
+| 10-combat-basics | /Users/pandorz/Documents/razorweave/books/core/v1.3.0/chapters/10-combat-basics.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_michsgzr_w4v28x/chapters/10-combat-basics.md | add_reference: Add a 'Combat at a Glance' callout box summarizing: 1) Combat uses same Check system, 2) Resolve Clocks track damage, 3) Actions: Strike, Maneuver, Set Up, 4) Turn order options. Include mini-table showing outcome-to-ticks mapping.; expand: Add a prominent callout box titled 'The Key Question: What Does Taken Out Mean?' explaining that this single question unlocks the entire combat system. Explain that 'taken out' is context-dependent (killed, knocked unconscious, disarmed, convinced to surrender, etc.).; clarify: Add concrete tick values table: Critical Success = 3 ticks, Full Success = 2 ticks, Partial Success = 1 tick, Failure = 0 ticks. Note that GM may adjust based on fictional positioning.; add_reference: Add a sidebar titled 'Turn Order Options' listing: Conversational (default), Popcorn (player picks next), Initiative Roll (for tactical groups). Each with 1-sentence description. |
+| 08-actions-checks-outcomes | /Users/pandorz/Documents/razorweave/books/core/v1.3.0/chapters/08-actions-checks-outcomes.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_michsgzr_w4v28x/chapters/08-actions-checks-outcomes.md | expand: Add a complete resolution walkthrough example showing all steps in sequence: Scene setup (infiltrating manor), Intent declaration (reach study unseen), Approach (stealth through servant corridors), Attribute selection (AGI), DC setting (16), Modifiers (+1 Edge from dim light), Roll (show dice), Outcome interpretation (all five tiers).; improve_examples: Add 3 detailed worked examples showing borderline when-to-roll situations: 1) Climbing a fence (no roll -> add pursuers -> now roll), 2) Recalling facts (no roll -> add time pressure -> now roll), 3) Fixing machine (no roll -> add missing tools -> now roll). Each shows the three-part test (Uncertainty, Consequence, Agency) applied.; add_reference: Add 'Choosing the Right Attribute' GM guidance box with key words for each: MIG (force, lift, break, endure), AGI (dodge, climb, sneak, aim), PRE (persuade, intimidate, charm), RSN (investigate, analyze, recall). Include 'Same Goal, Different Attributes' example showing 4 ways to get past a locked door. |
+| 09-tags-conditions-clocks | /Users/pandorz/Documents/razorweave/books/core/v1.3.0/chapters/09-tags-conditions-clocks.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_michsgzr_w4v28x/chapters/09-tags-conditions-clocks.md | add_reference: Add prominent 'The Progress/Pressure Pattern' callout box explaining the dual-clock structure: Progress Clock tracks toward goal, Pressure Clock tracks threat/opposition. When they race, tension builds naturally. Reference the investigation example.; expand: Add 'Roleplaying Emotional and Psychological Conditions' table with columns: Condition | How to Portray. Include: Frightened (trembling, avoiding threat's gaze), Dazed (slow responses, trailing off), Exhausted (heavy breathing, leaning on walls), Shaken (nervous laughter, fidgeting), Rattled (checking over shoulder, hesitation).; clarify: Replace ambiguous language ('might impose', 'could grant') with definitive statements. Add 'Tag Effects Quick Reference' table: Helpful Tags grant Edge, Hindering Tags impose Burden, DC-Shifting Tags adjust DC by 2-4. |
+| 07-characters-and-attributes | /Users/pandorz/Documents/razorweave/books/core/v1.3.0/chapters/07-characters-and-attributes.md | /Users/pandorz/Documents/razorweave/data/w1-artifacts/wfrun_michsgzr_w4v28x/chapters/07-characters-and-attributes.md | expand: Add explanation of why 0-2 scale is meaningful: bounded design keeps focus on story, each point represents significant capability difference. Show probability impact: +0 = ~38% success at DC 14, +1 = ~50%, +2 = ~62%. Video game players should understand this is intentional design.; expand: Add 'Embodying Limitations as Character Identity' subsection with specific behavioral examples for each low attribute: Low MIG (compensating with tools, delegating physical tasks), Low AGI (moving deliberately, avoiding precarious situations), Low PRE (preferring written communication, building influence through competence), Low RSN (trusting gut instincts, asking for explanations).; add_reference: Add 'Roleplay Prompts by Attribute Level' tables for each attribute showing questions to consider at levels 0, 1, and 2. E.g., MIG 0: 'How do you compensate for physical limitations?', MIG 2: 'How do you use your strength to help others?' |
+
+
+## Subagent Prompt Template
+
+For each Task(), use subagent_type="general-purpose" and this prompt:
+
+```
+Read `data/w1-prompts/wfrun_michsgzr_w4v28x/shared-context.md` for style guides and plan context.
+
+Modify chapter: {source_path}
+Write output to: {output_path}
+
+Modifications to apply:
+{list of modifications}
+
+Follow all style guide conventions. Preserve existing structure where not explicitly modified.
+Write the complete modified chapter to the output path.
+```
+
+## Output Requirements
+
+After all chapters are written, save results:
+```bash
+pnpm w1:content-modify --save-writer --run=wfrun_michsgzr_w4v28x --chapters=data/w1-artifacts/wfrun_michsgzr_w4v28x/chapters/
+```
