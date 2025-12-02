@@ -95,7 +95,8 @@
     "w1r:list": "tsx src/tooling/cli-commands/run.ts w1r list",
     "w1r:process": "tsx src/tooling/cli-commands/run.ts w1r process",
     "w1r:approve": "tsx src/tooling/cli-commands/run.ts w1r approve",
-    "w1r:complete": "tsx src/tooling/cli-commands/run.ts w1r complete"
+    "w1r:complete": "tsx src/tooling/cli-commands/run.ts w1r complete",
+    "exp:hello": "tsx experiments/hello-agent.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
