@@ -82,19 +82,19 @@ export async function generatePDF(
   const logoPath = projectPath('src/site/public/images/logos/main-logo.svg');
   // Use 'XYZ' destination with top of page positioning for reliable TOC linking
   doc.addNamedDestination('cover', 'XYZ', null, defaultConfig.pageHeight, null);
+  // Add outline item BEFORE rendering - captures current page position
+  doc.outline.addItem('Cover');
   renderCoverPage(doc, logoPath);
   state.currentPage = 1;
-
-  // Add cover bookmark with destination
-  doc.outline.addItem('Cover', { destination: 'cover' });
 
   // Render Table of Contents
   doc.addPage();
   doc.addNamedDestination('contents', 'XYZ', null, defaultConfig.pageHeight, null);
+  // Add outline item BEFORE rendering TOC content
+  doc.outline.addItem('Contents');
   state.currentPage++;
   const tocEntries = estimateChapterPages(chapters, state.currentPage + 1);
   renderTableOfContents(doc, tocEntries);
-  doc.outline.addItem('Contents', { destination: 'contents' });
 
   // Part divider configuration: which chapters start each part
   const PART_STARTS: Record<number, { number: string; title: string }> = {
@@ -105,19 +105,17 @@ export async function generatePDF(
   };
 
   // Render chapters (all chapters now add new pages)
+  // Note: Outline items are added inside renderPartDivider and renderChapterOpener
+  // at the right moment (before rendering content) so PDFKit captures correct page position
   for (const chapter of chapters) {
     // Insert part divider if this chapter starts a new part
     const partInfo = PART_STARTS[chapter.number];
     if (partInfo) {
       renderPartDivider(doc, partInfo.number, partInfo.title);
       state.currentPage++;
-      // Part bookmark links to named destination created in renderPartDivider
-      doc.outline.addItem(`Part ${partInfo.number}: ${partInfo.title}`, { destination: `part-${partInfo.number}` });
     }
 
     state = await renderChapter(doc, chapter, state, options, false);
-    // Add chapter bookmark linking to named destination created in renderChapterOpener
-    doc.outline.addItem(`${chapter.number}. ${chapter.title}`, { destination: `chapter-${chapter.number}` });
   }
 
   // Finalize document

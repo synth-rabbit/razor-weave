@@ -41,6 +41,9 @@ export function renderChapterOpener(
   const destinationName = `chapter-${chapterNumber}`;
   doc.addNamedDestination(destinationName, 'XYZ', null, defaultConfig.pageHeight, null);
 
+  // Add outline item NOW, before rendering content - PDFKit captures current page position
+  doc.outline.addItem(`${chapterNumber}. ${title}`);
+
   // Dark gradient background
   const gradient = doc.linearGradient(
     0, 0,
@@ -149,6 +152,9 @@ export function renderPartDivider(
   // Add named destination for bookmark/TOC linking - use 'XYZ' with top of page positioning
   const destinationName = `part-${partNumber}`;
   doc.addNamedDestination(destinationName, 'XYZ', null, pageHeight, null);
+
+  // Add outline item NOW, before rendering content - PDFKit captures current page position
+  doc.outline.addItem(`Part ${partNumber}: ${partTitle}`);
 
   // Dark gradient background for entire page
   const gradient = doc.linearGradient(0, 0, 0, pageHeight);
