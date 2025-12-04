@@ -80,7 +80,8 @@ export async function generatePDF(
 
   // Render cover page (uses the initial page created by PDFKit)
   const logoPath = projectPath('src/site/public/images/logos/main-logo.svg');
-  doc.addNamedDestination('cover');
+  // Use 'XYZ' destination with top of page positioning for reliable TOC linking
+  doc.addNamedDestination('cover', 'XYZ', null, defaultConfig.pageHeight, null);
   renderCoverPage(doc, logoPath);
   state.currentPage = 1;
 
@@ -89,7 +90,7 @@ export async function generatePDF(
 
   // Render Table of Contents
   doc.addPage();
-  doc.addNamedDestination('contents');
+  doc.addNamedDestination('contents', 'XYZ', null, defaultConfig.pageHeight, null);
   state.currentPage++;
   const tocEntries = estimateChapterPages(chapters, state.currentPage + 1);
   renderTableOfContents(doc, tocEntries);

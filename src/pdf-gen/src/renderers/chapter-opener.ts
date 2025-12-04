@@ -36,9 +36,10 @@ export function renderChapterOpener(
     doc.addPage();
   }
 
-  // Add named destination for TOC linking
+  // Add named destination for TOC linking - use 'XYZ' with top of page positioning
+  // This ensures clicking TOC links navigates to the top of the chapter opener page
   const destinationName = `chapter-${chapterNumber}`;
-  doc.addNamedDestination(destinationName);
+  doc.addNamedDestination(destinationName, 'XYZ', null, defaultConfig.pageHeight, null);
 
   // Dark gradient background
   const gradient = doc.linearGradient(
@@ -145,9 +146,9 @@ export function renderPartDivider(
   // Start new page
   doc.addPage();
 
-  // Add named destination for bookmark/TOC linking
+  // Add named destination for bookmark/TOC linking - use 'XYZ' with top of page positioning
   const destinationName = `part-${partNumber}`;
-  doc.addNamedDestination(destinationName);
+  doc.addNamedDestination(destinationName, 'XYZ', null, pageHeight, null);
 
   // Dark gradient background for entire page
   const gradient = doc.linearGradient(0, 0, 0, pageHeight);
